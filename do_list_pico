@@ -1,0 +1,4 @@
+#!/bin/bash
+#ls -d /gpfs01/star/pwg/lkramarik/pico_pAu/produced/*.root | sed 's#/##' > pico.list
+ls -d /gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoDst/*.root  > pico.list
+mv pico.list workDir/
