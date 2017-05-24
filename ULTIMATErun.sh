@@ -1,10 +1,10 @@
 #!/bin/bash
 
 #copylist
-cp /global/homes/k/kvapil/StPicoDpmMakerSL16d/picoLists/picoList_all.list ./
+cp /gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoLists/runlist00  ./
 
 #divide list
-list=${1:-"picoList_all.list"}
+list=${1:-"runlist00"}
 baseName=${2:-"listAll"}
 if [ ! -e "$list" ]; then
   echo $list does not exist or is not a file
@@ -28,13 +28,13 @@ done
 echo number of files: $i, number of lists: $(( listNumber + 1 ))
 
 #copy needed folders
-cp -r /global/homes/k/kvapil/StPicoDpmMakerSL16d/.sl64_gcc482 ./
-cp -Lr /global/homes/k/kvapil/StPicoDpmMakerSL16d/StRoot ./
-cp -Lr /global/homes/k/kvapil/StPicoDpmMakerSL16d/run14AuAu200GeVPrescales ./
-cp /global/homes/k/kvapil/StPicoDpmMakerSL16d/picoLists/picoList_bad_MB.list ./
+cp -r /gpfs01/star/pwg/lkramarik/Dmaker_dAu/.sl64_gcc482 ./
+cp -Lr /gpfs01/star/pwg/lkramarik/Dmaker_dAu/StRoot ./
+cp -Lr /gpfs01/star/pwg/lkramarik/Dmaker_dAu/run14AuAu200GeVPrescales ./
+cp /gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoLists/picoList_bad_MB.list ./
 mkdir starSubmit
-cp /global/homes/k/kvapil/StPicoDpmMakerSL16d/starSubmit/submitPicoHFMaker.csh ./starSubmit
-cp /global/homes/k/kvapil/StPicoDpmMakerSL16d/starSubmit/submitPicoHFMaker.xml ./starSubmit
+cp /gpfs01/star/pwg/lkramarik/Dmaker_dAu/starSubmit/submitPicoHFMaker.csh ./starSubmit
+cp /gpfs01/star/pwg/lkramarik/Dmaker_dAu/starSubmit/submitPicoHFMaker.xml ./starSubmit
 
 path=`pwd -P`
 path=$( echo $path | sed 's|//|/|g' )

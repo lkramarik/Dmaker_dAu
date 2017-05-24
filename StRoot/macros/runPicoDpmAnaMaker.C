@@ -15,24 +15,18 @@
 #include "TROOT.h"
 #include "TSystem.h"
 #include "TChain.h"
-
 #include "StMaker.h"
 #include "StChain.h"
-
 #include "StPicoDstMaker/StPicoDstMaker.h"
 #include "StPicoHFMaker/StPicoHFEvent.h"
 #include "StPicoHFMaker/StHFCuts.h"
 #include "StPicoEvent/StPicoEvent.h"
 #include "StPicoHFMyAnaMaker/StPicoHFMyAnaMaker.h"
-
 #include "macros/loadSharedHFLibraries.C"
-
 #include <iostream>
 #include <ctime>
 #include <cstdio>
-
 #include "StPicoDpmAnaMaker/StPicoDpmAnaMaker.h" //kvapil
-
 //#include "StRefMultCorr/StRefMultCorr.h"
 //#include "StRefMultCorr/CentralityMaker.h"
 
@@ -60,20 +54,17 @@ void runPicoDpmAnaMaker(
   }
   
   Int_t nEvents = 1000000;
-  //Int_t nEvents = 1000;
 
 #ifdef __CINT__
   gROOT->LoadMacro("loadSharedHFLibraries.C");
   loadSharedHFLibraries();
 #endif
-  
 
   chain = new StChain();
 
   // ========================================================================================
   //makerMode    = StPicoHFMaker::kAnalyze;
   // ========================================================================================
-  
   cout << "Maker Mode    " << makerMode << endl;
   cout << "TreeName      " << treeName << endl; 
   cout << "Decay Channel " << decayChannel << endl; 
@@ -141,32 +132,25 @@ void runPicoDpmAnaMaker(
 
   hfCuts->setCutVzMax(6.);
   hfCuts->setCutVzVpdVzMax(3.);
+  
+  hfCuts->addTriggerId(3); //VPD-5
+  hfCuts->addTriggerId(15); //BHT1-VPD-10
+  hfCuts->addTriggerId(16); //BHT2-VPD-30
   hfCuts->addTriggerId(530003); //VPD-5
-  hfCuts->addTriggerId(530201); //BHT1*VPDMB-5
-  hfCuts->addTriggerId(530202); //bht1-vpdmb-30 lukas 
-  hfCuts->addTriggerId(530213); //BHT0*BBCMB
-  hfCuts->addTriggerId(3); //BHT1*BBCMB
-  hfCuts->addTriggerId(500205); //BHT2*BBCMB
-  hfCuts->addTriggerId(500206); //bht*1-vpdmb-30_nobsmd
-  hfCuts->addTriggerId(35);   	//bht2*bbcmb
-  hfCuts->addTriggerId(500215); //bht2*bbcmb
-  hfCuts->addTriggerId(500214); //bht1*bbcmb 
-  hfCuts->addTriggerId(500213); //bht0*bbcmb
-  hfCuts->addTriggerId(500904); //vpdmb-30   
-cout<<"ok"<<endl;
-  hfCuts->setCutNHitsFitMin(15); //kvapil 20 to 15
+  hfCuts->addTriggerId(530201); //BHT1-VPD-10
+  hfCuts->addTriggerId(530202); //BHT2-VPD-30 
+  hfCuts->addTriggerId(530213); //BHT3
+  
+
+  hfCuts->setCutNHitsFitMin(15); //default is 20
   hfCuts->setCutRequireHFT(true);
 
   //LK hfCuts->setCutDcaMin(0.009,StHFCuts::kPion); //federic 1aug2016
   //LK  hfCuts->setCutDcaMin(0.007,StHFCuts::kKaon); //federic 3aug2016
-
   //hfCuts->setCutNHitsFitnHitsMax(0.52);  kvapil
- 
-  // ---------------------------------------------------
 
   // -- Channel0
   picoDpmAnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
-//  picoDpmAnaMaker->setDecayMode(StPicoHFEvent::kThreeParticleDecay); //kvapil
 
   // -- ADD USER CUTS HERE ----------------------------
    // kaonPion pair cuts
@@ -178,7 +162,6 @@ cout<<"ok"<<endl;
   float maxMass         = 3.;
   hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass);
  
-// --- Lomnitz cuts to remove noise from ghosting
   //Single track pt
   hfCuts->setCutPtRange(0.2,50.0,StHFCuts::kPion); //0.2 , 50.0
   hfCuts->setCutPtRange(0.2,50.0,StHFCuts::kKaon); //0.2, 50.0
@@ -190,14 +173,9 @@ cout<<"ok"<<endl;
   hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kKaon);
   hfCuts->setCutTOFDeltaOneOverBeta(0.06, StHFCuts::kPion); // v podstate 6 sigma
   hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kPion); 
-  cout<<"cuts set"<<endl;
   // set refmultCorr
   //StRefMultCorr* grefmultCorrUtil = CentralityMaker::instance()->getgRefMultCorr_P16id();
   //picoDpmAnaMaker->setRefMutCorr(grefmultCorrUtil);
-
-  // ========================================================================================
-
-  // ========================================================================================
 
   clock_t start = clock(); // getting starting time
   chain->Init();
@@ -208,8 +186,8 @@ cout<<"ok"<<endl;
 
   for (Int_t i=0; i<nEvents; i++) {
     if(i%10000==0)
-      cout << "Working on eventNumber " << i << endl;
-    
+//       cout << "Working on eventNumber " << i << endl;
+
     chain->Clear();
 
 	 int iret = chain->Make(i);
