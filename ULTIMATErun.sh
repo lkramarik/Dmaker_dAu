@@ -1,11 +1,11 @@
 #!/bin/bash
 
 #copylist
-cp /gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoLists/runlist00  ./
+cp /gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoLists/run00.list  ./
 
 #divide list
-list=${1:-"runlist00"}
-baseName=${2:-"listAll"}
+list=${1:-"run00.list"}
+baseName=${2:-""}
 if [ ! -e "$list" ]; then
   echo $list does not exist or is not a file
   exit 1
@@ -40,7 +40,7 @@ path=`pwd -P`
 path=$( echo $path | sed 's|//|/|g' )
 
 for j in $(eval echo "{0..$listNumber}"); do
-  echo executing submitPicoHFMaker.csh f0r $baseName$j.list
+  echo executing submitPicoHFMaker.csh for $path and $baseName$j.list
   csh starSubmit/submitPicoHFMaker.csh $path $baseName$j.list
 done
 

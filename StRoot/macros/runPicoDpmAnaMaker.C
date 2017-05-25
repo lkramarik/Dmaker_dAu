@@ -38,11 +38,11 @@ class StChain;
 StChain *chain;
 void runPicoDpmAnaMaker(
 			//const Char_t *inputFile="/gpfs01/star/pwg/lkramarik/pico_pAu/produced/st_physics_16127031_raw_4000024.picoDst.root",	
-		const char*  inputFile="/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/pico.list", 			 
-			const Char_t *outputFile="outputBaseName",  
-			 const unsigned int makerMode = 0 ,
-			 const Char_t *badRunListFileName = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/picoList_bad.list", const Char_t *treeName = "picoHFtree",
-			 const Char_t *productionBasePath = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/",
+		const char*  inputFile, 			 
+			const Char_t *outputFile,  
+			 const unsigned int makerMode,
+			 const Char_t *badRunListFileName, const Char_t *treeName,
+			 const Char_t *productionBasePath,
 			 const unsigned int decayChannel = 0 /* kChannel0 */) { 
   // -- Check STAR Library. Please set SL_version to the original star library used in the production 
   //    from http://www.star.bnl.gov/devcgi/dbProdOptionRetrv.pl
@@ -110,7 +110,7 @@ void runPicoDpmAnaMaker(
   }
 
 //StPicoDstMaker* picoDstMaker = new StPicoDstMaker("picoDstMaker");     
-  StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/pico.list", "picoDstMaker");
+  StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
   cout<<"ok, picoDstMaker created"<<endl;
   StPicoDpmAnaMaker* picoDpmAnaMaker = new StPicoDpmAnaMaker("picoDpmAnaMaker", picoDstMaker, outputFile, sInputListHF);
   picoDpmAnaMaker->setMakerMode(makerMode);
