@@ -14,7 +14,7 @@
 #include "TNtuple.h"
 
 void fit(){    
-    TString input = "ntp_all.root";
+    TString input = "ntp_01.root";
     TFile* data = new TFile(input ,"r");
     ntp = (TNtuple*)data -> Get("ntp;1");
     
@@ -28,10 +28,10 @@ void fit(){
     ntp -> SetBranchAddress("pi1_dca", &pi1_dca);
     ntp -> SetBranchAddress("k_dca", &k_dca);
     
-    TH1F* hInvMassBackMin = new TH1F("background minus", "background minus", 1000, 1.6, 2.5);
-    TH1F* hInvMassBackPlus = new TH1F("background plus", "background plus", 1000, 1.6, 2.5);
-    TH1F* hInvMassSign = new TH1F("signal", "signal", 1000, 1.6, 2.5);    
-    TH1F* hInvMassBack = new TH1F("background", "background", 1000, 1.6, 2.5); 
+    TH1F* hInvMassBackMin = new TH1F("background minus", "background minus", 1000, 0.6, 2.5);
+    TH1F* hInvMassBackPlus = new TH1F("background plus", "background plus", 1000, 0.6, 2.5);
+    TH1F* hInvMassSign = new TH1F("signal", "signal", 1000, 0.6, 2.5);    
+    TH1F* hInvMassBack = new TH1F("background", "background", 1000, 0.6, 2.5); 
     
     hInvMassBackMin -> Sumw2();
     hInvMassBackPlus -> Sumw2();
@@ -40,7 +40,7 @@ void fit(){
     Long64_t numberEntr = ntp -> GetEntries();
     cout<<"Number of entries in Ntuple: "<<numberEntr<<endl;;
     for (Long64_t i = 0; i < numberEntr; i++) {
-        if (i%10000000==0) {cout<<i<<endl;}
+//         if (i%10000000==0) {cout<<i<<endl;}
         ntp -> GetEntry(i);        
         //         if ((pi1_dca > 0.008) && (k_dca > 0.007)){
                 if ((pi1_dca > 0.009)){
@@ -63,8 +63,8 @@ void fit(){
     //     hInvMassBackMin -> SetMarkerColor(46);
     //     hInvMassBackPlus -> SetMarkerColor(8);
     TCanvas *c = new TCanvas("c","c",1200,800);
-    hInvMassBackPlus -> Draw();
-    hInvMassBackMin -> Draw("same");
+//     hInvMassBackPlus -> Draw();
+//     hInvMassBackMin -> Draw("same");
     hInvMassBack -> Add(hInvMassBackPlus,1);
     //     hInvMassBack -> Add(hInvMassBackMin, 1);
     Int_t Nentr = hInvMassBack -> GetNbinsX();
@@ -76,7 +76,7 @@ void fit(){
         valueM = hInvMassBackMin -> GetBinContent(j);  
         errorM = hInvMassBackMin -> GetBinError(j);
         error = sqrt(valueM*errorP*errorP/valueP + valueP*errorM*errorM/valueM);
-        cout<<2*sqrt(valueP*valueM)<<endl;
+//         cout<<2*sqrt(valueP*valueM)<<endl;
         hInvMassBack -> SetBinContent(j, 2*sqrt(valueP*valueM) );
         hInvMassBack -> SetBinError(j, error);
     }
