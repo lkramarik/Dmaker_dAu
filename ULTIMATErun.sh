@@ -1,10 +1,11 @@
 #!/bin/bash
 
 #copylist
-cp /gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoLists/run00.list  ./
+cp /gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoLists/runs_path_all.list  ./
+#cp /gpfs01/star/pwg/lkramarik/picoDst_dAu/production/runs_path_all.list  ./
 
 #divide list
-list=${1:-"run00.list"}
+list=${1:-"runs_path_all.list"}
 baseName=${2:-""}
 if [ ! -e "$list" ]; then
   echo $list does not exist or is not a file

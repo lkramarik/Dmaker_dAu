@@ -4,3 +4,4 @@ starSubmit/*
 *.so
 *.d
 workDir/*
+results/*

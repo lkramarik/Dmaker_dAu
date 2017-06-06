@@ -153,7 +153,7 @@ void runPicoDpmAnaMaker(
   float decayLengthMin  = 0.0030; // minimum
   float decayLengthMax  = 999999; //std::numeric_limits<float>::max();
   float cosThetaMin     = 0.0;   // minimum
-  float minMass         = 1.6;
+  float minMass         = 0.6;
   float maxMass         = 2.5;
   hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass);
  
