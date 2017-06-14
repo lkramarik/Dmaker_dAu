@@ -13,11 +13,9 @@
 #include "TFile.h"
 #include "TNtuple.h"
 
-void fit(){    
-    TString input = "../results/HPSS/03/ntp_03.root";
+void fit(TString input){    
     TFile* data = new TFile(input ,"r");
     ntp = (TNtuple*)data -> Get("ntp;1");
-    
     Float_t flag, D_mass, D_pt, k_pt, pi1_pt, pi1_dca, k_dca;
     ntp -> SetBranchAddress("flag",&flag);
     ntp -> SetBranchAddress("D_mass", &D_mass);
@@ -28,10 +26,10 @@ void fit(){
     ntp -> SetBranchAddress("pi1_dca", &pi1_dca);
     ntp -> SetBranchAddress("k_dca", &k_dca);
     
-    TH1F* hInvMassBackMin = new TH1F("background minus", "background minus", 1000, 0.6, 2.5);
-    TH1F* hInvMassBackPlus = new TH1F("background plus", "background plus", 1000, 0.6, 2.5);
-    TH1F* hInvMassSign = new TH1F("signal", "signal", 1000, 0.6, 2.5);    
-    TH1F* hInvMassBack = new TH1F("background", "background", 1000, 0.6, 2.5); 
+    TH1F* hInvMassBackMin = new TH1F("background minus", "background minus", 2000, 0.6, 2.6);
+    TH1F* hInvMassBackPlus = new TH1F("background plus", "background plus", 2000, 0.6, 2.6);
+    TH1F* hInvMassSign = new TH1F("signal", "signal", 2000, 0.6, 2.6);    
+    TH1F* hInvMassBack = new TH1F("background", "background", 2000, 0.6, 2.6); 
     
     hInvMassBackMin -> Sumw2();
     hInvMassBackPlus -> Sumw2();
@@ -40,50 +38,31 @@ void fit(){
     Long64_t numberEntr = ntp -> GetEntries();
     cout<<"Number of entries in Ntuple: "<<numberEntr<<endl;;
     for (Long64_t i = 0; i < numberEntr; i++) {
-//         if (i%10000000==0) {cout<<i<<endl;}
+        if (i%10000000==0) {cout<<i<<endl;}
         ntp -> GetEntry(i);        
-                if ((D_mass > 0.6) && (D_mass < 2.5)){
-                if ((pi1_dca > 0.009)){
-        if ((D_pt > 0) && (D_pt < 20)) {            
-            if ((flag >= 0 ) && (flag < 2)) {hInvMassSign -> Fill(D_mass); }
-            else if (flag == 4) {hInvMassBackMin -> Fill(D_mass); }
-            else {hInvMassBackPlus -> Fill(D_mass); }                
-        }
-	}        
+        //         if ((pi1_dca > 0.008) && (k_dca > 0.007)){
+        if ((pi1_dca > 0.008)){
+            if ((D_pt > 1) && (D_pt < 6)) {            
+                if ((flag >= 0 ) && (flag < 2)) {hInvMassSign -> Fill(D_mass); }
+                else if (flag == 4) {hInvMassBackMin -> Fill(D_mass); }
+                else {hInvMassBackPlus -> Fill(D_mass); }                
+            }
         }
     }
-    
-    int rebin = 2;
-    //     hInvMassBackMin -> Rebin(rebin);
-    //     hInvMassBackPlus -> Rebin(rebin);
-    //     hInvMassSign -> Rebin(rebin);
-    cout<<hInvMassBackMin -> GetNbinsX()<<endl;
-    cout<<hInvMassBackPlus -> GetNbinsX()<<endl;
-    cout<<hInvMassSign -> GetNbinsX()<<endl;
-    
-    //     hInvMassBackMin -> SetMarkerColor(46);
-    //     hInvMassBackPlus -> SetMarkerColor(8);
-    TCanvas *c = new TCanvas("c","c",1200,800);
-//     hInvMassBackPlus -> Draw();
-//     hInvMassBackMin -> Draw("same");
+
     hInvMassBack -> Add(hInvMassBackPlus,1);
-    //     hInvMassBack -> Add(hInvMassBackMin, 1);
-    Int_t Nentr = hInvMassBack -> GetNbinsX();
-    cout<<Nentr<<endl;
+
     Float_t value, error, valueM, errorM, valueP, errorP;
     for (Int_t j = 0; j < Nentr; j++) {
         valueP = hInvMassBack -> GetBinContent(j);  
         errorP = hInvMassBack -> GetBinError(j);
         valueM = hInvMassBackMin -> GetBinContent(j);  
         errorM = hInvMassBackMin -> GetBinError(j);
-        error = sqrt(valueM*errorP*errorP/valueP + valueP*errorM*errorM/valueM);
-//         cout<<2*sqrt(valueP*valueM)<<endl;
-        hInvMassBack -> SetBinContent(j, 2*sqrt(valueP*valueM) );
+        error = 0.5*sqrt(valueM*errorP*errorP/valueP + valueP*errorM*errorM/valueM);
+        hInvMassBack -> SetBinContent(j, sqrt(valueP*valueM) );
         hInvMassBack -> SetBinError(j, error);
     }
-    //     hInvMassBack -> Sumw2();
-    hInvMassBack -> SetName("background");
-    TFile* dataRes = new TFile("complete_mass_res_ntp_03.root" ,"RECREATE");
+    TFile* dataRes = new TFile("res_"+input ,"RECREATE");
     hInvMassSign -> Write();
     hInvMassBack -> Write(); 
     cout<<"res_"+input<<endl;
@@ -91,26 +70,29 @@ void fit(){
 }
 
 void fitting() {
-    Float_t fitRMin = 1.70;
-    Float_t fitRMax = 2.15;
-    int rebin = 5;
+    Float_t fitRMin = 1.65;
+    Float_t fitRMax = 2.35;
+    int rebin = 10;
     TString input = "res_ntp_all.root";
     TFile* data = new TFile(input ,"r");
     hInvMassBack = (TH1F*)data -> Get("background");
     hInvMassSign = (TH1F*)data -> Get("signal");
+   
+    hInvMassSign -> Rebin(rebin);
+    hInvMassBack -> Rebin(rebin);
     
-        hInvMassSign -> Rebin(rebin);
-        hInvMassBack -> Rebin(rebin);
+    hInvMassSign -> SetMarkerColor(46);
+    hInvMassSign -> SetLineColor(46);
     
-    Double_t hBackIntegral = hInvMassBack -> Integral(hInvMassBack -> FindBin(1.6), hInvMassBack -> FindBin(1.7), "") + hInvMassBack -> Integral(hInvMassBack -> FindBin(1.9), hInvMassBack -> FindBin(1.95), "");
-    Double_t hSignIntegral = hInvMassSign -> Integral(hInvMassSign -> FindBin(1.6), hInvMassSign -> FindBin(1.7), "") + hInvMassSign -> Integral(hInvMassSign -> FindBin(1.9), hInvMassSign -> FindBin(1.95), "");
+    Double_t hBackIntegral = hInvMassBack -> Integral(hInvMassBack -> FindBin(1.60), hInvMassBack -> FindBin(1.7), "") + hInvMassBack -> Integral(hInvMassBack -> FindBin(1.95), hInvMassBack -> FindBin(2.5), "");
+    Double_t hSignIntegral = hInvMassSign -> Integral(hInvMassSign -> FindBin(1.60), hInvMassSign -> FindBin(1.7), "") + hInvMassSign -> Integral(hInvMassSign -> FindBin(1.95), hInvMassSign -> FindBin(2.5), "");
     
     //     Double_t hBackIntegral = hInvMassBack -> Integral(hInvMassBack -> FindBin(2.06), hInvMassBack -> FindBin(2.2), "");// + hInvMassBack -> Integral(hInvMassBack -> FindBin(1.9), hInvMassBack -> FindBin(2), "");
     //     Double_t hSignIntegral = hInvMassSign -> Integral(hInvMassSign -> FindBin(2.06), hInvMassSign -> FindBin(2.2), "");// + hInvMassSign -> Integral(hInvMassSign -> FindBin(1.9), hInvMassSign -> FindBin(2), "");
     
     cout<<hInvMassBack -> GetNbinsX()<<endl;
     cout<<hInvMassSign -> GetNbinsX() << endl;
-    
+
     cout<<"Backgroung Integral: "<<hBackIntegral<<endl;
     cout<<"Signal Integral :"<<hSignIntegral<<endl;
     
@@ -122,21 +104,16 @@ void fitting() {
     }
     hInvMassBack -> Scale(hSignIntegral/hBackIntegral);
     
-   hBackIntegral = hInvMassBack -> Integral(hInvMassBack -> FindBin(1.65), hInvMassBack -> FindBin(1.7), "") + hInvMassBack -> Integral(hInvMassBack -> FindBin(1.9), hInvMassBack -> FindBin(1.95), "");
- hSignIntegral = hInvMassSign -> Integral(hInvMassSign -> FindBin(1.65), hInvMassSign -> FindBin(1.7), "") + hInvMassSign -> Integral(hInvMassSign -> FindBin(1.9), hInvMassSign -> FindBin(1.95), "");
- 
-//     for (j=0; j<Nbins; j++) {
-//         err[j] = err[j]*hSignIntegral/hBackIntegral;
-//         hInvMassBack -> SetBinError(j, err[j]);        
-//     }   //scaling error
-    
-
-    
+    for (j=0; j<Nbins; j++) {
+        err[j] = err[j]*hSignIntegral/hBackIntegral;
+        hInvMassBack -> SetBinError(j, err[j]);        
+    }   //scaling error
+       
     hInvMassSign -> Add(hInvMassBack,-1);
-//     for (j=0; j<Nbins; j++) {        
-// //         hInvMassSign -> SetBinError(j, sqrt(err[j]*err[j] + errS[j]*errS[j]));
-//     }
-//     
+    for (j=0; j<Nbins; j++) {        
+        hInvMassSign -> SetBinError(j, sqrt(err[j]*err[j] + errS[j]*errS[j]));
+    }
+    
     TCanvas *c3 = new TCanvas("c3","c3",1200,800);
     TF1 *fun0 = new TF1("fun0","pol1(0)+gaus(2)",fitRMin,fitRMax);
     fun0->SetParameters(1.,1.,1.,1.865,0.015);
