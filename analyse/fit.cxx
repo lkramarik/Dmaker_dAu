@@ -14,7 +14,7 @@
 #include "TNtuple.h"
 
 void fit(){    
-    TString input = "ntp_01.root";
+    TString input = "../results/HPSS/03/ntp_03.root";
     TFile* data = new TFile(input ,"r");
     ntp = (TNtuple*)data -> Get("ntp;1");
     
@@ -42,14 +42,15 @@ void fit(){
     for (Long64_t i = 0; i < numberEntr; i++) {
 //         if (i%10000000==0) {cout<<i<<endl;}
         ntp -> GetEntry(i);        
-        //         if ((pi1_dca > 0.008) && (k_dca > 0.007)){
+                if ((D_mass > 0.6) && (D_mass < 2.5)){
                 if ((pi1_dca > 0.009)){
         if ((D_pt > 0) && (D_pt < 20)) {            
             if ((flag >= 0 ) && (flag < 2)) {hInvMassSign -> Fill(D_mass); }
             else if (flag == 4) {hInvMassBackMin -> Fill(D_mass); }
             else {hInvMassBackPlus -> Fill(D_mass); }                
         }
-                }
+	}        
+        }
     }
     
     int rebin = 2;
@@ -82,7 +83,7 @@ void fit(){
     }
     //     hInvMassBack -> Sumw2();
     hInvMassBack -> SetName("background");
-    TFile* dataRes = new TFile("res_"+input ,"RECREATE");
+    TFile* dataRes = new TFile("complete_mass_res_ntp_03.root" ,"RECREATE");
     hInvMassSign -> Write();
     hInvMassBack -> Write(); 
     cout<<"res_"+input<<endl;

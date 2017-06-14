@@ -1,0 +1,9 @@
+#!/bin/bash
+
+cat runs_filename_outHPSS.txt | while read -r line
+do
+ sed -i.bak '/$line/d' ./runs_filename.txt
+#  [[ ! $s =~ st_physics_17141003_raw_4500045.picoDst.root ]] && echo "$line"
+done 
+#mv o file
+

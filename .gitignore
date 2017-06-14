@@ -5,3 +5,5 @@ starSubmit/*
 *.d
 workDir/*
 results/*
+analyse/*.root
+analyse/rootFiles/*
