@@ -19,7 +19,7 @@ void fit(TString input){
     Float_t flag, D_theta, D_mass, D_pt, D_decayL, k_pt, pi1_pt, pi1_dca, k_dca;
     ntp -> SetBranchAddress("flag",&flag);
     ntp -> SetBranchAddress("D_mass", &D_mass);
-ntp -> SetBranchAddress("D_decayL", &D_decayL);
+    ntp -> SetBranchAddress("D_decayL", &D_decayL);
     ntp -> SetBranchAddress("D_theta", &D_theta);
     ntp -> SetBranchAddress("D_pt", &D_pt);
     ntp -> SetBranchAddress("pi1_pt", &pi1_pt);
@@ -27,48 +27,55 @@ ntp -> SetBranchAddress("D_decayL", &D_decayL);
     ntp -> SetBranchAddress("pi1_dca", &pi1_dca);
     ntp -> SetBranchAddress("k_dca", &k_dca);
     
-    TH1F* hInvMassBackMin = new TH1F("background minus", "background minus", 2000, 1.6, 2.6);
-    TH1F* hInvMassBackPlus = new TH1F("background plus", "background plus", 2000, 1.6, 2.6);
-    TH1F* hInvMassSign = new TH1F("signal", "signal", 2000, 1.6, 2.6);    
-    TH1F* hInvMassBack = new TH1F("background", "background", 2000, 1.6, 2.6); 
+    TH1F* hInvMassBackMin = new TH1F("background minus", "background minus", 1000, 1.6, 2.5);
+    TH1F* hInvMassBackPlus = new TH1F("background plus", "background plus", 1000, 1.6, 2.5);
+    TH1F* hInvMassSign = new TH1F("signal", "signal", 1000, 1.6, 2.5);    
+    TH1F* hInvMassBack = new TH1F("background", "background", 1000, 1.6, 2.5); 
     
     hInvMassBackMin -> Sumw2();
     hInvMassBackPlus -> Sumw2();
     hInvMassSign -> Sumw2();
-    
+
     Long64_t numberEntr = ntp -> GetEntries();
     cout<<"Number of entries in Ntuple: "<<numberEntr<<endl;;
     for (Long64_t i = 0; i < numberEntr; i++) {
         if (i%10000000==0) {cout<<i<<endl;}
         ntp -> GetEntry(i);
-	if (cos(D_theta)>0.995) {        
-                if ((D_mass > 1.6) && (D_mass < 2.6)){
-        if ((pi1_dca > 0.008) && (D_decayL > 0.09)){
-            if ((D_pt > 1) && (D_pt < 6)) {            
-                if ((flag >= 0 ) && (flag < 2)) {hInvMassSign -> Fill(D_mass); }
-                else if (flag == 4) {hInvMassBackMin -> Fill(D_mass); }
-                else {hInvMassBackPlus -> Fill(D_mass); }                
-            }
-}
-}        
-}
+        if (cos(D_theta)>0.9) {        
+            if ((D_mass > 1.6) && (D_mass < 2.6)){
+                if ((pi1_dca > 0.008) && (D_decayL > 0.09)){
+                    if ((D_pt > 0.5) && (D_pt < 6)) {            
+                        if ((flag >= 0 ) && (flag < 2)) {hInvMassSign -> Fill(D_mass); }
+                        else if (flag == 4) {hInvMassBackMin -> Fill(D_mass); }
+                        else {hInvMassBackPlus -> Fill(D_mass); }                
+                    }
+                }
+            }        
+        }
     }
-
-    hInvMassBack -> Add(hInvMassBackPlus,1);
+    
     //Int_t Nentr = hInvMassBack -> GetNBinsX();
-    Float_t value, error, valueM, errorM, valueP, errorP;
-    for (Int_t j = 0; j < 2000; j++) {
-        valueP = hInvMassBack -> GetBinContent(j);  
-        errorP = hInvMassBack -> GetBinError(j);
+    hInvMassBackPlus -> Clone("background"); 
+    Double_t value, error, valueM, errorM, valueP, errorP;
+    for (Int_t j = 1; j < 1001; j++) {
+        valueP = hInvMassBackPlus -> GetBinContent(j);  
+        errorP = hInvMassBackPlus -> GetBinError(j);
         valueM = hInvMassBackMin -> GetBinContent(j);  
         errorM = hInvMassBackMin -> GetBinError(j);
         error = sqrt(valueM*errorP*errorP/valueP + valueP*errorM*errorM/valueM);
-        hInvMassBack -> SetBinContent(j, 2*sqrt(valueP*valueM) );
+        value = 2*sqrt(valueP*valueM);
+        cout<<j<<endl;
+        cout<<value<<endl;
+        hInvMassBack -> SetBinContent(j, value);
         hInvMassBack -> SetBinError(j, error);
     }
+    
     TFile* dataRes = new TFile("res_"+input ,"RECREATE");
     hInvMassSign -> Write();
     hInvMassBack -> Write(); 
+    hInvMassBackPlus -> Write(); 
+    hInvMassBackMin -> Write(); 
+    
     cout<<"res_"+input<<endl;
     cout<<"done"<<endl;
 }
@@ -81,7 +88,7 @@ void fitting() {
     TFile* data = new TFile(input ,"r");
     hInvMassBack = (TH1F*)data -> Get("background");
     hInvMassSign = (TH1F*)data -> Get("signal");
-   
+    
     hInvMassSign -> Rebin(rebin);
     hInvMassBack -> Rebin(rebin);
     
@@ -96,7 +103,7 @@ void fitting() {
     
     cout<<hInvMassBack -> GetNbinsX()<<endl;
     cout<<hInvMassSign -> GetNbinsX() << endl;
-
+    
     cout<<"Backgroung Integral: "<<hBackIntegral<<endl;
     cout<<"Signal Integral :"<<hSignIntegral<<endl;
     
@@ -112,7 +119,7 @@ void fitting() {
         err[j] = err[j]*hSignIntegral/hBackIntegral;
         hInvMassBack -> SetBinError(j, err[j]);        
     }   //scaling error
-       
+    
     hInvMassSign -> Add(hInvMassBack,-1);
     for (j=0; j<Nbins; j++) {        
         hInvMassSign -> SetBinError(j, sqrt(err[j]*err[j] + errS[j]*errS[j]));

@@ -7,5 +7,5 @@ do
 root -l -q ../fit.cxx\(\"$line\"\)
 done
 
-hadd res_ntp_all.root res*
-cp res_ntp_all.root ~/
+#hadd res_ntp_all.root res*
+#cp res_ntp_all.root ~/
