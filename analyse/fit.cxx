@@ -16,20 +16,21 @@
 void fit(TString input){    
     TFile* data = new TFile(input ,"r");
     ntp = (TNtuple*)data -> Get("ntp;1");
-    Float_t flag, D_mass, D_pt, k_pt, pi1_pt, pi1_dca, k_dca;
+    Float_t flag, D_theta, D_mass, D_pt, D_decayL, k_pt, pi1_pt, pi1_dca, k_dca;
     ntp -> SetBranchAddress("flag",&flag);
     ntp -> SetBranchAddress("D_mass", &D_mass);
-    //ntp -> SetBranchAddress("", &);
+ntp -> SetBranchAddress("D_decayL", &D_decayL);
+    ntp -> SetBranchAddress("D_theta", &D_theta);
     ntp -> SetBranchAddress("D_pt", &D_pt);
     ntp -> SetBranchAddress("pi1_pt", &pi1_pt);
     ntp -> SetBranchAddress("k_pt", &k_pt);
     ntp -> SetBranchAddress("pi1_dca", &pi1_dca);
     ntp -> SetBranchAddress("k_dca", &k_dca);
     
-    TH1F* hInvMassBackMin = new TH1F("background minus", "background minus", 2000, 0.6, 2.6);
-    TH1F* hInvMassBackPlus = new TH1F("background plus", "background plus", 2000, 0.6, 2.6);
-    TH1F* hInvMassSign = new TH1F("signal", "signal", 2000, 0.6, 2.6);    
-    TH1F* hInvMassBack = new TH1F("background", "background", 2000, 0.6, 2.6); 
+    TH1F* hInvMassBackMin = new TH1F("background minus", "background minus", 2000, 1.6, 2.6);
+    TH1F* hInvMassBackPlus = new TH1F("background plus", "background plus", 2000, 1.6, 2.6);
+    TH1F* hInvMassSign = new TH1F("signal", "signal", 2000, 1.6, 2.6);    
+    TH1F* hInvMassBack = new TH1F("background", "background", 2000, 1.6, 2.6); 
     
     hInvMassBackMin -> Sumw2();
     hInvMassBackPlus -> Sumw2();
@@ -39,27 +40,30 @@ void fit(TString input){
     cout<<"Number of entries in Ntuple: "<<numberEntr<<endl;;
     for (Long64_t i = 0; i < numberEntr; i++) {
         if (i%10000000==0) {cout<<i<<endl;}
-        ntp -> GetEntry(i);        
-        //         if ((pi1_dca > 0.008) && (k_dca > 0.007)){
-        if ((pi1_dca > 0.008)){
+        ntp -> GetEntry(i);
+	if (cos(D_theta)>0.995) {        
+                if ((D_mass > 1.6) && (D_mass < 2.6)){
+        if ((pi1_dca > 0.008) && (D_decayL > 0.09)){
             if ((D_pt > 1) && (D_pt < 6)) {            
                 if ((flag >= 0 ) && (flag < 2)) {hInvMassSign -> Fill(D_mass); }
                 else if (flag == 4) {hInvMassBackMin -> Fill(D_mass); }
                 else {hInvMassBackPlus -> Fill(D_mass); }                
             }
-        }
+}
+}        
+}
     }
 
     hInvMassBack -> Add(hInvMassBackPlus,1);
-
+    //Int_t Nentr = hInvMassBack -> GetNBinsX();
     Float_t value, error, valueM, errorM, valueP, errorP;
-    for (Int_t j = 0; j < Nentr; j++) {
+    for (Int_t j = 0; j < 2000; j++) {
         valueP = hInvMassBack -> GetBinContent(j);  
         errorP = hInvMassBack -> GetBinError(j);
         valueM = hInvMassBackMin -> GetBinContent(j);  
         errorM = hInvMassBackMin -> GetBinError(j);
-        error = 0.5*sqrt(valueM*errorP*errorP/valueP + valueP*errorM*errorM/valueM);
-        hInvMassBack -> SetBinContent(j, sqrt(valueP*valueM) );
+        error = sqrt(valueM*errorP*errorP/valueP + valueP*errorM*errorM/valueM);
+        hInvMassBack -> SetBinContent(j, 2*sqrt(valueP*valueM) );
         hInvMassBack -> SetBinError(j, error);
     }
     TFile* dataRes = new TFile("res_"+input ,"RECREATE");

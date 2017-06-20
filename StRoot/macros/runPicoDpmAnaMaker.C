@@ -131,9 +131,13 @@ void runPicoDpmAnaMaker(
   hfCuts->setCutVzVpdVzMax(3.);
   
   hfCuts->addTriggerId(3); //VPD-5
+  hfCuts->addTriggerId(6);  //highMult-VPD-5
+  hfCuts->addTriggerId(7);  //highMult2-VPD-5
   hfCuts->addTriggerId(15); //BHT1-VPD-10
   hfCuts->addTriggerId(16); //BHT2-VPD-30
   hfCuts->addTriggerId(530003); //VPD-5
+  hfCuts->addTriggerId(530101); //highMult-VPD-5
+  hfCuts->addTriggerId(530102); //highMult2-VPD-5
   hfCuts->addTriggerId(530201); //BHT1-VPD-10
   hfCuts->addTriggerId(530202); //BHT2-VPD-30 
   hfCuts->addTriggerId(530213); //BHT3
@@ -152,7 +156,7 @@ void runPicoDpmAnaMaker(
   float dcaDaughtersMax = 0.02;  // maximum
   float decayLengthMin  = 0.0030; // minimum
   float decayLengthMax  = 999999; //std::numeric_limits<float>::max();
-  float cosThetaMin     = 0.0;   // minimum
+  float cosThetaMin     = 0.4;   // minimum
   float minMass         = 0.6;
   float maxMass         = 2.6;
   hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass);
