@@ -41,14 +41,14 @@ void fit(TString input){
     for (Long64_t i = 0; i < numberEntr; i++) {
         if (i%10000000==0) {cout<<i<<endl;}
         ntp -> GetEntry(i);
-        if (cos(D_theta)>0.9) {        
+        if (cos(D_theta)>0.95) {        
             if ((D_mass > 1.6) && (D_mass < 2.6)){
-                if ((pi1_dca > 0.008) && (D_decayL > 0.09)){
+                //if ((pi1_dca > 0.008) ){
                     if ((D_pt > 0.5) && (D_pt < 6)) {            
                         if ((flag >= 0 ) && (flag < 2)) {hInvMassSign -> Fill(D_mass); }
                         else if (flag == 4) {hInvMassBackMin -> Fill(D_mass); }
                         else {hInvMassBackPlus -> Fill(D_mass); }                
-                    }
+                  //  }
                 }
             }        
         }
@@ -64,8 +64,8 @@ void fit(TString input){
         errorM = hInvMassBackMin -> GetBinError(j);
         error = sqrt(valueM*errorP*errorP/valueP + valueP*errorM*errorM/valueM);
         value = 2*sqrt(valueP*valueM);
-        cout<<j<<endl;
-        cout<<value<<endl;
+    
+   
         hInvMassBack -> SetBinContent(j, value);
         hInvMassBack -> SetBinError(j, error);
     }
