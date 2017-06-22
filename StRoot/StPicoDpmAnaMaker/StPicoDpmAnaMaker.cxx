@@ -419,28 +419,20 @@ int StPicoDpmAnaMaker::analyzeCandidates() {
       
       StHFPair const* triplet = static_cast<StHFPair*>(aCandidates->At(idx));
       StPicoTrack const* pion1 = mPicoDst->track(triplet->particle1Idx());
-//  LK     StPicoTrack const* pion2 = mPicoDst->track(triplet->particle2Idx());
       StPicoTrack const* kaon = mPicoDst->track(triplet->particle2Idx());
       
       // Greates distance between tracks
       float const dcaDaughters = triplet->dcaDaughters();
-//  LK     float const dcaDaughters_23 = triplet->dcaDaughters23();
-//  LK     float const dcaDaughters_13 = triplet->dcaDaughters31();
       float dcaMax = dcaDaughters;
       
       //TOF ---
       float kaonBetaBase = -1;
       float pion1BetaBase = -1;
-  // LK    float pion2BetaBase = -1;
       kaonBetaBase = mHFCuts->getTofBetaBase(kaon);
       pion1BetaBase = mHFCuts->getTofBetaBase(pion1);
-//  LK     pion2BetaBase = mHFCuts->getTofBetaBase(pion2);
 
       float kaonTOFinvbeta = fabs(1. / mHFCuts->getTofBetaBase(kaon) - sqrt(1+M_KAON_PLUS*M_KAON_PLUS/(kaon->gMom(mPrimVtx,mBField).mag()*kaon->gMom(mPrimVtx,mBField).mag())));
       float pion1TOFinvbeta = fabs(1. / mHFCuts->getTofBetaBase(pion1) - sqrt(1+M_PION_PLUS*M_PION_PLUS/(pion1->gMom(mPrimVtx,mBField).mag()*pion1->gMom(mPrimVtx,mBField).mag())));
-// LK       float pion2TOFinvbeta = fabs(1. / mHFCuts->getTofBetaBase(pion2) - sqrt(1+M_PION_PLUS*M_PION_PLUS/(pion2->gMom(mPrimVtx,mBField).mag()*pion2->gMom(mPrimVtx,mBField).mag())));
-
-
 
       // -- Flag D plus and Dminus TODO
       float flag = -99.;

@@ -16,6 +16,7 @@
 void fit(TString input){    
     TFile* data = new TFile(input ,"r");
     ntp = (TNtuple*)data -> Get("ntp;1");
+    list = (TList*) data -> Get("picoDpmAnaMaker;1");
     Float_t flag, D_theta, D_mass, D_pt, D_decayL, k_pt, pi1_pt, pi1_dca, k_dca;
     ntp -> SetBranchAddress("flag",&flag);
     ntp -> SetBranchAddress("D_mass", &D_mass);
@@ -31,6 +32,7 @@ void fit(TString input){
     TH1F* hInvMassBackPlus = new TH1F("background plus", "background plus", 1000, 1.6, 2.5);
     TH1F* hInvMassSign = new TH1F("signal", "signal", 1000, 1.6, 2.5);    
     TH1F* hInvMassBack = new TH1F("background", "background", 1000, 1.6, 2.5); 
+    TH1F* hStat = (TH1F*) list -> FindObject("hEventStat1");
     
     hInvMassBackMin -> Sumw2();
     hInvMassBackPlus -> Sumw2();
@@ -75,6 +77,7 @@ void fit(TString input){
     hInvMassBack -> Write(); 
     hInvMassBackPlus -> Write(); 
     hInvMassBackMin -> Write(); 
+    hStat -> Write();
     
     cout<<"res_"+input<<endl;
     cout<<"done"<<endl;
