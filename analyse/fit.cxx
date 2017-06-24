@@ -17,7 +17,7 @@ void fit(TString input){
     TFile* data = new TFile(input ,"r");
     ntp = (TNtuple*)data -> Get("ntp;1");
     list = (TList*) data -> Get("picoDpmAnaMaker;1");
-    Float_t flag, D_theta, D_mass, D_pt, D_decayL, k_pt, pi1_pt, pi1_dca, k_dca;
+    Float_t flag, D_theta, D_mass, D_pt, D_decayL, k_pt, pi1_pt, pi1_dca, k_dca, k_nSigma, pi1_nSigma, pi1_TOFinvbeta, k_TOFinvbeta, dcaMax;
     ntp -> SetBranchAddress("flag",&flag);
     ntp -> SetBranchAddress("D_mass", &D_mass);
     ntp -> SetBranchAddress("D_decayL", &D_decayL);
@@ -27,12 +27,24 @@ void fit(TString input){
     ntp -> SetBranchAddress("k_pt", &k_pt);
     ntp -> SetBranchAddress("pi1_dca", &pi1_dca);
     ntp -> SetBranchAddress("k_dca", &k_dca);
+    ntp -> SetBranchAddress("k_nSigma", &k_nSigma);
+    ntp -> SetBranchAddress("pi1_nSigma", &pi1_nSigma);
+    ntp -> SetBranchAddress("pi1_TOFinvbeta", &pi1_TOFinvbeta);
+    ntp -> SetBranchAddress("k_TOFinvbeta", &k_TOFinvbeta);
+    ntp -> SetBranchAddress("dcaMax", &dcaMax);
     
     TH1F* hInvMassBackMin = new TH1F("background minus", "background minus", 1000, 1.6, 2.5);
     TH1F* hInvMassBackPlus = new TH1F("background plus", "background plus", 1000, 1.6, 2.5);
     TH1F* hInvMassSign = new TH1F("signal", "signal", 1000, 1.6, 2.5);    
     TH1F* hInvMassBack = new TH1F("background", "background", 1000, 1.6, 2.5); 
     TH1F* hStat = (TH1F*) list -> FindObject("hEventStat1");
+    
+    TH1F* hpiTOFinvbeta = new TH1F("piTOFinvbeta", "piTOFinvbeta", 600, 0, 0.06);    
+    TH1F* hpinSigma = new TH1F("pinSigma", "pinSigma", 800, -4, 4);    
+    TH1F* hknSigma = new TH1F("knSigma", "knSigma", 800, -4, 4);    
+    TH1F* hkTOFinvbeta = new TH1F("kTOFinvbeta", "kTOFinvbeta", 600, 0, 0.06);    
+
+        
     
     hInvMassBackMin -> Sumw2();
     hInvMassBackPlus -> Sumw2();
@@ -44,9 +56,14 @@ void fit(TString input){
         if (i%10000000==0) {cout<<i<<endl;}
         ntp -> GetEntry(i);
         if (cos(D_theta)>0.95) {        
-            if ((D_mass > 1.6) && (D_mass < 2.6)){
-                //if ((pi1_dca > 0.008) ){
-                    if ((D_pt > 0.5) && (D_pt < 6)) {            
+            if ((D_mass > 0.7) && (D_mass < 2.6)){
+                //if ((pi1_dca > 0.008) && (k_dca > 0.0075) && (dcaMax < 0.0065) && (D_decayL > 0.015) && (k_TOFinvbeta < 0.03) && (pi1_TOFinvbeta < 0.03)  ){
+                    if ((D_pt > 0.3) && (D_pt < 6)) {
+                        hpiTOFinvbeta-> Fill(pi1_TOFinvbeta);
+                        hkTOFinvbeta -> Fill(k_TOFinvbeta);
+                        hpinSigma -> Fill(pi1_nSigma);
+                        hknSigma -> Fill(k_nSigma);
+                        
                         if ((flag >= 0 ) && (flag < 2)) {hInvMassSign -> Fill(D_mass); }
                         else if (flag == 4) {hInvMassBackMin -> Fill(D_mass); }
                         else {hInvMassBackPlus -> Fill(D_mass); }                
@@ -59,15 +76,14 @@ void fit(TString input){
     //Int_t Nentr = hInvMassBack -> GetNBinsX();
     hInvMassBackPlus -> Clone("background"); 
     Double_t value, error, valueM, errorM, valueP, errorP;
-    for (Int_t j = 1; j < 1001; j++) {
+    for (Int_t j = 1; j < 2001; j++) {
         valueP = hInvMassBackPlus -> GetBinContent(j);  
         errorP = hInvMassBackPlus -> GetBinError(j);
         valueM = hInvMassBackMin -> GetBinContent(j);  
         errorM = hInvMassBackMin -> GetBinError(j);
         error = sqrt(valueM*errorP*errorP/valueP + valueP*errorM*errorM/valueM);
         value = 2*sqrt(valueP*valueM);
-    
-   
+       
         hInvMassBack -> SetBinContent(j, value);
         hInvMassBack -> SetBinError(j, error);
     }
@@ -78,6 +94,10 @@ void fit(TString input){
     hInvMassBackPlus -> Write(); 
     hInvMassBackMin -> Write(); 
     hStat -> Write();
+    hpiTOFinvbeta -> Write();
+    hkTOFinvbeta -> Write();
+    hpinSigma -> Write();
+    hknSigma -> Write();
     
     cout<<"res_"+input<<endl;
     cout<<"done"<<endl;
