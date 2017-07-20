@@ -37,12 +37,11 @@ class StChain;
 #endif
 StChain *chain;
 void runPicoDpmAnaMaker(
-			//const Char_t *inputFile="/gpfs01/star/pwg/lkramarik/pico_pAu/produced/st_physics_16127031_raw_4000024.picoDst.root",	
-		const char*  inputFile="/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/pico.list", 			 
+			const Char_t *inputFile="/gpfs01/star/pwg/lkramarik/picoDst_dAu/production/testFiles/st_physics_adc_17141002_raw_5000056.picoDst.root",	
 			const Char_t *outputFile="outputBaseName",  
 			 const unsigned int makerMode = 0 ,
-			 const Char_t *badRunListFileName = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/picoList_bad.list", const Char_t *treeName = "picoHFtree",
-			 const Char_t *productionBasePath = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/",
+			 const Char_t *badRunListFileName = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoLists/picoList_bad.list", const Char_t *treeName = "picoHFtree",
+			 const Char_t *productionBasePath = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/",
 			 const unsigned int decayChannel = 0 /* kChannel0 */) { 
   // -- Check STAR Library. Please set SL_version to the original star library used in the production 
   //    from http://www.star.bnl.gov/devcgi/dbProdOptionRetrv.pl
@@ -134,9 +133,13 @@ void runPicoDpmAnaMaker(
   hfCuts->setCutVzVpdVzMax(3.);
   
   hfCuts->addTriggerId(3); //VPD-5
+  hfCuts->addTriggerId(6);  //highMult-VPD-5
+  hfCuts->addTriggerId(7);  //highMult2-VPD-5
   hfCuts->addTriggerId(15); //BHT1-VPD-10
   hfCuts->addTriggerId(16); //BHT2-VPD-30
   hfCuts->addTriggerId(530003); //VPD-5
+  hfCuts->addTriggerId(530101); //highMult-VPD-5
+  hfCuts->addTriggerId(530102); //highMult2-VPD-5
   hfCuts->addTriggerId(530201); //BHT1-VPD-10
   hfCuts->addTriggerId(530202); //BHT2-VPD-30 
   hfCuts->addTriggerId(530213); //BHT3
@@ -154,12 +157,12 @@ void runPicoDpmAnaMaker(
 
   // -- ADD USER CUTS HERE ----------------------------
    // kaonPion pair cuts
-  float dcaDaughtersMax = 0.008;  // maximum
-  float decayLengthMin  = 0.0030; // minimum
+  float dcaDaughtersMax = 0.2;  // maximum
+  float decayLengthMin  = 0.000; // minimum
   float decayLengthMax  = 999999; //std::numeric_limits<float>::max();
-  float cosThetaMin     = 0.90;   // minimum
-  float minMass         = 1.;
-  float maxMass         = 3.;
+  float cosThetaMin     = 0.4;   // minimum
+  float minMass         = 0.6;
+  float maxMass         = 2.6;
   hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass);
  
   //Single track pt
