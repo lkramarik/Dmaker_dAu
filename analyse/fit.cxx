@@ -33,10 +33,10 @@ void fit(TString input){
     ntp -> SetBranchAddress("k_TOFinvbeta", &k_TOFinvbeta);
     ntp -> SetBranchAddress("dcaMax", &dcaMax);
     
-    TH1F* hInvMassBackMin = new TH1F("background minus", "background minus", 1000, 1.6, 2.5);
-    TH1F* hInvMassBackPlus = new TH1F("background plus", "background plus", 1000, 1.6, 2.5);
-    TH1F* hInvMassSign = new TH1F("signal", "signal", 1000, 1.6, 2.5);    
-    TH1F* hInvMassBack = new TH1F("background", "background", 1000, 1.6, 2.5); 
+    TH1F* hInvMassBackMin = new TH1F("background minus", "background minus", 2000, 0.6, 2.6);
+    TH1F* hInvMassBackPlus = new TH1F("background plus", "background plus", 2000, 0.6, 2.6);
+    TH1F* hInvMassSign = new TH1F("signal", "signal", 2000, 0.6, 2.6);    
+    TH1F* hInvMassBack = new TH1F("background", "background", 2000, 0.6, 2.6); 
     TH1F* hStat = (TH1F*) list -> FindObject("hEventStat1");
     
     TH1F* hpiTOFinvbeta = new TH1F("piTOFinvbeta", "piTOFinvbeta", 600, 0, 0.06);    
@@ -56,8 +56,8 @@ void fit(TString input){
         if (i%10000000==0) {cout<<i<<endl;}
         ntp -> GetEntry(i);
         if (cos(D_theta)>0.95) {        
-            if ((D_mass > 0.7) && (D_mass < 2.6)){
-                //if ((pi1_dca > 0.008) && (k_dca > 0.0075) && (dcaMax < 0.0065) && (D_decayL > 0.015) && (k_TOFinvbeta < 0.03) && (pi1_TOFinvbeta < 0.03)  ){
+            if ((D_mass > 0.6) && (D_mass < 2.6)){
+                if ((pi1_dca > 0.008) && (k_dca > 0.008) && (dcaMax < 0.0150) && (D_decayL > 0.) && (k_TOFinvbeta < 0.03) && (pi1_TOFinvbeta < 0.03)  ){
                     if ((D_pt > 0.3) && (D_pt < 6)) {
                         hpiTOFinvbeta-> Fill(pi1_TOFinvbeta);
                         hkTOFinvbeta -> Fill(k_TOFinvbeta);
@@ -67,7 +67,7 @@ void fit(TString input){
                         if ((flag >= 0 ) && (flag < 2)) {hInvMassSign -> Fill(D_mass); }
                         else if (flag == 4) {hInvMassBackMin -> Fill(D_mass); }
                         else {hInvMassBackPlus -> Fill(D_mass); }                
-                  //  }
+                    }
                 }
             }        
         }
