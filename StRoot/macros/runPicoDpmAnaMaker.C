@@ -153,8 +153,8 @@ void runPicoDpmAnaMaker(
   hfCuts->setCutRequireHFT(true);
   // -- ADD USER CUTS HERE ----------------------------
    // kaonPion pair cuts
-  float dcaDaughtersMax = 0.02;  // maximum
-  float decayLengthMin  = 0.0030; // minimum
+  float dcaDaughtersMax = 0.2;  // maximum
+  float decayLengthMin  = 0.000; // minimum
   float decayLengthMax  = 999999; //std::numeric_limits<float>::max();
   float cosThetaMin     = 0.4;   // minimum
   float minMass         = 0.6;

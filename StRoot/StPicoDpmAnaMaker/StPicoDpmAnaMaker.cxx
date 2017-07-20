@@ -396,13 +396,14 @@ int StPicoDpmAnaMaker::createCandidates() {
        if( !mHFCuts->isHybridTOFHadron(kaon, mHFCuts->getTofBetaBase(kaon), StHFCuts::kKaon) ) continue;
         if (mIdxPicoKaons[idxKaon] == mIdxPicoPions[idxPion1]) continue;
         // -- Making pair
-        StHFPair triplet(pion1,kaon,mHFCuts->getHypotheticalMass(StHFCuts::kPion),mHFCuts->getHypotheticalMass(StHFCuts::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kFALSE);
+        StHFPair pair(pion1,kaon,mHFCuts->getHypotheticalMass(StHFCuts::kPion),mHFCuts->getHypotheticalMass(StHFCuts::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kFALSE);
 
-      if (!mHFCuts->isGoodSecondaryVertexPair(triplet)) continue;
-       mPicoHFEvent->addHFSecondaryVertexPair(&triplet);
+//       if (!mHFCuts->isGoodSecondaryVertexPair(triplet)) continue; LK 200717
+      if (!mHFCuts->isClosePair(pair)) continue;
+      
+       mPicoHFEvent->addHFSecondaryVertexPair(&pair);
 
       }  // for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon)
-//     LK } // for (unsigned short idxPion2 = idxPion1+1; idxPion2 < mIdxPicoPions.size(); ++idxPion2)
   } // for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1)
 
 
@@ -434,7 +435,7 @@ int StPicoDpmAnaMaker::analyzeCandidates() {
       float kaonTOFinvbeta = fabs(1. / mHFCuts->getTofBetaBase(kaon) - sqrt(1+M_KAON_PLUS*M_KAON_PLUS/(kaon->gMom(mPrimVtx,mBField).mag()*kaon->gMom(mPrimVtx,mBField).mag())));
       float pion1TOFinvbeta = fabs(1. / mHFCuts->getTofBetaBase(pion1) - sqrt(1+M_PION_PLUS*M_PION_PLUS/(pion1->gMom(mPrimVtx,mBField).mag()*pion1->gMom(mPrimVtx,mBField).mag())));
 
-      // -- Flag D plus and Dminus TODO
+      // -- Flag D0 and background
       float flag = -99.;
       if( kaon->charge()<0 && pion1->charge()>0 ) flag=0.; // -+
       if( kaon->charge()>0 && pion1->charge()<0 ) flag=1.; // +-
