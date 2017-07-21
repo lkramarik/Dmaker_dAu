@@ -1,4 +1,4 @@
-/*   root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runPicoHFMyAnaMaker.C++
+/*   root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runPicoDpmAnaMakerLocal.C++
  *  - Different modes to use the  class
  *    - StPicoHFMaker::kAnalyze - don't write candidate trees, just fill histograms
  *        inputFile : fileList of PicoDst files or single picoDst file
@@ -36,7 +36,7 @@ using namespace std;
 class StChain;
 #endif
 StChain *chain;
-void runPicoDpmAnaMaker(
+void runPicoDpmAnaMakerLocal(
 			const Char_t *inputFile="/gpfs01/star/pwg/lkramarik/picoDst_dAu/production/testFiles/st_physics_adc_17141002_raw_5000056.picoDst.root",	
 			const Char_t *outputFile="outputBaseName",  
 			 const unsigned int makerMode = 0 ,
