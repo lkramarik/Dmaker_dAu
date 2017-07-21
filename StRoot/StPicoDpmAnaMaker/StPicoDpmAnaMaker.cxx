@@ -384,16 +384,15 @@ int StPicoDpmAnaMaker::createQA(){
 
 // _________________________________________________________
 int StPicoDpmAnaMaker::createCandidates() {
-  // Creating candidates for D+- 3 body decay
-  // D+- -> K+2Pi decay
 
   for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
     StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
+//     if( !mHFCuts->isHybridTOFHadron(pion1, mHFCuts->getTofBetaBase(pion1), StHFCuts::kPion) ) continue;
       for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
         StPicoTrack const *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
         // -- Kaon selection
         // -- TOF
-       if( !mHFCuts->isHybridTOFHadron(kaon, mHFCuts->getTofBetaBase(kaon), StHFCuts::kKaon) ) continue;
+//        if( !mHFCuts->isHybridTOFHadron(kaon, mHFCuts->getTofBetaBase(kaon), StHFCuts::kKaon) ) continue;
         if (mIdxPicoKaons[idxKaon] == mIdxPicoPions[idxPion1]) continue;
         // -- Making pair
         StHFPair pair(pion1,kaon,mHFCuts->getHypotheticalMass(StHFCuts::kPion),mHFCuts->getHypotheticalMass(StHFCuts::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kFALSE);
