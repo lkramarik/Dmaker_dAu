@@ -108,8 +108,7 @@ void runPicoDpmAnaMakerLocal(
     exit(1);
   }
 
-//StPicoDstMaker* picoDstMaker = new StPicoDstMaker("picoDstMaker");     
-  StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/pico.list", "picoDstMaker");
+  StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
   cout<<"ok, picoDstMaker created"<<endl;
   StPicoDpmAnaMaker* picoDpmAnaMaker = new StPicoDpmAnaMaker("picoDpmAnaMaker", picoDstMaker, outputFile, sInputListHF);
   picoDpmAnaMaker->setMakerMode(makerMode);
