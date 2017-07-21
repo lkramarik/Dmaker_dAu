@@ -94,7 +94,7 @@ int StPicoDpmAnaMaker::InitHF() {
   
    // -------------- USER VARIABLES -------------------------
 
-  ntp_DMeson = new TNtuple("ntp","DMeson Tree","pi1_runId:pi1_eventId:pi1_phi:pi1_eta:pi1_pt:pi1_dca:pi1_dedx:pi1_nSigma:pi1_nHitFit:pi1_nHitdedx:pi1_TOFinvbeta:pi1_betaBase:k_runId:k_eventId:k_phi:k_eta:k_pt:k_dca:k_dedx:k_nSigma:k_nHitFit:k_nHitdedx:k_TOFinvbeta:k_betaBase:dcaMax:flag:primVz:D_theta:D_decayL:D_phi:D_eta:D_pt:D_mass:D_dV0Max:centrality:refmult:refmultcorr:reweight");
+  ntp_DMeson = new TNtuple("ntp","DMeson Tree","pi1_runId:pi1_eventId:pi1_phi:pi1_eta:pi1_pt:pi1_dca:pi1_dedx:pi1_nSigma:pi1_nHitFit:pi1_nHitdedx:pi1_TOFinvbeta:pi1_betaBase:k_runId:k_eventId:k_phi:k_eta:k_pt:k_dca:k_dedx:k_nSigma:k_nHitFit:k_nHitdedx:k_TOFinvbeta:k_betaBase:dcaMax:flag:primVz:D_theta:D_decayL:D_phi:D_eta:D_pt:D_mass:D_mass_LS:D_mass_US:D_dV0Max:centrality:refmult:refmultcorr:reweight");
   mRunNumber = 0;
   return kStOK;
 }
@@ -417,12 +417,12 @@ int StPicoDpmAnaMaker::analyzeCandidates() {
   if( mPicoHFEvent->nHFSecondaryVertices() >0 ){
     for (unsigned int idx = 0; idx <  mPicoHFEvent->nHFSecondaryVertices(); ++idx) {
       
-      StHFPair const* triplet = static_cast<StHFPair*>(aCandidates->At(idx));
-      StPicoTrack const* pion1 = mPicoDst->track(triplet->particle1Idx());
-      StPicoTrack const* kaon = mPicoDst->track(triplet->particle2Idx());
+      StHFPair const* pair = static_cast<StHFPair*>(aCandidates->At(idx));
+      StPicoTrack const* pion1 = mPicoDst->track(pair->particle1Idx());
+      StPicoTrack const* kaon = mPicoDst->track(pair->particle2Idx());
       
       // Greates distance between tracks
-      float const dcaDaughters = triplet->dcaDaughters();
+      float const dcaDaughters = pair->dcaDaughters();
       float dcaMax = dcaDaughters;
       
       //TOF ---
@@ -490,7 +490,7 @@ int StPicoDpmAnaMaker::analyzeCandidates() {
       ntVar[ii++] = pion1->gMom(mPrimVtx,mBField).phi();
       ntVar[ii++] = pion1->gMom(mPrimVtx,mBField).pseudoRapidity();
       ntVar[ii++] = pion1->gPt();
-      ntVar[ii++] = triplet->particle1Dca();
+      ntVar[ii++] = pair->particle1Dca();
       ntVar[ii++] = pion1->dEdx();
       ntVar[ii++] = pion1->nSigmaPion();
       ntVar[ii++] = pion1->nHitsFit();
@@ -503,7 +503,7 @@ int StPicoDpmAnaMaker::analyzeCandidates() {
       ntVar[ii++] = kaon->gMom(mPrimVtx,mBField).phi();
       ntVar[ii++] = kaon->gMom(mPrimVtx,mBField).pseudoRapidity();
       ntVar[ii++] = kaon->gPt();
-      ntVar[ii++] = triplet->particle2Dca();
+      ntVar[ii++] = pair->particle2Dca();
       ntVar[ii++] = kaon->dEdx();
       ntVar[ii++] = kaon->nSigmaKaon();
       ntVar[ii++] = kaon->nHitsFit();
@@ -515,12 +515,20 @@ int StPicoDpmAnaMaker::analyzeCandidates() {
 
       ntVar[ii++] = flag;
       ntVar[ii++] = mPrimVtx.z();
-      ntVar[ii++] = triplet->pointingAngle();
-      ntVar[ii++] = triplet->decayLength();
-      ntVar[ii++] = triplet->phi();
-      ntVar[ii++] = triplet->eta();
-      ntVar[ii++] = sqrt(pow(triplet->px(),2.0)+pow(triplet->py(),2.0));
-      ntVar[ii++] = triplet->m();
+      ntVar[ii++] = pair->pointingAngle();
+      ntVar[ii++] = pair->decayLength();
+      ntVar[ii++] = pair->phi();
+      ntVar[ii++] = pair->eta();
+      ntVar[ii++] = sqrt(pow(pair->px(),2.0)+pow(pair->py(),2.0));
+      ntVar[ii++] = pair->m();
+      if ((flag == 0) || (flag == 1)) {
+          ntVar[ii++] = 0; //D_mass_LS
+          ntVar[ii++] = pair->m();//D_mass_US
+      } else { 
+          ntVar[ii++] = pair->m(); //D_mass_LS
+          ntVar[ii++] = 0;//D_mass_US
+      }
+      
       ntVar[ii++] = 0; // triplet->dV0Max();
       ntVar[ii++] = centrality;
       ntVar[ii++] = 0; //mPicoDst->event()->refMult();
