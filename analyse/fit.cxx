@@ -57,7 +57,7 @@ void fit(TString input){
         ntp -> GetEntry(i);
         if (cos(D_theta)>0.95) {        
             if ((D_mass > 0.6) && (D_mass < 2.6)){
-                if ((pi1_dca > 0.008) && (k_dca > 0.008) && (dcaMax < 0.0150) && (D_decayL > 0.) && (k_TOFinvbeta < 0.03) && (pi1_TOFinvbeta < 0.03)  ){
+                if ((pi1_dca > 0.003) && (k_dca > 0.003) && (dcaMax < 0.0350) && (D_decayL > 0.) && (k_TOFinvbeta < 0.03) && (pi1_TOFinvbeta < 0.03)  ){
                     if ((D_pt > 0.3) && (D_pt < 6)) {
                         hpiTOFinvbeta-> Fill(pi1_TOFinvbeta);
                         hkTOFinvbeta -> Fill(k_TOFinvbeta);
