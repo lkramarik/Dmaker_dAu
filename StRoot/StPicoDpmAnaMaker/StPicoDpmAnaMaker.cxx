@@ -94,7 +94,7 @@ int StPicoDpmAnaMaker::InitHF() {
   
    // -------------- USER VARIABLES -------------------------
 
-  ntp_DMeson = new TNtuple("ntp","DMeson Tree","pi1_runId:pi1_eventId:pi1_phi:pi1_eta:pi1_pt:pi1_dca:pi1_dedx:pi1_nSigma:pi1_nHitFit:pi1_nHitdedx:pi1_TOFinvbeta:pi1_betaBase:k_runId:k_eventId:k_phi:k_eta:k_pt:k_dca:k_dedx:k_nSigma:k_nHitFit:k_nHitdedx:k_TOFinvbeta:k_betaBase:dcaMax:flag:primVz:D_theta:D_decayL:D_phi:D_eta:D_pt:D_mass:D_mass_LS:D_mass_US:D_dV0Max:centrality:refmult:refmultcorr:reweight");
+  ntp_DMeson = new TNtuple("ntp","DMeson Tree","grefMult:globalTracks:pi1_runId:pi1_eventId:pi1_phi:pi1_eta:pi1_pt:pi1_dca:pi1_dedx:pi1_nSigma:pi1_nHitFit:pi1_nHitdedx:pi1_TOFinvbeta:pi1_betaBase:k_runId:k_eventId:k_phi:k_eta:k_pt:k_dca:k_dedx:k_nSigma:k_nHitFit:k_nHitdedx:k_TOFinvbeta:k_betaBase:dcaMax:flag:primVz:D_theta:D_decayL:D_phi:D_eta:D_pt:D_mass:D_mass_LS:D_mass_US:D_dV0Max:centrality:refmult:refmultcorr:reweight");
   mRunNumber = 0;
   return kStOK;
 }
@@ -476,7 +476,7 @@ int StPicoDpmAnaMaker::analyzeCandidates() {
        const double reweight = mRefmultCorrUtil->getWeight();
        const double refmultCor = mRefmultCorrUtil->getRefMultCorr();
 */
-   int const centrality = 1;
+        int const centrality = 1;
        const double reweight = 1;
        const double refmultCor = 1;
 
@@ -484,7 +484,11 @@ int StPicoDpmAnaMaker::analyzeCandidates() {
       float ntVar[58];
       // ---
       // Saving to NTUPLE
-
+     float ref = (float)(mPicoHFEvent->grefMult()); 
+     float globalTracks = (float)(mPicoHFEvent->numberOfGlobalTracks());
+      
+      ntVar[ii++] = ref;
+      ntVar[ii++] = globalTracks;
       ntVar[ii++] = mPicoHFEvent->runId();
       ntVar[ii++] = mPicoHFEvent->eventId();
       ntVar[ii++] = pion1->gMom(mPrimVtx,mBField).phi();
