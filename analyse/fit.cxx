@@ -17,7 +17,7 @@ void fit(TString input){
     TFile* data = new TFile(input ,"r");
     ntp = (TNtuple*)data -> Get("ntp;1");
     list = (TList*) data -> Get("picoDpmAnaMaker;1");
-    Float_t flag, D_theta, D_mass, D_pt, D_decayL, k_pt, pi1_pt, pi1_dca, k_dca, k_nSigma, pi1_nSigma, pi1_TOFinvbeta, k_TOFinvbeta, dcaMax;
+    Float_t flag, D_theta, D_mass, D_pt, D_decayL, k_pt, pi1_pt, pi1_dca, k_dca, k_nSigma, pi1_nSigma, pi1_TOFinvbeta, k_TOFinvbeta, dcaMax, pi1_eventId, k_eventId;
     ntp -> SetBranchAddress("flag",&flag);
     ntp -> SetBranchAddress("D_mass", &D_mass);
     ntp -> SetBranchAddress("D_decayL", &D_decayL);
@@ -32,6 +32,10 @@ void fit(TString input){
     ntp -> SetBranchAddress("pi1_TOFinvbeta", &pi1_TOFinvbeta);
     ntp -> SetBranchAddress("k_TOFinvbeta", &k_TOFinvbeta);
     ntp -> SetBranchAddress("dcaMax", &dcaMax);
+    ntp -> SetBranchAddress("k_eventId", &k_eventId);
+    ntp -> SetBranchAddress("pi1_eventId", &pi1_eventId);
+    
+    
     
     TH1F* hInvMassBackMin = new TH1F("background minus", "background minus", 2000, 0.6, 2.6);
     TH1F* hInvMassBackPlus = new TH1F("background plus", "background plus", 2000, 0.6, 2.6);
@@ -55,6 +59,7 @@ void fit(TString input){
     for (Long64_t i = 0; i < numberEntr; i++) {
         if (i%10000000==0) {cout<<i<<endl;}
         ntp -> GetEntry(i);
+        cout<<k_eventId<<"    "<<pi1_eventId<<endl;
         if (cos(D_theta)>0.95) {        
             if ((D_mass > 0.6) && (D_mass < 2.6)){
                 if ((pi1_dca > 0.003) && (k_dca > 0.003) && (dcaMax < 0.0350) && (D_decayL > 0.) && (k_TOFinvbeta < 0.03) && (pi1_TOFinvbeta < 0.03)  ){

@@ -193,6 +193,8 @@ int StPicoDpmAnaMaker::MakeHF() {
    TH2F *h_mh2CentVzWg_run = static_cast<TH2F*>(mOutList->FindObject("h_mh2CentVzWg_run"));
 
     StThreeVectorF pVtx = mPicoDst->event()->primaryVertex();
+//     float multiplicity = mPicoDst->event()->refMult();
+//     h_refMult -> Fill(multiplicity);
 
 /*
       mRefmultCorrUtil->init(mPicoDst->event()->runId());
@@ -230,7 +232,7 @@ int StPicoDpmAnaMaker::MakeHF() {
         StPicoTrack const* trk = mPicoDst->track(iTrack);
         if (!trk) continue;
         StPhysicalHelixD helix = trk->helix(mPicoDst->event()->bField());
-        StThreeVectorF momentum = trk->gMom(pVtx, mPicoDst->event()->bField());
+        StThreeVectorF momentum = trk->gMom(mPicoDst->event()->primaryVertex(), mPicoDst->event()->bField());
 
         if (!(trk->nHitsFit()>=20)) continue;
         if (!(fabs(momentum.pseudoRapidity()) <= 1.0)) continue;      
@@ -414,7 +416,7 @@ int StPicoDpmAnaMaker::analyzeCandidates() {
   // --- Analyze previously constructed candidates and output to ntuple
   // -- Decay channel1
   TClonesArray const * aCandidates= mPicoHFEvent->aHFSecondaryVertices();
-  if( mPicoHFEvent->nHFSecondaryVertices() >0 ){
+  if( mPicoHFEvent->nHFSecondaryVertices() > 0 ){
     for (unsigned int idx = 0; idx <  mPicoHFEvent->nHFSecondaryVertices(); ++idx) {
       
       StHFPair const* pair = static_cast<StHFPair*>(aCandidates->At(idx));
