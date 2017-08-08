@@ -37,10 +37,10 @@ void fit(TString input){
     
     
     
-    TH1F* hInvMassBackMin = new TH1F("background minus", "background minus", 2000, 0.6, 2.6);
-    TH1F* hInvMassBackPlus = new TH1F("background plus", "background plus", 2000, 0.6, 2.6);
-    TH1F* hInvMassSign = new TH1F("signal", "signal", 2000, 0.6, 2.6);    
-    TH1F* hInvMassBack = new TH1F("background", "background", 2000, 0.6, 2.6); 
+    TH1F* hInvMassBackMin = new TH1F("background minus", "background minus", 2000, 0.4, 2.4);
+    TH1F* hInvMassBackPlus = new TH1F("background plus", "background plus", 2000, 0.4, 2.4);
+    TH1F* hInvMassSign = new TH1F("signal", "signal", 2000, 0.4, 2.4);    
+    TH1F* hInvMassBack = new TH1F("background", "background", 2000, 0.4, 2.4); 
     TH1F* hStat = (TH1F*) list -> FindObject("hEventStat1");
     
     TH1F* hpiTOFinvbeta = new TH1F("piTOFinvbeta", "piTOFinvbeta", 600, 0, 0.06);    
@@ -53,16 +53,16 @@ void fit(TString input){
     hInvMassBackMin -> Sumw2();
     hInvMassBackPlus -> Sumw2();
     hInvMassSign -> Sumw2();
-
+    Long64_t equal = 0;	
     Long64_t numberEntr = ntp -> GetEntries();
     cout<<"Number of entries in Ntuple: "<<numberEntr<<endl;;
     for (Long64_t i = 0; i < numberEntr; i++) {
         if (i%10000000==0) {cout<<i<<endl;}
         ntp -> GetEntry(i);
-        cout<<k_eventId<<"    "<<pi1_eventId<<endl;
+        if (k_eventId == pi1_eventId) equal++;
         if (cos(D_theta)>0.95) {        
             if ((D_mass > 0.6) && (D_mass < 2.6)){
-                if ((pi1_dca > 0.003) && (k_dca > 0.003) && (dcaMax < 0.0350) && (D_decayL > 0.) && (k_TOFinvbeta < 0.03) && (pi1_TOFinvbeta < 0.03)  ){
+                if ((pi1_dca > 0.002) && (k_dca > 0.002) && (dcaMax < 33333) && (D_decayL > 0.) && (k_TOFinvbeta < 0.03) && (pi1_TOFinvbeta < 0.03)  ){
                     if ((D_pt > 0.3) && (D_pt < 6)) {
                         hpiTOFinvbeta-> Fill(pi1_TOFinvbeta);
                         hkTOFinvbeta -> Fill(k_TOFinvbeta);
@@ -78,6 +78,7 @@ void fit(TString input){
         }
     }
     
+    cout<<"Number of equal runIds: "<<equal<<endl;
     //Int_t Nentr = hInvMassBack -> GetNBinsX();
     hInvMassBackPlus -> Clone("background"); 
     Double_t value, error, valueM, errorM, valueP, errorP;

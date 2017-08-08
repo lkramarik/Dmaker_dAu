@@ -397,7 +397,7 @@ int StPicoDpmAnaMaker::createCandidates() {
 //        if( !mHFCuts->isHybridTOFHadron(kaon, mHFCuts->getTofBetaBase(kaon), StHFCuts::kKaon) ) continue;
         if (mIdxPicoKaons[idxKaon] == mIdxPicoPions[idxPion1]) continue;
         // -- Making pair
-        StHFPair pair(pion1,kaon,mHFCuts->getHypotheticalMass(StHFCuts::kPion),mHFCuts->getHypotheticalMass(StHFCuts::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kFALSE);
+        StHFPair pair(pion1,kaon,mHFCuts->getHypotheticalMass(StHFCuts::kPion),mHFCuts->getHypotheticalMass(StHFCuts::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
 
 //       if (!mHFCuts->isGoodSecondaryVertexPair(triplet)) continue; LK 200717
       if (!mHFCuts->isClosePair(pair)) continue;
