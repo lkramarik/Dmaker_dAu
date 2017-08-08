@@ -48,7 +48,6 @@ void fit(TString input){
     TH1F* hknSigma = new TH1F("knSigma", "knSigma", 800, -4, 4);    
     TH1F* hkTOFinvbeta = new TH1F("kTOFinvbeta", "kTOFinvbeta", 600, 0, 0.06);    
 
-        
     
     hInvMassBackMin -> Sumw2();
     hInvMassBackPlus -> Sumw2();
@@ -60,20 +59,20 @@ void fit(TString input){
         if (i%10000000==0) {cout<<i<<endl;}
         ntp -> GetEntry(i);
         if (k_eventId == pi1_eventId) equal++;
-        if (cos(D_theta)>0.95) {        
+        if (cos(D_theta)>0.8) {        
             if ((D_mass > 0.6) && (D_mass < 2.6)){
-                if ((pi1_dca > 0.002) && (k_dca > 0.002) && (dcaMax < 33333) && (D_decayL > 0.) && (k_TOFinvbeta < 0.03) && (pi1_TOFinvbeta < 0.03)  ){
-                    if ((D_pt > 0.3) && (D_pt < 6)) {
+//                 if ((pi1_dca > 0.00) && (k_dca > 0.00) && (dcaMax < 33333333) && (D_decayL > 0.) && (k_TOFinvbeta < 0.06) && (pi1_TOFinvbeta < 0.06)  ){
+                    if ((D_pt > 0.2) && (D_pt < 6)) {
                         hpiTOFinvbeta-> Fill(pi1_TOFinvbeta);
                         hkTOFinvbeta -> Fill(k_TOFinvbeta);
                         hpinSigma -> Fill(pi1_nSigma);
                         hknSigma -> Fill(k_nSigma);
                         
-                        if ((flag >= 0 ) && (flag < 2)) {hInvMassSign -> Fill(D_mass); }
-                        else if (flag == 4) {hInvMassBackMin -> Fill(D_mass); }
-                        else {hInvMassBackPlus -> Fill(D_mass); }                
+                        if ((flag == 0 ) || (flag == 1)) {hInvMassSign -> Fill(D_mass); }
+                        if (flag == 4) {hInvMassBackMin -> Fill(D_mass); }
+                        if (flag == 5) {hInvMassBackPlus -> Fill(D_mass); }                
                     }
-                }
+//                 }
             }        
         }
     }
