@@ -341,7 +341,7 @@ const double refmultCor = mRefmultCorrUtil->getRefMultCorr();
         
         // if (!isGoodQaTrack(trk, momentum, dca)) continue; pt, nhits, pseudorap
         if (!(trk->gPt()>0.3)) continue;
-        if (!(trk->nHitsFit()>20)) continue;
+        if (!(trk->nHitsFit()>15)) continue;
         if (!(fabs(momentum.pseudoRapidity()) < 1.0)) continue;
         
         StThreeVectorF dcaPoint = helix.at(helix.pathLength(mPrimVtx.x(), mPrimVtx.y()));
@@ -774,6 +774,7 @@ void StPicoDpmAnaMaker::addDcaPtCent(float dca, float dcaXy, float dcaZ, bool Is
     if(EtaIndex == -1) return;
     if(VzIndex == -1) return;
     
+    centrality = 0;
     if (centrality < 0) return; // remove bad centrality, only keep 9 centralities
     if (IsPion){
         mh3DcaXyZPtCentPartEtaVzPhi[0][EtaIndex][VzIndex][centrality]->Fill(pt, dcaXy, dcaZ);
