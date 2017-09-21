@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<job fileListSyntax="paths" minFilesPerProcess="&minNFiles;" maxFilesPerProcess="&maxNFiles;" simulateSubmission="false">
+  <stdout URL="file:&basePath;/jobs/&prodId;/log/$JOBID.out"/>
+  <stderr URL="file:&basePath;/jobs/&prodId;/err/$JOBID.err"/>
+
+  <input URL="filelist:&listOfFiles;" />
+  
+  <Generator>
+    <Location>./report/</Location>
+    <ScriptLocation>./csh/</ScriptLocation>
+    <ListLocation>./list/</ListLocation>
+  </Generator>
+  
+  <command>
+    starver &starVersion;
+    
+    setenv PRODPATH &basePath;/production/&prodId;
+    setenv LOGPATH  &basePath;/jobs/&prodId;/log
+
+    mkdir -p ${PRODPATH} ${LOGPATH}
+
+    if ("&mMode;" == "1") then
+         &basePath;/jobs/&prodId;/starSubmit/parseFileList.csh ${FILELIST} &basePath; &prodId; &mMode; &treeName; ${JOBID} &rootMacro; picoList_bad.list &productionBasePath; &decayChannel; &starVersion;
+    else
+        root -q -b -l StRoot/macros/loadSharedHFLibraries.C StRoot/macros/&rootMacro;++\(\"$FILELIST\",\"&prodId;_$JOBINDEX\",&mMode;,\"picoList_bad.list\",\"&treeName;\",\"&productionBasePath;\",&decayChannel;\) &gt;&amp; ${JOBID}.log
+        tar -zcvf ${JOBID}.log.tgz ${JOBID}.log
+    endif
+
+  </command>
+
+  <output fromScratch="*.root"    toURL="$PRODPATH/" />
+  <output fromScratch="*.log.tgz" toURL="$LOGPATH/" />
+  <output fromScratch="*.log"     toURL="$LOGPATH/" />
+  
+  <SandBox installer="ZIP">
+    <Package name="LocalLibraries">
+      <File>file:./StRoot/</File>
+      <File>file:./run16dAuPrescales/</File>
+      <File>file:./.sl64_gcc482/</File>
+      <File>file:./picoList_bad.list</File>
+      <File>file:./starSubmit/parseFileList.csh</File>
+    </Package>
+  </SandBox>
+</job>
