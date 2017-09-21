@@ -59,9 +59,9 @@ void fit(TString input){
         if (i%10000000==0) {cout<<i<<endl;}
         ntp -> GetEntry(i);
         if (k_eventId == pi1_eventId) equal++;
-        if (cos(D_theta)>0.9) {        
-            if ((D_mass > 0.6) && (D_mass < 2.6)){
-                if ((pi1_dca > 0.00) && (k_dca > 0.00) && (dcaMax < 33333333) && (D_decayL > 0.) && (k_TOFinvbeta < 0.06) && (pi1_TOFinvbeta < 0.06)  ){
+        if (cos(D_theta)>0.8) {        
+            if ((D_mass > 0.4) && (D_mass < 2.4)){
+                if ((pi1_dca > 0.00) && (k_dca > 0.00) && (dcaMax < 33333333) && (D_decayL > 0.) && (k_TOFinvbeta < 0.04) && (pi1_TOFinvbeta < 0.04)  ){
                     if ((D_pt > 0.2) && (D_pt < 6)) {
                         hpiTOFinvbeta-> Fill(pi1_TOFinvbeta);
                         hkTOFinvbeta -> Fill(k_TOFinvbeta);

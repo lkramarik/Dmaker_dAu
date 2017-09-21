@@ -119,12 +119,15 @@ void runPicoDpmAnaMaker(
 
     // -- File name of bad run list
     hfCuts->setBadRunListFileName(badRunListFileName); 
-    
+
+    hfCuts->addTriggerId(2); //ZDC-VPD-5 
     hfCuts->addTriggerId(3); //VPD-5
     hfCuts->addTriggerId(6);  //highMult-VPD-5
     hfCuts->addTriggerId(7);  //highMult2-VPD-5
     hfCuts->addTriggerId(15); //BHT1-VPD-10
     hfCuts->addTriggerId(16); //BHT2-VPD-30
+    hfCuts->addTriggerId(17); //BHT3
+    hfCuts->addTriggerId(530002); //ZCD-VPD-5
     hfCuts->addTriggerId(530003); //VPD-5
     hfCuts->addTriggerId(530101); //highMult-VPD-5
     hfCuts->addTriggerId(530102); //highMult2-VPD-5
@@ -138,7 +141,7 @@ void runPicoDpmAnaMaker(
     // -- Channel0
     picoDpmAnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
     
-    hfCuts->setCutPrimaryDCAtoVtxMax(1.); //default is 1.0
+    hfCuts->setCutPrimaryDCAtoVtxMax(1.5); //default is 1.0
     hfCuts->setCutVzMax(6.);
     hfCuts->setCutVzVpdVzMax(3.);
     hfCuts->setCutNHitsFitMin(15); //default is 20
