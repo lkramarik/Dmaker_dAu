@@ -106,7 +106,7 @@ void StPicoDpmAnaMaker::ClearHF(Option_t *opt="") {
 // _________________________________________________________
 int StPicoDpmAnaMaker::FinishHF() {
     if( isMakerMode() != StPicoHFMaker::kWrite )
-        ntp_DMeson->Write();
+//         ntp_DMeson->Write();
     closeFile();
     return kStOK;
 }
@@ -910,7 +910,7 @@ void StPicoDpmAnaMaker::closeFile()
     mh3DcaZPtCent->Write();
     
     // nt->Write();
-    mOutFile->Write();
+//     mOutFile->Write();
     mOutFile->Close();
     //mOutFile->Delete();
 }
