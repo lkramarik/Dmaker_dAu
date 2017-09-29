@@ -15,7 +15,8 @@
 
 void fit(TString input){    
     TFile* data = new TFile(input ,"r");
-    ntp = (TNtuple*)data -> Get("ntp;1");
+    data -> ls();
+    ntp = (TNtuple*)data -> Get("ntp;5");
     list = (TList*) data -> Get("picoDpmAnaMaker;1");
     Float_t flag, D_theta, D_mass, D_pt, D_decayL, k_pt, pi1_pt, pi1_dca, k_dca, k_nSigma, pi1_nSigma, pi1_TOFinvbeta, k_TOFinvbeta, dcaMax, pi1_eventId, k_eventId;
     ntp -> SetBranchAddress("flag",&flag);
