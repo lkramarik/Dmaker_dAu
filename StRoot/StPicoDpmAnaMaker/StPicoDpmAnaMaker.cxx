@@ -106,7 +106,7 @@ void StPicoDpmAnaMaker::ClearHF(Option_t *opt="") {
 // _________________________________________________________
 int StPicoDpmAnaMaker::FinishHF() {
     if( isMakerMode() != StPicoHFMaker::kWrite )
-//         ntp_DMeson->Write();
+        ntp_DMeson -> Write(ntp_DMeson->GetName(), TObject::kOverwrite);
 //     closeFile();
     return kStOK;
 }
@@ -860,7 +860,7 @@ void StPicoDpmAnaMaker::addCent(const double refmultCor, int centrality, const d
 void StPicoDpmAnaMaker::closeFile()
 {
     mOutFile->cd();
-    
+    ntp_DMeson->Write();
     mh1Cent->Write();
     mh1CentWg->Write();
     mh1gRefmultCor->Write();
