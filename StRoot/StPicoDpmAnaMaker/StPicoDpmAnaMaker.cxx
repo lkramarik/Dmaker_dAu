@@ -88,6 +88,9 @@ int StPicoDpmAnaMaker::InitHF() {
     mOutList->Add(new TH2F("h_mh2CentVz_run", "CentralityVsVz;cent;Vz", 10, -1.5, 8.5, 200, -10, 10));
     mOutList->Add(new TH2F("h_mh2CentVzWg_run", "CentralityVsVzWg;cent;Vz", 10, -1.5, 8.5, 200, -10, 10));
     
+    mOutList->Add(new TH1F("h_refMult", "Multiplicity", 120, 0, 120));
+
+    
     //histoInit(mOutFileBaseName, true);
     
     
@@ -191,9 +194,13 @@ int StPicoDpmAnaMaker::MakeHF() {
     TH2F *h_mh2CentVz_run = static_cast<TH2F*>(mOutList->FindObject("h_mh2CentVz_run"));
     TH2F *h_mh2CentVzWg_run = static_cast<TH2F*>(mOutList->FindObject("h_mh2CentVzWg_run"));
     
+    TH1F *h_refMult = static_cast<TH1F*>(mOutList->FindObject("h_refMult"));
+
+    
     StThreeVectorF pVtx = mPicoDst->event()->primaryVertex();
-    //     float multiplicity = mPicoDst->event()->refMult();
-    //     h_refMult -> Fill(multiplicity);
+    
+    float multiplicity = mPicoDst->event()->refMult();
+    h_refMult -> Fill(multiplicity);
     
     /*
      *      mRefmultCorrUtil->init(mPicoDst->event()->runId());
