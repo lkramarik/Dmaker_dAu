@@ -44,7 +44,7 @@ void runPicoDpmAnaMaker(
     const Char_t *badRunListFileName, const Char_t *treeName,
     const Char_t *productionBasePath,
     const unsigned int decayChannel = 0 /* kChannel0 */) { 
-    string SL_version = "SL17b";
+    string SL_version = "SL17d";
     string env_SL = getenv ("STAR");
     if (env_SL.find(SL_version)==string::npos) {
         cout<<"Environment Star Library does not match the requested library in runPicoHFMyAnaMaker.C. Exiting..."<<endl;

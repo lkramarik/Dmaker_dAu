@@ -56,7 +56,7 @@ set treeName=MyAna.picoHFtree
 set productionId=`date +%F_%H-%M`
 
 # -- set STAR software version
-set starVersion=SL17b
+set starVersion=SL17d
 
 # -- production base path (to find picoDsts to corresponding trees
 set productionbasePath=/
@@ -65,8 +65,8 @@ set productionbasePath=/
 set xmlFile=submitPicoHFMaker.xml
 
 # -- set min and mx number of files
-set minNFiles=30
-set maxNFiles=40
+set minNFiles=40
+set maxNFiles=50
 
 # ###############################################
 # -- DON'T CHANGE BELOW THAT LINE

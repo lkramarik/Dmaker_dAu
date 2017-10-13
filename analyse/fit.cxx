@@ -16,7 +16,7 @@
 void fit(TString input){    
     TFile* data = new TFile(input ,"r");
     data -> ls();
-    ntp = (TNtuple*)data -> Get("ntp;5");
+    ntp = (TNtuple*)data -> Get("ntp");
     list = (TList*) data -> Get("picoDpmAnaMaker;1");
     Float_t flag, D_theta, D_mass, D_pt, D_decayL, k_pt, pi1_pt, pi1_dca, k_dca, k_nSigma, pi1_nSigma, pi1_TOFinvbeta, k_TOFinvbeta, dcaMax, pi1_eventId, k_eventId;
     ntp -> SetBranchAddress("flag",&flag);
@@ -49,7 +49,9 @@ void fit(TString input){
     TH1F* hknSigma = new TH1F("knSigma", "knSigma", 800, -4, 4);    
     TH1F* hkTOFinvbeta = new TH1F("kTOFinvbeta", "kTOFinvbeta", 600, 0, 0.06);    
     TH1F* hdecayLength = new TH1F("hdecayLength", "hdecayLength", 2000, 0, 0.2);  
-    
+    TH1F* hpi1_dca = new TH1F("hpi1_dca", "hpi1_dca", 2000, 0, 0.2);
+    TH1F* hk_dca = new TH1F("hk_dca", "hk_dca", 2000, 0, 0.2);     
+
     hInvMassBackMin -> Sumw2();
     hInvMassBackPlus -> Sumw2();
     hInvMassSign -> Sumw2();
@@ -62,15 +64,17 @@ void fit(TString input){
         if (k_eventId == pi1_eventId) equal++;
         if (cos(D_theta)>0.8) {        
             if ((D_mass > 0.4) && (D_mass < 2.4)){
-                if ((pi1_dca > 0.00) && (k_dca > 0.00) && (dcaMax < 33333333) && (D_decayL > 0.) && (k_TOFinvbeta < 0.04) && (pi1_TOFinvbeta < 0.04)  ){
+                if ((pi1_dca > 0.003) && (k_dca > 0.003) && (dcaMax < 33333333) && (D_decayL > 0.) && (k_TOFinvbeta < 0.05) && (pi1_TOFinvbeta < 0.05)  ){
                     if ((D_pt > 0.2) && (D_pt < 6)) {
                         hpiTOFinvbeta-> Fill(pi1_TOFinvbeta);
                         hkTOFinvbeta -> Fill(k_TOFinvbeta);
                         hpinSigma -> Fill(pi1_nSigma);
                         hknSigma -> Fill(k_nSigma);
                         hdecayLength -> Fill(D_decayL);
-                 
-                        if ((flag == 0 ) || (flag == 1)) {hInvMassSign -> Fill(D_mass); }
+                 	hpi1_dca -> Fill(pi1_dca);
+			hk_dca -> Fill(k_dca);
+			    
+                    if ((flag == 0 ) || (flag == 1)) {hInvMassSign -> Fill(D_mass); }
                         if (flag == 4) {hInvMassBackMin -> Fill(D_mass); }
                         if (flag == 5) {hInvMassBackPlus -> Fill(D_mass); }                
                     }
@@ -106,7 +110,9 @@ void fit(TString input){
     hpinSigma -> Write();
     hknSigma -> Write();
     hdecayLength -> Write();
-    
+    hpi1_dca -> Write();
+    hk_dca -> Write();
+
     cout<<"res_"+input<<endl;
     cout<<"done"<<endl;
 }
