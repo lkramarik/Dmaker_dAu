@@ -51,6 +51,7 @@ void fit(TString input){
     TH1F* hdecayLength = new TH1F("hdecayLength", "hdecayLength", 2000, 0, 0.2);  
     TH1F* hpi1_dca = new TH1F("hpi1_dca", "hpi1_dca", 2000, 0, 0.2);
     TH1F* hk_dca = new TH1F("hk_dca", "hk_dca", 2000, 0, 0.2);     
+    TH1F* hdcaDaughters = new TH1F("hdcaDaughters", "hdcaDaughters", 2000, 0, 0.2);
 
     hInvMassBackMin -> Sumw2();
     hInvMassBackPlus -> Sumw2();
@@ -64,7 +65,7 @@ void fit(TString input){
         if (k_eventId == pi1_eventId) equal++;
         if (cos(D_theta)>0.8) {        
             if ((D_mass > 0.4) && (D_mass < 2.4)){
-                if ((pi1_dca > 0.003) && (k_dca > 0.003) && (dcaMax < 33333333) && (D_decayL > 0.) && (k_TOFinvbeta < 0.05) && (pi1_TOFinvbeta < 0.05)  ){
+                if ((pi1_dca > 0.003) && (k_dca > 0.003) && (dcaMax < 9999999) && (D_decayL > 0.) && (k_TOFinvbeta < 0.05) && (pi1_TOFinvbeta < 0.05)  ){
                     if ((D_pt > 0.2) && (D_pt < 6)) {
                         hpiTOFinvbeta-> Fill(pi1_TOFinvbeta);
                         hkTOFinvbeta -> Fill(k_TOFinvbeta);
@@ -73,6 +74,7 @@ void fit(TString input){
                         hdecayLength -> Fill(D_decayL);
                  	hpi1_dca -> Fill(pi1_dca);
 			hk_dca -> Fill(k_dca);
+  			hdcaDaughters -> Fill(dcaMax);
 			    
                     if ((flag == 0 ) || (flag == 1)) {hInvMassSign -> Fill(D_mass); }
                         if (flag == 4) {hInvMassBackMin -> Fill(D_mass); }
@@ -112,6 +114,7 @@ void fit(TString input){
     hdecayLength -> Write();
     hpi1_dca -> Write();
     hk_dca -> Write();
+    hdcaDaughters -> Write();
 
     cout<<"res_"+input<<endl;
     cout<<"done"<<endl;

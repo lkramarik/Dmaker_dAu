@@ -1,6 +1,6 @@
-void projectSignal(TString input = "ntp_test.root") {
+void projectSignal(TString input) {
     TFile* data = new TFile(input ,"r");
-    TNtuple* ntp = (TNtuple*)data -> Get("ntp;2");
+    TNtuple* ntp = (TNtuple*)data -> Get("ntp");
 
     TCut* signal = new TCut("flag==1||flag==0");
     TCut* background = new TCut("flag==4||flag==5");
@@ -25,5 +25,8 @@ void projectSignal(TString input = "ntp_test.root") {
         ntp -> Project("h", var, *signal);
         h -> Write(var);
     }
+data -> Close();
+  fOut -> Close();
+
 
 }

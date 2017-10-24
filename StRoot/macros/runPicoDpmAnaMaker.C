@@ -145,7 +145,7 @@ void runPicoDpmAnaMaker(
     hfCuts->setCutVzMax(6.);
     hfCuts->setCutVzVpdVzMax(3.);
     hfCuts->setCutNHitsFitMin(15); //default is 20
-    hfCuts->setCutRequireHFT(true);
+    hfCuts->setCutRequireHFT(false);
 
     // -- ADD USER CUTS HERE ----------------------------
     // kaonPion pair cuts
@@ -180,8 +180,7 @@ void runPicoDpmAnaMaker(
     if(nEvents>total) nEvents = total;
     
     for (Int_t i=0; i<nEvents; i++) {
-        if(i%10000==0)
-            //       cout << "Working on eventNumber " << i << endl;
+//        if(i%10000==0)       cout << "Working on eventNumber " << i << endl;
             
             chain->Clear();
         
@@ -189,7 +188,7 @@ void runPicoDpmAnaMaker(
         
         if (iret) { cout << "Bad return code!" << iret << endl; break;}
         
-        total++;
+       
     }
     
     cout << "****************************************** " << endl;

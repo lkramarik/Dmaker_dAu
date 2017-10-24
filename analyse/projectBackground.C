@@ -1,6 +1,6 @@
-void projectBackground(TString input = "ntp_test.root") {
+void projectBackground(TString input) {
     TFile* data = new TFile(input ,"r");
-    TNtuple* ntp = (TNtuple*)data -> Get("ntp;2");
+    TNtuple* ntp = (TNtuple*)data -> Get("ntp");
 
     TCut* signal = new TCut("flag==1||flag==0");
     TCut* background = new TCut("flag==4||flag==5");
@@ -9,7 +9,7 @@ void projectBackground(TString input = "ntp_test.root") {
     TCut* pi1_dca = new TCut("pi1_dca<0.008");
 
     TList *listOut = new TList();
-    TFile *fOut = new TFile("signal_properties_"+input,"recreate");
+    TFile *fOut = new TFile("background_properties_"+input,"recreate");
 
     TH1F* h = new TH1F("h", "h", 10000, 0., 10.);
 
@@ -25,5 +25,7 @@ void projectBackground(TString input = "ntp_test.root") {
         ntp -> Project("h", var, *background);
         h -> Write(var);
     }
+  data -> Close();
+  fOut -> Close();
 
 }

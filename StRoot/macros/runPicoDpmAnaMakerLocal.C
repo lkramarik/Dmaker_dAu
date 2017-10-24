@@ -37,7 +37,7 @@ class StChain;
 #endif
 StChain *chain;
 void runPicoDpmAnaMakerLocal(
-			const Char_t *inputFile="/gpfs01/star/pwg/lkramarik/picoDst_dAu/production/testFiles/st_physics_adc_17141002_raw_5000056.picoDst.root",	
+			const Char_t *inputFile="/gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoLists/runs_local_test.list",	
 			const Char_t *outputFile="outputBaseName",  
 			 const unsigned int makerMode = 0 ,
 			 const Char_t *badRunListFileName = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoLists/picoList_bad.list", const Char_t *treeName = "picoHFtree",
@@ -45,7 +45,7 @@ void runPicoDpmAnaMakerLocal(
 			 const unsigned int decayChannel = 0 /* kChannel0 */) { 
   // -- Check STAR Library. Please set SL_version to the original star library used in the production 
   //    from http://www.star.bnl.gov/devcgi/dbProdOptionRetrv.pl
-  string SL_version = "SL17b";
+  string SL_version = "SL17d";
   string env_SL = getenv ("STAR");
   if (env_SL.find(SL_version)==string::npos) {
       cout<<"Environment Star Library does not match the requested library in runPicoHFMyAnaMaker.C. Exiting..."<<endl;
@@ -145,7 +145,7 @@ void runPicoDpmAnaMakerLocal(
   
 
   hfCuts->setCutNHitsFitMin(15); //default is 20
-  hfCuts->setCutRequireHFT(true);
+  hfCuts->setCutRequireHFT(false);
 
   //LK hfCuts->setCutDcaMin(0.009,StHFCuts::kPion); //federic 1aug2016
   //LK  hfCuts->setCutDcaMin(0.007,StHFCuts::kKaon); //federic 3aug2016
@@ -187,8 +187,7 @@ void runPicoDpmAnaMakerLocal(
   if(nEvents>total) nEvents = total;
 
   for (Int_t i=0; i<nEvents; i++) {
-    if(i%10000==0)
-//       cout << "Working on eventNumber " << i << endl;
+//    if(i%10000==0)       cout << "Working on eventNumber " << i << endl;
 
     chain->Clear();
 
