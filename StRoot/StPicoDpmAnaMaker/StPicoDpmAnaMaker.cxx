@@ -96,7 +96,7 @@ int StPicoDpmAnaMaker::InitHF() {
     
     // -------------- USER VARIABLES -------------------------
     
-    ntp_DMeson = new TNtuple("ntp","DMeson Tree","grefMult:pi1_runId:pi1_eventId:pi1_phi:pi1_eta:pi1_pt:pi1_dca:pi1_dedx:pi1_nSigma:pi1_nHitFit:pi1_nHitdedx:pi1_TOFinvbeta:pi1_betaBase:k_runId:k_eventId:k_phi:k_eta:k_pt:k_dca:k_dedx:k_nSigma:k_nHitFit:k_nHitdedx:k_TOFinvbeta:k_betaBase:dcaMax:flag:primVz:D_theta:D_decayL:D_phi:D_eta:D_pt:D_mass:D_mass_LS:D_mass_US:D_dV0Max:centrality:refmult:refmultcorr:reweight");
+    ntp_DMeson = new TNtuple("ntp","DMeson Tree","grefMult:pi1_runId:pi1_eventId:pi1_phi:pi1_eta:pi1_pt:pi1_dca:pi1_dedx:pi1_nSigma:pi1_nHitFit:pi1_nHitdedx:pi1_TOFinvbeta:pi1_betaBase:k_runId:k_eventId:k_phi:k_eta:k_pt:k_dca:k_dedx:k_nSigma:k_nHitFit:k_nHitdedx:k_TOFinvbeta:k_betaBase:dcaMax:flag:primVz:D_theta:D_decayL:D_phi:D_eta:D_cosThetaStar:D_pt:D_mass:D_mass_LS:D_mass_US:D_dV0Max:centrality:refmult:refmultcorr:reweight");
     mRunNumber = 0;
     return kStOK;
 }
@@ -401,6 +401,7 @@ int StPicoDpmAnaMaker::createCandidates() {
             //        if( !mHFCuts->isHybridTOFHadron(kaon, mHFCuts->getTofBetaBase(kaon), StHFCuts::kKaon) ) continue;
             if (mIdxPicoKaons[idxKaon] == mIdxPicoPions[idxPion1]) continue;
             // -- Making pair
+
             StHFPair pair(pion1, kaon, mHFCuts->getHypotheticalMass(StHFCuts::kPion),mHFCuts->getHypotheticalMass(StHFCuts::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
             if (!mHFCuts->isClosePair(pair)) continue;
             
@@ -485,7 +486,7 @@ int StPicoDpmAnaMaker::analyzeCandidates() {
             const double refmultCor = 1;
             
             int ii=0;
-            float ntVar[41];
+            float ntVar[42];
             // ---
             // Saving to NTUPLE
             // float ref = (float)(mPicoHFEvent->grefMult()); 
@@ -526,6 +527,8 @@ int StPicoDpmAnaMaker::analyzeCandidates() {
             ntVar[ii++] = pair->decayLength();
             ntVar[ii++] = pair->phi();
             ntVar[ii++] = pair->eta();
+            ntVar[ii++] = pair->cosThetaStar();
+
             ntVar[ii++] = sqrt(pow(pair->px(),2.0)+pow(pair->py(),2.0));
             ntVar[ii++] = pair->m();
             if ((flag == 0) || (flag == 1)) {
