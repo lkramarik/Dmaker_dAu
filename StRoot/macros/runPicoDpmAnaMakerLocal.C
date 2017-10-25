@@ -145,7 +145,7 @@ void runPicoDpmAnaMakerLocal(
   
 
   hfCuts->setCutNHitsFitMin(15); //default is 20
-  hfCuts->setCutRequireHFT(false);
+  hfCuts->setCutRequireHFT(true);
 
   //LK hfCuts->setCutDcaMin(0.009,StHFCuts::kPion); //federic 1aug2016
   //LK  hfCuts->setCutDcaMin(0.007,StHFCuts::kKaon); //federic 3aug2016
