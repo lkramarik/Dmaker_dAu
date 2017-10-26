@@ -52,6 +52,8 @@ void fit(TString input){
     TH1F* hpi1_dca = new TH1F("hpi1_dca", "hpi1_dca", 2000, 0, 0.2);
     TH1F* hk_dca = new TH1F("hk_dca", "hk_dca", 2000, 0, 0.2);     
     TH1F* hdcaDaughters = new TH1F("hdcaDaughters", "hdcaDaughters", 2000, 0, 0.2);
+    TH1F* hcosTheta = new TH1F("hcosTheta", "hcosTheta", , 0, 0.2);
+
 
     hInvMassBackMin -> Sumw2();
     hInvMassBackPlus -> Sumw2();
@@ -63,22 +65,24 @@ void fit(TString input){
         if (i%10000000==0) {cout<<i<<endl;}
         ntp -> GetEntry(i);
         if (k_eventId == pi1_eventId) equal++;
-        if (cos(D_theta)>0.8) {        
-            if ((D_mass > 0.4) && (D_mass < 2.4)){
-                if ((pi1_dca > 0.003) && (k_dca > 0.003) && (dcaMax < 9999999) && (D_decayL > 0.) && (k_TOFinvbeta < 0.05) && (pi1_TOFinvbeta < 0.05)  ){
+        if (cos(D_theta)>0.0) {
+            if ((D_mass > 1.7) && (D_mass < 2.0)){
+                if ((pi1_dca > 0.00) && (k_dca > 0.00) && (dcaMax < 9999999) && (D_decayL > 0.) && (k_TOFinvbeta < 0.05) && (pi1_TOFinvbeta < 0.05)  ){
                     if ((D_pt > 0.2) && (D_pt < 6)) {
+                        if ((flag == 0 ) || (flag == 1)) {
                         hpiTOFinvbeta-> Fill(pi1_TOFinvbeta);
                         hkTOFinvbeta -> Fill(k_TOFinvbeta);
                         hpinSigma -> Fill(pi1_nSigma);
                         hknSigma -> Fill(k_nSigma);
                         hdecayLength -> Fill(D_decayL);
-                 	hpi1_dca -> Fill(pi1_dca);
-			hk_dca -> Fill(k_dca);
-  			hdcaDaughters -> Fill(dcaMax);
-			    
-                    if ((flag == 0 ) || (flag == 1)) {hInvMassSign -> Fill(D_mass); }
-                        if (flag == 4) {hInvMassBackMin -> Fill(D_mass); }
-                        if (flag == 5) {hInvMassBackPlus -> Fill(D_mass); }                
+                 	    hpi1_dca -> Fill(pi1_dca);
+			            hk_dca -> Fill(k_dca);
+  			            hdcaDaughters -> Fill(dcaMax);
+                        hInvMassSign -> Fill(D_mass);
+                        hcosTheta->Fill(cos(D_theta));
+                        }
+//                        if (flag == 4) {hInvMassBackMin -> Fill(D_mass); }
+//                        if (flag == 5) {hInvMassBackPlus -> Fill(D_mass); }
                     }
                 }
             }        
@@ -86,20 +90,20 @@ void fit(TString input){
     }
     
     cout<<"Number of equal runIds: "<<equal<<endl;
-    //Int_t Nentr = hInvMassBack -> GetNBinsX();
-    hInvMassBackPlus -> Clone("background"); 
-    Double_t value, error, valueM, errorM, valueP, errorP;
-    for (Int_t j = 1; j < 2001; j++) {
-        valueP = hInvMassBackPlus -> GetBinContent(j);  
-        errorP = hInvMassBackPlus -> GetBinError(j);
-        valueM = hInvMassBackMin -> GetBinContent(j);  
-        errorM = hInvMassBackMin -> GetBinError(j);
-        error = sqrt(valueM*errorP*errorP/valueP + valueP*errorM*errorM/valueM);
-        value = 2*sqrt(valueP*valueM);
-       
-        hInvMassBack -> SetBinContent(j, value);
-        hInvMassBack -> SetBinError(j, error);
-    }
+//    //Int_t Nentr = hInvMassBack -> GetNBinsX();
+//    hInvMassBackPlus -> Clone("background");
+//    Double_t value, error, valueM, errorM, valueP, errorP;
+//    for (Int_t j = 1; j < 2001; j++) {
+//        valueP = hInvMassBackPlus -> GetBinContent(j);
+//        errorP = hInvMassBackPlus -> GetBinError(j);
+//        valueM = hInvMassBackMin -> GetBinContent(j);
+//        errorM = hInvMassBackMin -> GetBinError(j);
+//        error = sqrt(valueM*errorP*errorP/valueP + valueP*errorM*errorM/valueM);
+//        value = 2*sqrt(valueP*valueM);
+//
+//        hInvMassBack -> SetBinContent(j, value);
+//        hInvMassBack -> SetBinError(j, error);
+//    }
     
     TFile* dataRes = new TFile("res_"+input ,"RECREATE");
     hInvMassSign -> Write();
@@ -115,6 +119,7 @@ void fit(TString input){
     hpi1_dca -> Write();
     hk_dca -> Write();
     hdcaDaughters -> Write();
+    hcosTheta -> Write();
 
     cout<<"res_"+input<<endl;
     cout<<"done"<<endl;

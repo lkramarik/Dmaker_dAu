@@ -3,6 +3,7 @@ void projectSignal(TString input) {
     TNtuple* ntp = (TNtuple*)data -> Get("ntp");
 
     TCut* signal = new TCut("flag==1||flag==0");
+
     TCut* background = new TCut("flag==4||flag==5");
     TCut* dcaDaughter = new TCut("dcaMax<0.0100");
     TCut* k_dca = new TCut("k_dca<0.008");
@@ -13,11 +14,12 @@ void projectSignal(TString input) {
 
     TH1F* h = new TH1F("h", "h", 10000, 0., 10.);
 
-    string line[8] = {"D_pt","D_mass", "pi1_dca", "k_dca", "D_decayL", "dcaMax", "pi1_nSigma", "k_nSigma"};
+    string line[9] = {"D_pt","D_mass", "pi1_dca", "k_dca", "D_decayL", "dcaMax", "pi1_nSigma", "k_nSigma"};
+
     Double_t minim[] = {0,0.4,0,0,0,0,-3,-3};
     Double_t maxim[] = {7, 2.4, 2, 2, 2, 2, 3, 3};
     Double_t nbins[] = {700, 2000, 2000, 2000, 2000, 2000,600, 600};
-    for (int i = 0; i < 8; i++){
+    for (int i = 0; i < 9; i++){
         std::cout << line[i] << std::endl;
         const char * var = line[i].c_str();
         h -> SetTitle(var);
