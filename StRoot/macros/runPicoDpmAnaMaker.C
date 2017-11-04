@@ -145,7 +145,7 @@ void runPicoDpmAnaMaker(
     hfCuts->setCutVzMax(6.);
     hfCuts->setCutVzVpdVzMax(3.);
     hfCuts->setCutNHitsFitMin(15); //default is 20
-    hfCuts->setCutRequireHFT(false);
+    hfCuts->setCutRequireHFT(true);
 
     // -- ADD USER CUTS HERE ----------------------------
     // kaonPion pair cuts
@@ -158,16 +158,16 @@ void runPicoDpmAnaMaker(
     hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass);
     
     //Single track pt
-    hfCuts->setCutPtRange(0.2,50.0,StHFCuts::kPion); //0.2 , 50.0
-    hfCuts->setCutPtRange(0.2,50.0,StHFCuts::kKaon); //0.2, 50.0
+    hfCuts->setCutPtRange(0.1,50.0,StHFCuts::kPion); //0.2 , 50.0
+    hfCuts->setCutPtRange(0.1,50.0,StHFCuts::kKaon); //0.2, 50.0
     //TPC setters
     hfCuts->setCutTPCNSigmaPion(3.0); //3
     hfCuts->setCutTPCNSigmaKaon(2.5); //3
     //TOF setters, need to set pt range as well
     hfCuts->setCutTOFDeltaOneOverBeta(0.05, StHFCuts::kKaon); // v podstate 5 sigma; nastavene = f * (sigmaTOF), sigma TOF je 0.013 
-    hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kKaon);
-    hfCuts->setCutTOFDeltaOneOverBeta(0.06, StHFCuts::kPion); // v podstate 6 sigma
-    hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kPion); 
+    hfCuts->setCutPtotRangeHybridTOF(0.1,50.0,StHFCuts::kKaon);
+    hfCuts->setCutTOFDeltaOneOverBeta(0.05, StHFCuts::kPion); // v podstate 6 sigma
+    hfCuts->setCutPtotRangeHybridTOF(0.1,50.0,StHFCuts::kPion); 
     // set refmultCorr
     //StRefMultCorr* grefmultCorrUtil = CentralityMaker::instance()->getgRefMultCorr_P16id();
     //picoDpmAnaMaker->setRefMutCorr(grefmultCorrUtil);

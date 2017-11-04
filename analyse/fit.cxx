@@ -50,7 +50,7 @@ void fit(TString input){
     TH1F* hpi1_dca = new TH1F("hpi1_dca", "hpi1_dca", 2000, 0, 0.2);
     TH1F* hk_dca = new TH1F("hk_dca", "hk_dca", 2000, 0, 0.2);     
     TH1F* hdcaDaughters = new TH1F("hdcaDaughters", "hdcaDaughters", 2000, 0, 0.2);
-    TH1F* hcosTheta = new TH1F("hcosTheta", "hcosTheta", , 0, 0.2);
+    TH1F* hcosTheta = new TH1F("hcosTheta", "hcosTheta",1000 , 0, 1);
 
 
     hInvMassBackMin -> Sumw2();

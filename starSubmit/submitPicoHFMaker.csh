@@ -65,8 +65,8 @@ set productionbasePath=/
 set xmlFile=submitPicoHFMaker.xml
 
 # -- set min and mx number of files
-set minNFiles=80
-set maxNFiles=100
+set minNFiles=10
+set maxNFiles=20
 
 # ###############################################
 # -- DON'T CHANGE BELOW THAT LINE
