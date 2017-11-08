@@ -51,12 +51,14 @@ void fit(TString input){
     TH1F* hk_dca = new TH1F("hk_dca", "hk_dca", 2000, 0, 0.2);     
     TH1F* hdcaDaughters = new TH1F("hdcaDaughters", "hdcaDaughters", 2000, 0, 0.2);
     TH1F* hcosTheta = new TH1F("hcosTheta", "hcosTheta",1000 , 0, 1);
+    TH1F* hdca_d0 = new TH1F("hdca_d0", "hdca_d0",3000 , 0, 0.3);
 
 
     hInvMassBackMin -> Sumw2();
     hInvMassBackPlus -> Sumw2();
     hInvMassSign -> Sumw2();
-    Long64_t equal = 0;	
+    Long64_t equal = 0;
+    Float_t dca_d0 = 9999;
     Long64_t numberEntr = ntp -> GetEntries();
     cout<<"Number of entries in Ntuple: "<<numberEntr<<endl;;
     for (Long64_t i = 0; i < numberEntr; i++) {
@@ -67,6 +69,7 @@ void fit(TString input){
             if ((D_mass > 0.4) && (D_mass < 2.4)){
                 if ((pi1_dca > 0.00) && (k_dca > 0.00) && (dcaMax < 9999999) && (D_decayL > 0.) && (k_TOFinvbeta < 0.05) && (pi1_TOFinvbeta < 0.05)  ){
                     if ((D_pt > 0.2) && (D_pt < 6)) {
+                        dca_d0 = D_decayL * sqrt(1-cos(D_theta)*cos(D_theta));
                         hpiTOFinvbeta-> Fill(pi1_TOFinvbeta);
                         hkTOFinvbeta -> Fill(k_TOFinvbeta);
                         hpinSigma -> Fill(pi1_nSigma);
@@ -76,6 +79,7 @@ void fit(TString input){
 			            hk_dca -> Fill(k_dca);
   			            hdcaDaughters -> Fill(dcaMax);
                         hcosTheta->Fill(cos(D_theta));
+                        hdca_d0->Fill(dca_d0);
 
                         if ((flag == 0 ) || (flag == 1)) {hInvMassSign -> Fill(D_mass); }
                         if (flag == 4) {hInvMassBackMin -> Fill(D_mass); }
@@ -117,6 +121,7 @@ void fit(TString input){
     hk_dca -> Write();
     hdcaDaughters -> Write();
     hcosTheta -> Write();
+    hdca_d0 -> Write();
 
     cout<<"res_"+input<<endl;
     cout<<"done"<<endl;
