@@ -32,7 +32,7 @@ void fit(TString input){
     ntp -> SetBranchAddress("pi1_nSigma", &pi1_nSigma);
     ntp -> SetBranchAddress("pi1_TOFinvbeta", &pi1_TOFinvbeta);
     ntp -> SetBranchAddress("k_TOFinvbeta", &k_TOFinvbeta);
-    ntp -> SetBranchAddress("dcaMax", &dcaMax);
+    ntp -> SetBranchAddress("dcaDaughters", &dcaDaughters);
     ntp -> SetBranchAddress("k_eventId", &k_eventId);
     ntp -> SetBranchAddress("pi1_eventId", &pi1_eventId);
     
@@ -75,9 +75,9 @@ void fit(TString input){
                         hpinSigma -> Fill(pi1_nSigma);
                         hknSigma -> Fill(k_nSigma);
                         hdecayLength -> Fill(D_decayL);
-                 	    hpi1_dca -> Fill(pi1_dca);
-			            hk_dca -> Fill(k_dca);
-  			            hdcaDaughters -> Fill(dcaMax);
+                        hpi1_dca -> Fill(pi1_dca);
+			hk_dca -> Fill(k_dca);
+  			hdcaDaughters -> Fill(dcaDaughters);
                         hcosTheta->Fill(cos(D_theta));
                         hdca_d0->Fill(dca_d0);
 

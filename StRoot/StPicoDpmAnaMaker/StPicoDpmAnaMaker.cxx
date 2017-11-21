@@ -96,8 +96,10 @@ int StPicoDpmAnaMaker::InitHF() {
     
     // -------------- USER VARIABLES -------------------------
     
-    ntp_DMeson = new TNtuple("ntp","DMeson Tree","grefMult:pi1_runId:pi1_eventId:pi1_phi:pi1_eta:pi1_pt:pi1_dca:pi1_dedx:pi1_nSigma:pi1_nHitFit:pi1_nHitdedx:pi1_TOFinvbeta:pi1_betaBase:k_runId:k_eventId:k_phi:k_eta:k_pt:k_dca:k_dedx:k_nSigma:k_nHitFit:k_nHitdedx:k_TOFinvbeta:k_betaBase:dcaMax:flag:primVz:D_theta:D_decayL:D_phi:D_eta:D_cosThetaStar:D_pt:D_mass:D_mass_LS:D_mass_US:D_dV0Max:centrality:refmult:refmultcorr:reweight");
-    mRunNumber = 0;
+    ntp_DMeson_Signal = new TNtuple("ntp_signal","DMeson TreeSignal","grefMult:pi1_runId:pi1_eventId:pi1_phi:pi1_eta:pi1_pt:pi1_dca:pi1_dedx:pi1_nSigma:pi1_nHitFit:pi1_nHitdedx:pi1_TOFinvbeta:pi1_betaBase:k_runId:k_eventId:k_phi:k_eta:k_pt:k_dca:k_dedx:k_nSigma:k_nHitFit:k_nHitdedx:k_TOFinvbeta:k_betaBase:dcaDaughters:flag:primVz:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_phi:D_eta:D_cosThetaStar:D_pt:D_mass:D_mass_LS:D_mass_US:centrality:refmultcorr:reweight");
+    ntp_DMeson_Background = new TNtuple("ntp_background","DMeson TreeBackground","grefMult:pi1_runId:pi1_eventId:pi1_phi:pi1_eta:pi1_pt:pi1_dca:pi1_dedx:pi1_nSigma:pi1_nHitFit:pi1_nHitdedx:pi1_TOFinvbeta:pi1_betaBase:k_runId:k_eventId:k_phi:k_eta:k_pt:k_dca:k_dedx:k_nSigma:k_nHitFit:k_nHitdedx:k_TOFinvbeta:k_betaBase:dcaDaughters:flag:primVz:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_phi:D_eta:D_cosThetaStar:D_pt:D_mass:D_mass_LS:D_mass_US:centrality:refmultcorr:reweight");
+        
+	mRunNumber = 0;
     return kStOK;
 }
 
@@ -108,8 +110,10 @@ void StPicoDpmAnaMaker::ClearHF(Option_t *opt="") {
 
 // _________________________________________________________
 int StPicoDpmAnaMaker::FinishHF() {
-    if( isMakerMode() != StPicoHFMaker::kWrite )
-        ntp_DMeson -> Write(ntp_DMeson->GetName(), TObject::kOverwrite);
+    if( isMakerMode() != StPicoHFMaker::kWrite ){
+        ntp_DMeson_Signal -> Write(ntp_DMeson_Signal->GetName(), TObject::kOverwrite);
+        ntp_DMeson_Background -> Write(ntp_DMeson_Background->GetName(), TObject::kOverwrite);
+	}
 //     closeFile();
     return kStOK;
 }
@@ -425,19 +429,22 @@ int StPicoDpmAnaMaker::analyzeCandidates() {
             StHFPair const* pair = static_cast<StHFPair*>(aCandidates->At(idx));
             StPicoTrack const* pion1 = mPicoDst->track(pair->particle1Idx());
             StPicoTrack const* kaon = mPicoDst->track(pair->particle2Idx());
-            
-            // Greates distance between tracks
-            float const dcaDaughters = pair->dcaDaughters();
-            float dcaMax = dcaDaughters;
-            
+                     
             //TOF ---
+            float kaonTOFinvbeta = -1;
+            float pion1TOFinvbeta = -1;
             float kaonBetaBase = -1;
             float pion1BetaBase = -1;
             kaonBetaBase = mHFCuts->getTofBetaBase(kaon);
             pion1BetaBase = mHFCuts->getTofBetaBase(pion1);
             
-            float kaonTOFinvbeta = fabs(1. / mHFCuts->getTofBetaBase(kaon) - sqrt(1+M_KAON_PLUS*M_KAON_PLUS/(kaon->gMom(mPrimVtx,mBField).mag()*kaon->gMom(mPrimVtx,mBField).mag())));
-            float pion1TOFinvbeta = fabs(1. / mHFCuts->getTofBetaBase(pion1) - sqrt(1+M_PION_PLUS*M_PION_PLUS/(pion1->gMom(mPrimVtx,mBField).mag()*pion1->gMom(mPrimVtx,mBField).mag())));
+            if(!isnan(kaonBetaBase) && kaonBetaBase > 0){
+                kaonTOFinvbeta = fabs(1. / kaonBetaBase - sqrt(1+M_KAON_PLUS*M_KAON_PLUS/(kaon->gMom(mPrimVtx,mBField).mag()*kaon->gMom(mPrimVtx,mBField).mag())));
+            }
+
+            if(!isnan(pion1BetaBase) && pion1BetaBase > 0){
+                pion1TOFinvbeta = fabs(1. / pion1BetaBase - sqrt(1+M_PION_PLUS*M_PION_PLUS/(pion1->gMom(mPrimVtx,mBField).mag()*pion1->gMom(mPrimVtx,mBField).mag())));
+            }            
             
             // -- Flag D0 and background
             float flag = -99.;
@@ -489,9 +496,7 @@ int StPicoDpmAnaMaker::analyzeCandidates() {
             float ntVar[42];
             // ---
             // Saving to NTUPLE
-            // float ref = (float)(mPicoHFEvent->grefMult()); 
             // float globalTracks = (float)(mPicoHFEvent->numberOfGlobalTracks());
-            
             ntVar[ii++] = mPicoDst->event()->refMult();
             ntVar[ii++] = mPicoHFEvent->runId();
             ntVar[ii++] = mPicoHFEvent->eventId();
@@ -519,12 +524,14 @@ int StPicoDpmAnaMaker::analyzeCandidates() {
             ntVar[ii++] = kaonTOFinvbeta;
             ntVar[ii++] = kaonBetaBase;
             
-            ntVar[ii++] = dcaMax;
+            ntVar[ii++] = pair->dcaDaughters();
             
             ntVar[ii++] = flag;
             ntVar[ii++] = mPrimVtx.z();
             ntVar[ii++] = pair->pointingAngle();
+            ntVar[ii++] = cos(pair->pointingAngle());
             ntVar[ii++] = pair->decayLength();
+            ntVar[ii++] = pair->DcaToPrimaryVertex();
             ntVar[ii++] = pair->phi();
             ntVar[ii++] = pair->eta();
             ntVar[ii++] = pair->cosThetaStar();
@@ -537,14 +544,16 @@ int StPicoDpmAnaMaker::analyzeCandidates() {
             } else { 
                 ntVar[ii++] = pair->m(); //D_mass_LS
                 ntVar[ii++] = 0;//D_mass_US
-            }
-            
-            ntVar[ii++] = 0; // triplet->dV0Max();
+	   }                    
             ntVar[ii++] = centrality;
-            ntVar[ii++] = 0; //mPicoDst->event()->refMult();
             ntVar[ii++] = refmultCor;
             ntVar[ii++] = reweight;
-            ntp_DMeson->Fill(ntVar);
+            
+            if ((flag == 0) || (flag == 1)) {
+                ntp_DMeson_Signal->Fill(ntVar);
+            } else { 
+		ntp_DMeson_Background->Fill(ntVar);
+            }
         } // for (unsigned int idx = 0; idx <  mPicoHFEvent->nHFSecondaryVertices(); ++idx) {
     }
     return kStOK;
@@ -870,7 +879,8 @@ void StPicoDpmAnaMaker::addCent(const double refmultCor, int centrality, const d
 void StPicoDpmAnaMaker::closeFile()
 {
     mOutFile->cd();
-    ntp_DMeson->Write();
+    ntp_DMeson_Signal->Write();
+    ntp_DMeson_Background->Write();
     mh1Cent->Write();
     mh1CentWg->Write();
     mh1gRefmultCor->Write();

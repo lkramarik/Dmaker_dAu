@@ -159,7 +159,9 @@ private:
 
 
   // -- ADD USER MEMBERS HERE ------------------- 
-   TNtuple *ntp_DMeson;
+   TNtuple *ntp_DMeson_Signal;
+   TNtuple *ntp_DMeson_Background;
+
 
   // StRefMultCorr* mRefmultCorrUtil;
    int mRunNumber;
