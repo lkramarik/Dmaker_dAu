@@ -106,7 +106,7 @@ int StPicoDpmAnaMaker::FinishHF() {
         ntp_DMeson_Signal -> Write(ntp_DMeson_Signal->GetName(), TObject::kOverwrite);
         ntp_DMeson_Background -> Write(ntp_DMeson_Background->GetName(), TObject::kOverwrite);
     }
-    mOutFile->Close();
+//    mOutFile->Close();
 
     return kStOK;
 }
