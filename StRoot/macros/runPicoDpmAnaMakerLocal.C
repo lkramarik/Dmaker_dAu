@@ -65,7 +65,7 @@ void runPicoDpmAnaMakerLocal(
   // ========================================================================================
   cout << "Maker Mode    " << makerMode << endl;
   cout << "TreeName      " << treeName << endl; 
-  cout << "Decay Channel " << decayChannel << endl; 
+  cout << "Decay Channel " << decayChannel << endl;
 
   TString sInputFile(inputFile);
   TString sInputListHF("");  
@@ -114,7 +114,6 @@ void runPicoDpmAnaMakerLocal(
   picoDpmAnaMaker->setTreeName(treeName);
   picoDpmAnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
 
- 
   StHFCuts* hfCuts = new StHFCuts("hfBaseCuts");
   picoDpmAnaMaker->setHFBaseCuts(hfCuts);
   cout<<"event stuff set"<<endl;
