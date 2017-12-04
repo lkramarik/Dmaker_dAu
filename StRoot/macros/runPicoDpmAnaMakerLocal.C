@@ -65,7 +65,6 @@ void runPicoDpmAnaMakerLocal(
   // ========================================================================================
   cout << "Maker Mode    " << makerMode << endl;
   cout << "TreeName      " << treeName << endl; 
-  cout << "Decay Channel " << decayChannel << endl;
 
   TString sInputFile(inputFile);
   TString sInputListHF("");  
