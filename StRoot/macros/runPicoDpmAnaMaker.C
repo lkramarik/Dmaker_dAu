@@ -115,9 +115,6 @@ void runPicoDpmAnaMaker(
     StHFCuts* hfCuts = new StHFCuts("hfBaseCuts");
     picoDpmAnaMaker->setHFBaseCuts(hfCuts);
 
-    StHFCuts* d0Cuts = new StHFCuts("d0Cuts");
-    picoD0AnaMaker->setHFCuts(d0Cuts);
-
     cout<<"event stuff set"<<endl;
 
     // -- File name of bad run list
