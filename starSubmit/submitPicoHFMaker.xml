@@ -22,7 +22,7 @@
     if ("&mMode;" == "1") then
          &basePath;/jobs/&prodId;/starSubmit/parseFileList.csh ${FILELIST} &basePath; &prodId; &mMode; &treeName; ${JOBID} &rootMacro; picoList_bad.list &productionBasePath; &decayChannel; &starVersion;
     else
-        root -q -b -l StRoot/macros/loadSharedHFLibraries.C StRoot/macros/&rootMacro;++\(\"$FILELIST\",\"&prodId;_$JOBINDEX\",&mMode;,\"picoList_bad.list\",\"&treeName;\",\"&productionBasePath;\",&decayChannel;\) &gt;&amp; ${JOBID}.log
+        root -q -b -l StRoot/macros/loadSharedHFLibraries.C StRoot/macros/&rootMacro;++\(\"$FILELIST\",\"&prodId;_$JOBINDEX\",&mMode;,\"picoList_bad.list\",\"&treeName;\",\"&productionBasePath;\"\) &gt;&amp; ${JOBID}.log
         tar -zcvf ${JOBID}.log.tgz ${JOBID}.log
     endif
 

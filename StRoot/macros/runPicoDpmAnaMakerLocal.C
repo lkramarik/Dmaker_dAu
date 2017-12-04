@@ -41,8 +41,7 @@ void runPicoDpmAnaMakerLocal(
 			const Char_t *outputFile="outputBaseName",  
 			 const unsigned int makerMode = 0 ,
 			 const Char_t *badRunListFileName = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoLists/picoList_bad.list", const Char_t *treeName = "picoHFtree",
-			 const Char_t *productionBasePath = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/",
-			 const unsigned int decayChannel = 0 /* kChannel0 */) { 
+			 const Char_t *productionBasePath = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/") {
   // -- Check STAR Library. Please set SL_version to the original star library used in the production 
   //    from http://www.star.bnl.gov/devcgi/dbProdOptionRetrv.pl
   string SL_version = "SL17d";

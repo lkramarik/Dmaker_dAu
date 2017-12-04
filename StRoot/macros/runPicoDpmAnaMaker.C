@@ -42,8 +42,7 @@ void runPicoDpmAnaMaker(
     const Char_t *outputFile,  
     const unsigned int makerMode,
     const Char_t *badRunListFileName, const Char_t *treeName,
-    const Char_t *productionBasePath,
-    const unsigned int decayChannel = 0 /* kChannel0 */) { 
+    const Char_t *productionBasePath) {
     string SL_version = "SL17d";
     string env_SL = getenv ("STAR");
     if (env_SL.find(SL_version)==string::npos) {
@@ -65,8 +64,7 @@ void runPicoDpmAnaMaker(
     // ========================================================================================
     cout << "Maker Mode    " << makerMode << endl;
     cout << "TreeName      " << treeName << endl; 
-    cout << "Decay Channel " << decayChannel << endl; 
-    
+
     TString sInputFile(inputFile);
     TString sInputListHF("");  
     TString sProductionBasePath(productionBasePath);
@@ -112,9 +110,14 @@ void runPicoDpmAnaMaker(
     StPicoDpmAnaMaker* picoDpmAnaMaker = new StPicoDpmAnaMaker("picoDpmAnaMaker", picoDstMaker, outputFile, sInputListHF);
     picoDpmAnaMaker->setMakerMode(makerMode);
     picoDpmAnaMaker->setTreeName(treeName);
-    
+    picoDpmAnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
+
     StHFCuts* hfCuts = new StHFCuts("hfBaseCuts");
     picoDpmAnaMaker->setHFBaseCuts(hfCuts);
+
+    StHFCuts* d0Cuts = new StHFCuts("d0Cuts");
+    picoD0AnaMaker->setHFCuts(d0Cuts);
+
     cout<<"event stuff set"<<endl;
 
     // -- File name of bad run list
@@ -135,13 +138,10 @@ void runPicoDpmAnaMaker(
     hfCuts->addTriggerId(530202); //BHT2-VPD-30 
     hfCuts->addTriggerId(530213); //BHT3
     
-    //LK hfCuts->setCutDcaMin(0.009,StHFCuts::kPion); //federic 1aug2016
-    //LK  hfCuts->setCutDcaMin(0.007,StHFCuts::kKaon); //federic 3aug2016
-    
-    // -- Channel0
-    picoDpmAnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
-    
-    hfCuts->setCutPrimaryDCAtoVtxMax(1.5); //default is 1.0
+    hfCuts->setCutDcaMin(0.00,StHFCuts::kPion); // OK
+    hfCuts->setCutDcaMin(0.00,StHFCuts::kKaon); // OK
+
+    hfCuts->setCutPrimaryDCAtoVtxMax(1.); //default is 1.0
     hfCuts->setCutVzMax(6.);
     hfCuts->setCutVzVpdVzMax(3.);
     hfCuts->setCutNHitsFitMin(15); //default is 20
@@ -149,25 +149,25 @@ void runPicoDpmAnaMaker(
 
     // -- ADD USER CUTS HERE ----------------------------
     // kaonPion pair cuts
-    float dcaDaughtersMax = 999999;  // maximum
+    float dcaDaughtersMax = 2;  // maximum
     float decayLengthMin  = 0.000; // minimum
-    float decayLengthMax  = 999999; //std::numeric_limits<float>::max();
-    float cosThetaMin     = 0.5;   // minimum
+    float decayLengthMax  = 3; //std::numeric_limits<float>::max();
+    float cosThetaMin     = 0.;   // minimum
     float minMass         = 0.4;
     float maxMass         = 2.4;
-    hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass);
+    hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass); //ok
     
     //Single track pt
-    hfCuts->setCutPtRange(0.1,50.0,StHFCuts::kPion); //0.2 , 50.0
-    hfCuts->setCutPtRange(0.1,50.0,StHFCuts::kKaon); //0.2, 50.0
+    hfCuts->setCutPtRange(0.1,50.0,StHFCuts::kPion); //0.2 , 50.0 OK
+    hfCuts->setCutPtRange(0.1,50.0,StHFCuts::kKaon); //0.2, 50.0 OK
     //TPC setters
-    hfCuts->setCutTPCNSigmaPion(3.0); //3
-    hfCuts->setCutTPCNSigmaKaon(2.5); //3
+    hfCuts->setCutTPCNSigmaPion(3.0); //3 OK
+    hfCuts->setCutTPCNSigmaKaon(3.0); //3 OK
     //TOF setters, need to set pt range as well
-    hfCuts->setCutTOFDeltaOneOverBeta(0.05, StHFCuts::kKaon); // v podstate 5 sigma; nastavene = f * (sigmaTOF), sigma TOF je 0.013 
-    hfCuts->setCutPtotRangeHybridTOF(0.1,50.0,StHFCuts::kKaon);
-    hfCuts->setCutTOFDeltaOneOverBeta(0.05, StHFCuts::kPion); // v podstate 6 sigma
-    hfCuts->setCutPtotRangeHybridTOF(0.1,50.0,StHFCuts::kPion); 
+    hfCuts->setCutTOFDeltaOneOverBeta(0.05, StHFCuts::kKaon); // v podstate 5 sigma; nastavene = f * (sigmaTOF), sigma TOF je 0.013 OK
+    hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kKaon); // OK
+    hfCuts->setCutTOFDeltaOneOverBeta(0.09, StHFCuts::kPion); // v podstate 6 sigma OK
+    hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kPion); // OK
     // set refmultCorr
     //StRefMultCorr* grefmultCorrUtil = CentralityMaker::instance()->getgRefMultCorr_P16id();
     //picoDpmAnaMaker->setRefMutCorr(grefmultCorrUtil);

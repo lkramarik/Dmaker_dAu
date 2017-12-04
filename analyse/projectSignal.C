@@ -19,6 +19,7 @@ void projectSignal(TString input) {
     Double_t minim[] = {0,0.4,0,0,0,0,-3,-3};
     Double_t maxim[] = {7, 2.4, 2, 2, 2, 2, 3, 3};
     Double_t nbins[] = {700, 2000, 2000, 2000, 2000, 2000,600, 600};
+
     for (int i = 0; i < 9; i++){
         std::cout << line[i] << std::endl;
         const char * var = line[i].c_str();

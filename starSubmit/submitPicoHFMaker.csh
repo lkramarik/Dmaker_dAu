@@ -43,7 +43,7 @@ set badRunListFileName="picoList_bad.list"
 
 # -- set decay channel
 #    can be defined in you analysis - otherwise ignore
- set decayChannel=0
+# set decayChannel=0
 
 # ###############################################
 # -- CHANGE CAREFULLY BELOW THAT LINE
@@ -65,8 +65,8 @@ set productionbasePath=/
 set xmlFile=submitPicoHFMaker.xml
 
 # -- set min and mx number of files
-set minNFiles=80
-set maxNFiles=100
+set minNFiles=10
+set maxNFiles=20
 
 # ###############################################
 # -- DON'T CHANGE BELOW THAT LINE
@@ -216,7 +216,6 @@ endif
 echo '<?xml version="1.0" encoding="utf-8" ?>'		        > $hackTemplate
 echo '<\!DOCTYPE note ['                      		       >> $hackTemplate
 echo '<\!ENTITY treeName "'${treeName}'">'    		       >> $hackTemplate
-echo '<\!ENTITY decayChannel "'${decayChannel}'">'	       >> $hackTemplate
 echo '<\!ENTITY mMode "'${makerMode}'">'		       >> $hackTemplate
 echo '<\!ENTITY rootMacro "'${rootMacro}'">'  		       >> $hackTemplate
 echo '<\!ENTITY prodId "'${productionId}'">'  		       >> $hackTemplate
@@ -232,5 +231,5 @@ tail -n +2 ${xmlFile} >> $hackTemplate
 
 star-submit -u ie $hackTemplate
 
-#star-submit-template -template ${xmlFile} -entities listOfFiles=${input},basePath=${baseFolder},prodId=${productionId},mMode=${makerMode},treeName=${treeName},decayChannel=${decayChannel},productionBasePath=${productionbasePath},rootMacro=${rootMacro},starVersion=${starVersion},minNFiles=${minNFiles},maxNFiles=${maxNFiles}
+#star-submit-template -template ${xmlFile} -entities listOfFiles=${input},basePath=${baseFolder},prodId=${productionId},mMode=${makerMode},treeName=${treeName},productionBasePath=${productionbasePath},rootMacro=${rootMacro},starVersion=${starVersion},minNFiles=${minNFiles},maxNFiles=${maxNFiles}
 popd > /dev/null
