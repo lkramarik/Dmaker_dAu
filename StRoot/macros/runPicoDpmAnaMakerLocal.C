@@ -111,10 +111,9 @@ void runPicoDpmAnaMakerLocal(
   cout<<"ok, picoDstMaker created"<<endl;
   StPicoDpmAnaMaker* picoDpmAnaMaker = new StPicoDpmAnaMaker("picoDpmAnaMaker", picoDstMaker, outputFile, sInputListHF);
   picoDpmAnaMaker->setMakerMode(makerMode);
-  picoDpmAnaMaker->setDecayChannel(StPicoDpmAnaMaker::kChannel1);//kvapil
   picoDpmAnaMaker->setTreeName(treeName);
-  //picoDpmAnaMaker->setMcMode(mcMode); commented kvapil
-   
+  picoDpmAnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
+
  
   StHFCuts* hfCuts = new StHFCuts("hfBaseCuts");
   picoDpmAnaMaker->setHFBaseCuts(hfCuts);
