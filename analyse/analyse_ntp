@@ -4,8 +4,8 @@ rm ntuples.list
 ls *.root > ntuples.list
 cat ntuples.list | while read line
 do
-root -l -q ../fit.cxx\(\"$line\"\)
-#root -l -q ../projectSignal.C\(\"$line\"\)
+root -l -q ../project.cxx\(\"$line\"\)++
+#root -l -q ../projectSignal.ine\"\)
 #root -l -q ../projectBackground.C\(\"$line\"\)
 done
 rm res_ntp_all.root

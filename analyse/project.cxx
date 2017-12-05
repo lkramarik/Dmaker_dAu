@@ -51,9 +51,10 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName) {
         ntp->GetEntry(i);
         if (cos(D_theta) > 0.) {
             if ((D_mass > 0.4) && (D_mass < 2.4)) {
-                if ((pi1_dca > 0.00) && (k_dca > 0.00) && (dcaDaughters < 9999999) && (D_decayL > 0.) && (k_TOFinvbeta < 0.5) && (pi1_TOFinvbeta < 0.5)) {
-                    if ((D_pt > 0) && (D_pt < 600)) {
+                if ((pi1_dca > 0.008595) && (k_dca > 0.009448) && (dcaDaughters < 0.00525) && (D_decayL > 0.02202) && (fabs(k_TOFinvbeta) < 0.03) && (fabs(pi1_TOFinvbeta) < 4444444) && (fabs(k_nSigma) < 2) && (fabs(pi1_nSigma) < 3 )    )  {
+                    if ((D_pt > 2) && (D_pt < 3)) {
                         dca_d0 = D_decayL * sqrt(1 - cos(D_theta) * cos(D_theta));
+			if (dca_d0 < 0.003649) {
                         hpiTOFinvbeta->Fill(pi1_TOFinvbeta);
                         hkTOFinvbeta->Fill(k_TOFinvbeta);
                         hpinSigma->Fill(pi1_nSigma);
@@ -76,6 +77,7 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName) {
                             hInvMassBackPlus->Fill(D_mass);
                             hInvMassBack->Fill(D_mass);
                         }
+			}
                     }
                 }
             }
