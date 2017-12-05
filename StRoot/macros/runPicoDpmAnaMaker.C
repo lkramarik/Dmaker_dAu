@@ -155,8 +155,8 @@ void runPicoDpmAnaMaker(
     hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass); //ok
     
     //Single track pt
-    hfCuts->setCutPtRange(0.1,50.0,StHFCuts::kPion); //0.2 , 50.0 OK
-    hfCuts->setCutPtRange(0.1,50.0,StHFCuts::kKaon); //0.2, 50.0 OK
+    hfCuts->setCutPtRange(0.2,50.0,StHFCuts::kPion); //0.2 , 50.0 OK
+    hfCuts->setCutPtRange(0.2,50.0,StHFCuts::kKaon); //0.2, 50.0 OK
     //TPC setters
     hfCuts->setCutTPCNSigmaPion(3.0); //3 OK
     hfCuts->setCutTPCNSigmaKaon(3.0); //3 OK

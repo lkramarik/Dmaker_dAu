@@ -46,7 +46,7 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName) {
     TH1F *hcosTheta = new TH1F("hcosTheta", "hcosTheta", 1000, 0, 1);
     TH1F *hdca_d0 = new TH1F("hdca_d0", "hdca_d0", 3000, 0, 0.3);
 
-    for (Long64_t i = 0; i < numberEntr; i++) {
+    for (Long64_t i = 0; i < numberEntr; ++i) {
         if (i % 10000000 == 0) { cout << i << endl; }
         ntp->GetEntry(i);
         if (cos(D_theta) > 0.) {
@@ -54,30 +54,30 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName) {
                 if ((pi1_dca > 0.008595) && (k_dca > 0.009448) && (dcaDaughters < 0.00525) && (D_decayL > 0.02202) && (fabs(k_TOFinvbeta) < 0.03) && (fabs(pi1_TOFinvbeta) < 4444444) && (fabs(k_nSigma) < 2) && (fabs(pi1_nSigma) < 3 )    )  {
                     if ((D_pt > 2) && (D_pt < 3)) {
                         dca_d0 = D_decayL * sqrt(1 - cos(D_theta) * cos(D_theta));
-			if (dca_d0 < 0.003649) {
-                        hpiTOFinvbeta->Fill(pi1_TOFinvbeta);
-                        hkTOFinvbeta->Fill(k_TOFinvbeta);
-                        hpinSigma->Fill(pi1_nSigma);
-                        hknSigma->Fill(k_nSigma);
-                        hdecayLength->Fill(D_decayL);
-                        hpi1_dca->Fill(pi1_dca);
-                        hk_dca->Fill(k_dca);
-                        hdcaDaughters->Fill(dcaDaughters);
-                        hcosTheta->Fill(cos(D_theta));
-                        hdca_d0->Fill(dca_d0);
+                        if (dca_d0 < 0.003649) {
+                            hpiTOFinvbeta->Fill(pi1_TOFinvbeta);
+                            hkTOFinvbeta->Fill(k_TOFinvbeta);
+                            hpinSigma->Fill(pi1_nSigma);
+                            hknSigma->Fill(k_nSigma);
+                            hdecayLength->Fill(D_decayL);
+                            hpi1_dca->Fill(pi1_dca);
+                            hk_dca->Fill(k_dca);
+                            hdcaDaughters->Fill(dcaDaughters);
+                            hcosTheta->Fill(cos(D_theta));
+                            hdca_d0->Fill(dca_d0);
 
-                        dca_d0 = 0;
+                            dca_d0 = 0;
 
-                        if ((flag == 0) || (flag == 1)) { hInvMassSign->Fill(D_mass); }
-                        if (flag == 4) {
-                            hInvMassBackMin->Fill(D_mass);
-                            hInvMassBack->Fill(D_mass);
+                            if ((flag == 0) || (flag == 1)) { hInvMassSign->Fill(D_mass); }
+                            if (flag == 4) {
+                                hInvMassBackMin->Fill(D_mass);
+                                hInvMassBack->Fill(D_mass);
+                            }
+                            if (flag == 5) {
+                                hInvMassBackPlus->Fill(D_mass);
+                                hInvMassBack->Fill(D_mass);
+                            }
                         }
-                        if (flag == 5) {
-                            hInvMassBackPlus->Fill(D_mass);
-                            hInvMassBack->Fill(D_mass);
-                        }
-			}
                     }
                 }
             }
