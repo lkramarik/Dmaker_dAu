@@ -30,68 +30,11 @@ int StPicoDpmAnaMaker::InitHF() {
     //
     // EXAMPLE //  mOutList->Add(new TH1F(...));
     // EXAMPLE //  TH1F* hist = static_cast<TH1F*>(mOutList->Last());
-    mOutList->Add(new TH1F("h_time_per_event","h_time_per_event", 2000., 0., 20.));
-    mOutList->Add(new TH2F("h_piTOF","h_piTOF",100,0,10, 2, 0, 2));
-    mOutList->Add(new TH2F("h_kTOF","h_kTOF",100,0,10, 2, 0, 2));
-    mOutList->Add(new TH2F("h_pTOF","h_pTOF",100,0,10, 2, 0, 2));
-
-    mOutList->Add(new TH2F("h_piTOF_20","h_piTOF_20",100,0,10, 2, 0, 2));
-    mOutList->Add(new TH2F("h_kTOF_20","h_kTOF_20",100,0,10, 2, 0, 2));
-    mOutList->Add(new TH2F("h_pTOF_20","h_pTOF_20",100,0,10, 2, 0, 2));
-
-    mOutList->Add(new TH2F("h_piTOF_1sig","h_piTOF_1sig",100,0,10, 2, 0, 2));
-    mOutList->Add(new TH2F("h_kTOF_1sig","h_kTOF_1sig",100,0,10, 2, 0, 2));
-    mOutList->Add(new TH2F("h_pTOF_1sig","h_pTOF_1sig",100,0,10, 2, 0, 2));
-
-    mOutList->Add(new TH2F("h_piTOF_HFT","h_piTOF_HFT",100,0,10, 2, 0, 2));
-    mOutList->Add(new TH2F("h_kTOF_HFT","h_kTOF_HFT",100,0,10, 2, 0, 2));
-    mOutList->Add(new TH2F("h_pTOF_HFT","h_pTOF_HFT",100,0,10, 2, 0, 2));
-
-    mOutList->Add(new TH2F("h_piTOF_HFT_1sig","h_piTOF_HFT_1sig",100,0,10, 2, 0, 2));
-    mOutList->Add(new TH2F("h_kTOF_HFT_1sig","h_kTOF_HFT_1sig",100,0,10, 2, 0, 2));
-    mOutList->Add(new TH2F("h_pTOF_HFT_1sig","h_pTOF_HFT_1sig",100,0,10, 2, 0, 2));
-
-    mOutList->Add(new TH2F("h_piTOF_HFT_20","h_piTOF_HFT_20",100,0,10, 2, 0, 2));
-    mOutList->Add(new TH2F("h_kTOF_HFT_20","h_kTOF_HFT_20",100,0,10, 2, 0, 2));
-    mOutList->Add(new TH2F("h_pTOF_HFT_20","h_pTOF_HFT_20",100,0,10, 2, 0, 2));
-
-    mOutList->Add(new TH2F("h_piTOF_HFT_1sig_20","h_piTOF_HFT_1sig_20",100,0,10, 2, 0, 2));
-    mOutList->Add(new TH2F("h_kTOF_HFT_1sig_20","h_kTOF_HFT_1sig_20",100,0,10, 2, 0, 2));
-    mOutList->Add(new TH2F("h_pTOF_HFT_1sig_20","h_pTOF_HFT_1sig_20",100,0,10, 2, 0, 2));
-
-    mOutList->Add(new TH2F("h_piTOFbeta","h_piTOFbeta",500,0,10, 500, 0, 5));
-    mOutList->Add(new TH2F("h_kTOFbeta","h_kTOFbeta",500,0,10, 500, 0, 5));
-    mOutList->Add(new TH2F("h_pTOFbeta","h_pTOFbeta",500,0,10, 500, 0, 5));
-
-    mOutList->Add(new TH2F("h_pinsigma","h_pinsigma",1000,0,10, 99, -5, 5));
-    mOutList->Add(new TH2F("h_knsigma","h_knsigma",1000,0,10, 99, -5, 5));
-    mOutList->Add(new TH2F("h_pnsigma","h_pnsigma",1000,0,10, 99, -5, 5));
-
-
-    mOutList->Add(new TH2F("h_dedx","h_dedx", 1000, 0, 10, 1000, 0, 10));
-    /* mOutList->Add(new TH2D("h_pidedx","h_pidedx", 500, 0, 10, 500, -10, 10);
-     *  mOutList->Add(new TH2D("h_kdedx","h_kdedx", 500, 0, 10, 500, -10, 10));
-     *  mOutList->Add(new TH2D("h_pdedx","h_pdedx", 500, 0, 10, 500, -10, 10));*/
     mOutFileBaseName = mOutFileBaseName.ReplaceAll(".root", "");
-
-    mOutList->Add(new TH1F("h_mh1Cent", "EventsVsCentrality;cent;Counts", 10, -1.5, 8.5));
-    mOutList->Add(new TH1F("h_mh1CentWg", "EventsVsCentrality;cent;Counts", 10, -1.5, 8.5));
-    mOutList->Add(new TH1F("h_mh1gRefmultCor", "gRefmultCor;gRefmult;Counts", 700, 0, 700));
-    mOutList->Add(new TH1F("h_mh1gRefmultCorWg", "gRefmultCorWg;gRefmultCorWg;Counts", 700, 0, 700));
-    mOutList->Add(new TH2F("h_mh2CentVz", "CentralityVsVz;cent;Vz", 10, -1.5, 8.5, 200, -10, 10));
-    mOutList->Add(new TH2F("h_mh2CentVzWg", "CentralityVsVzWg;cent;Vz", 10, -1.5, 8.5, 200, -10, 10));
-    mOutList->Add(new TH1F("h_mh1Cent_run", "EventsVsCentrality;cent;Counts", 10, -1.5, 8.5));
-    mOutList->Add(new TH1F("h_mh1CentWg_run", "EventsVsCentrality;cent;Counts", 10, -1.5, 8.5));
-    mOutList->Add(new TH1F("h_mh1gRefmultCor_run", "gRefmultCor;gRefmult;Counts", 700, 0, 700));
-    mOutList->Add(new TH1F("h_mh1gRefmultCorWg_run", "gRefmultCorWg;gRefmultCorWg;Counts", 700, 0, 700));
-    mOutList->Add(new TH2F("h_mh2CentVz_run", "CentralityVsVz;cent;Vz", 10, -1.5, 8.5, 200, -10, 10));
-    mOutList->Add(new TH2F("h_mh2CentVzWg_run", "CentralityVsVzWg;cent;Vz", 10, -1.5, 8.5, 200, -10, 10));
-    mOutList->Add(new TH1F("h_refMult", "Multiplicity", 120, 0, 120));
 
     ntp_DMeson_Signal = new TNtuple("ntp_signal","DMeson TreeSignal","grefMult:pi1_runId:pi1_eventId:pi1_phi:pi1_eta:pi1_pt:pi1_dca:pi1_dedx:pi1_nSigma:pi1_nHitFit:pi1_nHitdedx:pi1_TOFinvbeta:pi1_betaBase:k_runId:k_eventId:k_phi:k_eta:k_pt:k_dca:k_dedx:k_nSigma:k_nHitFit:k_nHitdedx:k_TOFinvbeta:k_betaBase:dcaDaughters:flag:primVz:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_phi:D_eta:D_cosThetaStar:D_pt:D_mass:D_mass_LS:D_mass_US:centrality:refmultcorr:reweight");
     ntp_DMeson_Background = new TNtuple("ntp_background","DMeson TreeBackground","grefMult:pi1_runId:pi1_eventId:pi1_phi:pi1_eta:pi1_pt:pi1_dca:pi1_dedx:pi1_nSigma:pi1_nHitFit:pi1_nHitdedx:pi1_TOFinvbeta:pi1_betaBase:k_runId:k_eventId:k_phi:k_eta:k_pt:k_dca:k_dedx:k_nSigma:k_nHitFit:k_nHitdedx:k_TOFinvbeta:k_betaBase:dcaDaughters:flag:primVz:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_phi:D_eta:D_cosThetaStar:D_pt:D_mass:D_mass_LS:D_mass_US:centrality:refmultcorr:reweight");
 
-    mRunNumber = 0;
     return kStOK;
 }
 
@@ -103,11 +46,13 @@ void StPicoDpmAnaMaker::ClearHF(Option_t *opt="") {
 // _________________________________________________________
 int StPicoDpmAnaMaker::FinishHF() {
     if( isMakerMode() != StPicoHFMaker::kWrite ){
-        ntp_DMeson_Signal -> Write(ntp_DMeson_Signal->GetName(), TObject::kOverwrite);
-        ntp_DMeson_Background -> Write(ntp_DMeson_Background->GetName(), TObject::kOverwrite);
+
+//        ntp_DMeson_Signal -> Write(ntp_DMeson_Signal->GetName(), TObject::kOverwrite);
+        ntp_DMeson_Signal -> Write();
+//        ntp_DMeson_Background -> Write(ntp_DMeson_Background->GetName(), TObject::kOverwrite);
+        ntp_DMeson_Background -> Write();
     }
 //    mOutFile->Close();
-
     return kStOK;
 }
 
@@ -137,140 +82,7 @@ int StPicoDpmAnaMaker::MakeHF() {
         //createQA();
     }
 
-
-    //fill tof and tpc
-    TH2F *h_piTOF = static_cast<TH2F*>(mOutList->FindObject("h_piTOF"));
-    TH2F *h_kTOF = static_cast<TH2F*>(mOutList->FindObject("h_kTOF"));
-    TH2F *h_pTOF = static_cast<TH2F*>(mOutList->FindObject("h_pTOF"));
-
-    TH2F *h_piTOF_20 = static_cast<TH2F*>(mOutList->FindObject("h_piTOF_20"));
-    TH2F *h_kTOF_20 = static_cast<TH2F*>(mOutList->FindObject("h_kTOF_20"));
-    TH2F *h_pTOF_20 = static_cast<TH2F*>(mOutList->FindObject("h_pTOF_20"));
-
-    TH2F *h_piTOF_1sig = static_cast<TH2F*>(mOutList->FindObject("h_piTOF_1sig"));
-    TH2F *h_kTOF_1sig = static_cast<TH2F*>(mOutList->FindObject("h_kTOF_1sig"));
-    TH2F *h_pTOF_1sig = static_cast<TH2F*>(mOutList->FindObject("h_pTOF_1sig"));
-
-    TH2F *h_piTOF_HFT = static_cast<TH2F*>(mOutList->FindObject("h_piTOF_HFT"));
-    TH2F *h_kTOF_HFT = static_cast<TH2F*>(mOutList->FindObject("h_kTOF_HFT"));
-    TH2F *h_pTOF_HFT = static_cast<TH2F*>(mOutList->FindObject("h_pTOF_HFT"));
-
-    TH2F *h_piTOF_HFT_1sig = static_cast<TH2F*>(mOutList->FindObject("h_piTOF_HFT_1sig"));
-    TH2F *h_kTOF_HFT_1sig = static_cast<TH2F*>(mOutList->FindObject("h_kTOF_HFT_1sig"));
-    TH2F *h_pTOF_HFT_1sig = static_cast<TH2F*>(mOutList->FindObject("h_pTOF_HFT_1sig"));
-
-    TH2F *h_piTOF_HFT_20 = static_cast<TH2F*>(mOutList->FindObject("h_piTOF_HFT_20"));
-    TH2F *h_kTOF_HFT_20 = static_cast<TH2F*>(mOutList->FindObject("h_kTOF_HFT_20"));
-    TH2F *h_pTOF_HFT_20 = static_cast<TH2F*>(mOutList->FindObject("h_pTOF_HFT_20"));
-
-    TH2F *h_piTOF_HFT_1sig_20 = static_cast<TH2F*>(mOutList->FindObject("h_piTOF_HFT_1sig_20"));
-    TH2F *h_kTOF_HFT_1sig_20 = static_cast<TH2F*>(mOutList->FindObject("h_kTOF_HFT_1sig_20"));
-    TH2F *h_pTOF_HFT_1sig_20 = static_cast<TH2F*>(mOutList->FindObject("h_pTOF_HFT_1sig_20"));
-
-    TH2F *h_piTOFbeta = static_cast<TH2F*>(mOutList->FindObject("h_piTOFbeta"));
-    TH2F *h_kTOFbeta = static_cast<TH2F*>(mOutList->FindObject("h_kTOFbeta"));
-    TH2F *h_pTOFbeta = static_cast<TH2F*>(mOutList->FindObject("h_pTOFbeta"));
-
-    TH2F *h_pinsigma = static_cast<TH2F*>(mOutList->FindObject("h_pinsigma"));
-    TH2F *h_knsigma = static_cast<TH2F*>(mOutList->FindObject("h_knsigma"));
-    TH2F *h_pnsigma = static_cast<TH2F*>(mOutList->FindObject("h_pnsigma"));
-
-    TH2F *h_dedx = static_cast<TH2F*>(mOutList->FindObject("h_dedx"));
-
-    TH1F *h_mh1Cent = static_cast<TH1F*>(mOutList->FindObject("h_mh1Cent"));
-    TH1F *h_mh1CentWg = static_cast<TH1F*>(mOutList->FindObject("h_mh1CentWg"));
-    TH1F *h_mh1gRefmultCor = static_cast<TH1F*>(mOutList->FindObject("h_mh1gRefmultCor"));
-    TH1F *h_mh1gRefmultCorWg = static_cast<TH1F*>(mOutList->FindObject("h_mh1gRefmultCorWg"));
-    TH2F *h_mh2CentVz = static_cast<TH2F*>(mOutList->FindObject("h_mh2CentVz"));
-    TH2F *h_mh2CentVzWg = static_cast<TH2F*>(mOutList->FindObject("h_mh2CentVzWg"));
-
-    TH1F *h_mh1Cent_run = static_cast<TH1F*>(mOutList->FindObject("h_mh1Cent_run"));
-    TH1F *h_mh1CentWg_run = static_cast<TH1F*>(mOutList->FindObject("h_mh1CentWg_run"));
-    TH1F *h_mh1gRefmultCor_run = static_cast<TH1F*>(mOutList->FindObject("h_mh1gRefmultCor_run"));
-    TH1F *h_mh1gRefmultCorWg_run = static_cast<TH1F*>(mOutList->FindObject("h_mh1gRefmultCorWg_run"));
-    TH2F *h_mh2CentVz_run = static_cast<TH2F*>(mOutList->FindObject("h_mh2CentVz_run"));
-    TH2F *h_mh2CentVzWg_run = static_cast<TH2F*>(mOutList->FindObject("h_mh2CentVzWg_run"));
-
-    TH1F *h_refMult = static_cast<TH1F*>(mOutList->FindObject("h_refMult"));
-
-    StThreeVectorF pVtx = mPicoDst->event()->primaryVertex();
-
-    float multiplicity = mPicoDst->event()->refMult();
-    h_refMult -> Fill(multiplicity);
-
-    UInt_t nTracks = mPicoDst->numberOfTracks();
-    for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack){
-        StPicoTrack const* trk = mPicoDst->track(iTrack);
-        if (!trk) continue;
-        StPhysicalHelixD helix = trk->helix(mPicoDst->event()->bField());
-        StThreeVectorF momentum = trk->gMom(mPicoDst->event()->primaryVertex(), mPicoDst->event()->bField());
-
-        if (!(trk->nHitsFit()>=20)) continue;
-        if (!(fabs(momentum.pseudoRapidity()) <= 1.0)) continue;
-
-        if (fabs(trk->nSigmaPion())<3.0){
-            float piBeta = mHFCuts->getTofBetaBase(trk);
-            Int_t piTofAvailable = 0;
-            if(!isnan(piBeta) && piBeta > 0){
-                piTofAvailable = 1;
-                float tofPion = fabs(1. / piBeta - sqrt(1+M_PION_PLUS*M_PION_PLUS/(momentum.mag()*momentum.mag())));
-                h_piTOFbeta->Fill(trk->gPt(),tofPion);
-            }
-            h_piTOF->Fill(trk->gPt(),piTofAvailable);
-            if (trk->nHitsFit()>=20) h_piTOF_20->Fill(trk->gPt(),piTofAvailable);
-            if (trk->isHFTTrack()) h_piTOF_HFT->Fill(trk->gPt(),piTofAvailable);
-            if ((trk->isHFTTrack()) && (fabs(trk->nSigmaPion())<1.0)) h_piTOF_HFT_1sig->Fill(trk->gPt(),piTofAvailable);
-            if ((trk->isHFTTrack()) && (trk->nHitsFit()>=20)) h_piTOF_HFT_20->Fill(trk->gPt(),piTofAvailable);
-            if ((trk->isHFTTrack()) && (fabs(trk->nSigmaPion())<1.0) && (trk->nHitsFit()>=20)) h_piTOF_HFT_1sig_20->Fill(trk->gPt(),piTofAvailable);
-            if (fabs(trk->nSigmaPion())<1.0) h_piTOF_1sig->Fill(trk->gPt(),piTofAvailable);
-        }
-
-        if (fabs(trk->nSigmaKaon())<3.0){
-            float kBeta = mHFCuts->getTofBetaBase(trk);
-            Int_t kTofAvailable = 0;
-            if(!isnan(kBeta) && kBeta > 0){
-                kTofAvailable = 1;
-                float tofKaon = fabs(1. / kBeta - sqrt(1+M_KAON_PLUS*M_KAON_PLUS/(momentum.mag()*momentum.mag())));
-                h_kTOFbeta->Fill(trk->gPt(),tofKaon);
-            }
-            h_kTOF->Fill(trk->gPt(),kTofAvailable);
-            if (trk->nHitsFit()>=20) h_kTOF_20->Fill(trk->gPt(),kTofAvailable);
-            if (trk->isHFTTrack()) h_kTOF_HFT->Fill(trk->gPt(),kTofAvailable);
-            if ((trk->isHFTTrack()) && (fabs(trk->nSigmaKaon())<1.0)) h_kTOF_HFT_1sig->Fill(trk->gPt(),kTofAvailable);
-            if ((trk->isHFTTrack()) && (trk->nHitsFit()>=20)) h_kTOF_HFT_20->Fill(trk->gPt(),kTofAvailable);
-            if ((trk->isHFTTrack()) && (fabs(trk->nSigmaKaon())<1.0) && (trk->nHitsFit()>=20)) h_kTOF_HFT_1sig_20->Fill(trk->gPt(),kTofAvailable);
-            if (fabs(trk->nSigmaKaon())<1.0) h_kTOF_1sig->Fill(trk->gPt(),kTofAvailable);
-        }
-
-        if (fabs(trk->nSigmaProton())<3.0){
-            float pBeta = mHFCuts->getTofBetaBase(trk);
-            Int_t pTofAvailable = 0;
-            if(!isnan(pBeta) && pBeta > 0){
-                pTofAvailable = 1;
-                float tofProton = fabs(1. / pBeta - sqrt(1+M_PROTON*M_PROTON/(momentum.mag()*momentum.mag())));
-                h_pTOFbeta->Fill(trk->gPt(),tofProton);
-            }
-            h_pTOF->Fill(trk->gPt(),pTofAvailable);
-            if (trk->nHitsFit()>=20) h_pTOF_20->Fill(trk->gPt(),pTofAvailable);
-            if (trk->isHFTTrack()) h_pTOF_HFT->Fill(trk->gPt(),pTofAvailable);
-            if ((trk->isHFTTrack()) && (fabs(trk->nSigmaProton())<1.0)) h_pTOF_HFT_1sig->Fill(trk->gPt(),pTofAvailable);
-            if ((trk->isHFTTrack()) && (trk->nHitsFit()>=20)) h_pTOF_HFT_20->Fill(trk->gPt(),pTofAvailable);
-            if ((trk->isHFTTrack()) && (fabs(trk->nSigmaProton())<1.0) && (trk->nHitsFit()>=20)) h_pTOF_HFT_1sig_20->Fill(trk->gPt(),pTofAvailable);
-            if (fabs(trk->nSigmaProton())<1.0) h_pTOF_1sig->Fill(trk->gPt(),pTofAvailable);
-        }
-
-        h_pinsigma->Fill(momentum.mag(),trk->nSigmaPion());
-        h_knsigma->Fill(momentum.mag(),trk->nSigmaKaon());
-        h_pnsigma->Fill(momentum.mag(),trk->nSigmaProton());
-
-        h_dedx->Fill(momentum.mag(),trk->dEdx());
-
-    } // .. end tracks loop
-
     double duration = (double) (std::clock() - start1) / (double) CLOCKS_PER_SEC;
-    TH1F *h_time_per_event = static_cast<TH1F*>(mOutList->FindObject("h_time_per_event"));
-    h_time_per_event->Fill(duration);
-
     return kStOK;
 }
 
@@ -287,9 +99,7 @@ int StPicoDpmAnaMaker::createCandidates() {
             // -- Making pair
             StHFPair pair(pion1, kaon, mHFCuts->getHypotheticalMass(StHFCuts::kPion),mHFCuts->getHypotheticalMass(StHFCuts::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
             if (!mHFCuts->isClosePair(pair)) continue;
-
             mPicoHFEvent->addHFSecondaryVertexPair(&pair);
-
         }  // for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon)
     } // for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1)
 
