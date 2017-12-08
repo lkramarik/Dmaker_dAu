@@ -12,6 +12,21 @@ TH1F* hInvMassSign = new TH1F("signal", "signal", 2000, 0.4, 2.4);
 TH1F* hInvMassBack = new TH1F("background", "background", 2000, 0.4, 2.4);
 
 void projectNtp(TFile* data, TFile* dataRes, TString ntpName) {
+    Float_t cosDthetaMin=0;
+    Float_t D_massMin=0.4;
+    Float_t D_massMax=2.4;
+    Float_t D_ptMin=2;
+    Float_t D_ptMax=3;
+    Float_t D_decayLMin=0.02202;
+    Float_t pi1_dcaMin=0.008595;
+    Float_t k_dcaMin=0.009448;
+    Float_t k_nSigmaMax=2;
+    Float_t pi1_nSigmaMax=3;
+    Float_t pi1_TOFinvbetaMax=999;
+    Float_t k_TOFinvbetaMax=0.03;
+    Float_t dcaDaughtersMax=0.00525;
+    Float_t dca_d0Max=0.003649;
+
     data->ls();
     TNtuple* ntp = (TNtuple *) data->Get(ntpName);
     Long64_t numberEntr = ntp->GetEntries();
@@ -35,10 +50,10 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName) {
     ntp->SetBranchAddress("k_eventId", &k_eventId);
     ntp->SetBranchAddress("pi1_eventId", &pi1_eventId);
 
-    TH1F *hpiTOFinvbeta = new TH1F("piTOFinvbeta", "piTOFinvbeta", 600, 0, 0.06);
+    TH1F *hpiTOFinvbeta = new TH1F("piTOFinvbeta", "piTOFinvbeta", 2100, -2, 0.1);
     TH1F *hpinSigma = new TH1F("pinSigma", "pinSigma", 800, -4, 4);
     TH1F *hknSigma = new TH1F("knSigma", "knSigma", 800, -4, 4);
-    TH1F *hkTOFinvbeta = new TH1F("kTOFinvbeta", "kTOFinvbeta", 600, 0, 0.06);
+    TH1F *hkTOFinvbeta = new TH1F("kTOFinvbeta", "kTOFinvbeta", 2100, -2, 0.1);
     TH1F *hdecayLength = new TH1F("hdecayLength", "hdecayLength", 2000, 0, 0.2);
     TH1F *hpi1_dca = new TH1F("hpi1_dca", "hpi1_dca", 2000, 0, 0.2);
     TH1F *hk_dca = new TH1F("hk_dca", "hk_dca", 2000, 0, 0.2);
@@ -49,33 +64,38 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName) {
     for (Long64_t i = 0; i < numberEntr; ++i) {
         if (i % 10000000 == 0) { cout << i << endl; }
         ntp->GetEntry(i);
-        if (cos(D_theta) > 0.) {
-            if ((D_mass > 0.4) && (D_mass < 2.4)) {
-                if ((pi1_dca > 0.008595) && (k_dca > 0.009448) && (dcaDaughters < 0.00525) && (D_decayL > 0.02202) && (fabs(k_TOFinvbeta) < 0.03) && (fabs(pi1_TOFinvbeta) < 4444444) && (fabs(k_nSigma) < 2) && (fabs(pi1_nSigma) < 3 )    )  {
-                    if ((D_pt > 2) && (D_pt < 3)) {
-                        dca_d0 = D_decayL * sqrt(1 - cos(D_theta) * cos(D_theta));
-                        if (dca_d0 < 0.003649) {
-                            hpiTOFinvbeta->Fill(pi1_TOFinvbeta);
-                            hkTOFinvbeta->Fill(k_TOFinvbeta);
-                            hpinSigma->Fill(pi1_nSigma);
-                            hknSigma->Fill(k_nSigma);
-                            hdecayLength->Fill(D_decayL);
-                            hpi1_dca->Fill(pi1_dca);
-                            hk_dca->Fill(k_dca);
-                            hdcaDaughters->Fill(dcaDaughters);
-                            hcosTheta->Fill(cos(D_theta));
-                            hdca_d0->Fill(dca_d0);
+        if (TMath::Cos(D_theta) > cosDthetaMin) {
+            if ((D_mass > D_massMin) && (D_mass < D_massMax)) {
+                if ((pi1_dca > pi1_dcaMin) && (k_dca > k_dcaMin) && (dcaDaughters < dcaDaughtersMax) && (D_decayL > D_decayLMin)){
+                    if ((fabs(k_nSigma) < k_nSigmaMax) && (fabs(pi1_nSigma) < pi1_nSigmaMax)  ) {
+                        if (k_TOFinvbeta < 0) || ((k_TOFinvbeta > 0) && (fabs(k_TOFinvbeta) < k_TOFinvbetaMax)) {
+                            if (pi1_TOFinvbeta < 0) || ((pi1_TOFinvbeta > 0) && (fabs(pi1_TOFinvbeta) < pi1_TOFinvbetaMax)) {
+                                if ((D_pt > D_ptMin) && (D_pt < D_ptMax)) {
+                                    dca_d0 = D_decayL * sqrt(1 - TMath::Cos(D_theta) * TMath::Cos(D_theta));
+                                    if (dca_d0 < dca_d0Max) {
+                                        hpiTOFinvbeta->Fill(pi1_TOFinvbeta);
+                                        hkTOFinvbeta->Fill(k_TOFinvbeta);
+                                        hpinSigma->Fill(pi1_nSigma);
+                                        hknSigma->Fill(k_nSigma);
+                                        hdecayLength->Fill(D_decayL);
+                                        hpi1_dca->Fill(pi1_dca);
+                                        hk_dca->Fill(k_dca);
+                                        hdcaDaughters->Fill(dcaDaughters);
+                                        hcosTheta->Fill(cos(D_theta));
+                                        hdca_d0->Fill(dca_d0);
+                                        dca_d0 = 0;
 
-                            dca_d0 = 0;
-
-                            if ((flag == 0) || (flag == 1)) { hInvMassSign->Fill(D_mass); }
-                            if (flag == 4) {
-                                hInvMassBackMin->Fill(D_mass);
-                                hInvMassBack->Fill(D_mass);
-                            }
-                            if (flag == 5) {
-                                hInvMassBackPlus->Fill(D_mass);
-                                hInvMassBack->Fill(D_mass);
+                                        if ((flag == 0) || (flag == 1)) { hInvMassSign->Fill(D_mass); }
+                                        if (flag == 4) {
+                                            hInvMassBackMin->Fill(D_mass);
+                                            hInvMassBack->Fill(D_mass);
+                                        }
+                                        if (flag == 5) {
+                                            hInvMassBackPlus->Fill(D_mass);
+                                            hInvMassBack->Fill(D_mass);
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

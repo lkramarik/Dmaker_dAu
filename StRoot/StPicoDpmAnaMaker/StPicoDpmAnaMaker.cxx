@@ -109,11 +109,9 @@ int StPicoDpmAnaMaker::createCandidates() {
 // _________________________________________________________
 int StPicoDpmAnaMaker::analyzeCandidates() {
     // --- Analyze previously constructed candidates and output to ntuple
-    // -- Decay channel1
     TClonesArray const * aCandidates= mPicoHFEvent->aHFSecondaryVertices();
     if( mPicoHFEvent->nHFSecondaryVertices() > 0 ){
         for (unsigned int idx = 0; idx <  mPicoHFEvent->nHFSecondaryVertices(); ++idx) {
-
             StHFPair const* pair = static_cast<StHFPair*>(aCandidates->At(idx));
             StPicoTrack const* pion1 = mPicoDst->track(pair->particle1Idx());
             StPicoTrack const* kaon = mPicoDst->track(pair->particle2Idx());
@@ -142,14 +140,12 @@ int StPicoDpmAnaMaker::analyzeCandidates() {
             if( kaon->charge()<0 && pion1->charge()<0) flag=4.; // --
             if( kaon->charge()>0 && pion1->charge()>0) flag=5.; // ++
 
-
             int const centrality = 1;
             const double reweight = 1;
             const double refmultCor = 1;
 
             int ii=0;
             float ntVar[42];
-            // ---
             // Saving to NTUPLE
             // float globalTracks = (float)(mPicoHFEvent->numberOfGlobalTracks());
             ntVar[ii++] = mPicoDst->event()->refMult();
