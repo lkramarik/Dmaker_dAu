@@ -228,10 +228,12 @@ bool StPicoCutsBase::isGoodTrack(StPicoTrack const * const trk) const {
 // _________________________________________________________
 bool StPicoCutsBase::cutMinDcaToPrimVertex(StPicoTrack const * const trk, int pidFlag) const {
   // -- check on min dca for identified particle
-
-  StPhysicalHelixD helix = trk->helix(mPicoDst->event()->bField());
-  helix.moveOrigin(helix.pathLength(mPrimVtx));
-  float dca = (mPrimVtx - helix.origin()).mag();
+  // old:
+//   StPhysicalHelixD helix = trk->helix(mPicoDst->event()->bField());
+//   helix.moveOrigin(helix.pathLength(mPrimVtx));
+  
+  //new, same as vanek:
+  float dca = (mPrimVtx - trk->origin()).mag();
 
   return (dca >= mDcaMin[pidFlag]);
 }
@@ -366,9 +368,12 @@ float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk) const {
   //      - primary hadrons 
   //      - secondarys from charm decays (as an approximation)
   //    -> apply DCA cut to primary vertex to make sure only primaries or secondary HF decays are used
-  StPhysicalHelixD helix = trk->helix(mPicoDst->event()->bField());
 
-  return ((helix.origin() - mPrimVtx).mag() < mPrimaryDCAtoVtxMax) ? getTofBetaBase(trk) : std::numeric_limits<float>::quiet_NaN();
+ // old:
+    //   StPhysicalHelixD helix = trk->helix(mPicoDst->event()->bField());
+//   return ((helix.origin() - mPrimVtx).mag() < mPrimaryDCAtoVtxMax) ? getTofBetaBase(trk) : std::numeric_limits<float>::quiet_NaN();
+  
+  return ((trk->origin() - mPrimVtx).mag() < mPrimaryDCAtoVtxMax) ? getTofBetaBase(trk) : std::numeric_limits<float>::quiet_NaN(); //SL16j, Vanek
 }
 
 // _________________________________________________________

@@ -49,15 +49,19 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
   StPhysicalHelixD p1Helix = particle1->helix(bField);
   StPhysicalHelixD p2Helix = particle2->helix(bField);
 
-  // -- move origins of helices to the primary vertex origin
-  p1Helix.moveOrigin(p1Helix.pathLength(vtx));
-  p2Helix.moveOrigin(p2Helix.pathLength(vtx));
+  // -- move origins of helices to the primary vertex origin //commented 11.12.2017, same as Vanek
+//   p1Helix.moveOrigin(p1Helix.pathLength(vtx));
+//   p2Helix.moveOrigin(p2Helix.pathLength(vtx));
 
   // -- use straight lines approximation to get point of DCA of particle1-particle2 pair
-  StThreeVectorF const p1Mom = p1Helix.momentum(bField * kilogauss);
-  StThreeVectorF const p2Mom = p2Helix.momentum(bField * kilogauss);
-  StPhysicalHelixD const p1StraightLine(p1Mom, p1Helix.origin(), 0, particle1->charge());
-  StPhysicalHelixD const p2StraightLine(p2Mom, p2Helix.origin(), 0, particle2->charge());
+  //commented 11.12.2017, same as Vanek
+//   StThreeVectorF const p1Mom = p1Helix.momentum(bField * kilogauss);
+//   StThreeVectorF const p2Mom = p2Helix.momentum(bField * kilogauss);
+  StThreeVectorF const p1Mom = particle1->gMom();
+  StThreeVectorF const p2Mom = particle2->gMom();
+  
+  StPhysicalHelixD const p1StraightLine(p1Mom, particle1->origin(), 0, particle1->charge());
+  StPhysicalHelixD const p2StraightLine(p2Mom, particle2->origin(), 0, particle2->charge());
 
   pair<double, double> const ss = (useStraightLine) ? p1StraightLine.pathLengths(p2StraightLine) : p1Helix.pathLengths(p2Helix);
   StThreeVectorF const p1AtDcaToP2 = p1StraightLine.at(ss.first);
@@ -94,11 +98,11 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
   // -- calculate DCA of tracks to primary vertex
   //    if decay vertex is a tertiary vertex
   //    -> only rough estimate -> needs to be updated after secondary vertex is found
-  mParticle1Dca = (p1Helix.origin() - vtx).mag();
-  mParticle2Dca = (p2Helix.origin() - vtx).mag();
+  mParticle1Dca = (particle1->origin() - vtx).mag();
+  mParticle2Dca = (particle2->origin() - vtx).mag();
 }
 
-// _________________________________________________________
+// nepouzivam_________________________________________________________
 StHFPair::StHFPair(StPicoTrack const * const particle1, StHFPair const * const particle2,
 		   float p1MassHypo, float p2MassHypo, unsigned short const p1Idx, unsigned short const p2Idx,
 		   StThreeVectorF const & vtx, float const bField, bool const useStraightLine) :
@@ -167,8 +171,8 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StHFPair const * const p
   mDecayLength = vtxToV0.mag();
    
   // -- calculate DCA of tracks to primary vertex
-  mParticle1Dca = (p1Helix.origin() - vtx).mag();
-  mParticle2Dca = (p2Helix.origin() - vtx).mag();
+  mParticle1Dca = (particle1->origin() - vtx).mag();
+  mParticle2Dca = (particle2->origin() - vtx).mag();
 }
 // _________________________________________________________
 float StHFPair::pointingAngle(StThreeVectorF const & vtx2) const{

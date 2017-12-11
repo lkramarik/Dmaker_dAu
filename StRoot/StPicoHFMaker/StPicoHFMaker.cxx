@@ -1,3 +1,4 @@
+//lukas
 #include <vector>
 
 #include "TTree.h"
@@ -39,7 +40,7 @@ StPicoHFMaker::~StPicoHFMaker() {
   
   if (mHFCuts)
     delete mHFCuts;
-//  mHFCuts = NULL;
+  mHFCuts = NULL;
 
   /* mTree is owned by mOutputFile directory, it will be destructed once
    * the file is closed in ::Finish() */

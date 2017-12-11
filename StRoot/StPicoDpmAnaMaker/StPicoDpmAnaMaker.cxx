@@ -124,13 +124,26 @@ int StPicoDpmAnaMaker::analyzeCandidates() {
             kaonBetaBase = mHFCuts->getTofBetaBase(kaon);
             pion1BetaBase = mHFCuts->getTofBetaBase(pion1);
 
+            float ptot=9999;
+            float betaInv = 9999;
+             fabs(1/tofBeta - betaInv) < mTOFDeltaOneOverBetaMax[pidFlag];
+
             if(!isnan(kaonBetaBase) && kaonBetaBase > 0){
-                kaonTOFinvbeta = fabs(1. / kaonBetaBase - sqrt(1+M_KAON_PLUS*M_KAON_PLUS/(kaon->gMom(mPrimVtx,mBField).mag()*kaon->gMom(mPrimVtx,mBField).mag())));
+                ptot = kaon->gPtot();
+                betaInv = sqrt(ptot*ptot + mHypotheticalMass2[StPicoCutsBase::kKaon]) / ptot;
+                kaonTOFinvbeta = fabs(1/tofBeta - betaInv);
             }
 
             if(!isnan(pion1BetaBase) && pion1BetaBase > 0){
-                pion1TOFinvbeta = fabs(1. / pion1BetaBase - sqrt(1+M_PION_PLUS*M_PION_PLUS/(pion1->gMom(mPrimVtx,mBField).mag()*pion1->gMom(mPrimVtx,mBField).mag())));
+                ptot = pion1->gPtot();
+                betaInv = sqrt(ptot*ptot + mHypotheticalMass2[StPicoCutsBase::kPion]) / ptot;
+                kaonTOFinvbeta = fabs(1/tofBeta - betaInv);
             }
+
+//            if(!isnan(pion1BetaBase) && pion1BetaBase > 0){
+//                ptot = pion1->gPtot();
+//                pion1TOFinvbeta = fabs(1. / pion1BetaBase - sqrt(1+M_PION_PLUS*M_PION_PLUS/(pion1->gMom(mPrimVtx,mBField).mag()*pion1->gMom(mPrimVtx,mBField).mag())));
+//            }
 
             // -- Flag D0 and background
             float flag = -99.;
@@ -187,7 +200,7 @@ int StPicoDpmAnaMaker::analyzeCandidates() {
             ntVar[ii++] = pair->eta();
             ntVar[ii++] = pair->cosThetaStar();
 
-            ntVar[ii++] = sqrt(pow(pair->px(),2.0)+pow(pair->py(),2.0));
+            ntVar[ii++] = pair->pt(); //sqrt(pow(pair->px(),2.0)+pow(pair->py(),2.0));
             ntVar[ii++] = pair->m();
             if ((flag == 0) || (flag == 1)) {
                 ntVar[ii++] = -5; //D_mass_LS
@@ -219,7 +232,8 @@ bool StPicoDpmAnaMaker::isHadron(StPicoTrack const * const trk, int pidFlag) con
 // _________________________________________________________
 bool StPicoDpmAnaMaker::isPion(StPicoTrack const * const trk) const {
     // -- good pion
-    StThreeVectorF t = trk->pMom();
+//    StThreeVectorF t = trk->pMom(); //11.12.
+    StThreeVectorF t = trk->gMom(); //11.12.
     if (fabs(t.pseudoRapidity()) > 1.) return false; //pridano fabs 1212
     if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StHFCuts::kPion) ) return false;
 //    if (!mHFCuts->cutMinDcaToPrimVertex(trk, StPicoCutsBase::kPion)) return false;
@@ -229,7 +243,8 @@ bool StPicoDpmAnaMaker::isPion(StPicoTrack const * const trk) const {
 // _________________________________________________________
 bool StPicoDpmAnaMaker::isKaon(StPicoTrack const * const trk) const {
     // -- good kaon
-    StThreeVectorF t = trk->pMom();
+//    StThreeVectorF t = trk->pMom(); //11.12.
+    StThreeVectorF t = trk->gMom(); //11.12.
     if (fabs(t.pseudoRapidity()) > 1.) return false;//pridano fabs 1212
     if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StHFCuts::kKaon) ) return false;
 //    if (!mHFCuts->cutMinDcaToPrimVertex(trk, StPicoCutsBase::kKaon)) return false;
