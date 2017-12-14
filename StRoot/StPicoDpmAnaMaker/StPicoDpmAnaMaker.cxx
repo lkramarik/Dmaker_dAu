@@ -129,13 +129,13 @@ int StPicoDpmAnaMaker::analyzeCandidates() {
 
             if(!isnan(kaonBetaBase) && kaonBetaBase > 0){
                 ptot = kaon->gPtot();
-                betaInv = sqrt(ptot*ptot + mHypotheticalMass2[StPicoCutsBase::kKaon]) / ptot;
+                betaInv = sqrt(ptot*ptot + M_KAON_PLUS*M_KAON_PLUS) / ptot;
                 kaonTOFinvbeta = fabs(1/kaonBetaBase - betaInv);
             }
 
             if(!isnan(pion1BetaBase) && pion1BetaBase > 0){
                 ptot = pion1->gPtot();
-                betaInv = sqrt(ptot*ptot + mHypotheticalMass2[StPicoCutsBase::kPion]) / ptot;
+                betaInv = sqrt(ptot*ptot + M_PION_PLUS*M_PION_PLUS]) / ptot;
                 kaonTOFinvbeta = fabs(1/pion1BetaBase - betaInv);
             }
 
