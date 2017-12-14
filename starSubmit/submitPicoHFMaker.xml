@@ -36,7 +36,7 @@
     <Package name="LocalLibraries">
       <File>file:./StRoot/</File>
       <File>file:./run16dAuPrescales/</File>
-      <File>file:./.sl64_gcc482/</File>
+      <File>file:./.sl73_gcc485/</File>
       <File>file:./picoList_bad.list</File>
       <File>file:./starSubmit/parseFileList.csh</File>
     </Package>

@@ -29,7 +29,7 @@ done
 echo number of files: $i, number of lists: $(( listNumber + 1 ))
 
 #copy needed folders
-cp -r /gpfs01/star/pwg/lkramarik/Dmaker_dAu/.sl64_gcc482 ./
+cp -r /gpfs01/star/pwg/lkramarik/Dmaker_dAu/.sl73_gcc485 ./
 cp -Lr /gpfs01/star/pwg/lkramarik/Dmaker_dAu/StRoot ./
 cp -Lr /gpfs01/star/pwg/lkramarik/Dmaker_dAu/run16dAuPrescales ./
 cp /gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoLists/picoList_bad.list ./
