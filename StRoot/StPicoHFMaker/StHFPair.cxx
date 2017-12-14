@@ -172,7 +172,7 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StHFPair const * const p
    
   // -- calculate DCA of tracks to primary vertex
   mParticle1Dca = (particle1->origin() - vtx).mag();
-  mParticle2Dca = (particle2->origin() - vtx).mag();
+  mParticle2Dca = 10000; //change it
 }
 // _________________________________________________________
 float StHFPair::pointingAngle(StThreeVectorF const & vtx2) const{
