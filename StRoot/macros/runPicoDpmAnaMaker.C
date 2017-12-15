@@ -149,22 +149,22 @@ void runPicoDpmAnaMaker(
 
     // -- ADD USER CUTS HERE ----------------------------
     // kaonPion pair cuts
-    float dcaDaughtersMax = 0.00525;  // maximum
-    float decayLengthMin  = 0.02202; // minimum
-    float decayLengthMax  = 3; //std::numeric_limits<float>::max();
-    float cosThetaMin     = 0.;   // minimum
-    float minMass         = 0.4;
-    float maxMass         = 2.4;
-
-    float dcaToPvMax = 0.003649;
-
-    hfCuts -> setCutSecondaryPairDcaToPvMax(dcaToPvMax); //getting read for isgooSVpair.
-//    float dcaDaughtersMax = 2;  // maximum
-//    float decayLengthMin  = 0.000; // minimum
+//    float dcaDaughtersMax = 0.00525;  // maximum
+//    float decayLengthMin  = 0.02202; // minimum
 //    float decayLengthMax  = 3; //std::numeric_limits<float>::max();
 //    float cosThetaMin     = 0.;   // minimum
 //    float minMass         = 0.4;
 //    float maxMass         = 2.4;
+//
+//    float dcaToPvMax = 0.003649;
+
+//    hfCuts -> setCutSecondaryPairDcaToPvMax(dcaToPvMax); //getting read for isgooSVpair.
+    float dcaDaughtersMax = 2;  // maximum
+    float decayLengthMin  = 0.000; // minimum
+    float decayLengthMax  = 3; //std::numeric_limits<float>::max();
+    float cosThetaMin     = 0.;   // minimum
+    float minMass         = 0.4;
+    float maxMass         = 2.4;
 //
     hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass); //ok
     
@@ -177,7 +177,7 @@ void runPicoDpmAnaMaker(
     //TOF setters, need to set pt range as well
     hfCuts->setCutTOFDeltaOneOverBeta(0.03, StHFCuts::kKaon); // v podstate 5 sigma; nastavene = f * (sigmaTOF), sigma TOF je 0.013 OK
     hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kKaon); // OK
-    hfCuts->setCutTOFDeltaOneOverBeta(0.999, StHFCuts::kPion); // v podstate 6 sigma OK
+    hfCuts->setCutTOFDeltaOneOverBeta(0.999, StHFCuts::kPion); //
     hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kPion); // OK
     // set refmultCorr
     //StRefMultCorr* grefmultCorrUtil = CentralityMaker::instance()->getgRefMultCorr_P16id();

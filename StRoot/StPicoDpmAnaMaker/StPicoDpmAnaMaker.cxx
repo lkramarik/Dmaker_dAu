@@ -136,7 +136,7 @@ int StPicoDpmAnaMaker::analyzeCandidates() {
             if(!isnan(pion1BetaBase) && pion1BetaBase > 0){
                 ptot = pion1->gPtot();
                 betaInv = sqrt(ptot*ptot + M_PION_PLUS*M_PION_PLUS) / ptot;
-                kaonTOFinvbeta = fabs(1/pion1BetaBase - betaInv);
+                pion1TOFinvbeta = fabs(1/pion1BetaBase - betaInv);
             }
 
 //            if(!isnan(pion1BetaBase) && pion1BetaBase > 0){
