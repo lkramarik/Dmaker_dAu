@@ -15,17 +15,33 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName) {
     Float_t cosDthetaMin=0;
     Float_t D_massMin=0.4;
     Float_t D_massMax=2.4;
-    Float_t D_ptMin=2;
-    Float_t D_ptMax=3;
-    Float_t D_decayLMin=0.02202;
-    Float_t pi1_dcaMin=0.008595;
-    Float_t k_dcaMin=0.009448;
+    Float_t D_ptMin=1;
+    Float_t D_ptMax=2;
+    Float_t D_decayLMin=0.0232;
+    Float_t pi1_dcaMin=0.0099;
+    Float_t k_dcaMin=0.0087;
     Float_t k_nSigmaMax=2;
     Float_t pi1_nSigmaMax=3;
     Float_t pi1_TOFinvbetaMax=999;
     Float_t k_TOFinvbetaMax=0.03;
-    Float_t dcaDaughtersMax=0.00525;
-    Float_t dca_d0Max=0.003649;
+    Float_t dcaDaughtersMax=0.0093;
+    Float_t dca_d0Max=0.0075;
+
+    // pt 2-3 GeV
+//    Float_t cosDthetaMin=0;
+//    Float_t D_massMin=0.4;
+//    Float_t D_massMax=2.4;
+//    Float_t D_ptMin=2;
+//    Float_t D_ptMax=3;
+//    Float_t D_decayLMin=0.02202;
+//    Float_t pi1_dcaMin=0.008595;
+//    Float_t k_dcaMin=0.009448;
+//    Float_t k_nSigmaMax=2;
+//    Float_t pi1_nSigmaMax=3;
+//    Float_t pi1_TOFinvbetaMax=999;
+//    Float_t k_TOFinvbetaMax=0.03;
+//    Float_t dcaDaughtersMax=0.00525;
+//    Float_t dca_d0Max=0.003649;
 
     data->ls();
     TNtuple* ntp = (TNtuple *) data->Get(ntpName);
