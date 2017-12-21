@@ -135,8 +135,8 @@ void runPicoDpmAnaMaker(
     hfCuts->addTriggerId(530202); //BHT2-VPD-30 
     hfCuts->addTriggerId(530213); //BHT3
     
-    hfCuts->setCutDcaMin(0.008595,StHFCuts::kPion); // OK
-    hfCuts->setCutDcaMin(0.009448,StHFCuts::kKaon); // OK
+    hfCuts->setCutDcaMin(0.0099,StHFCuts::kPion); // OK
+    hfCuts->setCutDcaMin(0.0087,StHFCuts::kKaon); // OK
 
     hfCuts->setCutPrimaryDCAtoVtxMax(1.); //default is 1.0
     hfCuts->setCutVzMax(6.);
@@ -144,20 +144,18 @@ void runPicoDpmAnaMaker(
     hfCuts->setCutNHitsFitMin(15); //default is 20
     hfCuts->setCutRequireHFT(true);
 
-    Float_t D_ptMin=2;
-    Float_t D_ptMax=3;
-
     // -- ADD USER CUTS HERE ----------------------------
     // kaonPion pair cuts
-    float dcaDaughtersMax = 0.00525;  // maximum
-    float decayLengthMin  = 0.02202; // minimum
-    float decayLengthMax  = 3; //std::numeric_limits<float>::max();
+    float dcaDaughtersMax = 0.0093;  // maximum toto ide
+    float decayLengthMin  = 0.0232; // minimum
+    float decayLengthMax  = 4; //std::numeric_limits<float>::max(); toto ide (cutuje)
     float cosThetaMin     = 0.;   // minimum
     float minMass         = 0.4;
     float maxMass         = 2.4;
 
-    float dcaToPvMax = 0.003649;
-    hfCuts -> setCutSecondaryPairDcaToPvMax(dcaToPvMax); //getting read for isgooSVpair.
+//    float dcaToPvMax = 0.003649;
+//    hfCuts -> setCutSecondaryPairDcaToPvMax(dcaToPvMax); //getting read for isgooSVpair.
+
 //    float dcaDaughtersMax = 2;  // maximum
 //    float decayLengthMin  = 0.000; // minimum
 //    float decayLengthMax  = 3; //std::numeric_limits<float>::max();
@@ -174,7 +172,7 @@ void runPicoDpmAnaMaker(
     hfCuts->setCutTPCNSigmaPion(3.0); //3 OK
     hfCuts->setCutTPCNSigmaKaon(2.0); //3 OK
     //TOF setters, need to set pt range as well
-    hfCuts->setCutTOFDeltaOneOverBeta(0.03, StHFCuts::kKaon); // v podstate 5 sigma; nastavene = f * (sigmaTOF), sigma TOF je 0.013 OK
+    hfCuts->setCutTOFDeltaOneOverBeta(0.03, StHFCuts::kKaon); // nastavene = f * (sigmaTOF), sigma TOF je 0.013 OK
     hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kKaon); // OK
     hfCuts->setCutTOFDeltaOneOverBeta(999, StHFCuts::kPion); //
     hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kPion); // OK
