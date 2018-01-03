@@ -85,7 +85,7 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName) {
                 if ((pi1_dca > pi1_dcaMin) && (k_dca > k_dcaMin) && (dcaDaughters < dcaDaughtersMax) && (D_decayL > D_decayLMin)){
                     if ((fabs(k_nSigma) < k_nSigmaMax) && (fabs(pi1_nSigma) < pi1_nSigmaMax)  ) {
 //                        if ((k_TOFinvbeta < 0) || ((k_TOFinvbeta > 0) && (fabs(k_TOFinvbeta) < k_TOFinvbetaMax))){
-                        if (((k_TOFinvbeta > 0) && (fabs(k_TOFinvbeta) < k_TOFinvbetaMax)){
+                        if ((k_TOFinvbeta > 0) && (fabs(k_TOFinvbeta) < k_TOFinvbetaMax)){
                             if ((pi1_TOFinvbeta < 0) || ((pi1_TOFinvbeta > 0) && (fabs(pi1_TOFinvbeta) < pi1_TOFinvbetaMax))){
                                 if ((D_pt > D_ptMin) && (D_pt < D_ptMax)) {
                                     dca_d0 = D_decayL * sqrt(1 - TMath::Cos(D_theta) * TMath::Cos(D_theta));
