@@ -166,16 +166,16 @@ void runPicoDpmAnaMaker(
     hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass); //ok
     
     //Single track pt
-    hfCuts->setCutPtRange(0.2,50.0,StHFCuts::kPion); //0.2 , 50.0 OK
-    hfCuts->setCutPtRange(0.2,50.0,StHFCuts::kKaon); //0.2, 50.0 OK
+    hfCuts->setCutPtRange(0.001,50.0,StHFCuts::kPion); //0.2 , 50.0 OK
+    hfCuts->setCutPtRange(0.001,50.0,StHFCuts::kKaon); //0.2, 50.0 OK
     //TPC setters
     hfCuts->setCutTPCNSigmaPion(3.0); //3 OK
     hfCuts->setCutTPCNSigmaKaon(2.0); //3 OK
     //TOF setters, need to set pt range as well
     hfCuts->setCutTOFDeltaOneOverBeta(0.03, StHFCuts::kKaon); // nastavene = f * (sigmaTOF), sigma TOF je 0.013 OK
-    hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kKaon); // OK
+    hfCuts->setCutPtotRangeHybridTOF(0.001,50.0,StHFCuts::kKaon); // OK
     hfCuts->setCutTOFDeltaOneOverBeta(999, StHFCuts::kPion); //
-    hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kPion); // OK
+    hfCuts->setCutPtotRangeHybridTOF(0.001,50.0,StHFCuts::kPion); // OK
     // set refmultCorr
     //StRefMultCorr* grefmultCorrUtil = CentralityMaker::instance()->getgRefMultCorr_P16id();
     //picoDpmAnaMaker->setRefMutCorr(grefmultCorrUtil);
