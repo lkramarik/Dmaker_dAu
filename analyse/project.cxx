@@ -43,7 +43,7 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName) {
 //    Float_t dcaDaughtersMax=0.00525;
 //    Float_t dca_d0Max=0.003649;
 
-    data->ls();
+//    data->ls();
     TNtuple* ntp = (TNtuple *) data->Get(ntpName);
     Long64_t numberEntr = ntp->GetEntries();
     cout << "Number of entries in Ntuple: " << numberEntr << endl;;
@@ -86,7 +86,8 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName) {
                     if ((fabs(k_nSigma) < k_nSigmaMax) && (fabs(pi1_nSigma) < pi1_nSigmaMax)  ) {
 //                        if ((k_TOFinvbeta < 0) || ((k_TOFinvbeta > 0) && (fabs(k_TOFinvbeta) < k_TOFinvbetaMax))){
                         if ((k_TOFinvbeta > 0) && (fabs(k_TOFinvbeta) < k_TOFinvbetaMax)){
-                            if ((pi1_TOFinvbeta < 0) || ((pi1_TOFinvbeta > 0) && (fabs(pi1_TOFinvbeta) < pi1_TOFinvbetaMax))){
+//                            if ((pi1_TOFinvbeta < 0) || ((pi1_TOFinvbeta > 0) && (fabs(pi1_TOFinvbeta) < pi1_TOFinvbetaMax))){
+                            if (((pi1_TOFinvbeta > 0) && (fabs(pi1_TOFinvbeta) < pi1_TOFinvbetaMax))){
                                 if ((D_pt > D_ptMin) && (D_pt < D_ptMax)) {
                                     dca_d0 = D_decayL * sqrt(1 - TMath::Cos(D_theta) * TMath::Cos(D_theta));
                                     if (dca_d0 < dca_d0Max) {
