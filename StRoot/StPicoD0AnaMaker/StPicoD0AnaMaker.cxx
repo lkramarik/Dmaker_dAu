@@ -235,7 +235,7 @@ bool StPicoD0AnaMaker::isPion(StPicoTrack const * const trk) const {
     StThreeVectorF t = trk->gMom(); //11.12.
     if (fabs(t.pseudoRapidity()) > 1.) return false; //pridano fabs 1212
     if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StHFCuts::kPion) ) return false;
-//    if (!mHFCuts->cutMinDcaToPrimVertex(trk, StPicoCutsBase::kPion)) return false;
+    if (!mHFCuts->cutMinDcaToPrimVertex(trk, StPicoCutsBase::kPion)) return false;
     return (mHFCuts->isGoodTrack(trk) && mHFCuts->isTPCHadron(trk, StPicoCutsBase::kPion));
 }
 
@@ -246,7 +246,7 @@ bool StPicoD0AnaMaker::isKaon(StPicoTrack const * const trk) const {
     StThreeVectorF t = trk->gMom(); //11.12.
     if (fabs(t.pseudoRapidity()) > 1.) return false;//pridano fabs 1212
     if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StHFCuts::kKaon) ) return false;
-//    if (!mHFCuts->cutMinDcaToPrimVertex(trk, StPicoCutsBase::kKaon)) return false;
+    if (!mHFCuts->cutMinDcaToPrimVertex(trk, StPicoCutsBase::kKaon)) return false;
     return (mHFCuts->isGoodTrack(trk) && mHFCuts->isTPCHadron(trk, StPicoCutsBase::kKaon));
 }
 
