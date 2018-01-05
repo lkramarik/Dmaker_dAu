@@ -12,7 +12,7 @@
 #include "StPicoEvent/StPicoEvent.h"
 #include "StPicoEvent/StPicoTrack.h"
 #include "StPicoEvent/StPicoBTofPidTraits.h"
-#include "StPicoPrescales/StPicoPrescales.h"
+//#include "StPicoPrescales/StPicoPrescales.h"
 
 #include "StHFCuts.h"
 #include "StHFHists.h"
