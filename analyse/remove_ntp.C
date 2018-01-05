@@ -7,10 +7,10 @@ void remove_ntp(TString input){
   //   gDirectory->Delete(object_to_remove.c_str());
 //   file->Close();
 
- TList *list = (TList*)file -> Get("picoDpmAnaMaker;1"); 
+ TList *list = (TList*)file -> Get("PicoD0AnaMaker;1");
  TFile *fileOut=new TFile("small_"+input,"recreate");
 //  fileOut -> cd();
- list -> Clone() -> Write("picoDpmAnaMaker",1,0);
+ list -> Clone() -> Write("PicoD0AnaMaker",1,0);
 
     
 }

@@ -37,7 +37,7 @@ set input=${baseFolder}/${2}
 set makerMode=0
 
 # -- set root macro
-set rootMacro=runPicoDpmAnaMaker.C
+set rootMacro=runPicoD0AnaMaker.C
 
 # -- set filename for bad run list
 set badRunListFileName="picoList_bad.list"

@@ -7,11 +7,11 @@
 //#include "StPicoD0AnaMaker.h"
 #include "StPicoHFMaker/StHFCuts.h"
 
-#include "StPicoDpmAnaMaker.h"
-ClassImp(StPicoDpmAnaMaker)
+#include "StPicoD0AnaMaker.h"
+ClassImp(StPicoD0AnaMaker)
 
 // _________________________________________________________
-StPicoDpmAnaMaker::StPicoDpmAnaMaker(char const* name, StPicoDstMaker* picoMaker, char const* outputBaseFileName, char const* inputHFListHFtree = "") :
+StPicoD0AnaMaker::StPicoD0AnaMaker(char const* name, StPicoDstMaker* picoMaker, char const* outputBaseFileName, char const* inputHFListHFtree = "") :
         StPicoHFMaker(name, picoMaker, outputBaseFileName, inputHFListHFtree),
         mOutFileBaseName(outputBaseFileName){ //mDecayChannel(kChannel1), tu bolo
 
@@ -19,12 +19,12 @@ StPicoDpmAnaMaker::StPicoDpmAnaMaker(char const* name, StPicoDstMaker* picoMaker
 }
 
 // _________________________________________________________
-StPicoDpmAnaMaker::~StPicoDpmAnaMaker() {
+StPicoD0AnaMaker::~StPicoD0AnaMaker() {
     // destructor
 }
 
 // _________________________________________________________
-int StPicoDpmAnaMaker::InitHF() {
+int StPicoD0AnaMaker::InitHF() {
     // -- INITIALIZE USER HISTOGRAMS ETC HERE -------------------
     //    add them to the output list mOutList which is automatically written
     //
@@ -39,12 +39,12 @@ int StPicoDpmAnaMaker::InitHF() {
 }
 
 // _________________________________________________________
-void StPicoDpmAnaMaker::ClearHF(Option_t *opt="") {
+void StPicoD0AnaMaker::ClearHF(Option_t *opt="") {
     return;
 }
 
 // _________________________________________________________
-int StPicoDpmAnaMaker::FinishHF() {
+int StPicoD0AnaMaker::FinishHF() {
     if( isMakerMode() != StPicoHFMaker::kWrite ){
 
 //        ntp_DMeson_Signal -> Write(ntp_DMeson_Signal->GetName(), TObject::kOverwrite);
@@ -57,7 +57,7 @@ int StPicoDpmAnaMaker::FinishHF() {
 }
 
 // _________________________________________________________
-int StPicoDpmAnaMaker::MakeHF() {
+int StPicoD0AnaMaker::MakeHF() {
     //cout<<"MakeHF start"<<endl;  
     // -- process event
     //    ADD YOUR PROCESSING CODE HERE
@@ -87,7 +87,7 @@ int StPicoDpmAnaMaker::MakeHF() {
 }
 
 // _________________________________________________________
-int StPicoDpmAnaMaker::createCandidates() {
+int StPicoD0AnaMaker::createCandidates() {
 
     for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
         StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
@@ -107,7 +107,7 @@ int StPicoDpmAnaMaker::createCandidates() {
 }
 
 // _________________________________________________________
-int StPicoDpmAnaMaker::analyzeCandidates() {
+int StPicoD0AnaMaker::analyzeCandidates() {
     // --- Analyze previously constructed candidates and output to ntuple
     TClonesArray const * aCandidates= mPicoHFEvent->aHFSecondaryVertices();
     if( mPicoHFEvent->nHFSecondaryVertices() > 0 ){
@@ -223,13 +223,13 @@ int StPicoDpmAnaMaker::analyzeCandidates() {
 }
 
 // _________________________________________________________
-bool StPicoDpmAnaMaker::isHadron(StPicoTrack const * const trk, int pidFlag) const {
+bool StPicoD0AnaMaker::isHadron(StPicoTrack const * const trk, int pidFlag) const {
     // -- good hadron
     return (mHFCuts->isGoodTrack(trk) && mHFCuts->isTPCHadron(trk, pidFlag));
 }
 
 // _________________________________________________________
-bool StPicoDpmAnaMaker::isPion(StPicoTrack const * const trk) const {
+bool StPicoD0AnaMaker::isPion(StPicoTrack const * const trk) const {
     // -- good pion
 //    StThreeVectorF t = trk->pMom(); //11.12.
     StThreeVectorF t = trk->gMom(); //11.12.
@@ -240,7 +240,7 @@ bool StPicoDpmAnaMaker::isPion(StPicoTrack const * const trk) const {
 }
 
 // _________________________________________________________
-bool StPicoDpmAnaMaker::isKaon(StPicoTrack const * const trk) const {
+bool StPicoD0AnaMaker::isKaon(StPicoTrack const * const trk) const {
     // -- good kaon
 //    StThreeVectorF t = trk->pMom(); //11.12.
     StThreeVectorF t = trk->gMom(); //11.12.
@@ -251,12 +251,12 @@ bool StPicoDpmAnaMaker::isKaon(StPicoTrack const * const trk) const {
 }
 
 // _________________________________________________________
-bool StPicoDpmAnaMaker::isProton(StPicoTrack const * const trk) const {
+bool StPicoD0AnaMaker::isProton(StPicoTrack const * const trk) const {
     // -- good proton
     return (mHFCuts->isGoodTrack(trk) && mHFCuts->isTPCHadron(trk, StPicoCutsBase::kProton));
 }
 
-bool StPicoDpmAnaMaker::isCloseTracks(StPicoTrack const * const trk1, StPicoTrack const * const trk2, StThreeVectorF const & vtx, float bField) const {
+bool StPicoD0AnaMaker::isCloseTracks(StPicoTrack const * const trk1, StPicoTrack const * const trk2, StThreeVectorF const & vtx, float bField) const {
 
     StPhysicalHelixD p1Helix = trk1->helix(mPicoDst->event()->bField());
     StPhysicalHelixD p2Helix = trk2->helix(mPicoDst->event()->bField());

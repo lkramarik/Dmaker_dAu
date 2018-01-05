@@ -1,4 +1,4 @@
-/*   root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runPicoDpmAnaMakerLocal.C++
+/*   root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runPicoD0AnaMakerLocal.C++
  *  - Different modes to use the  class
  *    - StPicoHFMaker::kAnalyze - don't write candidate trees, just fill histograms
  *        inputFile : fileList of PicoDst files or single picoDst file
@@ -21,12 +21,12 @@
 #include "StPicoHFMaker/StPicoHFEvent.h"
 #include "StPicoHFMaker/StHFCuts.h"
 #include "StPicoEvent/StPicoEvent.h"
-#include "StPicoHFMyAnaMaker/StPicoHFMyAnaMaker.h"
+//#include "StPicoHFMyAnaMaker/StPicoHFMyAnaMaker.h"
 #include "macros/loadSharedHFLibraries.C"
 #include <iostream>
 #include <ctime>
 #include <cstdio>
-#include "StPicoDpmAnaMaker/StPicoDpmAnaMaker.h" //kvapil
+#include "StPicoD0AnaMaker/StPicoD0AnaMaker.h" //kvapil
 //#include "StRefMultCorr/StRefMultCorr.h"
 //#include "StRefMultCorr/CentralityMaker.h"
 
@@ -36,7 +36,7 @@ using namespace std;
 class StChain;
 #endif
 StChain *chain;
-void runPicoDpmAnaMakerLocal(
+void runPicoD0AnaMakerLocal(
 			const Char_t *inputFile="/gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoLists/runs_local_test.list",	
 			const Char_t *outputFile="outputBaseName",  
 			 const unsigned int makerMode = 0 ,
@@ -108,13 +108,13 @@ void runPicoDpmAnaMakerLocal(
 
   StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
   cout<<"ok, picoDstMaker created"<<endl;
-  StPicoDpmAnaMaker* picoDpmAnaMaker = new StPicoDpmAnaMaker("picoDpmAnaMaker", picoDstMaker, outputFile, sInputListHF);
-  picoDpmAnaMaker->setMakerMode(makerMode);
-  picoDpmAnaMaker->setTreeName(treeName);
-  picoDpmAnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
+  StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("PicoD0AnaMaker", picoDstMaker, outputFile, sInputListHF);
+  PicoD0AnaMaker->setMakerMode(makerMode);
+  PicoD0AnaMaker->setTreeName(treeName);
+  PicoD0AnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
 
   StHFCuts* hfCuts = new StHFCuts("hfBaseCuts");
-  picoDpmAnaMaker->setHFBaseCuts(hfCuts);
+  PicoD0AnaMaker->setHFBaseCuts(hfCuts);
   cout<<"event stuff set"<<endl;
   // ---------------------------------------------------
   // -- Set Base cuts for HF analysis
@@ -148,7 +148,7 @@ void runPicoDpmAnaMakerLocal(
   //hfCuts->setCutNHitsFitnHitsMax(0.52);  kvapil
 
   // -- Channel0
-  picoDpmAnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
+  PicoD0AnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
 
   // -- ADD USER CUTS HERE ----------------------------
    // kaonPion pair cuts
@@ -173,7 +173,7 @@ void runPicoDpmAnaMakerLocal(
   hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kPion); 
   // set refmultCorr
   //StRefMultCorr* grefmultCorrUtil = CentralityMaker::instance()->getgRefMultCorr_P16id();
-  //picoDpmAnaMaker->setRefMutCorr(grefmultCorrUtil);
+  //PicoD0AnaMaker->setRefMutCorr(grefmultCorrUtil);
 
   clock_t start = clock(); // getting starting time
   chain->Init();

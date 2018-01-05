@@ -1,11 +1,11 @@
-#ifndef StPicoDpmAnaMaker_h
-#define StPicoDpmAnaMaker_h
+#ifndef StPicoD0AnaMaker_h
+#define StPicoD0AnaMaker_h
 
 #include "StPicoHFMaker/StPicoHFMaker.h"
 #include "TNtuple.h"
 //#include "StRefMultCorr/StRefMultCorr.h"
 #include "TH2F.h"
-//#include "StPicoDpmAnaHists.h"
+//#include "StPicoD0AnaHists.h"
 #include <vector>
 
 #include "TClonesArray.h"
@@ -97,12 +97,12 @@ class StHFCuts;
 
 class StRefMultCorr;
 
-class StPicoDpmAnaMaker : public StPicoHFMaker
+class StPicoD0AnaMaker : public StPicoHFMaker
 {
 public:
-    StPicoDpmAnaMaker(char const* name, StPicoDstMaker* picoMaker, char const* outputBaseFileName,
+    StPicoD0AnaMaker(char const* name, StPicoDstMaker* picoMaker, char const* outputBaseFileName,
                       char const* inputHFListHFtree);
-    virtual ~StPicoDpmAnaMaker();
+    virtual ~StPicoD0AnaMaker();
 
     virtual Int_t InitHF();
     virtual Int_t MakeHF();
@@ -135,7 +135,7 @@ private:
 
     TFile* mOutFile;
 
-    ClassDef(StPicoDpmAnaMaker, 1) //set to 1
+    ClassDef(StPicoD0AnaMaker, 1) //set to 1
 };
 
 #endif

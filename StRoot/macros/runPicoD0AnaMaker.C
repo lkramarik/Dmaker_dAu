@@ -21,12 +21,12 @@
 #include "StPicoHFMaker/StPicoHFEvent.h"
 #include "StPicoHFMaker/StHFCuts.h"
 #include "StPicoEvent/StPicoEvent.h"
-#include "StPicoHFMyAnaMaker/StPicoHFMyAnaMaker.h"
+//#include "StPicoHFMyAnaMaker/StPicoHFMyAnaMaker.h"
 #include "macros/loadSharedHFLibraries.C"
 #include <iostream>
 #include <ctime>
 #include <cstdio>
-#include "StPicoDpmAnaMaker/StPicoDpmAnaMaker.h" //kvapil
+#include "StPicoD0AnaMaker/StPicoD0AnaMaker.h" //kvapil
 //#include "StRefMultCorr/StRefMultCorr.h"
 //#include "StRefMultCorr/CentralityMaker.h"
 
@@ -36,7 +36,7 @@ using namespace std;
 class StChain;
 #endif
 StChain *chain;
-void runPicoDpmAnaMaker(
+void runPicoD0AnaMaker(
     //const Char_t *inputFile="/gpfs01/star/pwg/lkramarik/pico_pAu/produced/st_physics_16127031_raw_4000024.picoDst.root",	
     const char*  inputFile, 			 
     const Char_t *outputFile,  
@@ -107,13 +107,13 @@ void runPicoDpmAnaMaker(
     
     StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
     cout<<"ok, picoDstMaker created"<<endl;
-    StPicoDpmAnaMaker* picoDpmAnaMaker = new StPicoDpmAnaMaker("picoDpmAnaMaker", picoDstMaker, outputFile, sInputListHF);
-    picoDpmAnaMaker->setMakerMode(makerMode);
-    picoDpmAnaMaker->setTreeName(treeName);
-    picoDpmAnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
+    StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("PicoD0AnaMaker", picoDstMaker, outputFile, sInputListHF);
+    PicoD0AnaMaker->setMakerMode(makerMode);
+    PicoD0AnaMaker->setTreeName(treeName);
+    PicoD0AnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
 
     StHFCuts* hfCuts = new StHFCuts("hfBaseCuts");
-    picoDpmAnaMaker->setHFBaseCuts(hfCuts);
+    PicoD0AnaMaker->setHFBaseCuts(hfCuts);
 
     cout<<"event stuff set"<<endl;
 
@@ -178,7 +178,7 @@ void runPicoDpmAnaMaker(
     hfCuts->setCutPtotRangeHybridTOF(0.001,50.0,StHFCuts::kPion); // OK
     // set refmultCorr
     //StRefMultCorr* grefmultCorrUtil = CentralityMaker::instance()->getgRefMultCorr_P16id();
-    //picoDpmAnaMaker->setRefMutCorr(grefmultCorrUtil);
+    //PicoD0AnaMaker->setRefMutCorr(grefmultCorrUtil);
     
     clock_t start = clock(); // getting starting time
     chain->Init();
