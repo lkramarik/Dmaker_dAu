@@ -158,7 +158,7 @@ void project(TString input = "testnew.root"){
     projectNtp(data, dataRes, "ntp_signal");
     projectNtp(data, dataRes, "ntp_background");
 
-    TList* list = (TList*) data -> Get("PicoD0AnaMaker;1");
+    TList* list = (TList*) data -> Get("picoDpmAnaMaker;1");
     TH1F* hStat = (TH1F*) list -> FindObject("hEventStat1");
     dataRes->cd();
     hInvMassSign -> Write();
