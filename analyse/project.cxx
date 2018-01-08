@@ -27,6 +27,24 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName) {
     Float_t k_TOFinvbetaMax=0.03;
     Float_t dcaDaughtersMax=0.015;
     Float_t dca_d0Max=0.0090;
+    Float_t pi1_ptMin=0.2;
+    Float_t k_ptMin=0.2;
+
+//    pt 1-2 bit wider
+//    Float_t cosDthetaMin=0;
+//    Float_t D_massMin=0.4;
+//    Float_t D_massMax=2.4;
+//    Float_t D_ptMin=1;
+//    Float_t D_ptMax=2;
+//    Float_t D_decayLMin=0.01;
+//    Float_t pi1_dcaMin=0.008;
+//    Float_t k_dcaMin=0.008;
+//    Float_t k_nSigmaMax=2;
+//    Float_t pi1_nSigmaMax=3;
+//    Float_t pi1_TOFinvbetaMax=999;
+//    Float_t k_TOFinvbetaMax=0.03;
+//    Float_t dcaDaughtersMax=0.015;
+//    Float_t dca_d0Max=0.0090;
 
     // pt 2-3 GeV
 //    Float_t cosDthetaMin=0;
@@ -77,13 +95,15 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName) {
     TH1F *hdcaDaughters = new TH1F("hdcaDaughters", "hdcaDaughters", 2000, 0, 0.2);
     TH1F *hcosTheta = new TH1F("hcosTheta", "hcosTheta", 1000, 0, 1);
     TH1F *hdca_d0 = new TH1F("hdca_d0", "hdca_d0", 3000, 0, 0.3);
+    TH1F *hpi_pt = new TH1F("hpi_pt", "hpi_pt", 500, 0, 5);
+    TH1F *hk_pt = new TH1F("hk_pt", "hk_pt", 500, 0, 5);
 
     for (Long64_t i = 0; i < numberEntr; ++i) {
         if (i % 10000000 == 0) { cout << i << endl; }
         ntp->GetEntry(i);
         if (TMath::Cos(D_theta) > cosDthetaMin) {
             if ((D_mass > D_massMin) && (D_mass < D_massMax)) {
-                if ((pi1_dca > pi1_dcaMin) && (k_dca > k_dcaMin) && (dcaDaughters < dcaDaughtersMax) && (D_decayL > D_decayLMin)){
+                if ((pi1_dca > pi1_dcaMin) && (k_dca > k_dcaMin) && (dcaDaughters < dcaDaughtersMax) && (D_decayL > D_decayLMin) && (k_pt > k_ptMin) && (pi1_pt > pi1_ptMin)){
                     if ((fabs(k_nSigma) < k_nSigmaMax) && (fabs(pi1_nSigma) < pi1_nSigmaMax)  ) {
 //                        if ((k_TOFinvbeta < 0) || ((k_TOFinvbeta > 0) && (fabs(k_TOFinvbeta) < k_TOFinvbetaMax))){
                         if ((k_TOFinvbeta > 0) && (fabs(k_TOFinvbeta) < k_TOFinvbetaMax)){
@@ -103,6 +123,8 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName) {
                                         hdcaDaughters->Fill(dcaDaughters);
                                         hcosTheta->Fill(cos(D_theta));
                                         hdca_d0->Fill(dca_d0);
+                                        hpi_pt->Fill(pi1_pt);
+                                        hk_pt->Fill(k_pt);
                                         dca_d0 = 0;
 
                                         if ((flag == 0) || (flag == 1)) { hInvMassSign->Fill(D_mass); }
@@ -135,6 +157,8 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName) {
     listOut->Add(hdcaDaughters);
     listOut->Add(hcosTheta);
     listOut->Add(hdca_d0);
+    listOut->Add(hpi_pt);
+    listOut->Add(hk_pt);
 
     dataRes->cd();
     listOut->Write("res_" + ntpName, 1, 0);
@@ -149,6 +173,8 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName) {
     delete hdcaDaughters;
     delete hcosTheta;
     delete hdca_d0;
+    delete hk_pt;
+    delete hpi_pt;
     delete listOut;
     delete ntp;
 }
@@ -160,7 +186,7 @@ void project(TString input = "testnew.root"){
     projectNtp(data, dataRes, "ntp_signal");
     projectNtp(data, dataRes, "ntp_background");
 
-    TList* list = (TList*) data -> Get("picoDpmAnaMaker;1");
+    TList* list = (TList*) data -> Get("pico*");
     TH1F* hStat = (TH1F*) list -> FindObject("hEventStat1");
     dataRes->cd();
     hInvMassSign -> Write();
