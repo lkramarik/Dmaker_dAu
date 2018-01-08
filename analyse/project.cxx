@@ -9,6 +9,7 @@
 TH1F* hInvMassBackMin = new TH1F("background minus", "background minus", 2000, 0.4, 2.4);
 TH1F* hInvMassBackPlus = new TH1F("background plus", "background plus", 2000, 0.4, 2.4);
 TH1F* hInvMassSign = new TH1F("signal", "signal", 2000, 0.4, 2.4);
+TH1F* hInvMassSignBefDdca = new TH1F("signal before D0 dca cut", "signal before D0 dca cut", 2000, 0.4, 2.4);
 TH1F* hInvMassBack = new TH1F("background", "background", 2000, 0.4, 2.4);
 
 void projectNtp(TFile* data, TFile* dataRes, TString ntpName) {
@@ -17,15 +18,15 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName) {
     Float_t D_massMax=2.4;
     Float_t D_ptMin=1;
     Float_t D_ptMax=2;
-    Float_t D_decayLMin=0.0232;
-    Float_t pi1_dcaMin=0.0099;
-    Float_t k_dcaMin=0.0087;
+    Float_t D_decayLMin=0.01;
+    Float_t pi1_dcaMin=0.008;
+    Float_t k_dcaMin=0.008;
     Float_t k_nSigmaMax=2;
     Float_t pi1_nSigmaMax=3;
     Float_t pi1_TOFinvbetaMax=999;
     Float_t k_TOFinvbetaMax=0.03;
-    Float_t dcaDaughtersMax=0.0093;
-    Float_t dca_d0Max=0.0075;
+    Float_t dcaDaughtersMax=0.015;
+    Float_t dca_d0Max=0.0090;
 
     // pt 2-3 GeV
 //    Float_t cosDthetaMin=0;
@@ -89,6 +90,7 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName) {
 //                            if ((pi1_TOFinvbeta < 0) || ((pi1_TOFinvbeta > 0) && (fabs(pi1_TOFinvbeta) < pi1_TOFinvbetaMax))){
                             if (((pi1_TOFinvbeta > 0) && (fabs(pi1_TOFinvbeta) < pi1_TOFinvbetaMax))){
                                 if ((D_pt > D_ptMin) && (D_pt < D_ptMax)) {
+                                    if ((flag == 0) || (flag == 1)) {hInvMassSignBefDdca -> Fill(D_mass);}
                                     dca_d0 = D_decayL * sqrt(1 - TMath::Cos(D_theta) * TMath::Cos(D_theta));
                                     if (dca_d0 < dca_d0Max) {
                                         hpiTOFinvbeta->Fill(pi1_TOFinvbeta);
@@ -162,6 +164,7 @@ void project(TString input = "testnew.root"){
     TH1F* hStat = (TH1F*) list -> FindObject("hEventStat1");
     dataRes->cd();
     hInvMassSign -> Write();
+    hInvMassSignBefDdca -> Write();
     hInvMassBack -> Write();
     hInvMassBackPlus -> Write();
     hInvMassBackMin -> Write();
