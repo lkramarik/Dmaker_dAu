@@ -26,7 +26,7 @@ ClassImp(StPicoHFMaker)
 // _________________________________________________________
 StPicoHFMaker::StPicoHFMaker(char const* name, StPicoDstMaker* picoMaker, 
 			     char const* outputBaseFileName,  char const* inputHFListHFtree = "") :
-  StMaker(name), mPicoDst(NULL), mHFCuts(NULL), mHFHists(NULL), mPicoHFEvent(NULL), mBField(0.), mOutList(NULL),
+  StMaker(name), mPicoDst(NULL), mHFCuts(NULL), mPicoHFEvent(NULL), mBField(0.), mOutList(NULL),
   mDecayMode(StPicoHFEvent::kTwoParticleDecay), mMakerMode(StPicoHFMaker::kAnalyze), mMcMode(false),
   mOutputTreeName("picoHFtree"), mOutputFileBaseName(outputBaseFileName), mInputFileName(inputHFListHFtree),
   mPicoDstMaker(picoMaker), mPicoEvent(NULL), mTree(NULL), mHFChain(NULL), mEventCounter(0), 
@@ -114,8 +114,8 @@ Int_t StPicoHFMaker::Init() {
   initializeEventStats();
 
   // -- initialize histogram class
-  mHFHists = new StHFHists(Form("hfHists_%s",GetName()));
-  mHFHists->init(mOutList,mDecayMode);
+//  mHFHists = new StHFHists(Form("hfHists_%s",GetName()));
+//  mHFHists->init(mOutList,mDecayMode);
 
   // -- call method of daughter class
   InitHF();
@@ -224,7 +224,7 @@ Int_t StPicoHFMaker::Make() {
     iReturn = MakeHF();
 
     // -- fill basic event histograms - for good events
-    mHFHists->fillGoodEventHists(*mPicoEvent, *mPicoHFEvent);
+//    mHFHists->fillGoodEventHists(*mPicoEvent, *mPicoHFEvent); // commented LK 04.01.2018
 
   } // if (setupEvent()) {
   
@@ -233,7 +233,7 @@ Int_t StPicoHFMaker::Make() {
     mTree->Fill();
   
   // -- fill basic event histograms - for all events
-  mHFHists->fillEventHists(*mPicoEvent, *mPicoHFEvent);
+//  mHFHists->fillEventHists(*mPicoEvent, *mPicoHFEvent); // commented LK 04.01.2018
 
   // -- reset event to be in a defined state
   resetEvent();
@@ -271,7 +271,7 @@ void StPicoHFMaker::createTertiaryK0Shorts() {
       mPicoHFEvent->addHFTertiaryVertexPair(&candidateK0Short);
 
       // -- fill tertiary pair histograms
-      mHFHists->fillTertiaryPairHists(&candidateK0Short, kTRUE);
+//      mHFHists->fillTertiaryPairHists(&candidateK0Short, kTRUE); // commented LK 04.01.2018
     }
   }
 }
@@ -306,7 +306,7 @@ void StPicoHFMaker::createTertiaryLambdas() {
       mPicoHFEvent->addHFTertiaryVertexPair(&lambda);
 
       // -- fill tertiary pair histograms
-      mHFHists->fillTertiaryPairHists(&lambda, kTRUE);
+//      mHFHists->fillTertiaryPairHists(&lambda, kTRUE);// commented LK 04.01.2018
     }
   }
 }

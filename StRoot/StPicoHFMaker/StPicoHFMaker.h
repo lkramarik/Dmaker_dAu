@@ -120,7 +120,7 @@ class StPicoHFMaker : public StMaker
     StPicoDst      *mPicoDst;
 
     StHFCuts       *mHFCuts;
-    StHFHists      *mHFHists;
+//    StHFHists      *mHFHists; comm. LK 04012018
 
     StPicoHFEvent  *mPicoHFEvent;
 
