@@ -11,26 +11,28 @@ TH1F* hInvMassBackPlus = new TH1F("background plus", "background plus", 2000, 0.
 TH1F* hInvMassSign = new TH1F("signal", "signal", 2000, 0.4, 2.4);
 TH1F* hInvMassSignBefDdca = new TH1F("signal before D0 dca cut", "signal before D0 dca cut", 2000, 0.4, 2.4);
 TH1F* hInvMassBack = new TH1F("background", "background", 2000, 0.4, 2.4);
+Float_t cosDthetaMinA[6]={0,0,0,0,0,0};
+Float_t D_ptMinA[6]={1,1,1,1,1,1};
+Float_t D_ptMaxA[6]={2,2,2,2,2,2};
+Float_t D_decayLMinA[6]=    {0.0232, 0.0000, 0.0000, 0.0000, 0.0000, 0.0232};
+Float_t pi1_dcaMinA[6]=     {0.0001, 0.0099, 0.0001, 0.0001, 0.0001, 0.0099};
+Float_t k_dcaMinA[6]=       {0.0001, 0.0001, 0.0087, 0.0001, 0.0001, 0.0087};
+Float_t dcaDaughtersMaxA[6]={9.9999, 9.9999, 9.9999, 0.0093, 9.9999, 0.0093};
+Float_t dca_d0MaxA[6]=      {9.9999, 9.9999, 9.9999, 9.9999, 0.0075, 0.0075};
 
-void projectNtp(TFile* data, TFile* dataRes, TString ntpName) {
-    Float_t cosDthetaMin=0;
+void projectNtp(TFile* data, TFile* dataRes, TString ntpName, Float_t cosDthetaMin, Float_t D_ptMin, Float_t D_ptMax, Float_t D_decayLMin, Float_t pi1_dcaMin, Float_t k_dcaMin,  Float_t dcaDaughtersMax, Float_t dca_d0Max) {
+
+
     Float_t D_massMin=0.4;
     Float_t D_massMax=2.4;
-    Float_t D_ptMin=1;
-    Float_t D_ptMax=2;
-    Float_t D_decayLMin=0.01;
-    Float_t pi1_dcaMin=0.008;
-    Float_t k_dcaMin=0.008;
     Float_t k_nSigmaMax=2;
     Float_t pi1_nSigmaMax=3;
     Float_t pi1_TOFinvbetaMax=999;
     Float_t k_TOFinvbetaMax=0.03;
-    Float_t dcaDaughtersMax=0.015;
-    Float_t dca_d0Max=0.0090;
+
     Float_t pi1_ptMin=0.2;
     Float_t k_ptMin=0.2;
 
-//    pt 1-2 bit wider
 //    Float_t cosDthetaMin=0;
 //    Float_t D_massMin=0.4;
 //    Float_t D_massMax=2.4;
@@ -179,14 +181,15 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName) {
     delete ntp;
 }
 
-void project(TString input = "testnew.root"){
+void projectFile(TString input = "testnew.root", Int_t i){
     TFile* data = new TFile(input ,"r");
-    TFile* dataRes = new TFile("res_"+input ,"RECREATE");
+    TString name = Form("%d_", i);
+    TFile* dataRes = new TFile(name+"res_"+input ,"RECREATE");
 
-    projectNtp(data, dataRes, "ntp_signal");
-    projectNtp(data, dataRes, "ntp_background");
+    projectNtp(data, dataRes, "ntp_signal", cosDthetaMinA[i], D_ptMinA[i], D_ptMaxA[i], D_decayLMinA[i], pi1_dcaMinA[i], k_dcaMinA[i],  dcaDaughtersMaxA[i], dca_d0MaxA[i]);
+    projectNtp(data, dataRes, "ntp_background", cosDthetaMinA[i], D_ptMinA[i], D_ptMaxA[i], D_decayLMinA[i], pi1_dcaMinA[i], k_dcaMinA[i],  dcaDaughtersMaxA[i], dca_d0MaxA[i]);
 
-    TList* list = (TList*) data -> Get("pico*");
+    TList* list = (TList*) data -> Get("picoD0AnaMaker");
     TH1F* hStat = (TH1F*) list -> FindObject("hEventStat1");
     dataRes->cd();
     hInvMassSign -> Write();
@@ -199,11 +202,26 @@ void project(TString input = "testnew.root"){
     delete list;
     data->Close();
     dataRes->Close();
+
     cout<<"res_"+input<<endl;
     cout<<"done"<<endl;
 
 }
 
+void project(TString inputO){
+    for (Int_t j = 0; j < 6; ++j) {
+        hInvMassSign -> Reset();
+        hInvMassSignBefDdca -> Reset();
+        hInvMassBack -> Reset();
+        hInvMassBackPlus -> Reset();
+        hInvMassBackMin -> Reset();
 
+        projectFile(inputO, j);
+    }
+
+
+
+
+}
 
 
