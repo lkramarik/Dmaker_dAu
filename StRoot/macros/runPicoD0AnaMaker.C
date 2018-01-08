@@ -107,7 +107,7 @@ void runPicoD0AnaMaker(
     
     StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
     cout<<"ok, picoDstMaker created"<<endl;
-    StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("PicoD0AnaMaker", picoDstMaker, outputFile, sInputListHF);
+    StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile, sInputListHF);
     PicoD0AnaMaker->setMakerMode(makerMode);
     PicoD0AnaMaker->setTreeName(treeName);
     PicoD0AnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
