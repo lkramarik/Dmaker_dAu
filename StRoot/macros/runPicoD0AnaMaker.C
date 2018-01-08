@@ -138,8 +138,8 @@ void runPicoD0AnaMaker(
 //    hfCuts->setCutDcaMin(0.00,StHFCuts::kPion); // OK
 //    hfCuts->setCutDcaMin(0.00,StHFCuts::kKaon); // OK
 
-    hfCuts->setCutDcaMin(0.0099,StHFCuts::kPion); // OK
-    hfCuts->setCutDcaMin(0.0087,StHFCuts::kKaon); // OK
+    hfCuts->setCutDcaMin(0.00,StHFCuts::kPion); // OK
+    hfCuts->setCutDcaMin(0.00,StHFCuts::kKaon); // OK
 
     hfCuts->setCutPrimaryDCAtoVtxMax(1.); //default is 1.0
     hfCuts->setCutVzMax(6.);
@@ -149,8 +149,8 @@ void runPicoD0AnaMaker(
 
     // -- ADD USER CUTS HERE ----------------------------
     // kaonPion pair cuts
-    float dcaDaughtersMax = 0.0093;  // maximum toto ide
-    float decayLengthMin  = 0.0232; // minimum
+    float dcaDaughtersMax = 1;  // maximum toto ide
+    float decayLengthMin  = 0.; // minimum
     float decayLengthMax  = 4; //std::numeric_limits<float>::max(); toto ide (cutuje)
     float cosThetaMin     = 0.;   // minimum
     float minMass         = 0.4;
@@ -169,16 +169,16 @@ void runPicoD0AnaMaker(
     hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass); //ok
     
     //Single track pt
-    hfCuts->setCutPtRange(0.001,50.0,StHFCuts::kPion); //0.2 , 50.0 OK
-    hfCuts->setCutPtRange(0.001,50.0,StHFCuts::kKaon); //0.2, 50.0 OK
+    hfCuts->setCutPtRange(0.1,50.0,StHFCuts::kPion); //0.2 , 50.0 OK
+    hfCuts->setCutPtRange(0.1,50.0,StHFCuts::kKaon); //0.2, 50.0 OK
     //TPC setters
     hfCuts->setCutTPCNSigmaPion(3.0); //3 OK
-    hfCuts->setCutTPCNSigmaKaon(2.0); //3 OK
+    hfCuts->setCutTPCNSigmaKaon(3.0); //3 OK
     //TOF setters, need to set pt range as well
-    hfCuts->setCutTOFDeltaOneOverBeta(0.03, StHFCuts::kKaon); // nastavene = f * (sigmaTOF), sigma TOF je 0.013 OK
-    hfCuts->setCutPtotRangeHybridTOF(0.001,50.0,StHFCuts::kKaon); // OK
+    hfCuts->setCutTOFDeltaOneOverBeta(0.05, StHFCuts::kKaon); // nastavene = f * (sigmaTOF), sigma TOF je 0.013 OK
+    hfCuts->setCutPtotRangeHybridTOF(0.1,50.0,StHFCuts::kKaon); // OK
     hfCuts->setCutTOFDeltaOneOverBeta(999, StHFCuts::kPion); //
-    hfCuts->setCutPtotRangeHybridTOF(0.001,50.0,StHFCuts::kPion); // OK
+    hfCuts->setCutPtotRangeHybridTOF(0.1,50.0,StHFCuts::kPion); // OK
     // set refmultCorr
     //StRefMultCorr* grefmultCorrUtil = CentralityMaker::instance()->getgRefMultCorr_P16id();
     //PicoD0AnaMaker->setRefMutCorr(grefmultCorrUtil);
