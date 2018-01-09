@@ -105,8 +105,8 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
   // -- calculate DCA of tracks to primary vertex
   //    if decay vertex is a tertiary vertex
   //    -> only rough estimate -> needs to be updated after secondary vertex is found
-  mParticle1Dca = (p1Helix->origin() - vtx).mag();
-  mParticle2Dca = (p2Helix->origin() - vtx).mag();
+  mParticle1Dca = (p1Helix.origin() - vtx).mag();
+  mParticle2Dca = (p2Helix.origin() - vtx).mag();
 }
 
 // nepouzivam_________________________________________________________
