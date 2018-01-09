@@ -32,7 +32,7 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
   mLorentzVector(StLorentzVectorF()), mDecayVertex(StThreeVectorF()),
   mPointingAngle(std::numeric_limits<float>::quiet_NaN()), mDecayLength(std::numeric_limits<float>::quiet_NaN()),
   mParticle1Dca(std::numeric_limits<float>::quiet_NaN()), mParticle2Dca(std::numeric_limits<float>::quiet_NaN()),
-  mParticle1Idx(p1Idx), mParticle2Idx(p2Idx),
+  mParticle1Idx(p1Idx), mParticle2Idx(p2Idx), mDcaToPrimaryVertex(std::numeric_limits<float>::quiet_NaN()),
   mDcaDaughters(std::numeric_limits<float>::max()), mCosThetaStar(std::numeric_limits<float>::quiet_NaN()) {
   // -- Create pair out of 2 tracks
   //     prefixes code:
