@@ -138,23 +138,35 @@ void runPicoD0AnaMaker(
 //    hfCuts->setCutDcaMin(0.00,StHFCuts::kPion); // OK
 //    hfCuts->setCutDcaMin(0.00,StHFCuts::kKaon); // OK
 
-    hfCuts->setCutDcaMin(0.0005,StHFCuts::kPion); // OK
-    hfCuts->setCutDcaMin(0.0005,StHFCuts::kKaon); // OK
-
     hfCuts->setCutPrimaryDCAtoVtxMax(1.); //default is 1.0
     hfCuts->setCutVzMax(6.);
     hfCuts->setCutVzVpdVzMax(3.);
     hfCuts->setCutNHitsFitMin(15); //default is 20
     hfCuts->setCutRequireHFT(true);
 
-    // -- ADD USER CUTS HERE ----------------------------
-    // kaonPion pair cuts
+
+//    WIDE
+//    hfCuts->setCutDcaMin(0.0005,StHFCuts::kPion); // OK
+//    hfCuts->setCutDcaMin(0.0005,StHFCuts::kKaon); // OK
+//
+//    float dcaDaughtersMax = 1;  // maximum toto ide
+//    float decayLengthMin  = 0.001; // minimum
+//    float decayLengthMax  = 4; //std::numeric_limits<float>::max(); toto ide (cutuje)
+//    float cosThetaMin     = 0.;   // minimum
+//    float minMass         = 0.4;
+//    float maxMass         = 2.4;
+
+//    WIDE
+    hfCuts->setCutDcaMin(0.0087,StHFCuts::kPion); // OK
+    hfCuts->setCutDcaMin(0.0005,StHFCuts::kKaon); // OK
+
     float dcaDaughtersMax = 1;  // maximum toto ide
-    float decayLengthMin  = 0.; // minimum
+    float decayLengthMin  = 0.001; // minimum
     float decayLengthMax  = 4; //std::numeric_limits<float>::max(); toto ide (cutuje)
-    float cosThetaMin     = 0.;   // minimum
+    float cosThetaMin     = 0.5;   // minimum
     float minMass         = 0.4;
     float maxMass         = 2.4;
+
 
 //    float dcaToPvMax = 0.003649;
 //    hfCuts -> setCutSecondaryPairDcaToPvMax(dcaToPvMax); //getting read for isgooSVpair.
@@ -177,7 +189,7 @@ void runPicoD0AnaMaker(
     //TOF setters, need to set pt range as well
     hfCuts->setCutTOFDeltaOneOverBeta(0.05, StHFCuts::kKaon); // nastavene = f * (sigmaTOF), sigma TOF je 0.013 OK
     hfCuts->setCutPtotRangeHybridTOF(0.1,50.0,StHFCuts::kKaon); // OK
-    hfCuts->setCutTOFDeltaOneOverBeta(999, StHFCuts::kPion); //
+    hfCuts->setCutTOFDeltaOneOverBeta(0.1, StHFCuts::kPion); //
     hfCuts->setCutPtotRangeHybridTOF(0.1,50.0,StHFCuts::kPion); // OK
     // set refmultCorr
     //StRefMultCorr* grefmultCorrUtil = CentralityMaker::instance()->getgRefMultCorr_P16id();
