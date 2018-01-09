@@ -14,7 +14,7 @@ TH1F* hInvMassBack = new TH1F("background", "background", 2000, 0.4, 2.4);
 Float_t cosDthetaMinA[6]={0,0,0,0,0,0};
 Float_t D_ptMinA[6]={1,1,1,1,1,1};
 Float_t D_ptMaxA[6]={2,2,2,2,2,2};
-Float_t D_decayLMinA[6]=    {0.0232, 0.0000, 0.0000, 0.0000, 0.0000, 0.0232};
+Float_t D_decayLMinA[6]=    {0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0232};
 Float_t pi1_dcaMinA[6]=     {0.0001, 0.0099, 0.0001, 0.0001, 0.0001, 0.0099};
 Float_t k_dcaMinA[6]=       {0.0001, 0.0001, 0.0087, 0.0001, 0.0001, 0.0087};
 Float_t dcaDaughtersMaxA[6]={9.9999, 9.9999, 9.9999, 0.0093, 9.9999, 0.0093};
@@ -103,7 +103,7 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName, Float_t cosDthetaM
     for (Long64_t i = 0; i < numberEntr; ++i) {
         if (i % 10000000 == 0) { cout << i << endl; }
         ntp->GetEntry(i);
-        if (TMath::Cos(D_theta) > cosDthetaMin) {
+        if (fabs(TMath::Cos(D_theta) > cosDthetaMin)) {
             if ((D_mass > D_massMin) && (D_mass < D_massMax)) {
                 if ((pi1_dca > pi1_dcaMin) && (k_dca > k_dcaMin) && (dcaDaughters < dcaDaughtersMax) && (D_decayL > D_decayLMin) && (k_pt > k_ptMin) && (pi1_pt > pi1_ptMin)){
                     if ((fabs(k_nSigma) < k_nSigmaMax) && (fabs(pi1_nSigma) < pi1_nSigmaMax)  ) {
@@ -189,7 +189,7 @@ void projectFile(TString input = "testnew.root", Int_t i){
     projectNtp(data, dataRes, "ntp_signal", cosDthetaMinA[i], D_ptMinA[i], D_ptMaxA[i], D_decayLMinA[i], pi1_dcaMinA[i], k_dcaMinA[i],  dcaDaughtersMaxA[i], dca_d0MaxA[i]);
     projectNtp(data, dataRes, "ntp_background", cosDthetaMinA[i], D_ptMinA[i], D_ptMaxA[i], D_decayLMinA[i], pi1_dcaMinA[i], k_dcaMinA[i],  dcaDaughtersMaxA[i], dca_d0MaxA[i]);
 
-    TList* list = (TList*) data -> Get("picoD0AnaMaker");
+    TList* list = (TList*) data -> Get("PicoD0AnaMaker");
     TH1F* hStat = (TH1F*) list -> FindObject("hEventStat1");
     dataRes->cd();
     hInvMassSign -> Write();
@@ -209,7 +209,7 @@ void projectFile(TString input = "testnew.root", Int_t i){
 }
 
 void project(TString inputO){
-    for (Int_t j = 0; j < 6; ++j) {
+    for (Int_t j = 0; j < 1; ++j) {
         hInvMassSign -> Reset();
         hInvMassSignBefDdca -> Reset();
         hInvMassBack -> Reset();
