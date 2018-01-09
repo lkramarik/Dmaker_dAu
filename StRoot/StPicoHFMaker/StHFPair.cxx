@@ -92,15 +92,13 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
   StLorentzVectorF const p1FourMomStar = p1FourMom.boost(pairFourMomReverse);
   mCosThetaStar = std::cos(p1FourMomStar.vect().angle(mLorentzVector.vect()));
 
-
- 
   // -- calculate pointing angle and decay length with respect to primary vertex 
   //    if decay vertex is a tertiary vertex
   //    -> only rough estimate -> needs to be updated after secondary vertex is found
   StThreeVectorF const vtxToV0 = mDecayVertex - vtx;
   mPointingAngle = vtxToV0.angle(mLorentzVector.vect());
   mDecayLength = vtxToV0.mag();
-  mDcaToPrimaryVertex = mDecayLength*sin(mPointingAngle); // sine law: DcaToPrimaryVertex/sin(pointingAngle) = decayLength/sin(90°)
+  mDcaToPrimaryVertex = mDecayLength*std::sin(mPointingAngle); // sine law: DcaToPrimaryVertex/sin(pointingAngle) = decayLength/sin(90°)
 
   // -- calculate DCA of tracks to primary vertex
   //    if decay vertex is a tertiary vertex

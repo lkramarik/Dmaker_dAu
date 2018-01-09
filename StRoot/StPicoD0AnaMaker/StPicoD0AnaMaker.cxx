@@ -194,7 +194,7 @@ int StPicoD0AnaMaker::analyzeCandidates() {
             ntVar[ii++] = pair->pointingAngle();
             ntVar[ii++] = cos(pair->pointingAngle());
             ntVar[ii++] = pair->decayLength();
-            ntVar[ii++] = (pair->decayLength())*sin(pair->pointingAngle());
+            ntVar[ii++] = pair->DcaToPrimaryVertex; //(pair->decayLength())*sin(pair->pointingAngle());
             ntVar[ii++] = pair->phi();
             ntVar[ii++] = pair->eta();
             ntVar[ii++] = pair->cosThetaStar();
