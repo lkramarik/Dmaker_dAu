@@ -119,6 +119,7 @@ inline StThreeVectorF const & StHFPair::decayVertex() const { return mDecayVerte
 inline float StHFPair::v0x() const { return mDecayVertex.x();}
 inline float StHFPair::v0y() const { return mDecayVertex.y();}
 inline float StHFPair::v0z() const { return mDecayVertex.z();}
-inline float StHFPair::DcaToPrimaryVertex() const { return mDcaToPrimaryVertex; }
+//inline float StHFPair::DcaToPrimaryVertex() const { return mDcaToPrimaryVertex; }
+inline float StHFPair::DcaToPrimaryVertex() const { return 10; }
 #endif
 
