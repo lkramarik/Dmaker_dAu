@@ -74,13 +74,13 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
   mDecayVertex = (p1AtDcaToP2 + p2AtDcaToP1) * 0.5 ;
 
   // -- calculate Lorentz vector of particle1-particle2 pair, straight line commented 09.01.2018
-//  StThreeVectorF const p1MomAtDca = p1Helix.momentumAt(ss.first,  bField * kilogauss);
-//  StThreeVectorF const p2MomAtDca = p2Helix.momentumAt(ss.second, bField * kilogauss);
+  StThreeVectorF const p1MomAtDca = p1Helix.momentumAt(ss.first,  bField * kilogauss);
+  StThreeVectorF const p2MomAtDca = p2Helix.momentumAt(ss.second, bField * kilogauss);
 
-  double const p1AtV0 = p1Helix.pathLength( mDecayVertex );
-  double const p2AtV0 = p2Helix.pathLength( mDecayVertex );
-  StThreeVectorF const p1MomAtDca = p1Helix.momentumAt(p1AtV0,  bField * kilogauss);
-  StThreeVectorF const p2MomAtDca = p2Helix.momentumAt(p2AtV0, bField * kilogauss);
+//  double const p1AtV0 = p1Helix.pathLength( mDecayVertex );
+//  double const p2AtV0 = p2Helix.pathLength( mDecayVertex );
+//  StThreeVectorF const p1MomAtDca = p1Helix.momentumAt(p1AtV0,  bField * kilogauss);
+//  StThreeVectorF const p2MomAtDca = p2Helix.momentumAt(p2AtV0, bField * kilogauss);
 
   StLorentzVectorF const p1FourMom(p1MomAtDca, p1MomAtDca.massHypothesis(p1MassHypo));
   StLorentzVectorF const p2FourMom(p2MomAtDca, p2MomAtDca.massHypothesis(p2MassHypo));
