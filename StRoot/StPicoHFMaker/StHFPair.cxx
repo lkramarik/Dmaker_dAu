@@ -99,8 +99,8 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
   mPointingAngle = 10;
 //  mPointingAngle = vtxToV0.angle(mLorentzVector.vect());
   mDecayLength = vtxToV0.mag();
-//  mDcaToPrimaryVertex = mDecayLength*std::sin(vtxToV0.angle(mLorentzVector.vect())); // sine law: DcaToPrimaryVertex/sin(pointingAngle) = decayLength/sin(90°)
-  mDcaToPrimaryVertex = 10; // sine law: DcaToPrimaryVertex/sin(pointingAngle) = decayLength/sin(90°)
+  mDcaToPrimaryVertex = vtxToV0.mag()*std::sin(vtxToV0.angle(mLorentzVector.vect())); // sine law: DcaToPrimaryVertex/sin(pointingAngle) = decayLength/sin(90°)
+//  mDcaToPrimaryVertex = 10; // sine law: DcaToPrimaryVertex/sin(pointingAngle) = decayLength/sin(90°)
 
   // -- calculate DCA of tracks to primary vertex
   //    if decay vertex is a tertiary vertex
