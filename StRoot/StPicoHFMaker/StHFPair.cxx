@@ -32,7 +32,7 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
   mLorentzVector(StLorentzVectorF()), mDecayVertex(StThreeVectorF()),
   mPointingAngle(std::numeric_limits<float>::quiet_NaN()), mDecayLength(std::numeric_limits<float>::quiet_NaN()),
   mParticle1Dca(std::numeric_limits<float>::quiet_NaN()), mParticle2Dca(std::numeric_limits<float>::quiet_NaN()),
-  mParticle1Idx(p1Idx), mParticle2Idx(p2Idx), mDcaToPrimaryVertex(std::numeric_limits<float>::quiet_NaN()),
+  mParticle1Idx(p1Idx), mParticle2Idx(p2Idx),
   mDcaDaughters(std::numeric_limits<float>::max()), mCosThetaStar(std::numeric_limits<float>::quiet_NaN()) {
   // -- Create pair out of 2 tracks
   //     prefixes code:
@@ -96,11 +96,10 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
   //    if decay vertex is a tertiary vertex
   //    -> only rough estimate -> needs to be updated after secondary vertex is found
   StThreeVectorF const vtxToV0 = mDecayVertex - vtx;
-  mPointingAngle = 10;
-//  mPointingAngle = vtxToV0.angle(mLorentzVector.vect());
+  mPointingAngle = vtxToV0.angle(mLorentzVector.vect());
   mDecayLength = vtxToV0.mag();
 //  mDcaToPrimaryVertex = vtxToV0.mag()*std::sin(vtxToV0.angle(mLorentzVector.vect())); // sine law: DcaToPrimaryVertex/sin(pointingAngle) = decayLength/sin(90°)
-  mDcaToPrimaryVertex = 10; // sine law: DcaToPrimaryVertex/sin(pointingAngle) = decayLength/sin(90°)
+//  mDcaToPrimaryVertex = 10; // sine law: DcaToPrimaryVertex/sin(pointingAngle) = decayLength/sin(90°)
 
   // -- calculate DCA of tracks to primary vertex
   //    if decay vertex is a tertiary vertex
