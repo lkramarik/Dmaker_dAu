@@ -11,10 +11,10 @@ TH1F* hInvMassBackPlus = new TH1F("background plus", "background plus", 2000, 0.
 TH1F* hInvMassSign = new TH1F("signal", "signal", 2000, 0.4, 2.4);
 TH1F* hInvMassSignBefDdca = new TH1F("signal before D0 dca cut", "signal before D0 dca cut", 2000, 0.4, 2.4);
 TH1F* hInvMassBack = new TH1F("background", "background", 2000, 0.4, 2.4);
-Float_t cosDthetaMinA[6]={0,0,0,0,0,0};
-Float_t D_ptMinA[6]={1,1,1,1,1,1};
-Float_t D_ptMaxA[6]={2,2,2,2,2,2};
-Float_t D_decayLMinA[6]=    {0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0232};
+Float_t cosDthetaMinA[6]={0.8,0.8,0.8,0.8,0.8,0.8};
+Float_t D_ptMinA[6]={0,0,0,0,0,0};
+Float_t D_ptMaxA[6]={20,20,20,20,20,20};
+Float_t D_decayLMinA[6]=    {0.0232, 0.0000, 0.0000, 0.0000, 0.0000, 0.0232};
 Float_t pi1_dcaMinA[6]=     {0.0001, 0.0099, 0.0001, 0.0001, 0.0001, 0.0099};
 Float_t k_dcaMinA[6]=       {0.0001, 0.0001, 0.0087, 0.0001, 0.0001, 0.0087};
 Float_t dcaDaughtersMaxA[6]={9.9999, 9.9999, 9.9999, 0.0093, 9.9999, 0.0093};
@@ -28,7 +28,7 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName, Float_t cosDthetaM
     Float_t k_nSigmaMax=2;
     Float_t pi1_nSigmaMax=3;
     Float_t pi1_TOFinvbetaMax=999;
-    Float_t k_TOFinvbetaMax=0.03;
+    Float_t k_TOFinvbetaMax=0.04;
 
     Float_t pi1_ptMin=0.2;
     Float_t k_ptMin=0.2;
@@ -107,10 +107,10 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName, Float_t cosDthetaM
             if ((D_mass > D_massMin) && (D_mass < D_massMax)) {
                 if ((pi1_dca > pi1_dcaMin) && (k_dca > k_dcaMin) && (dcaDaughters < dcaDaughtersMax) && (D_decayL > D_decayLMin) && (k_pt > k_ptMin) && (pi1_pt > pi1_ptMin)){
                     if ((fabs(k_nSigma) < k_nSigmaMax) && (fabs(pi1_nSigma) < pi1_nSigmaMax)  ) {
-//                        if ((k_TOFinvbeta < 0) || ((k_TOFinvbeta > 0) && (fabs(k_TOFinvbeta) < k_TOFinvbetaMax))){
-                        if ((k_TOFinvbeta > 0) && (fabs(k_TOFinvbeta) < k_TOFinvbetaMax)){
-//                            if ((pi1_TOFinvbeta < 0) || ((pi1_TOFinvbeta > 0) && (fabs(pi1_TOFinvbeta) < pi1_TOFinvbetaMax))){
-                            if (((pi1_TOFinvbeta > 0) && (fabs(pi1_TOFinvbeta) < pi1_TOFinvbetaMax))){
+                        if ((k_TOFinvbeta < 0) || ((k_TOFinvbeta > 0) && (fabs(k_TOFinvbeta) < k_TOFinvbetaMax))){
+//                        if ((k_TOFinvbeta > 0) && (fabs(k_TOFinvbeta) < k_TOFinvbetaMax)){
+                            if ((pi1_TOFinvbeta < 0) || ((pi1_TOFinvbeta >= 0) && (fabs(pi1_TOFinvbeta) < pi1_TOFinvbetaMax))){
+//                            if (((pi1_TOFinvbeta > 0) && (fabs(pi1_TOFinvbeta) < pi1_TOFinvbetaMax))){
                                 if ((D_pt > D_ptMin) && (D_pt < D_ptMax)) {
                                     if ((flag == 0) || (flag == 1)) {hInvMassSignBefDdca -> Fill(D_mass);}
                                     dca_d0 = D_decayL * sqrt(1 - TMath::Cos(D_theta) * TMath::Cos(D_theta));
@@ -209,7 +209,7 @@ void projectFile(TString input = "testnew.root", Int_t i){
 }
 
 void project(TString inputO){
-    for (Int_t j = 0; j < 1; ++j) {
+    for (Int_t j = 0; j < 6; ++j) {
         hInvMassSign -> Reset();
         hInvMassSignBefDdca -> Reset();
         hInvMassBack -> Reset();
