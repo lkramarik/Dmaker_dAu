@@ -30,7 +30,7 @@
   
   <SandBox installer="ZIP">
     <Package name="LocalLibraries">
-      <File>file:./project_one.cxx</File>
+      <File>file:./project_studyone.cxx</File>
     </Package>
   </SandBox>
 </job>
