@@ -71,8 +71,8 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName, Float_t cosDthetaM
     TH1F *hpi_pt = new TH1F("hpi_pt", "hpi_pt", 500, 0, 5);
     TH1F *hk_pt = new TH1F("hk_pt", "hk_pt", 500, 0, 5);
 
-//    for (Long64_t i = 0; i < numberEntr; ++i) {
-    for (Long64_t i = 0; i < 1000; ++i) {
+    for (Long64_t i = 0; i < numberEntr; ++i) {
+//    for (Long64_t i = 0; i < 1000; ++i) {
         if (i % 10000000 == 0) { cout << i << endl; }
         ntp->GetEntry(i);
         if (fabs(TMath::Cos(D_theta) > cosDthetaMin)) {
