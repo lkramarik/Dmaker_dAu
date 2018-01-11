@@ -47,10 +47,10 @@ void StPicoD0AnaMaker::ClearHF(Option_t *opt="") {
 int StPicoD0AnaMaker::FinishHF() {
     if( isMakerMode() != StPicoHFMaker::kWrite ){
 
-//        ntp_DMeson_Signal -> Write(ntp_DMeson_Signal->GetName(), TObject::kOverwrite);
-        ntp_DMeson_Signal -> Write();
-//        ntp_DMeson_Background -> Write(ntp_DMeson_Background->GetName(), TObject::kOverwrite);
-        ntp_DMeson_Background -> Write();
+        ntp_DMeson_Signal -> Write(ntp_DMeson_Signal->GetName(), TObject::kOverwrite);
+//        ntp_DMeson_Signal -> Write();
+        ntp_DMeson_Background -> Write(ntp_DMeson_Background->GetName(), TObject::kOverwrite);
+//        ntp_DMeson_Background -> Write();
     }
 //    mOutFile->Close();
     return kStOK;

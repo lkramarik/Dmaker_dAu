@@ -156,16 +156,29 @@ void runPicoD0AnaMaker(
 //    float minMass         = 0.4;
 //    float maxMass         = 2.4;
 
-//    WIDE
-    hfCuts->setCutDcaMin(0.000,StHFCuts::kPion); // OK
-    hfCuts->setCutDcaMin(0.000,StHFCuts::kKaon); // OK
+    //    WIDER than pt12 tmva
+    hfCuts->setCutDcaMin(0.007,StHFCuts::kPion); // OK
+    hfCuts->setCutDcaMin(0.007,StHFCuts::kKaon); // OK
 
-    float dcaDaughtersMax = 1;  // maximum toto ide
-    float decayLengthMin  = 0.001; // minimum
+    float dcaDaughtersMax = 0.012;  // maximum toto ide
+    float decayLengthMin  = 0.005; // minimum
     float decayLengthMax  = 4; //std::numeric_limits<float>::max(); toto ide (cutuje)
-    float cosThetaMin     = -2;   // minimum
-    float minMass         = 1.761;
-    float maxMass         = 1.971;
+    float cosThetaMin     = 0.5;   // minimum
+    float minMass         = 0.4;
+    float maxMass         = 2.4;
+
+
+
+//    tmva ready
+//    hfCuts->setCutDcaMin(0.000,StHFCuts::kPion); // OK
+//    hfCuts->setCutDcaMin(0.000,StHFCuts::kKaon); // OK
+//
+//    float dcaDaughtersMax = 1;  // maximum toto ide
+//    float decayLengthMin  = 0.001; // minimum
+//    float decayLengthMax  = 4; //std::numeric_limits<float>::max(); toto ide (cutuje)
+//    float cosThetaMin     = -2;   // minimum
+//    float minMass         = 1.761;
+//    float maxMass         = 1.971;
 
 
 //    float dcaToPvMax = 0.003649;
@@ -187,7 +200,7 @@ void runPicoD0AnaMaker(
     hfCuts->setCutTPCNSigmaPion(3.0); //3 OK
     hfCuts->setCutTPCNSigmaKaon(3.0); //3 OK
     //TOF setters, need to set pt range as well
-    hfCuts->setCutTOFDeltaOneOverBeta(0.03, StHFCuts::kKaon); // nastavene = f * (sigmaTOF), sigma TOF je 0.013 OK
+    hfCuts->setCutTOFDeltaOneOverBeta(0.04, StHFCuts::kKaon); // nastavene = f * (sigmaTOF), sigma TOF je 0.013 OK
     hfCuts->setCutPtotRangeHybridTOF(0.1,50.0,StHFCuts::kKaon); // OK
     hfCuts->setCutTOFDeltaOneOverBeta(0.1, StHFCuts::kPion); //
     hfCuts->setCutPtotRangeHybridTOF(0.1,50.0,StHFCuts::kPion); // OK
