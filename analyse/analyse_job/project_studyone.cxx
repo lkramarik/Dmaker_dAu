@@ -5,6 +5,9 @@
 #include "TH2.h"
 #include "TString.h"
 #include "TNtuple.h"
+#include <fstream>
+#include <sstream>
+#include <string>
 
 TH1F* hInvMassBackMin = new TH1F("background minus", "background minus", 2000, 0.4, 2.4);
 TH1F* hInvMassBackPlus = new TH1F("background plus", "background plus", 2000, 0.4, 2.4);
@@ -183,7 +186,6 @@ void projectFile(TString input = "testnew.root", Int_t i){
 }
 
 void project_studyone(TString inputO){
-
     for (int k = 0; k < 10 ; ++k) {
         hS[k] -> SetBins(2000,0.4,2.4);
         hS[k] -> SetName(Form("hInvMassSign_cut_%.4f", cut[k]));
@@ -194,16 +196,23 @@ void project_studyone(TString inputO){
 
     }
 
+    std::ifstream infile(input0);
 
-    for (Int_t j = 0; j < 1; ++j) {
-        hInvMassSign -> Reset();
-        hInvMassSignBefDdca -> Reset();
-        hInvMassBack -> Reset();
-        hInvMassBackPlus -> Reset();
-        hInvMassBackMin -> Reset();
+    while (std::getline(infile, line))
+    {
+        for (Int_t j = 0; j < 1; ++j) {
+            hInvMassSign -> Reset();
+            hInvMassSignBefDdca -> Reset();
+            hInvMassBack -> Reset();
+            hInvMassBackPlus -> Reset();
+            hInvMassBackMin -> Reset();
 
-        projectFile(inputO, j);
+            projectFile(line, j);
+        }
     }
+
+
+
 
 
 
