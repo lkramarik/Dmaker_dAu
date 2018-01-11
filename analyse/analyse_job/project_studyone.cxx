@@ -185,7 +185,7 @@ void projectFile(TString input = "testnew.root", Int_t i){
 
 }
 
-void project_studyone(TString inputO){
+void project_studyone(string inputO){
     for (int k = 0; k < 10 ; ++k) {
         hS[k] -> SetBins(2000,0.4,2.4);
         hS[k] -> SetName(Form("hInvMassSign_cut_%.4f", cut[k]));
