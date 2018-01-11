@@ -19,7 +19,7 @@
 
     mkdir -p ${PRODPATH} ${LOGPATH}
 
-    root -q -b -l &rootMacro;++\(\"$FILELIST\"\) &gt;&amp; ${JOBID}.log
+    root -q -b -l &rootMacro;\(\"$FILELIST\",\"&prodId;_$JOBINDEX\"\) &gt;&amp; ${JOBID}.log
     tar -zcvf ${JOBID}.log.tgz ${JOBID}.log
 
   </command>
@@ -30,7 +30,7 @@
   
   <SandBox installer="ZIP">
     <Package name="LocalLibraries">
-      <File>file:./project_studyone.cxx</File>
+      <File>file:&basePath;/project_studyone.cxx</File>
     </Package>
   </SandBox>
 </job>

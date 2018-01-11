@@ -78,7 +78,7 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName, Float_t cosDthetaM
 //    for (Long64_t i = 0; i < 1000; ++i) {
         if (i % 10000000 == 0) { cout << i << endl; }
         ntp->GetEntry(i);
-        if (fabs(TMath::Cos(D_theta) > cosDthetaMin)) {
+        if (cos(D_theta) > cosDthetaMin) {
             if ((D_mass > D_massMin) && (D_mass < D_massMax)) {
                 if ((pi1_dca > pi1_dcaMin) && (k_dca > k_dcaMin) && (dcaDaughters < dcaDaughtersMax) && (D_decayL > D_decayLMin) && (k_pt > k_ptMin) && (pi1_pt > pi1_ptMin)){
                     if ((fabs(k_nSigma) < k_nSigmaMax) && (fabs(pi1_nSigma) < pi1_nSigmaMax)  ) {
@@ -88,7 +88,7 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName, Float_t cosDthetaM
 //                            if (((pi1_TOFinvbeta > 0) && (fabs(pi1_TOFinvbeta) < pi1_TOFinvbetaMax))){
                                 if ((D_pt > D_ptMin) && (D_pt < D_ptMax)) {
                                     if ((flag == 0) || (flag == 1)) {hInvMassSignBefDdca -> Fill(D_mass);}
-                                    dcaD0ToPv = D_decayL * sqrt(1 - TMath::Cos(D_theta) * TMath::Cos(D_theta));
+                                    dcaD0ToPv = D_decayL * sqrt(1 - cos(D_theta) * cos(D_theta));
                                     hpiTOFinvbeta->Fill(pi1_TOFinvbeta);
                                     hkTOFinvbeta->Fill(k_TOFinvbeta);
                                     hpinSigma->Fill(pi1_nSigma);
@@ -153,10 +153,14 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName, Float_t cosDthetaM
     delete ntp;
 }
 
-void projectFile(TString input = "testnew.root", Int_t i){
+
+void projectFile(TString output = "out.root", TString input = "testnew.root", Int_t i=0){
+   
     TFile* data = new TFile(input ,"r");
     TString name = Form("%d_", i);
-    TFile* dataRes = new TFile(name+"res_"+input ,"RECREATE");
+    TFile* dataRes = new TFile(output,"RECREATE");
+
+//    TFile* dataRes = new TFile(name+"res_"+input ,"RECREATE");
 
     projectNtp(data, dataRes, "ntp_signal", cosDthetaMinA[i], D_ptMinA[i], D_ptMaxA[i], D_decayLMinA[i], pi1_dcaMinA[i], k_dcaMinA[i],  dcaDaughtersMaxA[i], dca_d0MaxA[i]);
     projectNtp(data, dataRes, "ntp_background", cosDthetaMinA[i], D_ptMinA[i], D_ptMaxA[i], D_decayLMinA[i], pi1_dcaMinA[i], k_dcaMinA[i],  dcaDaughtersMaxA[i], dca_d0MaxA[i]);
@@ -180,13 +184,15 @@ void projectFile(TString input = "testnew.root", Int_t i){
     data->Close();
     dataRes->Close();
 
-    cout<<"res_"+input<<endl;
-    cout<<"done"<<endl;
+    //cout<<"res_"+input<<endl;
+    //cout<<"done"<<endl;
 
 }
 
-void project_studyone(string inputO){
-    for (int k = 0; k < 10 ; ++k) {
+
+void project_studyone(const char* input0, TString output)
+{ 
+   for (int k = 0; k < 10 ; ++k) {
         hS[k] -> SetBins(2000,0.4,2.4);
         hS[k] -> SetName(Form("hInvMassSign_cut_%.4f", cut[k]));
         hS[k] -> SetTitle(Form("hInvMassSign_cut_%.4f", cut[k]));
@@ -195,20 +201,23 @@ void project_studyone(string inputO){
         hB[k] -> SetTitle(Form("hInvMassBack_cut_%.4f", cut[k]));
 
     }
-
+    std::string line;
     std::ifstream infile(input0);
+    int por =0;
 
     while (std::getline(infile, line))
     {
+        por = por +1 ;
         for (Int_t j = 0; j < 1; ++j) {
             hInvMassSign -> Reset();
             hInvMassSignBefDdca -> Reset();
             hInvMassBack -> Reset();
             hInvMassBackPlus -> Reset();
             hInvMassBackMin -> Reset();
+            TString number = Form("_%d_%d",por,j);
+            projectFile(output+number+".root", line, j);
 
-            projectFile(line, j);
-        }
+             }
     }
 
 
@@ -218,5 +227,3 @@ void project_studyone(string inputO){
 
 
 }
-
-
