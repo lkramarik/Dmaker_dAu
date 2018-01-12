@@ -6,3 +6,5 @@ workDir/*
 results/*
 analyse/*.root
 analyse/rootFiles/*
+analyse/analyse_job/*
+analyse/analyse_job2/*
