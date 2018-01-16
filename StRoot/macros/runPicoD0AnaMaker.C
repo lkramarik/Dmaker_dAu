@@ -213,7 +213,7 @@ void runPicoD0AnaMaker(
     Int_t nEvents = picoDstMaker->chain()->GetEntries();
     cout << " Total entries = " << nEvents << endl;
 
-    for (Int_t i=0; i<nEvents; i++) {
+    for (Int_t i=0; i<nEvents; ++i) {
 //        if(i%10==0)       cout << "Working on eventNumber " << i << endl;
         chain->Clear();
         int iret = chain->Make(i);
