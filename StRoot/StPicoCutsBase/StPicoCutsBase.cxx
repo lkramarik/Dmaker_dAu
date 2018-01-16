@@ -22,7 +22,7 @@ ClassImp(StPicoCutsBase)
 
 // _________________________________________________________
 StPicoCutsBase::StPicoCutsBase() : TNamed("PicoCutsBase", "PicoCutsBase"), 
-  mTOFCorr(new StV0TofCorrection), mPicoDst(NULL), mEventStatMax(6), mTOFResolution(0.013),
+  mTOFCorr(new StV0TofCorrection), mPicoDst(NULL), mEventStatMax(5), mTOFResolution(0.013),
   mBadRunListFileName("picoList_bad.list"), mVzMax(6.), mVzVpdVzMax(3.), 
   mNHitsFitMin(15), mRequireHFT(true), mNHitsFitnHitsMax(0.52), mPrimaryDCAtoVtxMax(1.0) {
   
@@ -59,7 +59,7 @@ StPicoCutsBase::StPicoCutsBase() : TNamed("PicoCutsBase", "PicoCutsBase"),
 
 // _________________________________________________________
 StPicoCutsBase::StPicoCutsBase(const Char_t *name) : TNamed(name, name), 
-  mTOFCorr(new StV0TofCorrection), mPicoDst(NULL), mEventStatMax(7), mTOFResolution(0.013),
+  mTOFCorr(new StV0TofCorrection), mPicoDst(NULL), mEventStatMax(5), mTOFResolution(0.013),
   mBadRunListFileName("picoList_bad_MB.list"), mVzMax(6.), mVzVpdVzMax(3.),
   mNHitsFitMin(15), mRequireHFT(true), mNHitsFitnHitsMax(0.52), mPrimaryDCAtoVtxMax(1.0) {
   // -- constructor
