@@ -172,8 +172,10 @@ bool StPicoCutsBase::isGoodEvent(StPicoDst const * const picoDst, int *aEventCut
 
   // -- 2 - No Trigger fired
   ++iCut;
-  if (!isGoodTrigger(picoEvent))
-    aEventCuts[iCut] = 1;
+  aEventCuts[iCut] = 0; //not looking at triggers
+  //trigger - is ok?
+//  if (!isGoodTrigger(picoEvent))
+//    aEventCuts[iCut] = 1;
 
   // -- 3 - Vertex z outside cut window
   ++iCut;

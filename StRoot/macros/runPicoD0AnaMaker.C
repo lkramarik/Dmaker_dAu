@@ -50,8 +50,7 @@ void runPicoD0AnaMaker(
         exit(1);
     }
     
-    Int_t nEvents = 1000000;
-    
+
     #ifdef __CINT__
     gROOT->LoadMacro("loadSharedHFLibraries.C");
     loadSharedHFLibraries();
@@ -104,8 +103,8 @@ void runPicoD0AnaMaker(
         cout << "Unknown makerMode! Exiting..." << endl;
         exit(1);
     }
-    
-    StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
+    StPicoDstMaker::PicoIoMode mode = StPicoDstMaker::PicoIoMode::IoRead
+    StPicoDstMaker* picoDstMaker = new StPicoDstMaker(mode, inputFile, "picoDstMaker");
     cout<<"ok, picoDstMaker created"<<endl;
     StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile, sInputListHF);
     PicoD0AnaMaker->setMakerMode(makerMode);
@@ -209,22 +208,16 @@ void runPicoD0AnaMaker(
     //PicoD0AnaMaker->setRefMutCorr(grefmultCorrUtil);
     
     clock_t start = clock(); // getting starting time
+
     chain->Init();
-    
-    int total = picoDstMaker->chain()->GetEntries();
-    cout << " Total entries = " << total << endl;
-    if(nEvents>total) nEvents = total;
-    
+    Int_t nEvents = picoDstMaker->chain()->GetEntries();
+    cout << " Total entries = " << nEvents << endl;
+
     for (Int_t i=0; i<nEvents; i++) {
-//        if(i%10000==0)       cout << "Working on eventNumber " << i << endl;
-            
-            chain->Clear();
-        
+//        if(i%10==0)       cout << "Working on eventNumber " << i << endl;
+        chain->Clear();
         int iret = chain->Make(i);
-        
         if (iret) { cout << "Bad return code!" << iret << endl; break;}
-        
-       
     }
     
     cout << "****************************************** " << endl;

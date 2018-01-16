@@ -183,16 +183,14 @@ void runPicoD0AnaMakerLocal(
   if(nEvents>total) nEvents = total;
 
   for (Int_t i=0; i<nEvents; i++) {
-//    if(i%10000==0)       cout << "Working on eventNumber " << i << endl;
+    if(i%10==0)       cout << "Working on eventNumber " << i << endl;
 
     chain->Clear();
 
 	 int iret = chain->Make(i);
 
     if (iret) { cout << "Bad return code!" << iret << endl; break;}
-    
-    total++;
-  }
+    }
   
   cout << "****************************************** " << endl;
   cout << "Work done... now its time to close up shop!"<< endl;
