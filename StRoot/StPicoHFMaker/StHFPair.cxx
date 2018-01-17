@@ -49,17 +49,21 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
   StPhysicalHelixD p1Helix = particle1->helix(bField);
   StPhysicalHelixD p2Helix = particle2->helix(bField);
 
-  // -- move origins of helices to the primary vertex origin //commented 11.12.2017, same as Vanek
-//   p1Helix.moveOrigin(p1Helix.pathLength(vtx));
-//   p2Helix.moveOrigin(p2Helix.pathLength(vtx));
+  //Liang:
+  // move origins of helices to the primary vertex origin
+  p1Helix.moveOrigin(p1Helix.pathLength(vtx));
+  p2Helix.moveOrigin(p2Helix.pathLength(vtx));
 
-  // -- use straight lines approximation to get point of DCA of particle1-particle2 pair
-  //commented 11.12.2017, same as Vanek
-//   StThreeVectorF const p1Mom = p1Helix.momentum(bField * kilogauss);
-//   StThreeVectorF const p2Mom = p2Helix.momentum(bField * kilogauss);
-  StThreeVectorF const p1Mom = particle1->gMom();
-  StThreeVectorF const p2Mom = particle2->gMom();
-  
+  // use straight lines approximation to get point of DCA of kaon-pion pair
+  StThreeVectorF const p1Mom = p1Helix.momentum(bField * kilogauss);
+  StThreeVectorF const p2Mom = p2Helix.momentum(bField * kilogauss);
+
+
+  //LUKAS:
+//  StThreeVectorF const p1Mom = particle1->gMom();
+//  StThreeVectorF const p2Mom = particle2->gMom();
+
+  //the same
   StPhysicalHelixD const p1StraightLine(p1Mom, particle1->origin(), 0, particle1->charge());
   StPhysicalHelixD const p2StraightLine(p2Mom, particle2->origin(), 0, particle2->charge());
 
@@ -98,15 +102,6 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
   StThreeVectorF const vtxToV0 = mDecayVertex - vtx;
   mPointingAngle = vtxToV0.angle(mLorentzVector.vect());
   mDecayLength = vtxToV0.mag();
-//  mDcaToPrimaryVertex = vtxToV0.mag()*std::sin(vtxToV0.angle(mLorentzVector.vect())); // sine law: DcaToPrimaryVertex/sin(pointingAngle) = decayLength/sin(90°)
-//  mDcaToPrimaryVertex = 10; // sine law: DcaToPrimaryVertex/sin(pointingAngle) = decayLength/sin(90°)
-
-  // -- calculate DCA of tracks to primary vertex
-  //    if decay vertex is a tertiary vertex
-  //    -> only rough estimate -> needs to be updated after secondary vertex is found
-//WHAT lk HAD
-//  mParticle1Dca = (p1Helix.origin() - vtx).mag();
-//  mParticle2Dca = (p2Helix.origin() - vtx).mag();
 
   mParticle1Dca = (vtx - particle1->dcaPoint()).mag();
   mParticle2Dca = (vtx - particle2->dcaPoint()).mag();
