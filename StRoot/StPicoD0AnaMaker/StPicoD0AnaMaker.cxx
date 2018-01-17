@@ -125,8 +125,8 @@ int StPicoD0AnaMaker::analyzeCandidates() {
             pion1BetaBase = mHFCuts->getTofBetaBase(pion1);
 
             // all of the tracks need to have TOF info
-            if(isnan(kaonBetaBase) && kaonBetaBase = -999) continue;
-            if(isnan(pionBetaBase) && pionBetaBase = -999) continue;
+            if(isnan(kaonBetaBase) && kaonBetaBase == -999) continue;
+            if(isnan(pionBetaBase) && pionBetaBase == -999) continue;
 
             float ptot=9999;
             float betaInv = 9999;

@@ -154,7 +154,7 @@ void runPicoD0AnaMaker(
     float decayLengthMin  = 0.000; // minimum
     float decayLengthMax  = 40; //std::numeric_limits<float>::max(); toto ide (cutuje)
     float cosThetaMin     = -2.;   // minimum
-    
+
     float minMass         = 0;
     float maxMass         = 2;
 
