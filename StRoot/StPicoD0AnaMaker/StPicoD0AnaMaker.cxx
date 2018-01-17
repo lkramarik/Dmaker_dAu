@@ -117,30 +117,29 @@ int StPicoD0AnaMaker::analyzeCandidates() {
             StPicoTrack const* kaon = mPicoDst->track(pair->particle2Idx());
 
             //TOF ---
-            float kaonTOFinvbeta = -999;
-            float pion1TOFinvbeta = -999;
-            float kaonBetaBase = -999;
-            float pion1BetaBase = -999;
-            kaonBetaBase = mHFCuts->getTofBetaBase(kaon);
-            pion1BetaBase = mHFCuts->getTofBetaBase(pion1);
+
+            float kaonBetaBase = mHFCuts->getTofBetaBase(kaon);
+            float pion1BetaBase = mHFCuts->getTofBetaBase(pion1);
 
             // all of the tracks need to have TOF info
-            if(isnan(kaonBetaBase) && kaonBetaBase == -999) continue;
-            if(isnan(pion1BetaBase) && pion1BetaBase == -999) continue;
+            if(kaonBetaBase!=kaonBetaBase) continue;
+            if(pion1BetaBase!=pion1BetaBase) continue;
             if(pair->pt() < 1) continue;
             if(pair->pt() > 2) continue;
 
             float ptot=9999;
             float betaInv = 9999;
 
+            float kaonTOFinvbeta = -999;
+            float pion1TOFinvbeta = -999;
 
-            if(!isnan(kaonBetaBase) && kaonBetaBase > -999){
+            if(kaonBetaBase==kaonBetaBase){
                 ptot = kaon->gPtot();
                 betaInv = sqrt(ptot*ptot + M_KAON_PLUS*M_KAON_PLUS) / ptot;
                 kaonTOFinvbeta = fabs(1/kaonBetaBase - betaInv);
             }
 
-            if(!isnan(pion1BetaBase) && pion1BetaBase > -999){
+            if(pion1BetaBase==pion1BetaBase){
                 ptot = pion1->gPtot();
                 betaInv = sqrt(ptot*ptot + M_PION_PLUS*M_PION_PLUS) / ptot;
                 pion1TOFinvbeta = fabs(1/pion1BetaBase - betaInv);
