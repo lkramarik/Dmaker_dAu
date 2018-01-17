@@ -103,8 +103,10 @@ void runPicoD0AnaMaker(
         cout << "Unknown makerMode! Exiting..." << endl;
         exit(1);
     }
-    StPicoDstMaker::PicoIoMode mode = StPicoDstMaker::PicoIoMode::IoRead;
-    StPicoDstMaker* picoDstMaker = new StPicoDstMaker(mode, inputFile, "picoDstMaker");
+//    StPicoDstMaker::PicoIoMode mode = StPicoDstMaker::PicoIoMode::IoRead;
+//    StPicoDstMaker* picoDstMaker = new StPicoDstMaker(mode, inputFile, "picoDstMaker");
+    StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
+
     cout<<"ok, picoDstMaker created"<<endl;
     StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile, sInputListHF);
     PicoD0AnaMaker->setMakerMode(makerMode);
@@ -149,7 +151,7 @@ void runPicoD0AnaMaker(
     hfCuts->setCutDcaMin(0.003,StHFCuts::kKaon); // OK
 
     float dcaDaughtersMax = 1;  // maximum toto ide
-    float decayLengthMin  = 0.001; // minimum
+    float decayLengthMin  = 0.000; // minimum
     float decayLengthMax  = 40; //std::numeric_limits<float>::max(); toto ide (cutuje)
     float cosThetaMin     = -2.;   // minimum
     float minMass         = 1.7;
