@@ -32,8 +32,8 @@ int StPicoD0AnaMaker::InitHF() {
     // EXAMPLE //  TH1F* hist = static_cast<TH1F*>(mOutList->Last());
     mOutFileBaseName = mOutFileBaseName.ReplaceAll(".root", "");
 
-    ntp_DMeson_Signal = new TNtuple("ntp_signal","DMeson TreeSignal","grefMult:pi1_runId:pi1_eventId:pi1_phi:pi1_eta:pi1_pt:pi1_dca:pi1_dedx:pi1_nSigma:pi1_nHitFit:pi1_nHitdedx:pi1_TOFinvbeta:pi1_betaBase:k_runId:k_eventId:k_phi:k_eta:k_pt:k_dca:k_dedx:k_nSigma:k_nHitFit:k_nHitdedx:k_TOFinvbeta:k_betaBase:dcaDaughters:flag:primVz:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_phi:D_eta:D_cosThetaStar:D_pt:D_mass:D_mass_LS:D_mass_US:centrality:refmultcorr:reweight");
-    ntp_DMeson_Background = new TNtuple("ntp_background","DMeson TreeBackground","grefMult:pi1_runId:pi1_eventId:pi1_phi:pi1_eta:pi1_pt:pi1_dca:pi1_dedx:pi1_nSigma:pi1_nHitFit:pi1_nHitdedx:pi1_TOFinvbeta:pi1_betaBase:k_runId:k_eventId:k_phi:k_eta:k_pt:k_dca:k_dedx:k_nSigma:k_nHitFit:k_nHitdedx:k_TOFinvbeta:k_betaBase:dcaDaughters:flag:primVz:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_phi:D_eta:D_cosThetaStar:D_pt:D_mass:D_mass_LS:D_mass_US:centrality:refmultcorr:reweight");
+    ntp_DMeson_Signal = new TNtuple("ntp_signal","DMeson TreeSignal","grefMult:pi1_runId:pi1_eventId:pi1_phi:pi1_eta:pi1_pt:pi1_dca:pi1_dedx:pi1_nSigma:pi1_nHitFit:pi1_nHitdedx:pi1_TOFinvbeta:pi1_betaBase:k_runId:k_eventId:k_phi:k_eta:k_pt:k_dca:k_dedx:k_nSigma:k_nHitFit:k_nHitdedx:k_TOFinvbeta:k_betaBase:dcaDaughters:flag:primVz:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_phi:D_eta:D_cosThetaStar:D_pt:D_mass:D_mass_LS:D_mass_US");
+    ntp_DMeson_Background = new TNtuple("ntp_background","DMeson TreeBackground","grefMult:pi1_runId:pi1_eventId:pi1_phi:pi1_eta:pi1_pt:pi1_dca:pi1_dedx:pi1_nSigma:pi1_nHitFit:pi1_nHitdedx:pi1_TOFinvbeta:pi1_betaBase:k_runId:k_eventId:k_phi:k_eta:k_pt:k_dca:k_dedx:k_nSigma:k_nHitFit:k_nHitdedx:k_TOFinvbeta:k_betaBase:dcaDaughters:flag:primVz:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_phi:D_eta:D_cosThetaStar:D_pt:D_mass:D_mass_LS:D_mass_US");
 
     return kStOK;
 }
@@ -127,6 +127,8 @@ int StPicoD0AnaMaker::analyzeCandidates() {
             // all of the tracks need to have TOF info
             if(isnan(kaonBetaBase) && kaonBetaBase == -999) continue;
             if(isnan(pion1BetaBase) && pion1BetaBase == -999) continue;
+            if(pair->pt() < 1) continue;
+            if(pair->pt() > 2) continue;
 
             float ptot=9999;
             float betaInv = 9999;
@@ -157,12 +159,8 @@ int StPicoD0AnaMaker::analyzeCandidates() {
             if( kaon->charge()<0 && pion1->charge()<0) flag=4.; // --
             if( kaon->charge()>0 && pion1->charge()>0) flag=5.; // ++
 
-            int const centrality = 1;
-            const double reweight = 1;
-            const double refmultCor = 1;
-
             int ii=0;
-            float ntVar[42];
+            float ntVar[39];
             // Saving to NTUPLE
             // float globalTracks = (float)(mPicoHFEvent->numberOfGlobalTracks());
             ntVar[ii++] = mPicoDst->event()->refMult();
@@ -170,7 +168,7 @@ int StPicoD0AnaMaker::analyzeCandidates() {
             ntVar[ii++] = mPicoHFEvent->eventId();
             ntVar[ii++] = pion1->gMom(mPrimVtx,mBField).phi();
             ntVar[ii++] = pion1->gMom(mPrimVtx,mBField).pseudoRapidity();
-            ntVar[ii++] = pion1->gPt();
+            ntVar[ii++] = pion1->gMom(mPrimVtx,mBField).perp();
             ntVar[ii++] = pair->particle1Dca();
             ntVar[ii++] = pion1->dEdx();
             ntVar[ii++] = pion1->nSigmaPion();
@@ -183,7 +181,7 @@ int StPicoD0AnaMaker::analyzeCandidates() {
             ntVar[ii++] = mPicoHFEvent->eventId();
             ntVar[ii++] = kaon->gMom(mPrimVtx,mBField).phi();
             ntVar[ii++] = kaon->gMom(mPrimVtx,mBField).pseudoRapidity();
-            ntVar[ii++] = kaon->gPt();
+            ntVar[ii++] = kaon->gMom(mPrimVtx,mBField).perp();
             ntVar[ii++] = pair->particle2Dca();
             ntVar[ii++] = kaon->dEdx();
             ntVar[ii++] = kaon->nSigmaKaon();
@@ -213,9 +211,6 @@ int StPicoD0AnaMaker::analyzeCandidates() {
                 ntVar[ii++] = pair->m(); //D_mass_LS
                 ntVar[ii++] = -5;//D_mass_US
             }
-            ntVar[ii++] = centrality;
-            ntVar[ii++] = refmultCor;
-            ntVar[ii++] = reweight;
 
             if ((flag == 0) || (flag == 1)) {
                 ntp_DMeson_Signal->Fill(ntVar);
