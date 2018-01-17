@@ -147,14 +147,15 @@ void runPicoD0AnaMaker(
 
 
 //    WIDE
-    hfCuts->setCutDcaMin(0.003,StHFCuts::kPion); // OK
-    hfCuts->setCutDcaMin(0.003,StHFCuts::kKaon); // OK
+    hfCuts->setCutDcaMin(0.00,StHFCuts::kPion); // OK
+    hfCuts->setCutDcaMin(0.00,StHFCuts::kKaon); // OK
 
-    float dcaDaughtersMax = 1;  // maximum toto ide
+    float dcaDaughtersMax = 999;  // maximum toto ide
     float decayLengthMin  = 0.000; // minimum
     float decayLengthMax  = 40; //std::numeric_limits<float>::max(); toto ide (cutuje)
     float cosThetaMin     = -2.;   // minimum
-    float minMass         = 1.7;
+    
+    float minMass         = 0;
     float maxMass         = 2;
 
     //    WIDER than pt12 tmva
