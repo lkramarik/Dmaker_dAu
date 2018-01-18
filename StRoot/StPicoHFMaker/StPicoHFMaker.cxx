@@ -15,11 +15,10 @@
 //#include "StPicoPrescales/StPicoPrescales.h"
 
 #include "StHFCuts.h"
-#include "StHFHists.h"
+//#include "StHFHists.h"
 #include "StPicoHFEvent.h"
 #include "StPicoHFMaker.h"
 #include "StHFPair.h"
-#include "StHFTriplet.h"
 
 ClassImp(StPicoHFMaker)
 
