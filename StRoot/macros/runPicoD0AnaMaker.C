@@ -37,8 +37,7 @@ class StChain;
 #endif
 StChain *chain;
 void runPicoD0AnaMaker(
-    //const Char_t *inputFile="/gpfs01/star/pwg/lkramarik/pico_pAu/produced/st_physics_16127031_raw_4000024.picoDst.root",	
-    const char*  inputFile, 			 
+    const char*  inputFile,
     const Char_t *outputFile,  
     const Char_t *badRunListFileName, const Char_t *treeName,
     const Char_t *productionBasePath) {
@@ -56,30 +55,23 @@ void runPicoD0AnaMaker(
     #endif
     
     chain = new StChain();
-    
-    // ========================================================================================
-    //makerMode    = StPicoHFMaker::kAnalyze;
-    // ========================================================================================
-    cout << "Maker Mode    " << makerMode << endl;
-    cout << "TreeName      " << treeName << endl; 
+    cout << "TreeName      " << treeName << endl;
 
     TString sInputFile(inputFile);
     TString sInputListHF("");  
     TString sProductionBasePath(productionBasePath);
     TString sTreeName(treeName);
     
-    if (makerMode == StPicoHFMaker::kAnalyze) {
-        if (!sInputFile.Contains(".list") && !sInputFile.Contains("picoDst.root")) {
-            cout << "No input list or picoDst root file provided! Exiting..." << endl;
-            exit(1);
-        }
+    if (!sInputFile.Contains(".list") && !sInputFile.Contains("picoDst.root")) {
+        cout << "No input list or picoDst root file provided! Exiting..." << endl;
+        exit(1);
     }
 
     StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
 
     cout<<"ok, picoDstMaker created"<<endl;
     StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile, sInputListHF);
-    PicoD0AnaMaker->setMakerMode(makerMode);
+//    PicoD0AnaMaker->setMakerMode(makerMode);
     PicoD0AnaMaker->setTreeName(treeName);
     PicoD0AnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
 
@@ -205,10 +197,7 @@ void runPicoD0AnaMaker(
     cout << "****************************************** " << endl;
     
     delete chain;
-    
-    // -- clean up if in read mode
-    if (makerMode == StPicoHFMaker::kRead)
-        gSystem->Exec(Form("rm -f %s", sInputFile.Data()));
-    }
+
+}
     
     
