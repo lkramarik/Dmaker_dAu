@@ -98,10 +98,10 @@ void runPicoD0AnaMaker(
 //    hfCuts->setCutDcaMin(0.00,StHFCuts::kPion); // OK
 //    hfCuts->setCutDcaMin(0.00,StHFCuts::kKaon); // OK
 
-    hfCuts->setCutPrimaryDCAtoVtxMax(1.); //default is 1.0
+    hfCuts->setCutPrimaryDCAtoVtxMax(10.); //default is 1.0
     hfCuts->setCutVzMax(6.);
     hfCuts->setCutVzVpdVzMax(3.);
-    hfCuts->setCutNHitsFitMin(15); //default is 20
+    hfCuts->setCutNHitsFitMin(20); //default is 20
     hfCuts->setCutRequireHFT(true);
 
 
@@ -155,11 +155,11 @@ void runPicoD0AnaMaker(
     hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass); //ok
     
     //Single track pt
-    hfCuts->setCutPtRange(0.1,50.0,StHFCuts::kPion); //0.2 , 50.0 OK
-    hfCuts->setCutPtRange(0.1,50.0,StHFCuts::kKaon); //0.2, 50.0 OK
+    hfCuts->setCutPtRange(0.2,50.0,StHFCuts::kPion); //0.2 , 50.0 OK
+    hfCuts->setCutPtRange(0.2,50.0,StHFCuts::kKaon); //0.2, 50.0 OK
     //TPC setters
     hfCuts->setCutTPCNSigmaPion(3.0); //3 OK
-    hfCuts->setCutTPCNSigmaKaon(3.0); //3 OK
+    hfCuts->setCutTPCNSigmaKaon(2.0); //3 OK
     //TOF setters, need to set pt range as well
     hfCuts->setCutTOFDeltaOneOverBeta(0.03, StHFCuts::kKaon); // nastavene = f * (sigmaTOF), sigma TOF je 0.013 OK
     hfCuts->setCutPtotRangeHybridTOF(0.1,50.0,StHFCuts::kKaon); // OK
