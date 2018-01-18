@@ -98,7 +98,7 @@ void runPicoD0AnaMaker(
 //    hfCuts->setCutDcaMin(0.00,StHFCuts::kPion); // OK
 //    hfCuts->setCutDcaMin(0.00,StHFCuts::kKaon); // OK
 
-    hfCuts->setCutPrimaryDCAtoVtxMax(10.); //default is 1.0
+    hfCuts->setCutPrimaryDCAtoVtxMax(100.); //default is 1.0
     hfCuts->setCutVzMax(6.);
     hfCuts->setCutVzVpdVzMax(3.);
     hfCuts->setCutNHitsFitMin(20); //default is 20
