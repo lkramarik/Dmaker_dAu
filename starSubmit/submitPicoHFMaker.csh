@@ -12,6 +12,7 @@
 #      StRoot                     ( from the git repo )
 #      run14AuAu200GeVPrescales   ( from the git repo )
 #      starSubmit                 ( from the git repo )
+#
 #      picoLists                  ( from the fileList git repo )
 #
 #   - the rootMacro is expected in StRoot/macros
@@ -23,6 +24,9 @@
 
 # -- baseFolder of job
 set baseFolder=${1}
+
+# --input file
+set input=${baseFolder}/${2}
 
 # -- set root macro
 set rootMacro=runPicoD0AnaMaker.C
