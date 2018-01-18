@@ -34,15 +34,10 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
   mParticle1Dca(std::numeric_limits<float>::quiet_NaN()), mParticle2Dca(std::numeric_limits<float>::quiet_NaN()),
   mParticle1Idx(p1Idx), mParticle2Idx(p2Idx),
   mDcaDaughters(std::numeric_limits<float>::max()), mCosThetaStar(std::numeric_limits<float>::quiet_NaN()) {
-  // -- Create pair out of 2 tracks
-  //     prefixes code:
-  //      p1 means particle 1
-  //      p2 means particle 2
-  //      pair means particle1-particle2  pair
 
   if ((!particle1 || !particle2) || (particle1->id() == particle2->id())) {
-    mParticle1Idx = std::numeric_limits<unsigned short>::max();
-    mParticle2Idx = std::numeric_limits<unsigned short>::max();
+    mParticle1Idx = std::numeric_limits<unsigned short>::quiet_NaN();
+    mParticle2Idx = std::numeric_limits<unsigned short>::quiet_NaN();
     return;
   }
 
@@ -80,11 +75,6 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
   // -- calculate Lorentz vector of particle1-particle2 pair, straight line commented 09.01.2018
   StThreeVectorF const p1MomAtDca = p1Helix.momentumAt(ss.first,  bField * kilogauss);
   StThreeVectorF const p2MomAtDca = p2Helix.momentumAt(ss.second, bField * kilogauss);
-
-//  double const p1AtV0 = p1Helix.pathLength( mDecayVertex );
-//  double const p2AtV0 = p2Helix.pathLength( mDecayVertex );
-//  StThreeVectorF const p1MomAtDca = p1Helix.momentumAt(p1AtV0,  bField * kilogauss);
-//  StThreeVectorF const p2MomAtDca = p2Helix.momentumAt(p2AtV0, bField * kilogauss);
 
   StLorentzVectorF const p1FourMom(p1MomAtDca, p1MomAtDca.massHypothesis(p1MassHypo));
   StLorentzVectorF const p2FourMom(p2MomAtDca, p2MomAtDca.massHypothesis(p2MassHypo));
