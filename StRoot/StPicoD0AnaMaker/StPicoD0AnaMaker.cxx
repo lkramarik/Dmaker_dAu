@@ -62,20 +62,10 @@ int StPicoD0AnaMaker::MakeHF() {
     //    ... it is usefull to use the methods below
     //     - createCandidates()
     //     - analyzeCandidates()
-
-    std::clock_t start1 = std::clock();//kvapil
-    if (isMakerMode() == StPicoHFMaker::kWrite) {
-        createCandidates();
-    }
-    else if (isMakerMode() == StPicoHFMaker::kRead) {
-        // -- the reading back of the perviously written trees happens in the background
-        analyzeCandidates();
-    }
-    else if (isMakerMode() == StPicoHFMaker::kAnalyze) {
         //cout<<"going to create candidates"<<endl;
         createCandidates();
         //cout<<"candidated created, going to analyze them"<<endl;
-        analyzeCandidates();
+//        analyzeCandidates();
         //cout<<"candidates analysed"<<endl;
     }
 
@@ -85,7 +75,6 @@ int StPicoD0AnaMaker::MakeHF() {
 
 // _________________________________________________________
 int StPicoD0AnaMaker::createCandidates() {
-
     for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
         StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
         for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
@@ -95,6 +84,78 @@ int StPicoD0AnaMaker::createCandidates() {
             StHFPair pair(pion1, kaon, mHFCuts->getHypotheticalMass(StHFCuts::kPion),mHFCuts->getHypotheticalMass(StHFCuts::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
             if (!mHFCuts->isClosePair(pair)) continue;
             mPicoHFEvent->addHFSecondaryVertexPair(&pair);
+
+//            Filling ntp
+            if(pair->pt() < 1) continue;
+            if(pair->pt() > 2) continue;
+
+            float flag = -99.;
+
+            if( kaon->charge()<0 && pion1->charge()>0 ) flag=0.; // -+
+            if( kaon->charge()>0 && pion1->charge()<0 ) flag=1.; // +-
+
+            if( kaon->charge()<0 && pion1->charge()<0) flag=4.; // --
+            if( kaon->charge()>0 && pion1->charge()>0) flag=5.; // ++
+
+            int ii=0;
+            float ntVar[39];
+            ntVar[ii++] = mPicoDst->event()->refMult();
+            ntVar[ii++] = mPicoHFEvent->runId();
+            ntVar[ii++] = mPicoHFEvent->eventId();
+            ntVar[ii++] = pion1->gMom(mPrimVtx,mBField).phi();
+            ntVar[ii++] = pion1->gMom(mPrimVtx,mBField).pseudoRapidity();
+            ntVar[ii++] = pion1->gMom(mPrimVtx,mBField).perp();
+            ntVar[ii++] = pair->particle1Dca();
+            ntVar[ii++] = pion1->dEdx();
+            ntVar[ii++] = pion1->nSigmaPion();
+            ntVar[ii++] = pion1->nHitsFit();
+            ntVar[ii++] = pion1->nHitsDedx();
+            ntVar[ii++] = getOneOverBeta(pion1, mHFCuts->getTofBetaBase(pion1), StHFCuts::kPion);
+            ntVar[ii++] = mHFCuts->getTofBetaBase(pion1);
+
+            ntVar[ii++] = mPicoHFEvent->runId();
+            ntVar[ii++] = mPicoHFEvent->eventId();
+            ntVar[ii++] = kaon->gMom(mPrimVtx,mBField).phi();
+            ntVar[ii++] = kaon->gMom(mPrimVtx,mBField).pseudoRapidity();
+            ntVar[ii++] = kaon->gMom(mPrimVtx,mBField).perp();
+            ntVar[ii++] = pair->particle2Dca();
+            ntVar[ii++] = kaon->dEdx();
+            ntVar[ii++] = kaon->nSigmaKaon();
+            ntVar[ii++] = kaon->nHitsFit();
+            ntVar[ii++] = kaon->nHitsDedx();
+            ntVar[ii++] = getOneOverBeta(kaon, mHFCuts->getTofBetaBase(kaon), StHFCuts::kKaon);
+            ntVar[ii++] = mHFCuts->getTofBetaBase(kaon);
+
+            ntVar[ii++] = pair->dcaDaughters();
+
+            ntVar[ii++] = flag;
+            ntVar[ii++] = mPrimVtx.z();
+            ntVar[ii++] = pair->pointingAngle();
+            ntVar[ii++] = cos(pair->pointingAngle());
+            ntVar[ii++] = pair->decayLength();
+            ntVar[ii++] = pair->DcaToPrimaryVertex(); //(pair->decayLength())*sin(pair->pointingAngle());
+            ntVar[ii++] = pair->phi();
+            ntVar[ii++] = pair->eta();
+            ntVar[ii++] = pair->cosThetaStar();
+
+            ntVar[ii++] = pair->pt(); //sqrt(pow(pair->px(),2.0)+pow(pair->py(),2.0));
+            ntVar[ii++] = pair->m();
+            if ((flag == 0) || (flag == 1)) {
+                ntVar[ii++] = -5; //D_mass_LS
+                ntVar[ii++] = pair->m();//D_mass_US
+            } else {
+                ntVar[ii++] = pair->m(); //D_mass_LS
+                ntVar[ii++] = -5;//D_mass_US
+            }
+
+            if ((flag == 0) || (flag == 1)) {
+                ntp_DMeson_Signal->Fill(ntVar);
+            } else {
+                ntp_DMeson_Background->Fill(ntVar);
+            }
+
+
+
         }  // for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon)
     } // for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1)
 
@@ -111,41 +172,9 @@ int StPicoD0AnaMaker::analyzeCandidates() {
             StPicoTrack const* pion1 = mPicoDst->track(pair->particle1Idx());
             StPicoTrack const* kaon = mPicoDst->track(pair->particle2Idx());
 
-            //TOF ---
-
-            float kaonBetaBase = mHFCuts->getTofBetaBase(kaon);
-            float pion1BetaBase = mHFCuts->getTofBetaBase(pion1);
-
-            // all of the tracks need to have TOF info
-//            if(kaonBetaBase!=kaonBetaBase) continue;
-//            if(pion1BetaBase!=pion1BetaBase) continue;
             if(pair->pt() < 1) continue;
             if(pair->pt() > 2) continue;
 
-            float ptot=9999;
-            float betaInv = 9999;
-
-            float kaonTOFinvbeta = -999;
-            float pion1TOFinvbeta = -999;
-
-            if(kaonBetaBase==kaonBetaBase){
-                ptot = kaon->gPtot();
-                betaInv = sqrt(ptot*ptot + M_KAON_PLUS*M_KAON_PLUS) / ptot;
-                kaonTOFinvbeta = fabs(1/kaonBetaBase - betaInv);
-            }
-
-            if(pion1BetaBase==pion1BetaBase){
-                ptot = pion1->gPtot();
-                betaInv = sqrt(ptot*ptot + M_PION_PLUS*M_PION_PLUS) / ptot;
-                pion1TOFinvbeta = fabs(1/pion1BetaBase - betaInv);
-            }
-
-//            if(!isnan(pion1BetaBase) && pion1BetaBase > 0){
-//                ptot = pion1->gPtot();
-//                pion1TOFinvbeta = fabs(1. / pion1BetaBase - sqrt(1+M_PION_PLUS*M_PION_PLUS/(pion1->gMom(mPrimVtx,mBField).mag()*pion1->gMom(mPrimVtx,mBField).mag())));
-//            }
-
-            // -- Flag D0 and background
             float flag = -99.;
 
             if( kaon->charge()<0 && pion1->charge()>0 ) flag=0.; // -+
