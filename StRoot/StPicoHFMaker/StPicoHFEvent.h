@@ -39,7 +39,6 @@ private:
    Int_t                mEventId;                     // event number
 
    unsigned int         mNHFSecondaryVertices;        // number of stored secondary vertex candidates
-   unsigned int         mNHFTertiaryVertices;         // number of stored tertiary vertex candidates
 
    TClonesArray*        mHFSecondaryVerticesArray;    // secondary vertex candidates
    static TClonesArray* fgHFSecondaryVerticesArray;
@@ -49,9 +48,6 @@ private:
 
 inline TClonesArray const * StPicoHFEvent::aHFSecondaryVertices() const { return mHFSecondaryVerticesArray;}
 inline unsigned int         StPicoHFEvent::nHFSecondaryVertices() const { return mNHFSecondaryVertices; }
-
-inline TClonesArray const * StPicoHFEvent::aHFTertiaryVertices()  const { return mHFTertiaryVerticesArray;}
-inline unsigned int         StPicoHFEvent::nHFTertiaryVertices()  const { return mNHFTertiaryVertices; }
 
 inline Int_t StPicoHFEvent::runId()        const { return mRunId; }
 inline Int_t StPicoHFEvent::eventId()      const { return mEventId; }
