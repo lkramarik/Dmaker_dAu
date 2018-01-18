@@ -4,7 +4,6 @@
 #include "StPicoEvent/StPicoTrack.h"
 //#include "StPicoD0EventMaker/StPicoD0Event.h"
 //#include "StPicoD0EventMaker/StKaonPion.h"
-//#include "StPicoD0AnaMaker.h"
 #include "StPicoHFMaker/StHFCuts.h"
 
 #include "StPicoD0AnaMaker.h"
@@ -78,7 +77,6 @@ int StPicoD0AnaMaker::MakeHF() {
         //cout<<"candidated created, going to analyze them"<<endl;
         analyzeCandidates();
         //cout<<"candidates analysed"<<endl;
-        //createQA();
     }
 
     double duration = (double) (std::clock() - start1) / (double) CLOCKS_PER_SEC;
@@ -253,7 +251,7 @@ bool StPicoD0AnaMaker::isProton(StPicoTrack const * const trk) const {
     return (mHFCuts->isGoodTrack(trk) && mHFCuts->isTPCHadron(trk, StPicoCutsBase::kProton));
 }
 
-float getOneOverBeta(StPicoTrack const * const trk,  float const & tofBeta, int pidFlag){
+float StPicoD0AnaMaker::getOneOverBeta(StPicoTrack const * const trk,  float const & tofBeta, int pidFlag){
     if (tofBeta <= 0)
         return -5;
     float m2 = mHFCuts->getHypotheticalMass(pidFlag)*mHFCuts->getHypotheticalMass(pidFlag);
