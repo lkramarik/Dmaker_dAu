@@ -13,8 +13,7 @@ ClassImp(StPicoD0AnaMaker)
 // _________________________________________________________
 StPicoD0AnaMaker::StPicoD0AnaMaker(char const* name, StPicoDstMaker* picoMaker, char const* outputBaseFileName, char const* inputHFListHFtree = "") :
         StPicoHFMaker(name, picoMaker, outputBaseFileName, inputHFListHFtree),
-        mOutFileBaseName(outputBaseFileName){ //mDecayChannel(kChannel1), tu bolo
-
+        mOutFileBaseName(outputBaseFileName){
     // constructor
 }
 
@@ -150,6 +149,7 @@ int StPicoD0AnaMaker::analyzeCandidates() {
 
             // -- Flag D0 and background
             float flag = -99.;
+            
             if( kaon->charge()<0 && pion1->charge()>0 ) flag=0.; // -+
             if( kaon->charge()>0 && pion1->charge()<0 ) flag=1.; // +-
 
@@ -158,8 +158,6 @@ int StPicoD0AnaMaker::analyzeCandidates() {
 
             int ii=0;
             float ntVar[39];
-            // Saving to NTUPLE
-            // float globalTracks = (float)(mPicoHFEvent->numberOfGlobalTracks());
             ntVar[ii++] = mPicoDst->event()->refMult();
             ntVar[ii++] = mPicoHFEvent->runId();
             ntVar[ii++] = mPicoHFEvent->eventId();
@@ -171,8 +169,8 @@ int StPicoD0AnaMaker::analyzeCandidates() {
             ntVar[ii++] = pion1->nSigmaPion();
             ntVar[ii++] = pion1->nHitsFit();
             ntVar[ii++] = pion1->nHitsDedx();
-            ntVar[ii++] = pion1TOFinvbeta;
-            ntVar[ii++] = pion1BetaBase;
+            ntVar[ii++] = getOneOverBeta(pion1, mHFCuts->getTofBetaBase(pion1), StHFCuts::kPion);
+            ntVar[ii++] = mHFCuts->getTofBetaBase(pion1);
 
             ntVar[ii++] = mPicoHFEvent->runId();
             ntVar[ii++] = mPicoHFEvent->eventId();
@@ -184,8 +182,8 @@ int StPicoD0AnaMaker::analyzeCandidates() {
             ntVar[ii++] = kaon->nSigmaKaon();
             ntVar[ii++] = kaon->nHitsFit();
             ntVar[ii++] = kaon->nHitsDedx();
-            ntVar[ii++] = kaonTOFinvbeta;
-            ntVar[ii++] = kaonBetaBase;
+            ntVar[ii++] = getOneOverBeta(kaon, mHFCuts->getTofBetaBase(kaon), StHFCuts::kKaon);
+            ntVar[ii++] = mHFCuts->getTofBetaBase(kaon);
 
             ntVar[ii++] = pair->dcaDaughters();
 
@@ -253,4 +251,13 @@ bool StPicoD0AnaMaker::isKaon(StPicoTrack const * const trk) const {
 bool StPicoD0AnaMaker::isProton(StPicoTrack const * const trk) const {
     // -- good proton
     return (mHFCuts->isGoodTrack(trk) && mHFCuts->isTPCHadron(trk, StPicoCutsBase::kProton));
+}
+
+float getOneOverBeta(StPicoTrack const * const trk,  float const & tofBeta, int pidFlag){
+    if (tofBeta <= 0)
+        return -5;
+    float m2 = mHFCuts->getHypotheticalMass(pidFlag)*mHFCuts->getHypotheticalMass(pidFlag);
+    float ptot    = trk->gPtot();
+    float betaInv = sqrt(ptot*ptot + m2) / ptot;
+    return fabs(1/tofBeta - betaInv);
 }

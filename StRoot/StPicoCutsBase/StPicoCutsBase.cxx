@@ -251,8 +251,6 @@ bool StPicoCutsBase::cutMinDcaToPrimVertexTertiary(StPicoTrack const * const trk
   return (dca >= mDcaMinTertiary[pidFlag]);
 }
 
-// =======================================================================
-
 // _________________________________________________________
 bool StPicoCutsBase::isTPCHadron(StPicoTrack const * const trk, int pidFlag) const {
   // -- check for good hadron in TPC
