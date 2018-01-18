@@ -56,7 +56,6 @@ int StPicoD0AnaMaker::FinishHF() {
 
 // _________________________________________________________
 int StPicoD0AnaMaker::MakeHF() {
-    //cout<<"MakeHF start"<<endl;  
     // -- process event
     //    ADD YOUR PROCESSING CODE HERE
     //    ... it is usefull to use the methods below
@@ -67,10 +66,8 @@ int StPicoD0AnaMaker::MakeHF() {
         //cout<<"candidated created, going to analyze them"<<endl;
 //        analyzeCandidates();
         //cout<<"candidates analysed"<<endl;
-    }
 
-    double duration = (double) (std::clock() - start1) / (double) CLOCKS_PER_SEC;
-    return kStOK;
+   return kStOK;
 }
 
 // _________________________________________________________
