@@ -8,29 +8,22 @@ TClonesArray *StPicoHFEvent::fgHFSecondaryVerticesArray = 0;
 TClonesArray *StPicoHFEvent::fgHFTertiaryVerticesArray  = 0;
 
 // _________________________________________________________
-StPicoHFEvent::StPicoHFEvent() : mRunId(-1), mEventId(-1), mNHFSecondaryVertices(0), mNHFTertiaryVertices(0),
-						  mHFSecondaryVerticesArray(NULL), mHFTertiaryVerticesArray(NULL) {
+StPicoHFEvent::StPicoHFEvent() : mRunId(-1), mEventId(-1), mNHFSecondaryVertices(0),
+						  mHFSecondaryVerticesArray(NULL), {
   // -- Default constructor
   if (!fgHFSecondaryVerticesArray) fgHFSecondaryVerticesArray = new TClonesArray("StHFPair");
   mHFSecondaryVerticesArray = fgHFSecondaryVerticesArray;
 }
 
 // _________________________________________________________
-StPicoHFEvent::StPicoHFEvent(unsigned int mode) : mRunId(-1), mEventId(-1), mNHFSecondaryVertices(0), mNHFTertiaryVertices(0),
-						  mHFSecondaryVerticesArray(NULL), mHFTertiaryVerticesArray(NULL) {
+StPicoHFEvent::StPicoHFEvent(unsigned int mode) : mRunId(-1), mEventId(-1), mNHFSecondaryVertices(0),
+						  mHFSecondaryVerticesArray(NULL) {
   // -- Constructor with mode selection
   if (mode == StPicoHFEvent::kTwoAndTwoParticleDecay) {
     if (!fgHFSecondaryVerticesArray) fgHFSecondaryVerticesArray = new TClonesArray("StHFPair");
     mHFSecondaryVerticesArray = fgHFSecondaryVerticesArray;
-
-    if (!fgHFTertiaryVerticesArray) fgHFTertiaryVerticesArray = new TClonesArray("StHFPair");
-    mHFTertiaryVerticesArray = fgHFTertiaryVerticesArray;
   }
   else if (mode == StPicoHFEvent::kTwoParticleDecay) {
-    if (!fgHFSecondaryVerticesArray) fgHFSecondaryVerticesArray = new TClonesArray("StHFPair");
-    mHFSecondaryVerticesArray = fgHFSecondaryVerticesArray;
-  }
-  else if (mode == StPicoHFEvent::kFourParticleDecay) {
     if (!fgHFSecondaryVerticesArray) fgHFSecondaryVerticesArray = new TClonesArray("StHFPair");
     mHFSecondaryVerticesArray = fgHFSecondaryVerticesArray;
   }
@@ -50,13 +43,9 @@ void StPicoHFEvent::addPicoEvent(StPicoEvent const & picoEvent) {
 // _________________________________________________________
 void StPicoHFEvent::clear(char const *option) {
   mHFSecondaryVerticesArray->Clear(option);
-  if (mHFTertiaryVerticesArray)
-    mHFTertiaryVerticesArray->Clear(option);
-  
   mRunId                = -1;
   mEventId              = -1;
   mNHFSecondaryVertices = 0;
-  mNHFTertiaryVertices  = 0;
 }
 
 // _________________________________________________________
