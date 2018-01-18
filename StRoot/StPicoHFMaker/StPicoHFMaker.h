@@ -4,52 +4,6 @@
 #include "StChain/StMaker.h"
 #include "StarClassLibrary/StLorentzVectorF.hh"
 
-/* **************************************************
- *  Base class for HF analysis
- *
- *  Usage:
- *  - Implement in daughter class
- *     InitHF()
- *     MakeHF()
- *     ClearHF()
- *     FinishHF()
- *  - Do not ovewrite Init, Make, Clear, Finish which are inhertited from StMaker
- *  - Set StHFCuts class via setHFBaseCuts(...) in run macro
- *
- *  - Set decay mode of analysis via setDecayMode(...)
- *     use enum of StPicoHFEvent::eHFEventMode (see there for more info)
- *      StPicoHFEvent::kTwoParticleDecay, 
- *      StPicoHFEvent::kThreeParticleDecay
- *      StPicoHFEvent::kTwoAndTwoParticleDecay 
- *
- *  - Set use mode of StPicoHFMaker class  via setMakerMode(...)
- *     use enum of StPicoHFMaker::eMakerMode 
- *      StPicoHFMaker::kAnalyze - don't write candidate trees, just fill histograms
- *      StPicoHFMaker::kWrite   - write candidate trees
- *      StPicoHFMaker::kRead    - read candidate trees and fill histograms
- *
- *  - Implement in daughter class, methods from StHFCuts utility class can/should be used
- *     methods are used to fill vectors for 'good' identified particles
- *     isPion
- *     isKaon
- *     isProton
- *
- * **************************************************
- *
- *  Initial Authors:
- *            Xin Dong        (xdong@lbl.gov)
- *            Mustafa Mustafa (mmustafa@lbl.gov)
- *          **Jochen Thaeder  (jmthader@lbl.gov)
- *
- *  Contributing Authors
- *            Michael Lomnitz (mrlomnitz@lbl.gov)
- *            Giacomo Contin  (gcontin@lbl.gov)
- *
- *  ** Code Maintainer
- *
- * **************************************************
- */
-
 class TTree;
 class TFile;
 class TChain;
@@ -62,7 +16,7 @@ class StPicoHFEvent;
 class StHFPair;
 class StHFTriplet;
 class StHFCuts;
-class StHFHists;
+//class StHFHists;
 
 class StPicoHFMaker : public StMaker 
 {
