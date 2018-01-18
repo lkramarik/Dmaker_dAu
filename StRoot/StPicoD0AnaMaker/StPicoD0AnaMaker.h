@@ -108,8 +108,6 @@ public:
     virtual Int_t MakeHF();
     virtual void  ClearHF(Option_t *opt);
     virtual Int_t FinishHF();
-    // -- Lomnitz: Added this cut funtions to to filter iwthout having to make pairs
-    virtual bool isCloseTracks(StPicoTrack const*, StPicoTrack const*,StThreeVectorF const & , float) const;
 
     // -- ADOPT DECAY CHANNELS, if wished -------------------
     void setDecayChannel(unsigned int u) { mDecayChannel = u; }

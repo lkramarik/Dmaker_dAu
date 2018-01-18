@@ -44,10 +44,9 @@ void runPicoD0AnaMaker(
     string SL_version = "SL17d";
     string env_SL = getenv ("STAR");
     if (env_SL.find(SL_version)==string::npos) {
-        cout<<"Environment Star Library does not match the requested library in runPicoHFMyAnaMaker.C. Exiting..."<<endl;
+        cout<<"Environment Star Library does not match the requested library in run**.C. Exiting..."<<endl;
         exit(1);
     }
-    
 
     #ifdef __CINT__
     gROOT->LoadMacro("loadSharedHFLibraries.C");
@@ -68,7 +67,6 @@ void runPicoD0AnaMaker(
     }
 
     StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
-
     cout<<"ok, picoDstMaker created"<<endl;
     StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile, sInputListHF);
 //    PicoD0AnaMaker->setMakerMode(makerMode);

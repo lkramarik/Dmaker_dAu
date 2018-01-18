@@ -91,10 +91,8 @@ int StPicoD0AnaMaker::createCandidates() {
 
     for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
         StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
-        //     if( !mHFCuts->isHybridTOFHadron(pion1, mHFCuts->getTofBetaBase(pion1), StHFCuts::kPion) ) continue;
         for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
             StPicoTrack const *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
-            //        if( !mHFCuts->isHybridTOFHadron(kaon, mHFCuts->getTofBetaBase(kaon), StHFCuts::kKaon) ) continue;
             if (mIdxPicoKaons[idxKaon] == mIdxPicoPions[idxPion1]) continue;
             // -- Making pair
             StHFPair pair(pion1, kaon, mHFCuts->getHypotheticalMass(StHFCuts::kPion),mHFCuts->getHypotheticalMass(StHFCuts::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
@@ -122,8 +120,8 @@ int StPicoD0AnaMaker::analyzeCandidates() {
             float pion1BetaBase = mHFCuts->getTofBetaBase(pion1);
 
             // all of the tracks need to have TOF info
-            if(kaonBetaBase!=kaonBetaBase) continue;
-            if(pion1BetaBase!=pion1BetaBase) continue;
+//            if(kaonBetaBase!=kaonBetaBase) continue;
+//            if(pion1BetaBase!=pion1BetaBase) continue;
             if(pair->pt() < 1) continue;
             if(pair->pt() > 2) continue;
 
@@ -233,7 +231,8 @@ bool StPicoD0AnaMaker::isPion(StPicoTrack const * const trk) const {
 //    StThreeVectorF t = trk->pMom(); //11.12.
     StThreeVectorF t = trk->gMom(); //11.12.
     if (fabs(t.pseudoRapidity()) > 1.) return false; //pridano fabs 1212
-    if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StHFCuts::kPion) ) return false;
+    if (!mHFCuts->isTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StHFCuts::kPion) ) return false;
+//    if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StHFCuts::kPion) ) return false;
     if (!mHFCuts->cutMinDcaToPrimVertex(trk, StPicoCutsBase::kPion)) return false;
     return (mHFCuts->isGoodTrack(trk) && mHFCuts->isTPCHadron(trk, StPicoCutsBase::kPion));
 }
@@ -244,7 +243,8 @@ bool StPicoD0AnaMaker::isKaon(StPicoTrack const * const trk) const {
 //    StThreeVectorF t = trk->pMom(); //11.12.
     StThreeVectorF t = trk->gMom(); //11.12.
     if (fabs(t.pseudoRapidity()) > 1.) return false;//pridano fabs 1212
-    if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StHFCuts::kKaon) ) return false;
+    if (!mHFCuts->isTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StHFCuts::kKaon) ) return false;
+//    if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StHFCuts::kKaon) ) return false;
     if (!mHFCuts->cutMinDcaToPrimVertex(trk, StPicoCutsBase::kKaon)) return false;
     return (mHFCuts->isGoodTrack(trk) && mHFCuts->isTPCHadron(trk, StPicoCutsBase::kKaon));
 }
@@ -253,27 +253,4 @@ bool StPicoD0AnaMaker::isKaon(StPicoTrack const * const trk) const {
 bool StPicoD0AnaMaker::isProton(StPicoTrack const * const trk) const {
     // -- good proton
     return (mHFCuts->isGoodTrack(trk) && mHFCuts->isTPCHadron(trk, StPicoCutsBase::kProton));
-}
-
-bool StPicoD0AnaMaker::isCloseTracks(StPicoTrack const * const trk1, StPicoTrack const * const trk2, StThreeVectorF const & vtx, float bField) const {
-
-    StPhysicalHelixD p1Helix = trk1->helix(mPicoDst->event()->bField());
-    StPhysicalHelixD p2Helix = trk2->helix(mPicoDst->event()->bField());
-    p1Helix.moveOrigin(p1Helix.pathLength(vtx));
-    p2Helix.moveOrigin(p2Helix.pathLength(vtx));
-    if( ( p1Helix.origin()-vtx ).mag()>0.2 || ( p2Helix.origin()-vtx ).mag()>0.2 ) return false;
-
-    //Requires loading constants
-    StThreeVectorF const p1Mom = p1Helix.momentum(bField * kilogauss);
-    StThreeVectorF const p2Mom = p2Helix.momentum(bField * kilogauss);
-    StPhysicalHelixD const p1StraightLine(p1Mom, p1Helix.origin(), 0, trk1->charge());
-    StPhysicalHelixD const p2StraightLine(p2Mom, p2Helix.origin(), 0, trk2->charge());
-    //DCA
-    pair<double, double> const ss = p1StraightLine.pathLengths(p2StraightLine);
-    StThreeVectorF const p1AtDcaToP2 = p1StraightLine.at(ss.first);
-    StThreeVectorF const p2AtDcaToP1 = p2StraightLine.at(ss.second);
-    float const dca = (p1AtDcaToP2-p2AtDcaToP1).mag();
-    if(dca > 0.50) return false; //kubo : 0.009, in cm
-    // -- good pair
-    return true;
 }
