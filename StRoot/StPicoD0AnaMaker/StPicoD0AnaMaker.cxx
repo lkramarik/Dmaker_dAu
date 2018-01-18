@@ -149,7 +149,7 @@ int StPicoD0AnaMaker::analyzeCandidates() {
 
             // -- Flag D0 and background
             float flag = -99.;
-            
+
             if( kaon->charge()<0 && pion1->charge()>0 ) flag=0.; // -+
             if( kaon->charge()>0 && pion1->charge()<0 ) flag=1.; // +-
 

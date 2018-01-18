@@ -54,7 +54,7 @@ public:
     virtual Int_t MakeHF();
     virtual void  ClearHF(Option_t *opt);
     virtual Int_t FinishHF();
-    virtual float getOneOverBeta(StPicoTrack const * const trk,  float const & tofBeta, int pidFlag)
+    virtual float getOneOverBeta(StPicoTrack const * const trk,  float const & tofBeta, int pidFlag);
 
 protected:
     virtual bool isHadron(StPicoTrack const*, int pidFlag) const;
