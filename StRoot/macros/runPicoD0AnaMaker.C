@@ -40,7 +40,6 @@ void runPicoD0AnaMaker(
     //const Char_t *inputFile="/gpfs01/star/pwg/lkramarik/pico_pAu/produced/st_physics_16127031_raw_4000024.picoDst.root",	
     const char*  inputFile, 			 
     const Char_t *outputFile,  
-    const unsigned int makerMode,
     const Char_t *badRunListFileName, const Char_t *treeName,
     const Char_t *productionBasePath) {
     string SL_version = "SL17d";
@@ -75,36 +74,7 @@ void runPicoD0AnaMaker(
             exit(1);
         }
     }
-    else if (makerMode == StPicoHFMaker::kWrite) {
-        if (!sInputFile.Contains("picoDst.root")) {
-            cout << "No input picoDst root file provided! Exiting..." << endl;
-            exit(1);
-        }
-    }
-    else if (makerMode == StPicoHFMaker::kRead) {
-        if (!sInputFile.Contains(".list")) {
-            cout << "No input list provided! Exiting..." << endl;
-            exit(1);
-        }
-        
-        // -- prepare filelist for picoDst from trees
-        sInputListHF = sInputFile;
-        sInputFile = "tmpPico.list";
-        
-        TString command = "sed 's|" + sTreeName + ".root|picoDst.root|g' " + sInputListHF + " > " + sInputFile;
-        cout << "COMMAND : " << command << endl; 
-        gSystem->Exec(command.Data());
-        
-        command = "sed -i 's|^.*" + sTreeName + "|" + sProductionBasePath + "|g' " + sInputFile; // + " > " + sInputFile;
-        cout << "COMMAND : " << command << endl; 
-        gSystem->Exec(command.Data());
-    }
-    else {
-        cout << "Unknown makerMode! Exiting..." << endl;
-        exit(1);
-    }
-//    StPicoDstMaker::PicoIoMode mode = StPicoDstMaker::PicoIoMode::IoRead;
-//    StPicoDstMaker* picoDstMaker = new StPicoDstMaker(mode, inputFile, "picoDstMaker");
+
     StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
 
     cout<<"ok, picoDstMaker created"<<endl;

@@ -12,7 +12,6 @@
 #      StRoot                     ( from the git repo )
 #      run14AuAu200GeVPrescales   ( from the git repo )
 #      starSubmit                 ( from the git repo )
-#
 #      picoLists                  ( from the fileList git repo )
 #
 #   - the rootMacro is expected in StRoot/macros
@@ -24,17 +23,6 @@
 
 # -- baseFolder of job
 set baseFolder=${1}
-
-# --input file 
-#    makerMode 0,1 : list must contain picoDst.root files
-#    makerMode 2   : list must contain ${treeName}.root files
-set input=${baseFolder}/${2}
-
-# -- set maker mode
-#    0 - kAnalyze, 
-#    1 - kWrite
-#    2 - kRead
-set makerMode=0
 
 # -- set root macro
 set rootMacro=runPicoD0AnaMaker.C
@@ -176,21 +164,6 @@ if ( ! -e ${input} ) then
     exit
 endif
 
-if ( ${makerMode} == 0 || ${makerMode} == 1 ) then
-    head -n 2 ${input} | grep ".picoDst.root" > /dev/null
-    if ( $? != 0 ) then
-        
-	echo "Filelist $input  does not contain picoDsts!"
-	exit
-    endif
-else if ( ${makerMode} == 2 ) then
-    head -n 2 ${input} | grep ".${treeName}.root" > /dev/null
-    if ( $? != 0 ) then
-	echo "Filelist does not contain ${treeName} trees!"
-	exit
-    endif
-endif
-echo "ok"
 
 # -----------------------------------------------
 
@@ -217,7 +190,6 @@ endif
 echo '<?xml version="1.0" encoding="utf-8" ?>'		        > $hackTemplate
 echo '<\!DOCTYPE note ['                      		       >> $hackTemplate
 echo '<\!ENTITY treeName "'${treeName}'">'    		       >> $hackTemplate
-echo '<\!ENTITY mMode "'${makerMode}'">'		       >> $hackTemplate
 echo '<\!ENTITY rootMacro "'${rootMacro}'">'  		       >> $hackTemplate
 echo '<\!ENTITY prodId "'${productionId}'">'  		       >> $hackTemplate
 echo '<\!ENTITY basePath "'${baseFolder}'">'  		       >> $hackTemplate
@@ -232,5 +204,5 @@ tail -n +2 ${xmlFile} >> $hackTemplate
 
 star-submit -u ie $hackTemplate
 
-#star-submit-template -template ${xmlFile} -entities listOfFiles=${input},basePath=${baseFolder},prodId=${productionId},mMode=${makerMode},treeName=${treeName},productionBasePath=${productionbasePath},rootMacro=${rootMacro},starVersion=${starVersion},minNFiles=${minNFiles},maxNFiles=${maxNFiles}
+#star-submit-template -template ${xmlFile} -entities listOfFiles=${input},basePath=${baseFolder},prodId=${productionId},treeName=${treeName},productionBasePath=${productionbasePath},rootMacro=${rootMacro},starVersion=${starVersion},minNFiles=${minNFiles},maxNFiles=${maxNFiles}
 popd > /dev/null
