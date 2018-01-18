@@ -5,11 +5,9 @@
 ClassImp(StPicoHFEvent)
 
 TClonesArray *StPicoHFEvent::fgHFSecondaryVerticesArray = 0;
-TClonesArray *StPicoHFEvent::fgHFTertiaryVerticesArray  = 0;
-
 // _________________________________________________________
 StPicoHFEvent::StPicoHFEvent() : mRunId(-1), mEventId(-1), mNHFSecondaryVertices(0),
-						  mHFSecondaryVerticesArray(NULL), {
+						  mHFSecondaryVerticesArray(NULL) {
   // -- Default constructor
   if (!fgHFSecondaryVerticesArray) fgHFSecondaryVerticesArray = new TClonesArray("StHFPair");
   mHFSecondaryVerticesArray = fgHFSecondaryVerticesArray;
