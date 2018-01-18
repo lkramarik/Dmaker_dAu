@@ -1,32 +1,11 @@
 #ifndef StPicoHFEvent__h
 #define StPicoHFEvent__h
 
-/* **************************************************
- *  Generic class storing event-wise information in HF analysis
- *  constructor takes option mode:
- *   - StPicoHFEvent::kTwoParticleDecay       ->  two particle decay at secondary vertex (A -> B + C)
- *   - StPicoHFEvent::kThreeParticleDecay     ->  three particle decay at secondary vertex (A -> B + C + d)
- *   - StPicoHFEvent::kTwoAndTwoParticleDecay ->  two particle decay at secondary vertex (A -> B + C)
- *                                                and two particle decay at tertiary vertex (C -> D + E)
- *
- *  Initial Authors:
- *            Xin Dong        (xdong@lbl.gov)
- *            Mustafa Mustafa (mmustafa@lbl.gov)
- *          **Jochen Thaeder  (jmthader@lbl.gov)
- *
- *  ** Code Maintainer 
- *
- * **************************************************
- */
-
 #include "TObject.h"
 #include "TClonesArray.h"
 
 class StPicoEvent;
-
 class StHFPair;
-class StHFTriplet;
-class StHFQuadruplet;
 
 class StPicoHFEvent : public TObject
 {
@@ -39,9 +18,7 @@ public:
 
    // -- add pair or triplet to the event
    void  addHFSecondaryVertexPair(StHFPair const*);
-   void  addHFSecondaryVertexTriplet(StHFTriplet const*);
    void  addHFTertiaryVertexPair(StHFPair const*);
-   void  addHFSecondaryVertexQuadruplet(StHFQuadruplet const*);
 
    // -- get array with particles from secondary and tertiary vertex
    TClonesArray const * aHFSecondaryVertices() const;
@@ -57,7 +34,6 @@ public:
    enum eHFEventMode {kTwoParticleDecay, kThreeParticleDecay, kTwoAndTwoParticleDecay, kFourParticleDecay};
 
 private:
-
    // -- some variables below are kept in ROOT types to match the same ones in StPicoEvent
    Int_t                mRunId;                       // run number
    Int_t                mEventId;                     // event number
@@ -67,9 +43,6 @@ private:
 
    TClonesArray*        mHFSecondaryVerticesArray;    // secondary vertex candidates
    static TClonesArray* fgHFSecondaryVerticesArray;
-
-   TClonesArray*        mHFTertiaryVerticesArray;     // tertiary vertex candidates
-   static TClonesArray* fgHFTertiaryVerticesArray;
 
    ClassDef(StPicoHFEvent, 1)
 };
