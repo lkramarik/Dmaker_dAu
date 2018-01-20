@@ -171,7 +171,7 @@ int StPicoD0AnaMaker::createCandidates() {
         StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
         for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
             StPicoTrack const *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
-            if (mIdxPicoKaons[idxKaon] == mIdxPicoPions[idxPion1]) continue;
+//            if (mIdxPicoKaons[idxKaon] == mIdxPicoPions[idxPion1]) continue;
             StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StHFCuts::kPion),mHFCuts->getHypotheticalMass(StHFCuts::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
 
             if (!mHFCuts->isClosePair(pair)) continue;
