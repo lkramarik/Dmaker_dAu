@@ -160,7 +160,7 @@ void runPicoD0AnaMaker(
     hfCuts->setCutTPCNSigmaPion(3.0); //3 OK
     hfCuts->setCutTPCNSigmaKaon(2.0); //3 OK
     //TOF setters, need to set pt range as well
-    hfCuts->setCutTOFDeltaOneOverBeta(0.04, StHFCuts::kKaon); // nastavene = f * (sigmaTOF), sigma TOF je 0.013 OK
+    hfCuts->setCutTOFDeltaOneOverBeta(999, StHFCuts::kKaon); // nastavene = f * (sigmaTOF), sigma TOF je 0.013 OK
     hfCuts->setCutPtotRangeHybridTOF(0.1,50.0,StHFCuts::kKaon); // OK
     hfCuts->setCutTOFDeltaOneOverBeta(999, StHFCuts::kPion); //
     hfCuts->setCutPtotRangeHybridTOF(0.1,50.0,StHFCuts::kPion); // OK
