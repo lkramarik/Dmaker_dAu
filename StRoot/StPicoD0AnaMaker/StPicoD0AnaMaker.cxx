@@ -32,21 +32,21 @@ int StPicoD0AnaMaker::InitHF() {
     mOutList->Add(new TH2F("h_kTOF","h_kTOF",100,0,10, 250, -1, 1.5));
     mOutList->Add(new TH2F("h_pTOF","h_pTOF",100,0,10, 250, -1, 1.5));
 
-    mOutList->Add(new TH2F("h_piTOF_20","h_piTOF_20",100,0,10, 100, 0, 1));
-    mOutList->Add(new TH2F("h_kTOF_20","h_kTOF_20",100,0,10, 100, 0, 1));
-    mOutList->Add(new TH2F("h_pTOF_20","h_pTOF_20",100,0,10, 100, 0, 1));
+    mOutList->Add(new TH2F("h_piTOF_20","h_piTOF_20",100,0,10, 300, 0, 1));
+    mOutList->Add(new TH2F("h_kTOF_20","h_kTOF_20",100,0,10, 300, 0, 1));
+    mOutList->Add(new TH2F("h_pTOF_20","h_pTOF_20",100,0,10, 300, 0, 1));
 
-    mOutList->Add(new TH2F("h_piTOF_HFT","h_piTOF_HFT",100,0,10, 100, 0, 1));
-    mOutList->Add(new TH2F("h_kTOF_HFT","h_kTOF_HFT",100,0,10, 100, 0, 1));
-    mOutList->Add(new TH2F("h_pTOF_HFT","h_pTOF_HFT",100,0,10, 100, 0, 1));
+    mOutList->Add(new TH2F("h_piTOF_HFT","h_piTOF_HFT",100,0,10, 300, 0, 1));
+    mOutList->Add(new TH2F("h_kTOF_HFT","h_kTOF_HFT",100,0,10, 300, 0, 1));
+    mOutList->Add(new TH2F("h_pTOF_HFT","h_pTOF_HFT",100,0,10, 300, 0, 1));
 
-    mOutList->Add(new TH2F("h_piTOF_HFT_20","h_piTOF_HFT_20",100,0,10, 100, 0, 1));
-    mOutList->Add(new TH2F("h_kTOF_HFT_20","h_kTOF_HFT_20",100,0,10, 100, 0, 1));
-    mOutList->Add(new TH2F("h_pTOF_HFT_20","h_pTOF_HFT_20",100,0,10, 100, 0, 1));
+    mOutList->Add(new TH2F("h_piTOF_HFT_20","h_piTOF_HFT_20",100,0,10, 300, 0, 1));
+    mOutList->Add(new TH2F("h_kTOF_HFT_20","h_kTOF_HFT_20",100,0,10, 300, 0, 1));
+    mOutList->Add(new TH2F("h_pTOF_HFT_20","h_pTOF_HFT_20",100,0,10, 300, 0, 1));
 
-    mOutList->Add(new TH2F("h_piTOFbeta","h_piTOFbeta",500,0,10, 100, 0, 1));
-    mOutList->Add(new TH2F("h_kTOFbeta","h_kTOFbeta",500,0,10, 100, 0, 1));
-    mOutList->Add(new TH2F("h_pTOFbeta","h_pTOFbeta",500,0,10, 100, 0, 1));
+    mOutList->Add(new TH2F("h_piTOFbeta","h_piTOFbeta",500,0,10, 300, 0, 1));
+    mOutList->Add(new TH2F("h_kTOFbeta","h_kTOFbeta",500,0,10, 300, 0, 1));
+    mOutList->Add(new TH2F("h_pTOFbeta","h_pTOFbeta",500,0,10, 300, 0, 1));
 
     mOutList->Add(new TH2F("h_pinsigma","h_pinsigma",1000,0,10, 99, -5, 5));
     mOutList->Add(new TH2F("h_knsigma","h_knsigma",1000,0,10, 99, -5, 5));
