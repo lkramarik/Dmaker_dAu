@@ -81,86 +81,86 @@ int StPicoD0AnaMaker::FinishHF() {
 }
 // _________________________________________________________
 int StPicoD0AnaMaker::MakeHF() {
-    createCandidates();
+//    createCandidates();
 //        analyzeCandidates();
 
-//    TH2F *h_piTOF = static_cast<TH2F*>(mOutList->FindObject("h_piTOF"));
-//    TH2F *h_kTOF = static_cast<TH2F*>(mOutList->FindObject("h_kTOF"));
-//    TH2F *h_pTOF = static_cast<TH2F*>(mOutList->FindObject("h_pTOF"));
-//
-//    TH2F *h_piTOF_20 = static_cast<TH2F*>(mOutList->FindObject("h_piTOF_20"));
-//    TH2F *h_kTOF_20 = static_cast<TH2F*>(mOutList->FindObject("h_kTOF_20"));
-//    TH2F *h_pTOF_20 = static_cast<TH2F*>(mOutList->FindObject("h_pTOF_20"));
-//
-//    TH2F *h_piTOF_HFT = static_cast<TH2F*>(mOutList->FindObject("h_piTOF_HFT"));
-//    TH2F *h_kTOF_HFT = static_cast<TH2F*>(mOutList->FindObject("h_kTOF_HFT"));
-//    TH2F *h_pTOF_HFT = static_cast<TH2F*>(mOutList->FindObject("h_pTOF_HFT"));
-//
-//    TH2F *h_piTOF_HFT_20 = static_cast<TH2F*>(mOutList->FindObject("h_piTOF_HFT_20"));
-//    TH2F *h_kTOF_HFT_20 = static_cast<TH2F*>(mOutList->FindObject("h_kTOF_HFT_20"));
-//    TH2F *h_pTOF_HFT_20 = static_cast<TH2F*>(mOutList->FindObject("h_pTOF_HFT_20"));
-//
-//    TH2F *h_piTOFbeta = static_cast<TH2F*>(mOutList->FindObject("h_piTOFbeta"));
-//    TH2F *h_kTOFbeta = static_cast<TH2F*>(mOutList->FindObject("h_kTOFbeta"));
-//    TH2F *h_pTOFbeta = static_cast<TH2F*>(mOutList->FindObject("h_pTOFbeta"));
-//
-//    TH2F *h_pinsigma = static_cast<TH2F*>(mOutList->FindObject("h_pinsigma"));
-//    TH2F *h_knsigma = static_cast<TH2F*>(mOutList->FindObject("h_knsigma"));
-//    TH2F *h_pnsigma = static_cast<TH2F*>(mOutList->FindObject("h_pnsigma"));
-//
-//    TH2F *h_dedx = static_cast<TH2F*>(mOutList->FindObject("h_dedx"));
-//
-//    StThreeVectorF pVtx = mPicoDst->event()->primaryVertex();
-//
-//    UInt_t nTracks = mPicoDst->numberOfTracks();
-//    for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack){
-//        StPicoTrack const* trk = mPicoDst->track(iTrack);
-//        if (!trk) continue;
-//        StPhysicalHelixD helix = trk->helix(mBField);
-//        StThreeVectorF momentum = trk->gMom(pVtx, mPicoDst->event()->bField());
-//
-//        if (!(trk->nHitsFit()>=15)) continue;
-//        if (!(fabs(momentum.pseudoRapidity()) <= 1.0)) continue;
-//
-//        if (fabs(trk->nSigmaPion())<3.0){
-//            if (mHFCuts->isTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StHFCuts::kPion)) {
-//                    h_piTOF->Fill(trk->gPt(),mHFCuts->getTofBetaBase(trk));
-//                    float oneOverBeta = getOneOverBeta(trk, mHFCuts->getTofBetaBase(trk), StHFCuts::kPion);
-//                    h_piTOFbeta->Fill(trk->gPt(),oneOverBeta);
-//                    if (trk->nHitsFit()>=20) h_piTOF_20->Fill(trk->gPt(),oneOverBeta);
-//                    if (trk->isHFTTrack()) h_piTOF_HFT->Fill(trk->gPt(),oneOverBeta);
-//                    if ((trk->isHFTTrack()) && (trk->nHitsFit()>=20)) h_piTOF_HFT_20->Fill(trk->gPt(),oneOverBeta);
-//            }
-//        }
-//
-//        if (fabs(trk->nSigmaKaon())<3.0){
-//            if (mHFCuts->isTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StHFCuts::kKaon)) {
-//                h_kTOF->Fill(trk->gPt(),mHFCuts->getTofBetaBase(trk));
-//                float oneOverBeta = getOneOverBeta(trk, mHFCuts->getTofBetaBase(trk), StHFCuts::kKaon);
-//                h_kTOFbeta->Fill(trk->gPt(),oneOverBeta);
-//                if (trk->nHitsFit()>=20) h_kTOF_20->Fill(trk->gPt(),oneOverBeta);
-//                if (trk->isHFTTrack()) h_kTOF_HFT->Fill(trk->gPt(),oneOverBeta);
-//                if ((trk->isHFTTrack()) && (trk->nHitsFit()>=20)) h_kTOF_HFT_20->Fill(trk->gPt(),oneOverBeta);
-//            }
-//        }
-//
-//        if (fabs(trk->nSigmaProton())<3.0){
-//            if (mHFCuts->isTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StHFCuts::kProton)) {
-//                h_pTOF->Fill(trk->gPt(),mHFCuts->getTofBetaBase(trk));
-//                float oneOverBeta = getOneOverBeta(trk, mHFCuts->getTofBetaBase(trk), StHFCuts::kProton);
-//                h_pTOFbeta->Fill(trk->gPt(),oneOverBeta);
-//                if (trk->nHitsFit()>=20) h_pTOF_20->Fill(trk->gPt(),oneOverBeta);
-//                if (trk->isHFTTrack()) h_pTOF_HFT->Fill(trk->gPt(),oneOverBeta);
-//                if ((trk->isHFTTrack()) && (trk->nHitsFit()>=20)) h_pTOF_HFT_20->Fill(trk->gPt(),oneOverBeta);
-//            }
-//        }
-//
-//        h_pinsigma->Fill(momentum.mag(),trk->nSigmaPion());
-//        h_knsigma->Fill(momentum.mag(),trk->nSigmaKaon());
-//        h_pnsigma->Fill(momentum.mag(),trk->nSigmaProton());
-//        h_dedx->Fill(momentum.mag(),trk->dEdx());
-//
-//    } // .. end tracks loop
+    TH2F *h_piTOF = static_cast<TH2F*>(mOutList->FindObject("h_piTOF"));
+    TH2F *h_kTOF = static_cast<TH2F*>(mOutList->FindObject("h_kTOF"));
+    TH2F *h_pTOF = static_cast<TH2F*>(mOutList->FindObject("h_pTOF"));
+
+    TH2F *h_piTOF_20 = static_cast<TH2F*>(mOutList->FindObject("h_piTOF_20"));
+    TH2F *h_kTOF_20 = static_cast<TH2F*>(mOutList->FindObject("h_kTOF_20"));
+    TH2F *h_pTOF_20 = static_cast<TH2F*>(mOutList->FindObject("h_pTOF_20"));
+
+    TH2F *h_piTOF_HFT = static_cast<TH2F*>(mOutList->FindObject("h_piTOF_HFT"));
+    TH2F *h_kTOF_HFT = static_cast<TH2F*>(mOutList->FindObject("h_kTOF_HFT"));
+    TH2F *h_pTOF_HFT = static_cast<TH2F*>(mOutList->FindObject("h_pTOF_HFT"));
+
+    TH2F *h_piTOF_HFT_20 = static_cast<TH2F*>(mOutList->FindObject("h_piTOF_HFT_20"));
+    TH2F *h_kTOF_HFT_20 = static_cast<TH2F*>(mOutList->FindObject("h_kTOF_HFT_20"));
+    TH2F *h_pTOF_HFT_20 = static_cast<TH2F*>(mOutList->FindObject("h_pTOF_HFT_20"));
+
+    TH2F *h_piTOFbeta = static_cast<TH2F*>(mOutList->FindObject("h_piTOFbeta"));
+    TH2F *h_kTOFbeta = static_cast<TH2F*>(mOutList->FindObject("h_kTOFbeta"));
+    TH2F *h_pTOFbeta = static_cast<TH2F*>(mOutList->FindObject("h_pTOFbeta"));
+
+    TH2F *h_pinsigma = static_cast<TH2F*>(mOutList->FindObject("h_pinsigma"));
+    TH2F *h_knsigma = static_cast<TH2F*>(mOutList->FindObject("h_knsigma"));
+    TH2F *h_pnsigma = static_cast<TH2F*>(mOutList->FindObject("h_pnsigma"));
+
+    TH2F *h_dedx = static_cast<TH2F*>(mOutList->FindObject("h_dedx"));
+
+    StThreeVectorF pVtx = mPicoDst->event()->primaryVertex();
+
+    UInt_t nTracks = mPicoDst->numberOfTracks();
+    for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack){
+        StPicoTrack const* trk = mPicoDst->track(iTrack);
+        if (!trk) continue;
+        StPhysicalHelixD helix = trk->helix(mBField);
+        StThreeVectorF momentum = trk->gMom(pVtx, mPicoDst->event()->bField());
+
+        if (!(trk->nHitsFit()>=15)) continue;
+        if (!(fabs(momentum.pseudoRapidity()) <= 1.0)) continue;
+
+        if (fabs(trk->nSigmaPion())<3.0){
+            if (mHFCuts->isTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StHFCuts::kPion)) {
+                    h_piTOF->Fill(trk->gPt(),mHFCuts->getTofBetaBase(trk));
+                    float oneOverBeta = getOneOverBeta(trk, mHFCuts->getTofBetaBase(trk), StHFCuts::kPion);
+                    h_piTOFbeta->Fill(trk->gPt(),oneOverBeta);
+                    if (trk->nHitsFit()>=20) h_piTOF_20->Fill(trk->gPt(),oneOverBeta);
+                    if (trk->isHFTTrack()) h_piTOF_HFT->Fill(trk->gPt(),oneOverBeta);
+                    if ((trk->isHFTTrack()) && (trk->nHitsFit()>=20)) h_piTOF_HFT_20->Fill(trk->gPt(),oneOverBeta);
+            }
+        }
+
+        if (fabs(trk->nSigmaKaon())<3.0){
+            if (mHFCuts->isTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StHFCuts::kKaon)) {
+                h_kTOF->Fill(trk->gPt(),mHFCuts->getTofBetaBase(trk));
+                float oneOverBeta = getOneOverBeta(trk, mHFCuts->getTofBetaBase(trk), StHFCuts::kKaon);
+                h_kTOFbeta->Fill(trk->gPt(),oneOverBeta);
+                if (trk->nHitsFit()>=20) h_kTOF_20->Fill(trk->gPt(),oneOverBeta);
+                if (trk->isHFTTrack()) h_kTOF_HFT->Fill(trk->gPt(),oneOverBeta);
+                if ((trk->isHFTTrack()) && (trk->nHitsFit()>=20)) h_kTOF_HFT_20->Fill(trk->gPt(),oneOverBeta);
+            }
+        }
+
+        if (fabs(trk->nSigmaProton())<3.0){
+            if (mHFCuts->isTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StHFCuts::kProton)) {
+                h_pTOF->Fill(trk->gPt(),mHFCuts->getTofBetaBase(trk));
+                float oneOverBeta = getOneOverBeta(trk, mHFCuts->getTofBetaBase(trk), StHFCuts::kProton);
+                h_pTOFbeta->Fill(trk->gPt(),oneOverBeta);
+                if (trk->nHitsFit()>=20) h_pTOF_20->Fill(trk->gPt(),oneOverBeta);
+                if (trk->isHFTTrack()) h_pTOF_HFT->Fill(trk->gPt(),oneOverBeta);
+                if ((trk->isHFTTrack()) && (trk->nHitsFit()>=20)) h_pTOF_HFT_20->Fill(trk->gPt(),oneOverBeta);
+            }
+        }
+
+        h_pinsigma->Fill(momentum.mag(),trk->nSigmaPion());
+        h_knsigma->Fill(momentum.mag(),trk->nSigmaKaon());
+        h_pnsigma->Fill(momentum.mag(),trk->nSigmaProton());
+        h_dedx->Fill(momentum.mag(),trk->dEdx());
+
+    } // .. end tracks loop
 
    return kStOK;
 }
@@ -252,7 +252,7 @@ int StPicoD0AnaMaker::createCandidates() {
     return kStOK;
 }
 
-// _________________________________________________________
+// no using_________________________________________________________
 int StPicoD0AnaMaker::analyzeCandidates() {
     // --- Analyze previously constructed candidates and output to ntuple
     TClonesArray const * aCandidates= mPicoHFEvent->aHFSecondaryVertices();
