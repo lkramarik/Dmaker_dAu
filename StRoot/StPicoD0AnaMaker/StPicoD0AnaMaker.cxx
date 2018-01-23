@@ -194,7 +194,7 @@ int StPicoD0AnaMaker::createCandidates() {
             ntVar[ii++] = mPicoHFEvent->eventId();
             ntVar[ii++] = pion1->gMom(mPrimVtx,mBField).phi();
             ntVar[ii++] = pion1->gMom(mPrimVtx,mBField).pseudoRapidity();
-            ntVar[ii++] = pion1->gMom(mPrimVtx,mBField).perp();
+            ntVar[ii++] = pion1->gPt();
             ntVar[ii++] = pair->particle1Dca();
             ntVar[ii++] = pion1->dEdx();
             ntVar[ii++] = pion1->nSigmaPion();
@@ -207,7 +207,7 @@ int StPicoD0AnaMaker::createCandidates() {
             ntVar[ii++] = mPicoHFEvent->eventId();
             ntVar[ii++] = kaon->gMom(mPrimVtx,mBField).phi();
             ntVar[ii++] = kaon->gMom(mPrimVtx,mBField).pseudoRapidity();
-            ntVar[ii++] = kaon->gMom(mPrimVtx,mBField).perp();
+            ntVar[ii++] = kaon->gPt();
             ntVar[ii++] = pair->particle2Dca();
             ntVar[ii++] = kaon->dEdx();
             ntVar[ii++] = kaon->nSigmaKaon();
@@ -344,7 +344,7 @@ bool StPicoD0AnaMaker::isHadron(StPicoTrack const * const trk, int pidFlag) cons
 bool StPicoD0AnaMaker::isPion(StPicoTrack const * const trk) const {
     // -- good pion
 //    StThreeVectorF t = trk->pMom(); //11.12.
-    StThreeVectorF t = trk->gMom(); //11.12.
+    StThreeVectorF t = trk->gMom(mPrimVtx, mBField); //11.12.
     if (fabs(t.pseudoRapidity()) > 1.) return false; //pridano fabs 1212
     if (!mHFCuts->isTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StHFCuts::kPion) ) return false;
 //    if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StHFCuts::kPion) ) return false;
@@ -356,7 +356,7 @@ bool StPicoD0AnaMaker::isPion(StPicoTrack const * const trk) const {
 bool StPicoD0AnaMaker::isKaon(StPicoTrack const * const trk) const {
     // -- good kaon
 //    StThreeVectorF t = trk->pMom(); //11.12.
-    StThreeVectorF t = trk->gMom(); //11.12.
+    StThreeVectorF t = trk->gMom(mPrimVtx, mBField); //11.12.
     if (fabs(t.pseudoRapidity()) > 1.) return false;//pridano fabs 1212
     if (!mHFCuts->isTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StHFCuts::kKaon) ) return false;
 //    if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StHFCuts::kKaon) ) return false;
