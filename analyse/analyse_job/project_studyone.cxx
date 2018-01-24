@@ -78,7 +78,7 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName, Float_t cosDthetaM
 
     for (Long64_t i = 0; i < numberEntr; ++i) {
 //    for (Long64_t i = 0; i < 1000; ++i) {
-        if (i % 10000000 == 0) { cout << i << endl; }
+//        if (i % 10000000 == 0) { cout << i << endl; }
         ntp->GetEntry(i);
         if (cos(D_theta) > cosDthetaMin) {
             if ((D_mass > D_massMin) && (D_mass < D_massMax)) {
@@ -88,7 +88,7 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName, Float_t cosDthetaM
                             if (fabs(pi1_TOFinvbeta) < pi1_TOFinvbetaMax){
                                 if ((D_pt > D_ptMin) && (D_pt < D_ptMax)) {
                                     if ((flag == 0) || (flag == 1)) {hInvMassSignBefDdca -> Fill(D_mass);}
-                                    if (dcaD0ToPv < 0.0095) {
+                                    if (dcaD0ToPv < dca_d0Max) {
                                         hpiTOFinvbeta->Fill(pi1_TOFinvbeta);
                                         hkTOFinvbeta->Fill(k_TOFinvbeta);
                                         hpinSigma->Fill(pi1_nSigma);
