@@ -101,18 +101,18 @@ void runPicoD0AnaMaker(
     hfCuts->setCutPrimaryDCAtoVtxMax(10.); //default is 1.0
     hfCuts->setCutVzMax(6.);
     hfCuts->setCutVzVpdVzMax(3.);
-    hfCuts->setCutNHitsFitMin(15); //default is 20
+    hfCuts->setCutNHitsFitMin(20); //default is 20
 //    setCutNHitsFitnHitsMax
     hfCuts->setCutRequireHFT(true);
 
 //    WIDE
-    hfCuts->setCutDcaMin(0.003,StHFCuts::kPion); // OK
-    hfCuts->setCutDcaMin(0.003,StHFCuts::kKaon); // OK
+    hfCuts->setCutDcaMin(0.005,StHFCuts::kPion); // OK
+    hfCuts->setCutDcaMin(0.005,StHFCuts::kKaon); // OK
 
-    float dcaDaughtersMax = 1;  // maximum toto ide
+    float dcaDaughtersMax = 0.03;  // maximum toto ide
     float decayLengthMin  = 0.005; // minimum
     float decayLengthMax  = 999; //std::numeric_limits<float>::max(); toto ide (cutuje)
-    float cosThetaMin     = -2.;   // minimum
+    float cosThetaMin     = 0.;   // minimum
 
     float minMass         = 0;
     float maxMass         = 2;
@@ -161,7 +161,7 @@ void runPicoD0AnaMaker(
     hfCuts->setCutTPCNSigmaPion(3.0); //3 OK
     hfCuts->setCutTPCNSigmaKaon(2.0); //3 OK
     //TOF setters, need to set pt range as well
-    hfCuts->setCutTOFDeltaOneOverBeta(0.04, StHFCuts::kKaon); // nastavene = f * (sigmaTOF), sigma TOF je 0.013 OK
+    hfCuts->setCutTOFDeltaOneOverBeta(0.03, StHFCuts::kKaon); // nastavene = f * (sigmaTOF), sigma TOF je 0.013 OK
     hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kKaon); // OK
     hfCuts->setCutTOFDeltaOneOverBeta(999, StHFCuts::kPion); //
     hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kPion); // OK
