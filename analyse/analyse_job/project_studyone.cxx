@@ -16,14 +16,14 @@ TH1F* hS[10] = {new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(
 TH1F* hB[10]= {new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F()};
 TH1F* hInvMassSignBefDdca = new TH1F("signal before D0 dca cut", "signal before D0 dca cut", 2000, 0.4, 2.4);
 TH1F* hInvMassBack = new TH1F("background", "background", 2000, 0.4, 2.4);
-Float_t cosDthetaMinA[6]={0.8,0.8,0.8,0.8,0.8,0.0};
-Float_t D_ptMinA[6]={0,0,0,0,0,1};
-Float_t D_ptMaxA[6]={20,20,20,20,20,2};
-Float_t D_decayLMinA[6]=    {0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0232};
-Float_t pi1_dcaMinA[6]=     {0.0001, 0.0099, 0.0001, 0.0001, 0.0001, 0.0099};
-Float_t k_dcaMinA[6]=       {0.0001, 0.0001, 0.0087, 0.0001, 0.0001, 0.0087};
-Float_t dcaDaughtersMaxA[6]={9.9999, 9.9999, 9.9999, 0.0093, 9.9999, 0.0093};
-Float_t dca_d0MaxA[6]=      {9.9999, 9.9999, 9.9999, 9.9999, 0.0075, 0.0075};
+Float_t cosDthetaMinA[6]={-1,-1,-1,-1,-1,-1};
+Float_t D_ptMinA[6]={0,0,3,2,1,1};
+Float_t D_ptMaxA[6]={0,0,5,3,2,2};
+Float_t D_decayLMinA[6]=    {0.0000, 0.0000, 0.0100, 0.0100, 0.0100, 0.0232};
+Float_t pi1_dcaMinA[6]=     {0.0001, 0.0099, 0.0070, 0.0070, 0.0070, 0.0099};
+Float_t k_dcaMinA[6]=       {0.0001, 0.0001, 0.0070, 0.0070, 0.0070, 0.0087};
+Float_t dcaDaughtersMaxA[6]={9.9999, 9.9999, 0.0100, 0.0100, 0.0100, 0.0093};
+Float_t dca_d0MaxA[6]=      {9.9999, 9.9999, 0.0095, 0.0095, 0.0095, 0.0075};
 Float_t cut[10] = {0.0075,0.0090,0.0105,0.0120,0.015,0.02,0.03,0.04,0.05,0.07};
 
 void projectNtp(TFile* data, TFile* dataRes, TString ntpName, Float_t cosDthetaMin, Float_t D_ptMin, Float_t D_ptMax, Float_t D_decayLMin, Float_t pi1_dcaMin, Float_t k_dcaMin,  Float_t dcaDaughtersMax, Float_t dca_d0Max) {
@@ -32,7 +32,7 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName, Float_t cosDthetaM
     Float_t k_nSigmaMax=2;
     Float_t pi1_nSigmaMax=3;
     Float_t pi1_TOFinvbetaMax=999;
-    Float_t k_TOFinvbetaMax=0.04;
+    Float_t k_TOFinvbetaMax=0.03;
 
     Float_t pi1_ptMin=0.2;
     Float_t k_ptMin=0.2;
@@ -73,6 +73,8 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName, Float_t cosDthetaM
     TH1F *hdca_d0 = new TH1F("hdca_d0", "hdca_d0", 3000, 0, 0.3);
     TH1F *hpi_pt = new TH1F("hpi_pt", "hpi_pt", 500, 0, 5);
     TH1F *hk_pt = new TH1F("hk_pt", "hk_pt", 500, 0, 5);
+    TH1F *hD_pt = new TH1F("hD_pt", "hD_pt", 500, 0, 5);
+
 
     for (Long64_t i = 0; i < numberEntr; ++i) {
 //    for (Long64_t i = 0; i < 1000; ++i) {
@@ -99,6 +101,7 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName, Float_t cosDthetaM
                                     hdca_d0->Fill(dcaD0ToPv);
                                     hpi_pt->Fill(pi1_pt);
                                     hk_pt->Fill(k_pt);
+                                    hD_pt->Fill(D_pt);
                                     if (flag < 2) { hInvMassSign->Fill(D_mass); }
                                     if (flag > 2.1) { hInvMassBack->Fill(D_mass);}
 
@@ -131,6 +134,8 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName, Float_t cosDthetaM
     listOut->Add(hdca_d0);
     listOut->Add(hpi_pt);
     listOut->Add(hk_pt);
+    listOut->Add(hD_pt);
+
 
     dataRes->cd();
     listOut->Write("res_" + ntpName, 1, 0);
@@ -147,6 +152,7 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName, Float_t cosDthetaM
     delete hdca_d0;
     delete hk_pt;
     delete hpi_pt;
+    delete hD_pt;
     delete listOut;
     delete ntp;
 }
@@ -206,7 +212,7 @@ void project_studyone(const char* input0, TString output)
     while (std::getline(infile, line))
     {
         por = por +1 ;
-        for (Int_t j = 5; j < 6; ++j) {
+        for (Int_t j = 2; j < 6; ++j) {
             hInvMassSign -> Reset();
             hInvMassSignBefDdca -> Reset();
             hInvMassBack -> Reset();
