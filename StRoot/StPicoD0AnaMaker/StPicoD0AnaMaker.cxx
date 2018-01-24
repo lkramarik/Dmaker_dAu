@@ -54,7 +54,7 @@ int StPicoD0AnaMaker::InitHF() {
 //
 //    mOutList->Add(new TH2F("h_dedx","h_dedx", 1000, 0, 10, 1000, 0, 10));
 //
-//    mOutFileBaseName = mOutFileBaseName.ReplaceAll(".root", "");
+    mOutFileBaseName = mOutFileBaseName.ReplaceAll(".root", "");
 
     ntp_DMeson_Signal = new TNtuple("ntp_signal","DMeson TreeSignal","grefMult:pi1_runId:pi1_eventId:pi1_phi:pi1_eta:pi1_pt:pi1_dca:pi1_dedx:pi1_nSigma:pi1_nHitFit:pi1_nHitdedx:pi1_TOFinvbeta:pi1_betaBase:k_runId:k_eventId:k_phi:k_eta:k_pt:k_dca:k_dedx:k_nSigma:k_nHitFit:k_nHitdedx:k_TOFinvbeta:k_betaBase:dcaDaughters:flag:primVz:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_phi:D_eta:D_cosThetaStar:D_pt:D_mass:D_mass_LS:D_mass_US");
     ntp_DMeson_Background = new TNtuple("ntp_background","DMeson TreeBackground","grefMult:pi1_runId:pi1_eventId:pi1_phi:pi1_eta:pi1_pt:pi1_dca:pi1_dedx:pi1_nSigma:pi1_nHitFit:pi1_nHitdedx:pi1_TOFinvbeta:pi1_betaBase:k_runId:k_eventId:k_phi:k_eta:k_pt:k_dca:k_dedx:k_nSigma:k_nHitFit:k_nHitdedx:k_TOFinvbeta:k_betaBase:dcaDaughters:flag:primVz:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_phi:D_eta:D_cosThetaStar:D_pt:D_mass:D_mass_LS:D_mass_US");
@@ -176,8 +176,10 @@ int StPicoD0AnaMaker::createCandidates() {
 
             if (!mHFCuts->isClosePair(pair)) continue;
 //            Filling ntp
-            if(pair->pt() < 1) continue;
-            if(pair->pt() > 2) continue;
+//            if(pair->pt() < 1) continue;
+//            if(pair->pt() > 2) continue;
+
+            if (fabs(pair->eta) > 1) continue;
 
             float flag = -99.;
 
