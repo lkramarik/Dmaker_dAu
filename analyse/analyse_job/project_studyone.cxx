@@ -16,9 +16,9 @@ TH1F* hS[10] = {new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(
 TH1F* hB[10]= {new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F()};
 TH1F* hInvMassSignBefDdca = new TH1F("signal before D0 dca cut", "signal before D0 dca cut", 2000, 0.4, 2.4);
 TH1F* hInvMassBack = new TH1F("background", "background", 2000, 0.4, 2.4);
-Float_t cosDthetaMinA[6]={0.8,0.8,0.8,0.8,0.8,0.8};
-Float_t D_ptMinA[6]={0,0,0,0,0,0};
-Float_t D_ptMaxA[6]={20,20,20,20,20,20};
+Float_t cosDthetaMinA[6]={0.8,0.8,0.8,0.8,0.8,0.0};
+Float_t D_ptMinA[6]={0,0,0,0,0,1};
+Float_t D_ptMaxA[6]={20,20,20,20,20,2};
 Float_t D_decayLMinA[6]=    {0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0232};
 Float_t pi1_dcaMinA[6]=     {0.0001, 0.0099, 0.0001, 0.0001, 0.0001, 0.0099};
 Float_t k_dcaMinA[6]=       {0.0001, 0.0001, 0.0087, 0.0001, 0.0001, 0.0087};
@@ -82,10 +82,8 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName, Float_t cosDthetaM
             if ((D_mass > D_massMin) && (D_mass < D_massMax)) {
                 if ((pi1_dca > pi1_dcaMin) && (k_dca > k_dcaMin) && (dcaDaughters < dcaDaughtersMax) && (D_decayL > D_decayLMin) && (k_pt > k_ptMin) && (pi1_pt > pi1_ptMin)){
                     if ((fabs(k_nSigma) < k_nSigmaMax) && (fabs(pi1_nSigma) < pi1_nSigmaMax)  ) {
-                        if ((k_TOFinvbeta < 0) || ((k_TOFinvbeta > 0) && (fabs(k_TOFinvbeta) < k_TOFinvbetaMax))){
-//                        if ((k_TOFinvbeta > 0) && (fabs(k_TOFinvbeta) < k_TOFinvbetaMax)){
-                            if ((pi1_TOFinvbeta < 0) || ((pi1_TOFinvbeta >= 0) && (fabs(pi1_TOFinvbeta) < pi1_TOFinvbetaMax))){
-//                            if (((pi1_TOFinvbeta > 0) && (fabs(pi1_TOFinvbeta) < pi1_TOFinvbetaMax))){
+                        if (fabs(k_TOFinvbeta) < k_TOFinvbetaMax){
+                            if (fabs(pi1_TOFinvbeta) < pi1_TOFinvbetaMax){
                                 if ((D_pt > D_ptMin) && (D_pt < D_ptMax)) {
                                     if ((flag == 0) || (flag == 1)) {hInvMassSignBefDdca -> Fill(D_mass);}
                                     dcaD0ToPv = D_decayL * sqrt(1 - cos(D_theta) * cos(D_theta));
@@ -104,12 +102,12 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName, Float_t cosDthetaM
                                     if (flag < 2) { hInvMassSign->Fill(D_mass); }
                                     if (flag > 2.1) { hInvMassBack->Fill(D_mass);}
 
-                                    for (int l = 0; l < 10; ++l) {
-                                        if (dcaD0ToPv < cut[l]) {
-                                            if (flag < 2) { hS[l]->Fill(D_mass); }
-                                            if (flag > 2.1) { hB[l]->Fill(D_mass);}
-                                        }
-                                    }
+//                                    for (int l = 0; l < 10; ++l) {
+//                                        if (dcaD0ToPv < cut[l]) {
+//                                            if (flag < 2) { hS[l]->Fill(D_mass); }
+//                                            if (flag > 2.1) { hB[l]->Fill(D_mass);}
+//                                        }
+//                                    }
 
                                 }
                             }
@@ -175,10 +173,10 @@ void projectFile(TString output = "out.root", TString input = "testnew.root", In
     hInvMassBackPlus -> Write();
     hInvMassBackMin -> Write();
     hStat -> Write();
-    for (int k = 0; k < 10 ; ++k) {
-        hS[k] -> Write();
-        hB[k] -> Write();
-    }
+//    for (int k = 0; k < 10 ; ++k) {
+//        hS[k] -> Write();
+//        hB[k] -> Write();
+//    }
 
     delete list;
     data->Close();
@@ -208,7 +206,7 @@ void project_studyone(const char* input0, TString output)
     while (std::getline(infile, line))
     {
         por = por +1 ;
-        for (Int_t j = 0; j < 1; ++j) {
+        for (Int_t j = 5; j < 6; ++j) {
             hInvMassSign -> Reset();
             hInvMassSignBefDdca -> Reset();
             hInvMassBack -> Reset();
