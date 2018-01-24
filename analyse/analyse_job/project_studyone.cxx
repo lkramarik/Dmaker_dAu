@@ -59,7 +59,7 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName, Float_t cosDthetaM
     ntp->SetBranchAddress("dcaDaughters", &dcaDaughters);
     ntp->SetBranchAddress("k_eventId", &k_eventId);
     ntp->SetBranchAddress("pi1_eventId", &pi1_eventId);
-//    ntp->SetBranchAddress("dcaD0ToPv", &dcaD0ToPv);
+    ntp->SetBranchAddress("dcaD0ToPv", &dcaD0ToPv);
 
     TH1F *hpiTOFinvbeta = new TH1F("piTOFinvbeta", "piTOFinvbeta", 2100, -2, 0.1);
     TH1F *hpinSigma = new TH1F("pinSigma", "pinSigma", 800, -4, 4);
@@ -88,23 +88,23 @@ void projectNtp(TFile* data, TFile* dataRes, TString ntpName, Float_t cosDthetaM
                             if (fabs(pi1_TOFinvbeta) < pi1_TOFinvbetaMax){
                                 if ((D_pt > D_ptMin) && (D_pt < D_ptMax)) {
                                     if ((flag == 0) || (flag == 1)) {hInvMassSignBefDdca -> Fill(D_mass);}
-                                    dcaD0ToPv = D_decayL * sqrt(1 - cos(D_theta) * cos(D_theta));
-                                    hpiTOFinvbeta->Fill(pi1_TOFinvbeta);
-                                    hkTOFinvbeta->Fill(k_TOFinvbeta);
-                                    hpinSigma->Fill(pi1_nSigma);
-                                    hknSigma->Fill(k_nSigma);
-                                    hdecayLength->Fill(D_decayL);
-                                    hpi1_dca->Fill(pi1_dca);
-                                    hk_dca->Fill(k_dca);
-                                    hdcaDaughters->Fill(dcaDaughters);
-                                    hcosTheta->Fill(cos(D_theta));
-                                    hdca_d0->Fill(dcaD0ToPv);
-                                    hpi_pt->Fill(pi1_pt);
-                                    hk_pt->Fill(k_pt);
-                                    hD_pt->Fill(D_pt);
-                                    if (flag < 2) { hInvMassSign->Fill(D_mass); }
-                                    if (flag > 2.1) { hInvMassBack->Fill(D_mass);}
-
+                                    if (dcaD0ToPv < 0.0095) {
+                                        hpiTOFinvbeta->Fill(pi1_TOFinvbeta);
+                                        hkTOFinvbeta->Fill(k_TOFinvbeta);
+                                        hpinSigma->Fill(pi1_nSigma);
+                                        hknSigma->Fill(k_nSigma);
+                                        hdecayLength->Fill(D_decayL);
+                                        hpi1_dca->Fill(pi1_dca);
+                                        hk_dca->Fill(k_dca);
+                                        hdcaDaughters->Fill(dcaDaughters);
+                                        hcosTheta->Fill(cos(D_theta));
+                                        hdca_d0->Fill(dcaD0ToPv);
+                                        hpi_pt->Fill(pi1_pt);
+                                        hk_pt->Fill(k_pt);
+                                        hD_pt->Fill(D_pt);
+                                        if (flag < 2) { hInvMassSign->Fill(D_mass); }
+                                        if (flag > 2.1) { hInvMassBack->Fill(D_mass); }
+                                    }
 //                                    for (int l = 0; l < 10; ++l) {
 //                                        if (dcaD0ToPv < cut[l]) {
 //                                            if (flag < 2) { hS[l]->Fill(D_mass); }
