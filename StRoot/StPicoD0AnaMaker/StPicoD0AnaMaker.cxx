@@ -179,7 +179,7 @@ int StPicoD0AnaMaker::createCandidates() {
 //            if(pair->pt() < 1) continue;
 //            if(pair->pt() > 2) continue;
 
-            if (fabs(pair->eta) > 1) continue;
+            if (fabs(pair->eta()) > 1) continue;
 
             float flag = -99.;
 
