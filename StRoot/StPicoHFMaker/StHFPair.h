@@ -100,6 +100,7 @@ class StHFPair : public TObject
   ClassDef(StHFPair,2)
 };
 inline StLorentzVectorF const & StHFPair::lorentzVector() const { return mLorentzVector;}
+inline float StHFPair::rapidity()    const { return mLorentzVector.rapidity();}
 inline float StHFPair::m()    const { return mLorentzVector.m();}
 inline float StHFPair::pt()   const { return mLorentzVector.perp();}
 inline float StHFPair::eta()  const { return mLorentzVector.pseudoRapidity();}

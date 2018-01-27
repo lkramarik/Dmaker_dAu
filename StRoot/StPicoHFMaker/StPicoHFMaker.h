@@ -61,9 +61,6 @@ class StPicoHFMaker : public StMaker
 
   protected:
 
-    void  createTertiaryK0Shorts();
-    void  createTertiaryLambdas();
-
     unsigned int isDecayMode() const;
     unsigned int isMakerMode() const;
     bool         isMcMode() const;

@@ -203,7 +203,6 @@ bool StPicoCutsBase::isGoodEvent(StPicoDst const * const picoDst, int *aEventCut
 // _________________________________________________________
 bool StPicoCutsBase::isGoodRun(StPicoEvent const * const picoEvent) const {
   // -- is good run (not in bad runlist)
-
   return (!(std::binary_search(mVecBadRunList.begin(), mVecBadRunList.end(), picoEvent->runId())));
 }
 
@@ -221,22 +220,13 @@ bool StPicoCutsBase::isGoodTrigger(StPicoEvent const * const picoEvent) const {
 // _________________________________________________________
 bool StPicoCutsBase::isGoodTrack(StPicoTrack const * const trk) const {
   // -- require at least one hit on every layer of PXL and IST.
-  return ((!mRequireHFT || trk->isHFTTrack()) && 
-	  trk->nHitsFit() >= mNHitsFitMin);
+  return ((!mRequireHFT || trk->isHFTTrack()) && trk->nHitsFit() >= mNHitsFitMin && trk->gPt() >= mPtRange[pidFlag][0] && trk->gPt() < mPtRange[pidFlag][1]);
 }
-
-// =======================================================================
 
 // _________________________________________________________
 bool StPicoCutsBase::cutMinDcaToPrimVertex(StPicoTrack const * const trk, int pidFlag) const {
   // -- check on min dca for identified particle
-  // old:
-//   StPhysicalHelixD helix = trk->helix(mPicoDst->event()->bField());
-//   helix.moveOrigin(helix.pathLength(mPrimVtx));
-  
-  //new, same as vanek:
-  float dca = (mPrimVtx - trk->origin()).mag();
-
+  float dca = (mPrimVtx - trk->dcaPoint()).mag();
   return (dca >= mDcaMin[pidFlag]);
 }
 
@@ -246,7 +236,7 @@ bool StPicoCutsBase::cutMinDcaToPrimVertexTertiary(StPicoTrack const * const trk
 
   StPhysicalHelixD helix = trk->helix(mPicoDst->event()->bField());
   helix.moveOrigin(helix.pathLength(mPrimVtx));
-  float dca = (mPrimVtx - helix.origin()).mag();
+  float dca = (mPrimVtx - helix.dcaPoint()).mag();
 
   return (dca >= mDcaMinTertiary[pidFlag]);
 }
@@ -254,7 +244,6 @@ bool StPicoCutsBase::cutMinDcaToPrimVertexTertiary(StPicoTrack const * const trk
 // _________________________________________________________
 bool StPicoCutsBase::isTPCHadron(StPicoTrack const * const trk, int pidFlag) const {
   // -- check for good hadron in TPC
-
   float nSigma = std::numeric_limits<float>::quiet_NaN();
 
   if (pidFlag == kPion)
@@ -264,8 +253,7 @@ bool StPicoCutsBase::isTPCHadron(StPicoTrack const * const trk, int pidFlag) con
   else if (pidFlag == kProton)
     nSigma = fabs(trk->nSigmaProton());
 
-  return ( trk->gPt() >= mPtRange[pidFlag][0] && trk->gPt() < mPtRange[pidFlag][1] &&
-	   nSigma < mTPCNSigmaMax[pidFlag] );
+  return (nSigma < mTPCNSigmaMax[pidFlag] );
 }
 
 // _________________________________________________________
@@ -278,9 +266,8 @@ bool StPicoCutsBase::isTOFHadronPID(StPicoTrack const *trk, float const & tofBet
   //      no TOF info : false
   
   // -- has TOF information
-  if (tofBeta <= 0) 
+  if (tofBeta <= 0)
     return false;
-  
   float ptot    = trk->gPtot();
   float betaInv = sqrt(ptot*ptot + mHypotheticalMass2[pidFlag]) / ptot;
   return ( fabs(1/tofBeta - betaInv) < mTOFDeltaOneOverBetaMax[pidFlag] );
@@ -325,8 +312,6 @@ bool StPicoCutsBase::isHybridTOFHadron(StPicoTrack const *trk, float const & tof
   return isTOFHadronPID(trk, tofBeta, pidFlag);
 }
 
-// =======================================================================
-
 // _________________________________________________________
 StPicoBTofPidTraits* StPicoCutsBase::hasTofPid(StPicoTrack const * const trk) const {
   // -- check if track has TOF pid information
@@ -343,37 +328,76 @@ float StPicoCutsBase::getTofBetaBase(StPicoTrack const * const trk) const {
   //      - primary hadrons 
   //      - secondarys from charm decays (as an approximation)
 
+//  LUKAS
+//  float beta = std::numeric_limits<float>::quiet_NaN();
+//
+//  StPicoBTofPidTraits *tofPid = hasTofPid(trk);
+//  if (!tofPid)
+//    return beta;
+//
+//  beta = tofPid->btofBeta();
+//  if (beta < 1e-4) {
+//    StThreeVectorF const btofHitPos = tofPid->btofHitPos();
+//    StPhysicalHelixD helix = trk->helix(mPicoDst->event()->bField());
+//    float pathLength = tofPathLength(&mPrimVtx, &btofHitPos, helix.curvature());
+//    float tof = tofPid->btof();
+//    beta = (tof > 0) ? pathLength / (tof * (C_C_LIGHT / 1.e9)) : std::numeric_limits<float>::quiet_NaN();
+//  }
+//
+//  return beta;
+
+//  LIANG
+  int index2tof = trk->bTofPidTraitsIndex();
   float beta = std::numeric_limits<float>::quiet_NaN();
 
-  StPicoBTofPidTraits *tofPid = hasTofPid(trk);
-  if (!tofPid) 
-    return beta;
+  if(index2tof >= 0) { //toto je trocha ine ako predtym, inak je to rovnake... 25.01.
+    StPicoBTofPidTraits *tofPid = mPicoDstMaker->picoDst()->btofPidTraits(index2tof);
 
-  beta = tofPid->btofBeta();
-  if (beta < 1e-4) {
-    StThreeVectorF const btofHitPos = tofPid->btofHitPos();
-    StPhysicalHelixD helix = trk->helix(mPicoDst->event()->bField());
-    float pathLength = tofPathLength(&mPrimVtx, &btofHitPos, helix.curvature());
-    float tof = tofPid->btof();
-    beta = (tof > 0) ? pathLength / (tof * (C_C_LIGHT / 1.e9)) : std::numeric_limits<float>::quiet_NaN();
+    if(tofPid)   {
+      beta = tofPid->btofBeta();
+
+      if (beta < 1e-4)         {
+        StThreeVectorF const btofHitPos = tofPid->btofHitPos();
+        // StPhysicalHelixD helix = trk->helix();
+        StPhysicalHelixD helix = trk->helix(mPicoDstMaker->picoDst()->event()->bField());
+
+        float L = tofPathLength(pVtx, &btofHitPos, helix.curvature());
+        float tof = tofPid->btof();
+        if (tof > 0) beta = L / (tof * (C_C_LIGHT / 1.e9));
+        else beta = std::numeric_limits<float>::quiet_NaN();
+      }
+    }
   }
-    
+
   return beta;
 }
 
 // _________________________________________________________
-float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk) const {
-  // -- provide beta of TOF for pico track
-  //    use for 
-  //      - primary hadrons 
-  //      - secondarys from charm decays (as an approximation)
-  //    -> apply DCA cut to primary vertex to make sure only primaries or secondary HF decays are used
+float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk) const { //liangs
+    int index2tof = trk->bTofPidTraitsIndex();
+    float beta = std::numeric_limits<float>::quiet_NaN();
 
- // old:
-    //   StPhysicalHelixD helix = trk->helix(mPicoDst->event()->bField());
-//   return ((helix.origin() - mPrimVtx).mag() < mPrimaryDCAtoVtxMax) ? getTofBetaBase(trk) : std::numeric_limits<float>::quiet_NaN();
-  
-  return ((trk->origin() - mPrimVtx).mag() < mPrimaryDCAtoVtxMax) ? getTofBetaBase(trk) : std::numeric_limits<float>::quiet_NaN(); //SL16j, Vanek
+    if(index2tof >= 0) {
+      StPicoBTofPidTraits *tofPid = mPicoDstMaker->picoDst()->btofPidTraits(index2tof);
+
+      if(tofPid)   {
+        beta = tofPid->btofBeta();
+
+        if (beta < 1e-4)         {
+          StThreeVectorF const btofHitPos = tofPid->btofHitPos();
+          // StPhysicalHelixD helix = trk->helix();
+          StPhysicalHelixD helix = trk->helix(mPicoDstMaker->picoDst()->event()->bField());
+
+          float L = tofPathLength(pVtx, &btofHitPos, helix.curvature());
+          float tof = tofPid->btof();
+          if (tof > 0) beta = L / (tof * (C_C_LIGHT / 1.e9));
+          else beta = std::numeric_limits<float>::quiet_NaN();
+        }
+      }
+    }
+
+    return beta;
+
 }
 
 // _________________________________________________________

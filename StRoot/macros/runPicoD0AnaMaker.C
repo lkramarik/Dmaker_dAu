@@ -54,7 +54,6 @@ void runPicoD0AnaMaker(
     #endif
     
     chain = new StChain();
-    cout << "TreeName      " << treeName << endl;
 
     TString sInputFile(inputFile);
     TString sInputListHF("");  
@@ -75,10 +74,7 @@ void runPicoD0AnaMaker(
     StHFCuts* hfCuts = new StHFCuts("hfBaseCuts");
     PicoD0AnaMaker->setHFBaseCuts(hfCuts);
 
-    cout<<"event stuff set"<<endl;
-
-    // -- File name of bad run list
-    hfCuts->setBadRunListFileName(badRunListFileName); 
+    hfCuts->setBadRunListFileName(badRunListFileName);
 
     hfCuts->addTriggerId(2); //ZDC-VPD-5 
     hfCuts->addTriggerId(3); //VPD-5
@@ -95,12 +91,10 @@ void runPicoD0AnaMaker(
     hfCuts->addTriggerId(530202); //BHT2-VPD-30 
     hfCuts->addTriggerId(530213); //BHT3
     
-//    hfCuts->setCutDcaMin(0.00,StHFCuts::kPion); // OK
-//    hfCuts->setCutDcaMin(0.00,StHFCuts::kKaon); // OK
 
     hfCuts->setCutPrimaryDCAtoVtxMax(10.); //default is 1.0
-    hfCuts->setCutVzMax(100);
-    hfCuts->setCutVzVpdVzMax(3.);
+    hfCuts->setCutVzMax(1000);
+    hfCuts->setCutVzVpdVzMax(1000.);
     hfCuts->setCutNHitsFitMin(20); //default is 20
 //    setCutNHitsFitnHitsMax
     hfCuts->setCutRequireHFT(true);
@@ -155,16 +149,14 @@ void runPicoD0AnaMaker(
     hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass); //ok
     
     //Single track pt
-    hfCuts->setCutPtRange(0.2,50.0,StHFCuts::kPion); //0.2 , 50.0 OK
-    hfCuts->setCutPtRange(0.2,50.0,StHFCuts::kKaon); //0.2, 50.0 OK
+    hfCuts->setCutPtRange(0.2,50.0,StHFCuts::kPion);
+    hfCuts->setCutPtRange(0.2,50.0,StHFCuts::kKaon);
     //TPC setters
     hfCuts->setCutTPCNSigmaPion(3.0); //3 OK
     hfCuts->setCutTPCNSigmaKaon(2.0); //3 OK
     //TOF setters, need to set pt range as well
     hfCuts->setCutTOFDeltaOneOverBeta(0.03, StHFCuts::kKaon); // nastavene = f * (sigmaTOF), sigma TOF je 0.013 OK
-    hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kKaon); // OK
     hfCuts->setCutTOFDeltaOneOverBeta(999, StHFCuts::kPion); //
-    hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kPion); // OK
     // set refmultCorr
     //StRefMultCorr* grefmultCorrUtil = CentralityMaker::instance()->getgRefMultCorr_P16id();
     //PicoD0AnaMaker->setRefMutCorr(grefmultCorrUtil);
