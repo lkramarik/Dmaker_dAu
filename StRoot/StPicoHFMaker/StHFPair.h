@@ -36,68 +36,62 @@ class StPicoTrack;
 
 class StHFPair : public TObject
 {
- public:
-  StHFPair();
-  StHFPair(StHFPair const *);
+public:
+	StHFPair();
+	StHFPair(StHFPair const *);
 
-  StHFPair(StPicoTrack const * particle1, StPicoTrack const * particle2, 
-	   float p1MassHypo, float p2MassHypo,
-	   unsigned short p1Idx, unsigned short p2Idx,
-	   StThreeVectorF const & vtx, float bField, bool useStraightLine = true);
+	StHFPair(StPicoTrack const * particle1, StPicoTrack const * particle2,
+			 float p1MassHypo, float p2MassHypo,
+			 unsigned short p1Idx, unsigned short p2Idx,
+			 StThreeVectorF const & vtx, float bField, bool useStraightLine = true);
 
-  StHFPair(StPicoTrack const * particle1, StHFPair const * particle2, 
-	   float p1MassHypo, float p2MassHypo,
-	   unsigned short p1Idx, unsigned short p2Idx,
-	   StThreeVectorF const & vtx, float bField, bool useStraightLine = true);
+	~StHFPair() {;}
 
-  ~StHFPair() {;}
-  
+	StLorentzVectorF const & lorentzVector() const;
+	StThreeVectorF const & decayVertex() const;
+	float rapidity()    const;
+	float m()    const;
+	float pt()   const;
+	float eta()  const;
+	float phi()  const;
+	float pointingAngle() const;
+	float pointingAngle(StThreeVectorF const & vtx2) const;
+	float decayLength() const;
+	float decayLength(StThreeVectorF const & vtx2) const;
+	float particle1Dca() const;
+	float particle1Dca(StPicoTrack const * p1track, StThreeVectorF const & vtx2, float bField) const;
+	float particle2Dca() const;
+	float particle2Dca(StPicoTrack const * p1track, StThreeVectorF const & vtx2, float bField) const;
+	unsigned short particle1Idx() const;
+	unsigned short particle2Idx() const;
+	float dcaDaughters() const;
+	float cosThetaStar() const;
+	float v0x() const;
+	float v0y() const;
+	float v0z() const;
+	float px() const;
+	float py() const;
+	float pz() const;
+	float DcaToPrimaryVertex() const;
 
-  StLorentzVectorF const & lorentzVector() const;
-  StThreeVectorF const & decayVertex() const;
-  float m()    const;
-  float pt()   const;
-  float eta()  const;
-  float phi()  const;
-  float pointingAngle() const;
-  float pointingAngle(StThreeVectorF const & vtx2) const;
-  float decayLength() const;
-  float decayLength(StThreeVectorF const & vtx2) const;
-  float particle1Dca() const;
-  float particle1Dca(StPicoTrack const * p1track, StThreeVectorF const & vtx2, float bField) const;
-  float particle2Dca() const;
-  float particle2Dca(StPicoTrack const * p1track, StThreeVectorF const & vtx2, float bField) const;
-  unsigned short particle1Idx() const;
-  unsigned short particle2Idx() const;
-  float dcaDaughters() const;
-  float cosThetaStar() const;
-  float v0x() const;
-  float v0y() const;
-  float v0z() const;
-  float px() const;
-  float py() const;
-  float pz() const;
-  float DcaToPrimaryVertex() const;
+private:
+	StHFPair(StHFPair const &);
+	StHFPair& operator=(StHFPair const &);
+	StLorentzVectorF mLorentzVector;
+	StThreeVectorF   mDecayVertex;
 
- private:
-  StHFPair(StHFPair const &);
-  StHFPair& operator=(StHFPair const &);
-  StLorentzVectorF mLorentzVector; 
-  StThreeVectorF   mDecayVertex; 
+	float mPointingAngle;
+	float mDecayLength;
+	float mParticle1Dca;
+	float mParticle2Dca;
 
-  float mPointingAngle;
-  float mDecayLength;
-  float mParticle1Dca;
-  float mParticle2Dca;
-  float mDcaToPrimaryVertex;
+	unsigned short  mParticle1Idx; // index of track in StPicoDstEvent
+	unsigned short  mParticle2Idx; // index of track in StPicoDstEvent for particle, idx in tertiary vertex array for pair
 
-  unsigned short  mParticle1Idx; // index of track in StPicoDstEvent 
-  unsigned short  mParticle2Idx; // index of track in StPicoDstEvent for particle, idx in tertiary vertex array for pair 
+	float mDcaDaughters;
+	float mCosThetaStar;
 
-  float mDcaDaughters;
-  float mCosThetaStar;
-
-  ClassDef(StHFPair,2)
+	ClassDef(StHFPair,2)
 };
 inline StLorentzVectorF const & StHFPair::lorentzVector() const { return mLorentzVector;}
 inline float StHFPair::rapidity()    const { return mLorentzVector.rapidity();}

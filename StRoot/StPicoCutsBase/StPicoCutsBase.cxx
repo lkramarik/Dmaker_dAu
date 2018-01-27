@@ -220,7 +220,7 @@ bool StPicoCutsBase::isGoodTrigger(StPicoEvent const * const picoEvent) const {
 // _________________________________________________________
 bool StPicoCutsBase::isGoodTrack(StPicoTrack const * const trk) const {
   // -- require at least one hit on every layer of PXL and IST.
-  return ((!mRequireHFT || trk->isHFTTrack()) && trk->nHitsFit() >= mNHitsFitMin && trk->gPt() >= mPtRange[pidFlag][0] && trk->gPt() < mPtRange[pidFlag][1]);
+  return ((!mRequireHFT || trk->isHFTTrack()) && trk->nHitsFit() >= mNHitsFitMin);
 }
 
 // _________________________________________________________
@@ -236,7 +236,7 @@ bool StPicoCutsBase::cutMinDcaToPrimVertexTertiary(StPicoTrack const * const trk
 
   StPhysicalHelixD helix = trk->helix(mPicoDst->event()->bField());
   helix.moveOrigin(helix.pathLength(mPrimVtx));
-  float dca = (mPrimVtx - helix.dcaPoint()).mag();
+  float dca = (mPrimVtx - helix.origin()).mag();
 
   return (dca >= mDcaMinTertiary[pidFlag]);
 }
@@ -351,7 +351,7 @@ float StPicoCutsBase::getTofBetaBase(StPicoTrack const * const trk) const {
   float beta = std::numeric_limits<float>::quiet_NaN();
 
   if(index2tof >= 0) { //toto je trocha ine ako predtym, inak je to rovnake... 25.01.
-    StPicoBTofPidTraits *tofPid = mPicoDstMaker->picoDst()->btofPidTraits(index2tof);
+    StPicoBTofPidTraits *tofPid = mPicoDst->btofPidTraits(index2tof);
 
     if(tofPid)   {
       beta = tofPid->btofBeta();
@@ -359,9 +359,9 @@ float StPicoCutsBase::getTofBetaBase(StPicoTrack const * const trk) const {
       if (beta < 1e-4)         {
         StThreeVectorF const btofHitPos = tofPid->btofHitPos();
         // StPhysicalHelixD helix = trk->helix();
-        StPhysicalHelixD helix = trk->helix(mPicoDstMaker->picoDst()->event()->bField());
+        StPhysicalHelixD helix = trk->helix(mPicoDst->event()->bField());
 
-        float L = tofPathLength(pVtx, &btofHitPos, helix.curvature());
+        float L = tofPathLength(mPrimVtx, &btofHitPos, helix.curvature());
         float tof = tofPid->btof();
         if (tof > 0) beta = L / (tof * (C_C_LIGHT / 1.e9));
         else beta = std::numeric_limits<float>::quiet_NaN();
@@ -376,25 +376,26 @@ float StPicoCutsBase::getTofBetaBase(StPicoTrack const * const trk) const {
 float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk) const { //liangs
     int index2tof = trk->bTofPidTraitsIndex();
     float beta = std::numeric_limits<float>::quiet_NaN();
-
-    if(index2tof >= 0) {
-      StPicoBTofPidTraits *tofPid = mPicoDstMaker->picoDst()->btofPidTraits(index2tof);
-
-      if(tofPid)   {
-        beta = tofPid->btofBeta();
-
-        if (beta < 1e-4)         {
-          StThreeVectorF const btofHitPos = tofPid->btofHitPos();
-          // StPhysicalHelixD helix = trk->helix();
-          StPhysicalHelixD helix = trk->helix(mPicoDstMaker->picoDst()->event()->bField());
-
-          float L = tofPathLength(pVtx, &btofHitPos, helix.curvature());
-          float tof = tofPid->btof();
-          if (tof > 0) beta = L / (tof * (C_C_LIGHT / 1.e9));
-          else beta = std::numeric_limits<float>::quiet_NaN();
-        }
-      }
-    }
+  //docasne zakomentovane
+//
+//    if(index2tof >= 0) {
+//      StPicoBTofPidTraits *tofPid = mPicoDstMaker->picoDst()->btofPidTraits(index2tof);
+//
+//      if(tofPid)   {
+//        beta = tofPid->btofBeta();
+//
+//        if (beta < 1e-4)         {
+//          StThreeVectorF const btofHitPos = tofPid->btofHitPos();
+//          // StPhysicalHelixD helix = trk->helix();
+//          StPhysicalHelixD helix = trk->helix(mPicoDstMaker->picoDst()->event()->bField());
+//
+//          float L = tofPathLength(pVtx, &btofHitPos, helix.curvature());
+//          float tof = tofPid->btof();
+//          if (tof > 0) beta = L / (tof * (C_C_LIGHT / 1.e9));
+//          else beta = std::numeric_limits<float>::quiet_NaN();
+//        }
+//      }
+//    }
 
     return beta;
 
