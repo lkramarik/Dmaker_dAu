@@ -361,7 +361,7 @@ float StPicoCutsBase::getTofBetaBase(StPicoTrack const * const trk) const {
         // StPhysicalHelixD helix = trk->helix();
         StPhysicalHelixD helix = trk->helix(mPicoDst->event()->bField());
 
-        float L = tofPathLength(mPrimVtx, &btofHitPos, helix.curvature());
+        float L = tofPathLength(&mPrimVtx, &btofHitPos, helix.curvature());
         float tof = tofPid->btof();
         if (tof > 0) beta = L / (tof * (C_C_LIGHT / 1.e9));
         else beta = std::numeric_limits<float>::quiet_NaN();
