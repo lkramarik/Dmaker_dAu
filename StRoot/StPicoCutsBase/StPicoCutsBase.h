@@ -1,32 +1,6 @@
 #ifndef STPICOCUTSBASE_H
 #define STPICOCUTSBASE_H
-
-/* **************************************************
- *  Cut base class for pico analysis
- *  - Base class for cuts 
- *  
- * **************************************************
- *  Inhertit from it if needed 
- *
- * **************************************************
- *
- *
- *  Initial Authors:  
- *            Xin Dong        (xdong@lbl.gov)
- *            Mustafa Mustafa (mmustafa@lbl.gov)
- *          **Jochen Thaeder  (jmthader@lbl.gov)   
- *
- *  Contributing Authors
- *            Michael Lomnitz (mrlomnitz@lbl.gov)
- *            Guannan Xie     (guannanxie@lbl.gov)
- *
- *  ** Code Maintainer
- *
- * **************************************************
- */
-
 #include <vector>
-
 #include "TNamed.h"
 #include "TString.h"
 #include "StarClassLibrary/StLorentzVectorF.hh"
@@ -47,16 +21,10 @@ class StPicoCutsBase : public TNamed
   
   void initBase();
 
-  // -- overload init in inhertited class - but call initBase there
   virtual void init() { initBase(); }
 
-  // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --   
-
   bool isGoodEvent(StPicoDst const * const picoDst, int *aEventCuts = NULL);
-
-  // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --   
-
-  bool isGoodRun(StPicoEvent const * const picoEvent) const;
+    bool isGoodRun(StPicoEvent const * const picoEvent) const;
   bool isGoodTrigger(StPicoEvent const * const picoEvent) const;
   bool isGoodTrack(StPicoTrack const * const trk) const;
 
@@ -79,7 +47,6 @@ class StPicoCutsBase : public TNamed
   StPicoBTofPidTraits* hasTofPid(StPicoTrack const * const trk) const;
 
   bool isTPCHadron(StPicoTrack const * const trk, int pidFlag) const;
-
   bool isTPCPion(StPicoTrack const *trk) const;
   bool isTPCKaon(StPicoTrack const *trk) const;
   bool isTPCProton(StPicoTrack const *trk) const;
@@ -131,16 +98,11 @@ class StPicoCutsBase : public TNamed
   void setCutVzMax(float f);
   void setCutVzVpdVzMax(float f);
 
-  // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-
   void setCutNHitsFitMin(int i);
   void setCutRequireHFT(bool b);
   void setCutNHitsFitnHitsMax(float f);
 
   void setCutPrimaryDCAtoVtxMax(float f);
-
-  // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-
   void setCutPtRange(float min, float max, int pidFlag);
   void setCutDcaMin(float min, int pidFlag);
   void setCutDcaMinTertiary(float min, int pidFlag);

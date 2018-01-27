@@ -25,9 +25,7 @@ StPicoCutsBase::StPicoCutsBase() : TNamed("PicoCutsBase", "PicoCutsBase"),
   mTOFCorr(new StV0TofCorrection), mPicoDst(NULL), mEventStatMax(5), mTOFResolution(0.013),
   mBadRunListFileName("picoList_bad.list"), mVzMax(6.), mVzVpdVzMax(3.), 
   mNHitsFitMin(15), mRequireHFT(true), mNHitsFitnHitsMax(0.52), mPrimaryDCAtoVtxMax(6.0) {
-  
-  // -- default constructor
-  
+
   for (Int_t idx = 0; idx < kPicoPIDMax; ++idx) {
     mPtRange[idx][0] = std::numeric_limits<float>::lowest();
     mPtRange[idx][1] = std::numeric_limits<float>::max();
@@ -253,7 +251,7 @@ bool StPicoCutsBase::isTPCHadron(StPicoTrack const * const trk, int pidFlag) con
   else if (pidFlag == kProton)
     nSigma = fabs(trk->nSigmaProton());
 
-  return (nSigma < mTPCNSigmaMax[pidFlag] );
+  return (nSigma < mTPCNSigmaMax[pidFlag] && trk->gPt() >= mPtRange[pidFlag][0] && trk->gPt() < mPtRange[pidFlag][1] );
 }
 
 // _________________________________________________________
