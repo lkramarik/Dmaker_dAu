@@ -179,8 +179,6 @@ int StPicoD0AnaMaker::createCandidates() {
             if(pair->pt() < 1) continue;
             if(pair->pt() > 2) continue;
 
-//            if (fabs(pair->eta()) > 1) continue;
-
             float flag = -99.;
 
             if( kaon->charge()<0 && pion1->charge()>0 ) flag=0.; // -+
@@ -348,8 +346,8 @@ bool StPicoD0AnaMaker::isPion(StPicoTrack const * const trk) const {
     StThreeVectorF t = trk->gMom(mPrimVtx, mBField);
     if (fabs(t.pseudoRapidity()) > 1.) return false;
     if (!mHFCuts->isGoodTrack(trk)) return false; //HFT, NhitsFit, pt range
-    if (!mHFCuts->isTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kPion) ) return false;
-//    if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StHFCuts::kPion) ) return false;
+//    if (!mHFCuts->isTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kPion) ) return false;
+    if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kPion) ) return false;
     if (!mHFCuts->cutMinDcaToPrimVertex(trk, StPicoCutsBase::kPion)) return false;
     return (mHFCuts->isTPCHadron(trk, StPicoCutsBase::kPion));
 }
@@ -359,8 +357,8 @@ bool StPicoD0AnaMaker::isKaon(StPicoTrack const * const trk) const {
     StThreeVectorF t = trk->gMom(mPrimVtx, mBField);
     if (fabs(t.pseudoRapidity()) > 1.) return false;
     if (!mHFCuts->isGoodTrack(trk)) return false;
-    if (!mHFCuts->isTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon) ) return false;
-//    if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StHFCuts::kKaon) ) return false;
+//    if (!mHFCuts->isTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon) ) return false;
+    if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon) ) return false;
     if (!mHFCuts->cutMinDcaToPrimVertex(trk, StPicoCutsBase::kKaon)) return false;
     return (mHFCuts->isTPCHadron(trk, StPicoCutsBase::kKaon));
 }
@@ -371,7 +369,7 @@ bool StPicoD0AnaMaker::isProton(StPicoTrack const * const trk) const {
 }
 
 float StPicoD0AnaMaker::getOneOverBeta(StPicoTrack const * const trk,  float const & tofBeta, int pidFlag){
-    if (tofBeta <= 0)
+    if ((tofBeta <= 0) || (tofBeta!=tofBeta))
         return -5;
     float m2 = mHFCuts->getHypotheticalMass(pidFlag)*mHFCuts->getHypotheticalMass(pidFlag);
     float ptot = trk->gPtot();
