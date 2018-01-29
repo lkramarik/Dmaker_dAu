@@ -346,8 +346,8 @@ bool StPicoD0AnaMaker::isPion(StPicoTrack const * const trk) const {
     StThreeVectorF t = trk->gMom(mPrimVtx, mBField);
     if (fabs(t.pseudoRapidity()) > 1.) return false;
     if (!mHFCuts->isGoodTrack(trk)) return false; //HFT, NhitsFit, pt range
-//    if (!mHFCuts->isTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kPion) ) return false;
-    if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kPion) ) return false;
+    if (!mHFCuts->isTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kPion) ) return false;
+//    if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kPion) ) return false;
     if (!mHFCuts->cutMinDcaToPrimVertex(trk, StPicoCutsBase::kPion)) return false;
     return (mHFCuts->isTPCHadron(trk, StPicoCutsBase::kPion));
 }
@@ -357,8 +357,8 @@ bool StPicoD0AnaMaker::isKaon(StPicoTrack const * const trk) const {
     StThreeVectorF t = trk->gMom(mPrimVtx, mBField);
     if (fabs(t.pseudoRapidity()) > 1.) return false;
     if (!mHFCuts->isGoodTrack(trk)) return false;
-//    if (!mHFCuts->isTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon) ) return false;
-    if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon) ) return false;
+    if (!mHFCuts->isTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon) ) return false;
+//    if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon) ) return false;
     if (!mHFCuts->cutMinDcaToPrimVertex(trk, StPicoCutsBase::kKaon)) return false;
     return (mHFCuts->isTPCHadron(trk, StPicoCutsBase::kKaon));
 }
