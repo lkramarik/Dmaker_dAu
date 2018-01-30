@@ -267,7 +267,6 @@ bool StPicoD0AnaMaker::isHadron(StPicoTrack const * const trk, int pidFlag) cons
 bool StPicoD0AnaMaker::isPion(StPicoTrack const * const trk) const {
     // -- good pion
     StThreeVectorF t = trk->gMom(mPrimVtx, mBField);
-//    if (fabs(t.pseudoRapidity()) > 1.) return false;
     if (!mHFCuts->isGoodTrack(trk)) return false; //HFT, NhitsFit, pt range
     if (!mHFCuts->isTOFHadronPID(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kPion) ) return false;
 //    if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kPion) ) return false;
@@ -278,7 +277,6 @@ bool StPicoD0AnaMaker::isPion(StPicoTrack const * const trk) const {
 // _________________________________________________________
 bool StPicoD0AnaMaker::isKaon(StPicoTrack const * const trk) const {
     StThreeVectorF t = trk->gMom(mPrimVtx, mBField);
-//    if (fabs(t.pseudoRapidity()) > 1.) return false;
     if (!mHFCuts->isGoodTrack(trk)) return false;
     if (!mHFCuts->isTOFHadronPID(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon) ) return false;
 //    if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon) ) return false;
