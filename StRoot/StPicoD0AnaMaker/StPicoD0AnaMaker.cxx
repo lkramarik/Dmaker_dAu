@@ -176,11 +176,11 @@ int StPicoD0AnaMaker::createCandidates() {
 
     for(int i=0;i<mPicoDst->numberOfTracks();i++)  {
         StPicoTrack const* pion1 = mPicoDst->track(i);
-        if (!isPion(trk)) continue;
+        if (!isPion(pion1)) continue;
 
         for(int j=0;j<mPicoDst->numberOfTracks();j++)  {
             StPicoTrack const* kaon = mPicoDst->track(j);
-            if (!isKaon(trk)) continue;
+            if (!isKaon(kaon)) continue;
 
             StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), i, j, mPrimVtx, mBField, kTRUE);
 //            if (!mHFCuts->isClosePair(pair)) continue;
@@ -265,12 +265,12 @@ int StPicoD0AnaMaker::createCandidates() {
 int StPicoD0AnaMaker::analyzeCandidates() {
     for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
         StPicoTrack const *t = mPicoDst->track(mIdxPicoPions[idxPion1]);
-        ntp_pion->Fill(t->gPt(), t->gMom().phi(), t->gMom().pseudoRapidity(), t->nSigmaPion(), t->nHitsFit(), getOneOverBeta(t, mHFCuts->getTofBetaBase(pion1), StPicoCutsBase::kPion), mPicoHFEvent->eventId(), mPicoHFEvent->runId());
+        ntp_pion->Fill(t->gPt(), t->gMom().phi(), t->gMom().pseudoRapidity(), t->nSigmaPion(), t->nHitsFit(), getOneOverBeta(t, mHFCuts->getTofBetaBase(t), StPicoCutsBase::kPion), mPicoHFEvent->eventId(), mPicoHFEvent->runId());
     }
 
     for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
         StPicoTrack const *t = mPicoDst->track(mIdxPicoKaons[idxKaon]);
-        ntp_kaon->Fill(t->gPt(), t->gMom().phi(), t->gMom().pseudoRapidity(), t->nSigmaPion(), t->nHitsFit(), getOneOverBeta(t, mHFCuts->getTofBetaBase(pion1), StPicoCutsBase::kPion), mPicoHFEvent->eventId(), mPicoHFEvent->runId());
+        ntp_kaon->Fill(t->gPt(), t->gMom().phi(), t->gMom().pseudoRapidity(), t->nSigmaKaon(), t->nHitsFit(), getOneOverBeta(t, mHFCuts->getTofBetaBase(t), StPicoCutsBase::kKaon), mPicoHFEvent->eventId(), mPicoHFEvent->runId());
     }
     return kStOK;
 }
