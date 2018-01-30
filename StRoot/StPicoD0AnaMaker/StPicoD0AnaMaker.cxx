@@ -237,7 +237,7 @@ int StPicoD0AnaMaker::createCandidates() {
             ntVar[ii++] = pair->eta();
             ntVar[ii++] = pair->cosThetaStar();
 
-            ntVar[ii++] = pair->pt(); //sqrt(pow(pair->px(),2.0)+pow(pair->py(),2.0));
+            ntVar[ii++] = pair->pt();
             ntVar[ii++] = pair->m();
 
             if ((flag == 0) || (flag == 1)) {

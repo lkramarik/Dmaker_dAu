@@ -26,7 +26,7 @@
 #include <iostream>
 #include <ctime>
 #include <cstdio>
-#include "StPicoD0AnaMaker/StPicoD0AnaMaker.h" //kvapil
+#include "StPicoD0AnaMaker/StPicoD0AnaMaker.h"
 //#include "StRefMultCorr/StRefMultCorr.h"
 //#include "StRefMultCorr/CentralityMaker.h"
 
@@ -39,11 +39,10 @@ StChain *chain;
 void runPicoD0AnaMakerLocal(
 			const Char_t *inputFile="/gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoLists/runs_local_test.list",	
 			const Char_t *outputFile="outputBaseName",  
-			 const unsigned int makerMode = 0 ,
-			 const Char_t *badRunListFileName = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoLists/picoList_bad.list", const Char_t *treeName = "picoHFtree",
-			 const Char_t *productionBasePath = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/") {
-  // -- Check STAR Library. Please set SL_version to the original star library used in the production 
-  //    from http://www.star.bnl.gov/devcgi/dbProdOptionRetrv.pl
+            const unsigned int makerMode = 0 ,
+			const Char_t *badRunListFileName = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoLists/picoList_bad.list",
+            const Char_t *treeName = "picoHFtree",
+			const Char_t *productionBasePath = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/") {
   string SL_version = "SL17d";
   string env_SL = getenv ("STAR");
   if (env_SL.find(SL_version)==string::npos) {
@@ -60,56 +59,19 @@ void runPicoD0AnaMakerLocal(
 
   chain = new StChain();
 
-  // ========================================================================================
-  //makerMode    = StPicoHFMaker::kAnalyze;
-  // ========================================================================================
-  cout << "Maker Mode    " << makerMode << endl;
-  cout << "TreeName      " << treeName << endl; 
-
   TString sInputFile(inputFile);
-  TString sInputListHF("");  
+  TString sInputListHF("");
   TString sProductionBasePath(productionBasePath);
   TString sTreeName(treeName);
 
-  if (makerMode == StPicoHFMaker::kAnalyze) {
-    if (!sInputFile.Contains(".list") && !sInputFile.Contains("picoDst.root")) {
-      cout << "No input list or picoDst root file provided! Exiting..." << endl;
-      exit(1);
-    }
-  }
-  else if (makerMode == StPicoHFMaker::kWrite) {
-    if (!sInputFile.Contains("picoDst.root")) {
-      cout << "No input picoDst root file provided! Exiting..." << endl;
-      exit(1);
-    }
-  }
-  else if (makerMode == StPicoHFMaker::kRead) {
-   if (!sInputFile.Contains(".list")) {
-      cout << "No input list provided! Exiting..." << endl;
-      exit(1);
-   }
-   
-   // -- prepare filelist for picoDst from trees
-   sInputListHF = sInputFile;
-   sInputFile = "tmpPico.list";
-
-   TString command = "sed 's|" + sTreeName + ".root|picoDst.root|g' " + sInputListHF + " > " + sInputFile;
-   cout << "COMMAND : " << command << endl; 
-   gSystem->Exec(command.Data());
-
-   command = "sed -i 's|^.*" + sTreeName + "|" + sProductionBasePath + "|g' " + sInputFile; // + " > " + sInputFile;
-   cout << "COMMAND : " << command << endl; 
-   gSystem->Exec(command.Data());
-  }
-  else {
-    cout << "Unknown makerMode! Exiting..." << endl;
+  if (!sInputFile.Contains(".list") && !sInputFile.Contains("picoDst.root")) {
+    cout << "No input list or picoDst root file provided! Exiting..." << endl;
     exit(1);
   }
 
   StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
   cout<<"ok, picoDstMaker created"<<endl;
-  StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("PicoD0AnaMaker", picoDstMaker, outputFile, sInputListHF);
-  PicoD0AnaMaker->setMakerMode(makerMode);
+  StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile, sInputListHF);
   PicoD0AnaMaker->setTreeName(treeName);
   PicoD0AnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
 

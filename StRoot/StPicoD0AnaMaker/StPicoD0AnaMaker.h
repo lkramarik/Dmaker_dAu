@@ -46,19 +46,16 @@ class StRefMultCorr;
 class StPicoD0AnaMaker : public StPicoHFMaker
 {
 public:
-    StPicoD0AnaMaker(char const* name, StPicoDstMaker* picoMaker, char const* outputBaseFileName,
-                      char const* inputHFListHFtree);
+    StPicoD0AnaMaker(char const*, StPicoDstMaker*, char const*, char const*);
     virtual ~StPicoD0AnaMaker();
 
     virtual Int_t InitHF();
     virtual Int_t MakeHF();
     virtual void  ClearHF(Option_t *opt);
     virtual Int_t FinishHF();
-    virtual float getOneOverBeta(StPicoTrack const *,  float const & tofBeta, int pidFlag);
+    virtual float getOneOverBeta(StPicoTrack const *,  float const , int );
     virtual float getTofBetaD0(StPicoTrack const *, StThreeVectorF const*) const;
     virtual bool isTofKaonD0(StPicoTrack const *, float) const;
-
-
 
 protected:
     virtual bool isHadron(StPicoTrack const*, int pidFlag) const;
