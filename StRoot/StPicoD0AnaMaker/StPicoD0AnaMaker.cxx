@@ -285,7 +285,7 @@ bool StPicoD0AnaMaker::isKaon(StPicoTrack const * const trk) const {
     float kBeta = getTofBetaD0(trk,&mPrimVtx);
     bool tofAvailable = kBeta>0;
     bool tofKaon = tofAvailable && isTofKaonD0(trk,kBeta);
-    bool goodKaon = (tofAvailable && tofKaon) || (!tofAvailable && tpcKaon);
+    bool goodKaon = (tofAvailable && tofKaon);
     if(!goodKaon) return false;
 
     if (!mHFCuts->cutMinDcaToPrimVertex(trk, StPicoCutsBase::kKaon)) return false;
