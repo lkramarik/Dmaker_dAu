@@ -24,7 +24,7 @@ ClassImp(StPicoCutsBase)
 StPicoCutsBase::StPicoCutsBase() : TNamed("PicoCutsBase", "PicoCutsBase"), 
   mTOFCorr(new StV0TofCorrection), mPicoDst(NULL), mEventStatMax(5), mTOFResolution(0.013),
   mBadRunListFileName("picoList_bad.list"), mVzMax(6.), mVzVpdVzMax(3.), 
-  mNHitsFitMin(15), mRequireHFT(true), mNHitsFitnHitsMax(0.52), mPrimaryDCAtoVtxMax(6.0) {
+  mNHitsFitMin(15), mRequireHFT(true), mNHitsFitnHitsMax(0.), mPrimaryDCAtoVtxMax(6.0) {
 
   for (Int_t idx = 0; idx < kPicoPIDMax; ++idx) {
     mPtRange[idx][0] = std::numeric_limits<float>::lowest();
@@ -59,7 +59,7 @@ StPicoCutsBase::StPicoCutsBase() : TNamed("PicoCutsBase", "PicoCutsBase"),
 StPicoCutsBase::StPicoCutsBase(const Char_t *name) : TNamed(name, name), 
   mTOFCorr(new StV0TofCorrection), mPicoDst(NULL), mEventStatMax(5), mTOFResolution(0.013),
   mBadRunListFileName("picoList_bad_MB.list"), mVzMax(6.), mVzVpdVzMax(3.),
-  mNHitsFitMin(15), mRequireHFT(true), mNHitsFitnHitsMax(0.52), mPrimaryDCAtoVtxMax(6.0) {
+  mNHitsFitMin(15), mRequireHFT(true), mNHitsFitnHitsMax(0.), mPrimaryDCAtoVtxMax(6.0) {
   // -- constructor
 
   for (Int_t idx = 0; idx < kPicoPIDMax; ++idx) {
@@ -259,8 +259,8 @@ bool StPicoCutsBase::isTOFHadronPID(StPicoTrack const *trk, float const & tofBet
   if (tofBeta <= 0) {return false;}
 
   double ptot    = trk->gPtot();
-  float betaInv = sqrt(ptot*ptot + mHypotheticalMass2[pidFlag]) / ptot;
-  return ( fabs(1/tofBeta - betaInv) < mTOFDeltaOneOverBetaMax[pidFlag] );
+  float betaInv = ptot / sqrt(ptot*ptot + mHypotheticalMass2[pidFlag]);
+  return ( fabs(1/tofBeta - 1/betaInv) < mTOFDeltaOneOverBetaMax[pidFlag] );
 }
 
 // _________________________________________________________

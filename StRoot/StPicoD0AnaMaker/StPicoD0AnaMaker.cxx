@@ -206,8 +206,8 @@ int StPicoD0AnaMaker::createCandidates() {
 
             ntVar[ii++] = mPicoHFEvent->runId();
             ntVar[ii++] = mPicoHFEvent->eventId();
-            ntVar[ii++] = kaon->gMom(mPrimVtx,mBField).phi();
-            ntVar[ii++] = kaon->gMom(mPrimVtx,mBField).pseudoRapidity();
+            ntVar[ii++] = kaon->gMom().phi();
+            ntVar[ii++] = kaon->gMom().pseudoRapidity();
             ntVar[ii++] = kaon->gPt();
             ntVar[ii++] = pair->particle2Dca();
             ntVar[ii++] = kaon->dEdx();
@@ -267,7 +267,6 @@ bool StPicoD0AnaMaker::isHadron(StPicoTrack const * const trk, int pidFlag) cons
 // _________________________________________________________
 bool StPicoD0AnaMaker::isPion(StPicoTrack const * const trk) const {
     // -- good pion
-    StThreeVectorF t = trk->gMom(mPrimVtx, mBField);
     if (!mHFCuts->isGoodTrack(trk)) return false; //HFT, NhitsFit, pt range
     if (!mHFCuts->isTOFHadronPID(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kPion) ) return false;
 //    if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kPion) ) return false;
@@ -277,7 +276,6 @@ bool StPicoD0AnaMaker::isPion(StPicoTrack const * const trk) const {
 
 // _________________________________________________________
 bool StPicoD0AnaMaker::isKaon(StPicoTrack const * const trk) const {
-    StThreeVectorF t = trk->gMom(mPrimVtx, mBField);
     if (!mHFCuts->isGoodTrack(trk)) return false;
 //    if (!mHFCuts->isTOFHadronPID(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon) ) return false;
 //    if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon) ) return false;
@@ -302,8 +300,8 @@ float StPicoD0AnaMaker::getOneOverBeta(StPicoTrack const * const trk,  float con
         return -5;
     float m2 = mHFCuts->getHypotheticalMass(pidFlag)*mHFCuts->getHypotheticalMass(pidFlag);
     float ptot = trk->gPtot();
-    float betaInv = sqrt(ptot*ptot + m2) / ptot;
-    return fabs(1/tofBeta - betaInv);
+    float ptot/ betaInv = sqrt(ptot*ptot + m2) / ptot;
+    return (1/tofBeta - 1/betaInv);
 }
 
 float StPicoD0AnaMaker::getTofBetaD0(StPicoTrack const * const trk, StThreeVectorF const* const pVtx) const

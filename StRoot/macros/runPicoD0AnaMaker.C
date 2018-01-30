@@ -154,7 +154,7 @@ void runPicoD0AnaMaker(
     hfCuts->setCutTPCNSigmaPion(3.0);
     hfCuts->setCutTPCNSigmaKaon(2.0);
     hfCuts->setCutTOFDeltaOneOverBetaKaon(0.04);
-    hfCuts->setCutTOFDeltaOneOverBetaPion(999);
+//    hfCuts->setCutTOFDeltaOneOverBetaPion(999);
     // set refmultCorr
     //StRefMultCorr* grefmultCorrUtil = CentralityMaker::instance()->getgRefMultCorr_P16id();
     //PicoD0AnaMaker->setRefMutCorr(grefmultCorrUtil);
