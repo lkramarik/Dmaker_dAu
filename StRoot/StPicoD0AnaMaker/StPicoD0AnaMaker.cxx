@@ -314,7 +314,7 @@ float StPicoD0AnaMaker::getTofBetaD0(StPicoTrack const * const trk, StThreeVecto
 
     if(index2tof >= 0)
     {
-        StPicoBTofPidTraits *tofPid = mPicoDstMaker->picoDst()->btofPidTraits(index2tof);
+        StPicoBTofPidTraits *tofPid = mPicoDst->btofPidTraits(index2tof);
 
         if(tofPid)
         {
@@ -324,7 +324,7 @@ float StPicoD0AnaMaker::getTofBetaD0(StPicoTrack const * const trk, StThreeVecto
             {
                 StThreeVectorF const btofHitPos = tofPid->btofHitPos();
                 // StPhysicalHelixD helix = trk->helix();
-                StPhysicalHelixD helix = trk->helix(mPicoDstMaker->picoDst()->event()->bField());
+                StPhysicalHelixD helix = trk->helix(mBField);
 
                 float L = tofPathLength(pVtx, &btofHitPos, helix.curvature());
                 float tof = tofPid->btof();
