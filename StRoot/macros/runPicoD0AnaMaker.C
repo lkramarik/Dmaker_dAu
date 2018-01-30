@@ -151,12 +151,10 @@ void runPicoD0AnaMaker(
     //Single track pt
     hfCuts->setCutPtRange(0.2,50.0,StHFCuts::kPion);
     hfCuts->setCutPtRange(0.2,50.0,StHFCuts::kKaon);
-    //TPC setters
     hfCuts->setCutTPCNSigmaPion(3.0); //3 OK
     hfCuts->setCutTPCNSigmaKaon(2.0); //3 OK
-    //TOF setters, need to set pt range as well
-    hfCuts->setCutTOFDeltaOneOverBeta(0.03, StHFCuts::kKaon); // nastavene = f * (sigmaTOF), sigma TOF je 0.013 OK
-    hfCuts->setCutTOFDeltaOneOverBeta(999, StHFCuts::kPion); //
+    hfCuts->setCutTOFDeltaOneOverBetaKaon(0.04);
+    hfCuts->setCutTOFDeltaOneOverBetaPion(999);
     // set refmultCorr
     //StRefMultCorr* grefmultCorrUtil = CentralityMaker::instance()->getgRefMultCorr_P16id();
     //PicoD0AnaMaker->setRefMutCorr(grefmultCorrUtil);
