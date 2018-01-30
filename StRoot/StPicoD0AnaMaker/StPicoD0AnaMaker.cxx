@@ -59,8 +59,8 @@ int StPicoD0AnaMaker::InitHF() {
 
     ntp_kaon = new TNtuple("ntp_kaon", "kaon tree","k_pt:k_phi:k_eta:k_nSigma:k_nHitFit:k_TOFinvbeta:pi_eventId:pi_runId");
     ntp_pion = new TNtuple("ntp_pion", "pion tree","pi_pt:pi_phi:pi_eta:pi_nSigma:pi_nHitFit:pi_TOFinvbeta:k_eventId:k_runId");
-    ntp_DMeson_Signal = new TNtuple("ntp_signal","DMeson TreeSignal","grefMult:pi1_runId:pi1_eventId:pi1_phi:pi1_eta:pi1_pt:pi1_dca:pi1_dedx:pi1_nSigma:pi1_nHitFit:pi1_nHitdedx:pi1_TOFinvbeta:pi1_betaBase:k_runId:k_eventId:k_phi:k_eta:k_pt:k_dca:k_dedx:k_nSigma:k_nHitFit:k_nHitdedx:k_TOFinvbeta:k_betaBase:dcaDaughters:flag:primVz:D_rapidity:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_phi:D_eta:D_cosThetaStar:D_pt:D_mass:D_mass_LS:D_mass_US");
-    ntp_DMeson_Background = new TNtuple("ntp_background","DMeson TreeBackground","grefMult:pi1_runId:pi1_eventId:pi1_phi:pi1_eta:pi1_pt:pi1_dca:pi1_dedx:pi1_nSigma:pi1_nHitFit:pi1_nHitdedx:pi1_TOFinvbeta:pi1_betaBase:k_runId:k_eventId:k_phi:k_eta:k_pt:k_dca:k_dedx:k_nSigma:k_nHitFit:k_nHitdedx:k_TOFinvbeta:k_betaBase:dcaDaughters:flag:primVz:D_rapidity:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_phi:D_eta:D_cosThetaStar:D_pt:D_mass:D_mass_LS:D_mass_US");
+    ntp_DMeson_Signal = new TNtuple("ntp_signal","DMeson TreeSignal","grefMult:pi1_runId:pi1_eventId:pi1_phi:pi1_eta:pi1_pt:pi1_dca:pi1_dedx:pi1_nSigma:pi1_nHitFit:pi1_nHitdedx:pi1_TOFinvbeta:pi1_betaBase:k_runId:k_eventId:k_phi:k_eta:k_pt:k_dca:k_dedx:k_nSigma:k_nHitFit:k_nHitdedx:k_TOFinvbeta:k_betaBase:dcaDaughters:flag:primVz:D_rapidity:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_phi:D_eta:D_cosThetaStar:D_pt:D_mass");
+    ntp_DMeson_Background = new TNtuple("ntp_background","DMeson TreeBackground","grefMult:pi1_runId:pi1_eventId:pi1_phi:pi1_eta:pi1_pt:pi1_dca:pi1_dedx:pi1_nSigma:pi1_nHitFit:pi1_nHitdedx:pi1_TOFinvbeta:pi1_betaBase:k_runId:k_eventId:k_phi:k_eta:k_pt:k_dca:k_dedx:k_nSigma:k_nHitFit:k_nHitdedx:k_TOFinvbeta:k_betaBase:dcaDaughters:flag:primVz:D_rapidity:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_phi:D_eta:D_cosThetaStar:D_pt:D_mass");
 
     return kStOK;
 }
@@ -83,7 +83,7 @@ int StPicoD0AnaMaker::FinishHF() {
 // _________________________________________________________
 int StPicoD0AnaMaker::MakeHF() {
     createCandidates();
-//        analyzeCandidates();
+    analyzeCandidates();
 
 //    TH2F *h_piTOF = static_cast<TH2F*>(mOutList->FindObject("h_piTOF"));
 //    TH2F *h_kTOF = static_cast<TH2F*>(mOutList->FindObject("h_kTOF"));
@@ -197,7 +197,7 @@ int StPicoD0AnaMaker::createCandidates() {
             if( kaon->charge()>0 && pion1->charge()>0) flag=5.; // ++
 
             int ii=0;
-            float ntVar[40];
+            float ntVar[38];
             ntVar[ii++] = mPicoDst->event()->refMult();
             ntVar[ii++] = mPicoHFEvent->runId();
             ntVar[ii++] = mPicoHFEvent->eventId();
@@ -239,29 +239,18 @@ int StPicoD0AnaMaker::createCandidates() {
 
             ntVar[ii++] = pair->pt(); //sqrt(pow(pair->px(),2.0)+pow(pair->py(),2.0));
             ntVar[ii++] = pair->m();
-            if ((flag == 0) || (flag == 1)) {
-                ntVar[ii++] = -5; //D_mass_LS
-                ntVar[ii++] = pair->m();//D_mass_US
-            } else {
-                ntVar[ii++] = pair->m(); //D_mass_LS
-                ntVar[ii++] = -5;//D_mass_US
-            }
 
             if ((flag == 0) || (flag == 1)) {
                 ntp_DMeson_Signal->Fill(ntVar);
             } else {
                 ntp_DMeson_Background->Fill(ntVar);
             }
-
-
-
         }  // for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon)
     } // for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1)
 
     return kStOK;
 }
 
-// no using_________________________________________________________
 int StPicoD0AnaMaker::analyzeCandidates() {
     for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
         StPicoTrack const *t = mPicoDst->track(mIdxPicoPions[idxPion1]);
@@ -275,15 +264,11 @@ int StPicoD0AnaMaker::analyzeCandidates() {
     return kStOK;
 }
 
-// _________________________________________________________
 bool StPicoD0AnaMaker::isHadron(StPicoTrack const * const trk, int pidFlag) const {
-    // -- good hadron
     return (mHFCuts->isGoodTrack(trk) && mHFCuts->isTPCHadron(trk, pidFlag));
 }
 
-// _________________________________________________________
 bool StPicoD0AnaMaker::isPion(StPicoTrack const * const trk) const {
-    // -- good pion
     if (!mHFCuts->isGoodTrack(trk)) return false; //HFT, NhitsFit, pt range
     if (!mHFCuts->isTOFHadronPID(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kPion) ) return false;
 //    if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kPion) ) return false;
@@ -291,23 +276,14 @@ bool StPicoD0AnaMaker::isPion(StPicoTrack const * const trk) const {
     return (mHFCuts->isTPCHadron(trk, StPicoCutsBase::kPion));
 }
 
-// _________________________________________________________
 bool StPicoD0AnaMaker::isKaon(StPicoTrack const * const trk) const {
     if (!mHFCuts->isGoodTrack(trk)) return false;
-//    if (!mHFCuts->isTOFHadronPID(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon) ) return false;
+    if (!mHFCuts->isTOFHadronPID(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon) ) return false;
 //    if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon) ) return false;
-
-    float kBeta = getTofBetaD0(trk,&mPrimVtx);
-    bool tofAvailable = kBeta>0;
-    bool tofKaon = tofAvailable && isTofKaonD0(trk,kBeta);
-    bool goodKaon = (tofAvailable && tofKaon);
-    if(!goodKaon) return false;
-
     if (!mHFCuts->cutMinDcaToPrimVertex(trk, StPicoCutsBase::kKaon)) return false;
     return (mHFCuts->isTPCHadron(trk, StPicoCutsBase::kKaon));
 }
 
-// _________________________________________________________
 bool StPicoD0AnaMaker::isProton(StPicoTrack const * const trk) const {
     return (mHFCuts->isGoodTrack(trk) && mHFCuts->isTPCHadron(trk, StPicoCutsBase::kProton));
 }
@@ -318,50 +294,5 @@ float StPicoD0AnaMaker::getOneOverBeta(StPicoTrack const * const trk,  float con
     float m2 = mHFCuts->getHypotheticalMass(pidFlag)*mHFCuts->getHypotheticalMass(pidFlag);
     float ptot = trk->gPtot();
     float betaInv = ptot / sqrt(ptot*ptot + m2);
-    return (1/tofBeta - 1/betaInv);
-}
-
-float StPicoD0AnaMaker::getTofBetaD0(StPicoTrack const * const trk, StThreeVectorF const* const pVtx) const
-{
-    int index2tof = trk->bTofPidTraitsIndex();
-
-    float beta = std::numeric_limits<float>::quiet_NaN();
-
-    if(index2tof >= 0)
-    {
-        StPicoBTofPidTraits *tofPid = mPicoDst->btofPidTraits(index2tof);
-
-        if(tofPid)
-        {
-            beta = tofPid->btofBeta();
-
-            if (beta < 1e-4)
-            {
-                StThreeVectorF const btofHitPos = tofPid->btofHitPos();
-                // StPhysicalHelixD helix = trk->helix();
-                StPhysicalHelixD helix = trk->helix(mBField);
-
-                float L = tofPathLength(pVtx, &btofHitPos, helix.curvature());
-                float tof = tofPid->btof();
-                if (tof > 0) beta = L / (tof * (C_C_LIGHT / 1.e9));
-                else beta = std::numeric_limits<float>::quiet_NaN();
-            }
-        }
-    }
-
-    return beta;
-}
-
-bool StPicoD0AnaMaker::isTofKaonD0(StPicoTrack const * const trk, float beta) const
-{
-    bool tofKaon = false;
-
-    if(beta>0)
-    {
-        double ptot = trk->gPtot();
-        float beta_k = ptot/sqrt(ptot*ptot+M_KAON_PLUS*M_KAON_PLUS);
-        tofKaon = fabs(1/beta - 1/beta_k) < 0.03 ? true : false;
-    }
-
-    return tofKaon;
+    return fabs(1/tofBeta - 1/betaInv);
 }

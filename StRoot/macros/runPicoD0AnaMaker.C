@@ -108,9 +108,6 @@ void runPicoD0AnaMaker(
     float decayLengthMax  = 999; //std::numeric_limits<float>::max(); toto ide (cutuje)
     float cosThetaMin     = -2.;   // minimum
 
-    float minMass         = 0;
-    float maxMass         = 2;
-
     //    WIDER than pt12 tmva
 //    hfCuts->setCutDcaMin(0.007,StHFCuts::kPion); // OK
 //   hfCuts->setCutDcaMin(0.007,StHFCuts::kKaon); // OK
@@ -155,9 +152,6 @@ void runPicoD0AnaMaker(
     hfCuts->setCutTPCNSigmaKaon(2.0);
     hfCuts->setCutTOFDeltaOneOverBetaKaon(0.04);
 //    hfCuts->setCutTOFDeltaOneOverBetaPion(999);
-    // set refmultCorr
-    //StRefMultCorr* grefmultCorrUtil = CentralityMaker::instance()->getgRefMultCorr_P16id();
-    //PicoD0AnaMaker->setRefMutCorr(grefmultCorrUtil);
     
     clock_t start = clock(); // getting starting time
 
