@@ -264,9 +264,10 @@ bool StPicoCutsBase::isTOFHadronPID(StPicoTrack const *trk, float const & tofBet
   //      no TOF info : false
   
   // -- has TOF information
-  if (tofBeta <= 0)
-    return false;
-  float ptot    = trk->gPtot();
+
+  if (tofBeta <= 0) {return false;}
+
+  double ptot    = trk->gPtot();
   float betaInv = sqrt(ptot*ptot + mHypotheticalMass2[pidFlag]) / ptot;
   return ( fabs(1/tofBeta - betaInv) < mTOFDeltaOneOverBetaMax[pidFlag] );
 }
@@ -281,6 +282,8 @@ bool StPicoCutsBase::isTOFHadron(StPicoTrack const *trk, float const & tofBeta, 
   //      not in ptot range : true
 
   // -- only apply, if in ptot range
+
+
   float ptot = trk->gPtot();  
   if (ptot < mPtotRangeTOF[pidFlag][0] || ptot >= mPtotRangeTOF[pidFlag][1])
     return true;
@@ -321,30 +324,7 @@ StPicoBTofPidTraits* StPicoCutsBase::hasTofPid(StPicoTrack const * const trk) co
 
 // _________________________________________________________
 float StPicoCutsBase::getTofBetaBase(StPicoTrack const * const trk) const {
-  // -- provide beta of TOF for pico track
-  //    use for 
-  //      - primary hadrons 
-  //      - secondarys from charm decays (as an approximation)
-
-//  LUKAS
-//  float beta = std::numeric_limits<float>::quiet_NaN();
-//
-//  StPicoBTofPidTraits *tofPid = hasTofPid(trk);
-//  if (!tofPid)
-//    return beta;
-//
-//  beta = tofPid->btofBeta();
-//  if (beta < 1e-4) {
-//    StThreeVectorF const btofHitPos = tofPid->btofHitPos();
-//    StPhysicalHelixD helix = trk->helix(mPicoDst->event()->bField());
-//    float pathLength = tofPathLength(&mPrimVtx, &btofHitPos, helix.curvature());
-//    float tof = tofPid->btof();
-//    beta = (tof > 0) ? pathLength / (tof * (C_C_LIGHT / 1.e9)) : std::numeric_limits<float>::quiet_NaN();
-//  }
-//
-//  return beta;
-
-//  LIANG
+//  same as liang
   int index2tof = trk->bTofPidTraitsIndex();
   float beta = std::numeric_limits<float>::quiet_NaN();
 
@@ -354,7 +334,7 @@ float StPicoCutsBase::getTofBetaBase(StPicoTrack const * const trk) const {
     if(tofPid)   {
       beta = tofPid->btofBeta();
 
-      if (beta < 1e-4)         {
+      if (beta < 1e-4) {
         StThreeVectorF const btofHitPos = tofPid->btofHitPos();
         // StPhysicalHelixD helix = trk->helix();
         StPhysicalHelixD helix = trk->helix(mPicoDst->event()->bField());
@@ -374,26 +354,7 @@ float StPicoCutsBase::getTofBetaBase(StPicoTrack const * const trk) const {
 float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk) const { //liangs
     int index2tof = trk->bTofPidTraitsIndex();
     float beta = std::numeric_limits<float>::quiet_NaN();
-  //docasne zakomentovane
-//
-//    if(index2tof >= 0) {
-//      StPicoBTofPidTraits *tofPid = mPicoDstMaker->picoDst()->btofPidTraits(index2tof);
-//
-//      if(tofPid)   {
-//        beta = tofPid->btofBeta();
-//
-//        if (beta < 1e-4)         {
-//          StThreeVectorF const btofHitPos = tofPid->btofHitPos();
-//          // StPhysicalHelixD helix = trk->helix();
-//          StPhysicalHelixD helix = trk->helix(mPicoDstMaker->picoDst()->event()->bField());
-//
-//          float L = tofPathLength(pVtx, &btofHitPos, helix.curvature());
-//          float tof = tofPid->btof();
-//          if (tof > 0) beta = L / (tof * (C_C_LIGHT / 1.e9));
-//          else beta = std::numeric_limits<float>::quiet_NaN();
-//        }
-//      }
-//    }
+
 
     return beta;
 
