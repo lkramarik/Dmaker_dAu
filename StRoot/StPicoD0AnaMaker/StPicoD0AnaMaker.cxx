@@ -57,6 +57,8 @@ int StPicoD0AnaMaker::InitHF() {
 //
     mOutFileBaseName = mOutFileBaseName.ReplaceAll(".root", "");
 
+    ntp_kaon = new TNtuple("ntp_kaon", "kaon tree","k_pt:k_phi:k_eta:k_nSigma:k_nHitFit:k_TOFinvbeta:pi_eventId:pi_runId");
+    ntp_pion = new TNtuple("ntp_pion", "pion tree","pi_pt:pi_phi:pi_eta:pi_nSigma:pi_nHitFit:pi_TOFinvbeta:k_eventId:k_runId");
     ntp_DMeson_Signal = new TNtuple("ntp_signal","DMeson TreeSignal","grefMult:pi1_runId:pi1_eventId:pi1_phi:pi1_eta:pi1_pt:pi1_dca:pi1_dedx:pi1_nSigma:pi1_nHitFit:pi1_nHitdedx:pi1_TOFinvbeta:pi1_betaBase:k_runId:k_eventId:k_phi:k_eta:k_pt:k_dca:k_dedx:k_nSigma:k_nHitFit:k_nHitdedx:k_TOFinvbeta:k_betaBase:dcaDaughters:flag:primVz:D_rapidity:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_phi:D_eta:D_cosThetaStar:D_pt:D_mass:D_mass_LS:D_mass_US");
     ntp_DMeson_Background = new TNtuple("ntp_background","DMeson TreeBackground","grefMult:pi1_runId:pi1_eventId:pi1_phi:pi1_eta:pi1_pt:pi1_dca:pi1_dedx:pi1_nSigma:pi1_nHitFit:pi1_nHitdedx:pi1_TOFinvbeta:pi1_betaBase:k_runId:k_eventId:k_phi:k_eta:k_pt:k_dca:k_dedx:k_nSigma:k_nHitFit:k_nHitdedx:k_TOFinvbeta:k_betaBase:dcaDaughters:flag:primVz:D_rapidity:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_phi:D_eta:D_cosThetaStar:D_pt:D_mass:D_mass_LS:D_mass_US");
 
@@ -70,14 +72,12 @@ void StPicoD0AnaMaker::ClearHF(Option_t *opt="") {
 
 // _________________________________________________________
 int StPicoD0AnaMaker::FinishHF() {
-    if( isMakerMode() != StPicoHFMaker::kWrite ){
+    ntp_DMeson_Signal -> Write(ntp_DMeson_Signal->GetName(), TObject::kOverwrite);
+    ntp_DMeson_Background -> Write(ntp_DMeson_Background->GetName(), TObject::kOverwrite);
+    ntp_pion -> Write(ntp_pion->GetName(), TObject::kOverwrite);
+    ntp_kaon -> Write(ntp_kaon->GetName(), TObject::kOverwrite);
 
-        ntp_DMeson_Signal -> Write(ntp_DMeson_Signal->GetName(), TObject::kOverwrite);
-//        ntp_DMeson_Signal -> Write();
-        ntp_DMeson_Background -> Write(ntp_DMeson_Background->GetName(), TObject::kOverwrite);
-//        ntp_DMeson_Background -> Write();
-    }
-//    mOutFile->Close();
+    mOutFile->Close();
     return kStOK;
 }
 // _________________________________________________________
@@ -163,19 +163,27 @@ int StPicoD0AnaMaker::MakeHF() {
 //
 //    } // .. end tracks loop
 
-   return kStOK;
+    return kStOK;
 }
 
 // _________________________________________________________
 int StPicoD0AnaMaker::createCandidates() {
-    for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
-        StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
-        for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
-            StPicoTrack const *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
-            if (mIdxPicoKaons[idxKaon] == mIdxPicoPions[idxPion1]) continue;
-            StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
+//    for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
+//        StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
+//        for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
+//            StPicoTrack const *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
+//    StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
 
-            if (!mHFCuts->isClosePair(pair)) continue;
+    for(int i=0;i<mPicoDst->numberOfTracks();i++)  {
+        StPicoTrack const* pion1 = mPicoDst->track(i);
+        if (!isPion(trk)) continue;
+
+        for(int j=0;j<mPicoDst->numberOfTracks();j++)  {
+            StPicoTrack const* kaon = mPicoDst->track(j);
+            if (!isKaon(trk)) continue;
+
+            StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), i, j, mPrimVtx, mBField, kTRUE);
+//            if (!mHFCuts->isClosePair(pair)) continue;
 
             if(pair->pt() < 1) continue;
             if(pair->pt() > 2) continue;
@@ -255,6 +263,15 @@ int StPicoD0AnaMaker::createCandidates() {
 
 // no using_________________________________________________________
 int StPicoD0AnaMaker::analyzeCandidates() {
+    for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
+        StPicoTrack const *t = mPicoDst->track(mIdxPicoPions[idxPion1]);
+        ntp_pion->Fill(t->gPt(), t->gMom().phi(), t->gMom().pseudoRapidity(), t->nSigmaPion(), t->nHitsFit(), getOneOverBeta(t, mHFCuts->getTofBetaBase(pion1), StPicoCutsBase::kPion), mPicoHFEvent->eventId(), mPicoHFEvent->runId());
+    }
+
+    for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
+        StPicoTrack const *t = mPicoDst->track(mIdxPicoKaons[idxKaon]);
+        ntp_kaon->Fill(t->gPt(), t->gMom().phi(), t->gMom().pseudoRapidity(), t->nSigmaPion(), t->nHitsFit(), getOneOverBeta(t, mHFCuts->getTofBetaBase(pion1), StPicoCutsBase::kPion), mPicoHFEvent->eventId(), mPicoHFEvent->runId());
+    }
     return kStOK;
 }
 

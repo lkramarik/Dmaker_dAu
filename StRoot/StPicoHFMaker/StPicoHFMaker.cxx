@@ -151,17 +151,13 @@ Int_t StPicoHFMaker::Make() {
   Int_t iReturn = kStOK;
   if (setupEvent()) {
     UInt_t nTracks = mPicoDst->numberOfTracks();
-
-    // -- Fill vectors of particle types
-    if (mMakerMode == StPicoHFMaker::kAnalyze) {
-      for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
+    for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
         StPicoTrack* trk = mPicoDst->track(iTrack);
 
         if (!trk || !mHFCuts->isGoodTrack(trk)) continue;
         if (isPion(trk))   mIdxPicoPions.push_back(iTrack);   // isPion implemented by daughter class
         if (isKaon(trk))   mIdxPicoKaons.push_back(iTrack);   // isKaon implemented by daughter class
 //        if (isProton(trk)) mIdxPicoProtons.push_back(iTrack); // isProton method to be implemented by daughter class
-      }
     }
 
     // -- call method of daughter class
@@ -179,7 +175,7 @@ bool StPicoHFMaker::setupEvent() {
   // -- fill members from pico event, check for good eventa and fill event statistics
 
   mPicoEvent = mPicoDst->event();
-  mPicoHFEvent->addPicoEvent(*mPicoEvent); //not using
+  mPicoHFEvent->addPicoEvent(*mPicoEvent);
 
   mBField = mPicoEvent->bField();
   mPrimVtx = mPicoEvent->primaryVertex();
