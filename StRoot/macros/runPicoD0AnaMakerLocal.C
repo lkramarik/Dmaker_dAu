@@ -1,16 +1,3 @@
-/*   root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runPicoD0AnaMakerLocal.C++
- *  - Different modes to use the  class
- *    - StPicoHFMaker::kAnalyze - don't write candidate trees, just fill histograms
- *        inputFile : fileList of PicoDst files or single picoDst file
- *        outputFile: baseName for outfile 
- *    - StPicoHFMaker::kWrite   - write candidate trees
- *        inputFile : path to single picoDist file
- *        outputFile: baseName for outfile 
- *    - StPicoHFMaker::kRead    - read candidate trees and fill histograms
- *        inputFile : fileList of PicoDst files
- *        outputFile: baseName for outfile 
- */
-
 #ifndef __CINT__
 #include "TROOT.h"
 #include "TSystem.h"
@@ -21,14 +8,11 @@
 #include "StPicoHFMaker/StPicoHFEvent.h"
 #include "StPicoHFMaker/StHFCuts.h"
 #include "StPicoEvent/StPicoEvent.h"
-//#include "StPicoHFMyAnaMaker/StPicoHFMyAnaMaker.h"
 #include "macros/loadSharedHFLibraries.C"
 #include <iostream>
 #include <ctime>
 #include <cstdio>
 #include "StPicoD0AnaMaker/StPicoD0AnaMaker.h"
-//#include "StRefMultCorr/StRefMultCorr.h"
-//#include "StRefMultCorr/CentralityMaker.h"
 
 using namespace std;
 

@@ -7,18 +7,14 @@
 #include "TH2F.h"
 //#include "StPicoD0AnaHists.h"
 #include <vector>
-
 #include "TClonesArray.h"
-
 #include "StThreeVectorF.hh"
 #include "StLorentzVectorF.hh"
-
 #include "StPicoDstMaker/StPicoDst.h"
 #include "StPicoDstMaker/StPicoDstMaker.h"
 #include "StPicoEvent/StPicoEvent.h"
 #include "StPicoEvent/StPicoTrack.h"
 #include "StPicoEvent/StPicoBTofPidTraits.h"
-
 #include "StPicoHFMaker/StPicoHFEvent.h"
 #include "StPicoHFMaker/StHFCuts.h"
 #include "StPicoHFMaker/StHFPair.h"
@@ -41,8 +37,6 @@ class StHFPair;
 class StHFTriplet;
 class StHFCuts;
 
-class StRefMultCorr;
-
 class StPicoD0AnaMaker : public StPicoHFMaker
 {
 public:
@@ -54,8 +48,6 @@ public:
     virtual void  ClearHF(Option_t *opt);
     virtual Int_t FinishHF();
     virtual float getOneOverBeta(StPicoTrack const *,  float const & tofBeta, int pidFlag);
-    virtual float getTofBetaD0(StPicoTrack const *, StThreeVectorF const*) const;
-    virtual bool isTofKaonD0(StPicoTrack const *, float) const;
 
 protected:
     virtual bool isHadron(StPicoTrack const*, int pidFlag) const;
