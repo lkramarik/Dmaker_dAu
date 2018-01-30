@@ -256,15 +256,6 @@ bool StPicoCutsBase::isTPCHadron(StPicoTrack const * const trk, int pidFlag) con
 
 // _________________________________________________________
 bool StPicoCutsBase::isTOFHadronPID(StPicoTrack const *trk, float const & tofBeta, int pidFlag) const {
-  // -- check for good hadron in TOF PID
-  //    use for 
-  //      - primary hadrons 
-  //      - secondarys from charm decays (as an approximation)
-  //    return:
-  //      no TOF info : false
-  
-  // -- has TOF information
-
   if (tofBeta <= 0) {return false;}
 
   double ptot    = trk->gPtot();

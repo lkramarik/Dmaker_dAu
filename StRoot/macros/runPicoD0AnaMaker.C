@@ -151,8 +151,8 @@ void runPicoD0AnaMaker(
     //Single track pt
     hfCuts->setCutPtRange(0.2,50.0,StHFCuts::kPion);
     hfCuts->setCutPtRange(0.2,50.0,StHFCuts::kKaon);
-    hfCuts->setCutTPCNSigmaPion(3.0); //3 OK
-    hfCuts->setCutTPCNSigmaKaon(2.0); //3 OK
+    hfCuts->setCutTPCNSigmaPion(3.0);
+    hfCuts->setCutTPCNSigmaKaon(2.0);
     hfCuts->setCutTOFDeltaOneOverBetaKaon(0.04);
     hfCuts->setCutTOFDeltaOneOverBetaPion(999);
     // set refmultCorr

@@ -5,7 +5,8 @@
 //#include "StPicoD0EventMaker/StPicoD0Event.h"
 //#include "StPicoD0EventMaker/StKaonPion.h"
 #include "StPicoHFMaker/StHFCuts.h"
-
+#include "phys_constants.h"
+#include "StBTofUtil/tofPathLength.hh"
 #include "StPicoD0AnaMaker.h"
 ClassImp(StPicoD0AnaMaker)
 
@@ -278,8 +279,15 @@ bool StPicoD0AnaMaker::isPion(StPicoTrack const * const trk) const {
 bool StPicoD0AnaMaker::isKaon(StPicoTrack const * const trk) const {
     StThreeVectorF t = trk->gMom(mPrimVtx, mBField);
     if (!mHFCuts->isGoodTrack(trk)) return false;
-    if (!mHFCuts->isTOFHadronPID(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon) ) return false;
+//    if (!mHFCuts->isTOFHadronPID(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon) ) return false;
 //    if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon) ) return false;
+
+    float kBeta = getTofBetaD0(trk,&mPrimVtx);
+    bool tofAvailable = kBeta>0;
+    bool tofKaon = tofAvailable && isTofKaonD0(trk,kBeta);
+    bool goodKaon = (tofAvailable && tofKaon) || (!tofAvailable && tpcKaon);
+    if(!goodKaon) return false;
+
     if (!mHFCuts->cutMinDcaToPrimVertex(trk, StPicoCutsBase::kKaon)) return false;
     return (mHFCuts->isTPCHadron(trk, StPicoCutsBase::kKaon));
 }
@@ -296,4 +304,49 @@ float StPicoD0AnaMaker::getOneOverBeta(StPicoTrack const * const trk,  float con
     float ptot = trk->gPtot();
     float betaInv = sqrt(ptot*ptot + m2) / ptot;
     return fabs(1/tofBeta - betaInv);
+}
+
+float StPicoD0AnaMaker::getTofBetaD0(StPicoTrack const * const trk, StThreeVectorF const* const pVtx) const
+{
+    int index2tof = trk->bTofPidTraitsIndex();
+
+    float beta = std::numeric_limits<float>::quiet_NaN();
+
+    if(index2tof >= 0)
+    {
+        StPicoBTofPidTraits *tofPid = mPicoDstMaker->picoDst()->btofPidTraits(index2tof);
+
+        if(tofPid)
+        {
+            beta = tofPid->btofBeta();
+
+            if (beta < 1e-4)
+            {
+                StThreeVectorF const btofHitPos = tofPid->btofHitPos();
+                // StPhysicalHelixD helix = trk->helix();
+                StPhysicalHelixD helix = trk->helix(mPicoDstMaker->picoDst()->event()->bField());
+
+                float L = tofPathLength(pVtx, &btofHitPos, helix.curvature());
+                float tof = tofPid->btof();
+                if (tof > 0) beta = L / (tof * (C_C_LIGHT / 1.e9));
+                else beta = std::numeric_limits<float>::quiet_NaN();
+            }
+        }
+    }
+
+    return beta;
+}
+
+bool StPicoD0AnaMaker::isTofKaonD0(StPicoTrack const * const trk, float beta) const
+{
+    bool tofKaon = false;
+
+    if(beta>0)
+    {
+        double ptot = trk->gPtot();
+        float beta_k = ptot/sqrt(ptot*ptot+M_KAON_PLUS*M_KAON_PLUS);
+        tofKaon = fabs(1/beta - 1/beta_k) < 0.03 ? true : false;
+    }
+
+    return tofKaon;
 }
