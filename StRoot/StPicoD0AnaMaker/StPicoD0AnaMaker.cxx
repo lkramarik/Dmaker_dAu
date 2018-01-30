@@ -83,7 +83,7 @@ int StPicoD0AnaMaker::FinishHF() {
 // _________________________________________________________
 int StPicoD0AnaMaker::MakeHF() {
     createCandidates();
-    analyzeCandidates();
+//    analyzeCandidates();
 
 //    TH2F *h_piTOF = static_cast<TH2F*>(mOutList->FindObject("h_piTOF"));
 //    TH2F *h_kTOF = static_cast<TH2F*>(mOutList->FindObject("h_kTOF"));
