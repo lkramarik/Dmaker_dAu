@@ -300,7 +300,7 @@ float StPicoD0AnaMaker::getOneOverBeta(StPicoTrack const * const trk,  float con
         return -5;
     float m2 = mHFCuts->getHypotheticalMass(pidFlag)*mHFCuts->getHypotheticalMass(pidFlag);
     float ptot = trk->gPtot();
-    float ptot/ betaInv = sqrt(ptot*ptot + m2) / ptot;
+    float betaInv = ptot / sqrt(ptot*ptot + m2);
     return (1/tofBeta - 1/betaInv);
 }
 
