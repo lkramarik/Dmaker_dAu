@@ -76,8 +76,6 @@ int StPicoD0AnaMaker::FinishHF() {
     ntp_DMeson_Background -> Write(ntp_DMeson_Background->GetName(), TObject::kOverwrite);
     ntp_pion -> Write(ntp_pion->GetName(), TObject::kOverwrite);
     ntp_kaon -> Write(ntp_kaon->GetName(), TObject::kOverwrite);
-
-    mOutFile->Close();
     return kStOK;
 }
 // _________________________________________________________
@@ -296,3 +294,4 @@ float StPicoD0AnaMaker::getOneOverBeta(StPicoTrack const * const trk,  float con
     float betaInv = ptot / sqrt(ptot*ptot + m2);
     return fabs(1/tofBeta - 1/betaInv);
 }
+

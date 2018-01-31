@@ -58,7 +58,7 @@ Int_t StPicoHFMaker::Init() {
 
   // -- file which holds list of histograms
   mOutputFileList = new TFile(Form("%s.%s.root", mOutputFileBaseName.Data(), GetName()), "RECREATE");
-  mOutputFileList->SetCompressionLevel(1);
+//  mOutputFileList->SetCompressionLevel(1);
 
   // -- disable automatic adding of objects to file
   bool oldStatus = TH1::AddDirectoryStatus();
@@ -87,15 +87,6 @@ Int_t StPicoHFMaker::Init() {
 
 // _________________________________________________________
 Int_t StPicoHFMaker::Finish() {
-  // -- Inhertited from StMaker 
-  //    NOT TO BE OVERWRITTEN by daughter class
-  //    daughter class should implement FinishHF()
-
-  if (mMakerMode == StPicoHFMaker::kWrite) {
-    mOutputFileTree->cd();
-    mOutputFileTree->Write();
-    mOutputFileTree->Close();
-  }
 
   mOutputFileList->cd();
   mOutList->Write(mOutList->GetName(), TObject::kSingleKey);
