@@ -89,7 +89,7 @@ Int_t StPicoHFMaker::Init() {
 Int_t StPicoHFMaker::Finish() {
 
   mOutputFileList->cd();
-  mOutList->Write(mOutList->GetName(), TObject::kSingleKey);
+  mOutList->Write(mOutList->GetName(),  TObject::kSingleKey); //predtym TObject::kSingleKey
 
   // -- call method of daughter class
   FinishHF();
