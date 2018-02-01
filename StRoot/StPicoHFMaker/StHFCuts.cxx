@@ -57,9 +57,6 @@ StHFCuts::~StHFCuts() {
   // destructor
   
 }
-
-// =======================================================================
-
 // _________________________________________________________
 bool StHFCuts::isClosePair(StHFPair const & pair) const {
   // -- check for a pair which is close in dca w/o mass constraint,

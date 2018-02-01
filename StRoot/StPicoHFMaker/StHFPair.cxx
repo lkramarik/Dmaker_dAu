@@ -52,10 +52,11 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
   StThreeVectorF const p1Mom = p1Helix.momentum(bField * kilogauss);
   StThreeVectorF const p2Mom = p2Helix.momentum(bField * kilogauss);
 
-  StPhysicalHelixD const p1StraightLine(p1Mom, particle1->origin(), 0, particle1->charge());
-  StPhysicalHelixD const p2StraightLine(p2Mom, particle2->origin(), 0, particle2->charge());
+  StPhysicalHelixD const p1StraightLine(p1Mom, p1Helix->origin(), 0, particle1->charge());
+  StPhysicalHelixD const p2StraightLine(p2Mom, p2Helix->origin(), 0, particle2->charge());
 
-  pair<double, double> const ss = (useStraightLine) ? p1StraightLine.pathLengths(p2StraightLine) : p1Helix.pathLengths(p2Helix);
+//  pair<double, double> const ss = (useStraightLine) ? p1StraightLine.pathLengths(p2StraightLine) : p1Helix.pathLengths(p2Helix);
+  pair<double, double> const ss = p1StraightLine.pathLengths(p2StraightLine);
   StThreeVectorF const p1AtDcaToP2 = p1StraightLine.at(ss.first);
   StThreeVectorF const p2AtDcaToP1 = p2StraightLine.at(ss.second);
 
@@ -83,8 +84,11 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
   mPointingAngle = vtxToV0.angle(mLorentzVector.vect());
   mDecayLength = vtxToV0.mag();
 
-  mParticle1Dca = (vtx - particle1->dcaPoint()).mag();
-  mParticle2Dca = (vtx - particle2->dcaPoint()).mag();
+  mParticle1Dca = (p1Helix.origin() - vtx).mag();
+  mParticle2Dca = (p2Helix.origin() - vtx).mag();
+
+//  mParticle1Dca = (vtx - particle1->dcaPoint()).mag();
+//  mParticle2Dca = (vtx - particle2->dcaPoint()).mag();
 }
 
 // _________________________________________________________

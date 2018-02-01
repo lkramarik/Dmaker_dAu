@@ -91,7 +91,7 @@ private:
 	float mDcaDaughters;
 	float mCosThetaStar;
 
-	ClassDef(StHFPair,2)
+	ClassDef(StHFPair,1)
 };
 inline StLorentzVectorF const & StHFPair::lorentzVector() const { return mLorentzVector;}
 inline float StHFPair::rapidity()    const { return mLorentzVector.rapidity();}

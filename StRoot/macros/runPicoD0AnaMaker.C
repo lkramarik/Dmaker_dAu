@@ -126,7 +126,7 @@ void runPicoD0AnaMaker(
 //    float minMass         = 0.4;
 //    float maxMass         = 2.4;
 //
-    hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass); //ok
+//    hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass); //ok
     
     //Single track pt
     hfCuts->setCutPtRange(0.2,50.0,StHFCuts::kPion);
