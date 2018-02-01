@@ -52,8 +52,8 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
   StThreeVectorF const p1Mom = p1Helix.momentum(bField * kilogauss);
   StThreeVectorF const p2Mom = p2Helix.momentum(bField * kilogauss);
 
-  StPhysicalHelixD const p1StraightLine(p1Mom, p1Helix->origin(), 0, particle1->charge());
-  StPhysicalHelixD const p2StraightLine(p2Mom, p2Helix->origin(), 0, particle2->charge());
+  StPhysicalHelixD const p1StraightLine(p1Mom, p1Helix.origin(), 0, particle1->charge());
+  StPhysicalHelixD const p2StraightLine(p2Mom, p2Helix.origin(), 0, particle2->charge());
 
 //  pair<double, double> const ss = (useStraightLine) ? p1StraightLine.pathLengths(p2StraightLine) : p1Helix.pathLengths(p2Helix);
   pair<double, double> const ss = p1StraightLine.pathLengths(p2StraightLine);
