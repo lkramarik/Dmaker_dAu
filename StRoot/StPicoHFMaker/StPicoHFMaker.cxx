@@ -58,7 +58,7 @@ Int_t StPicoHFMaker::Init() {
 
   // -- file which holds list of histograms
   mOutputFileList = new TFile(Form("%s.%s.root", mOutputFileBaseName.Data(), GetName()), "RECREATE");
-//  mOutputFileList->SetCompressionLevel(1);
+  mOutputFileList->SetCompressionLevel(1);
 
   // -- disable automatic adding of objects to file
   bool oldStatus = TH1::AddDirectoryStatus();
