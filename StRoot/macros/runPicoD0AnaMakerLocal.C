@@ -151,8 +151,5 @@ void runPicoD0AnaMakerLocal(
   
   delete chain;
 
-  // -- clean up if in read mode
-  if (makerMode == StPicoHFMaker::kRead)
-    gSystem->Exec(Form("rm -f %s", sInputFile.Data()));
 }
 
