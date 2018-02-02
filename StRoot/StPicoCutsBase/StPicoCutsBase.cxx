@@ -304,7 +304,7 @@ bool StPicoCutsBase::isHybridTOFHadron(StPicoTrack const *trk, float const & tof
   return isTOFHadronPID(trk, tofBeta, pidFlag);
 }
 
-bool StPicoCutsBase::isTOFmatched(StPicoTrack const *trk) {
+bool StPicoCutsBase::isTOFmatched(StPicoTrack const *trk) const {
   int tofIndex = trk->bTofPidTraitsIndex();
   bool TofMatch = kFALSE;
   StPicoBTofPidTraits* tofPidTraits;
