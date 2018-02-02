@@ -55,8 +55,8 @@ int StPicoD0AnaMaker::InitHF() {
 //
 //    mOutList->Add(new TH2F("h_dedx","h_dedx", 1000, 0, 10, 1000, 0, 10));
 //h_tracktest
-    mOutList->Add(new TH1D("h_tracktest","h_tracktest", 5, 0, 5));
-    mOutList->Add(new TH1D("h_tracktest_TOF","h_tracktest_TOF", 5, 0, 5));
+    mOutList->Add(new TH1D("h_tracktest","h_tracktest", 5, 0.5, 5.5));
+    mOutList->Add(new TH1D("h_tracktest_TOF","h_tracktest_TOF", 5, 0.5, 5.5));
 
     mOutFileBaseName = mOutFileBaseName.ReplaceAll(".root", "");
 
