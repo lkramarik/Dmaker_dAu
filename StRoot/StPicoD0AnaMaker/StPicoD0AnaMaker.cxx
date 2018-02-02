@@ -273,9 +273,9 @@ int StPicoD0AnaMaker::analyzeCandidates() {
     for(unsigned int i=0;i<mPicoDst->numberOfTracks();i++) {
         StPicoTrack const *t = mPicoDst->track(i);
         if (!t) continue;
-        if (t->isHFTTrack()) continue;
+        if (!t->isHFTTrack()) continue;
         h_tracktest->Fill(1);
-        if (t->nHitsFit() >= 20) h_tracktest->Fill(2);
+        if (isGoodTrack(t)) h_tracktest->Fill(2);
 //        if (mHFCuts->isGoodTrack(t)) h_tracktest->Fill(2); // NhitsFit
 
         float pt=t->gPt();
