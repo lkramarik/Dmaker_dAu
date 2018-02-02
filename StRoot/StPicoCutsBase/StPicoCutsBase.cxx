@@ -268,7 +268,7 @@ bool StPicoCutsBase::isTOFKaon(StPicoTrack const *trk) const {
 
   double ptot    = trk->gPtot();
   float betaInv = ptot / sqrt(ptot*ptot + M_KAON_PLUS*M_KAON_PLUS);
-  return ( fabs(1/tofBeta - 1/betaInv) < mTOFDeltaOneOverBetaMax[pidFlag] );
+  return ( fabs(1/tofBeta - 1/betaInv) < mTOFDeltaOneOverBetaMax[kKaon] );
 }
 
 
