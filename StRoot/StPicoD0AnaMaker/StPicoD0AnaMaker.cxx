@@ -275,8 +275,7 @@ int StPicoD0AnaMaker::analyzeCandidates() {
         if (!t) continue;
         if (!t->isHFTTrack()) continue;
         h_tracktest->Fill(1);
-        if (isGoodTrack(t)) h_tracktest->Fill(2);
-//        if (mHFCuts->isGoodTrack(t)) h_tracktest->Fill(2); // NhitsFit
+        if (mHFCuts->isGoodTrack(t)) h_tracktest->Fill(2); // NhitsFit
 
         float pt=t->gPt();
         if (pt>0.6) h_tracktest->Fill(3);
