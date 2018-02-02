@@ -304,6 +304,16 @@ bool StPicoCutsBase::isHybridTOFHadron(StPicoTrack const *trk, float const & tof
   return isTOFHadronPID(trk, tofBeta, pidFlag);
 }
 
+bool StPicoCutsBase::isTOFmatched(StPicoTrack const *trk) {
+  int tofIndex = trk->bTofPidTraitsIndex();
+  bool TofMatch = kFALSE;
+  StPicoBTofPidTraits* tofPidTraits;
+  if (tofIndex >= 0)  tofPidTraits = mPicoDst->btofPidTraits(tofIndex);
+  if (tofIndex >= 0 && tofPidTraits && tofPidTraits->btofMatchFlag() > 0)  TofMatch = kTRUE;
+  return TofMatch;
+}
+
+
 // _________________________________________________________
 StPicoBTofPidTraits* StPicoCutsBase::hasTofPid(StPicoTrack const * const trk) const {
   // -- check if track has TOF pid information
@@ -312,6 +322,7 @@ StPicoBTofPidTraits* StPicoCutsBase::hasTofPid(StPicoTrack const * const trk) co
   int index2tof = trk->bTofPidTraitsIndex();
   return (index2tof >= 0) ? mPicoDst->btofPidTraits(index2tof) : NULL;
 }
+
 
 // _________________________________________________________
 float StPicoCutsBase::getTofBetaBase(StPicoTrack const * const trk) const {

@@ -61,8 +61,8 @@ private:
 
     TNtuple *ntp_DMeson_Signal;
     TNtuple *ntp_DMeson_Background;
-    TNtuple *ntp_kaon;
-    TNtuple *ntp_pion;
+//    TNtuple *ntp_kaon;
+//    TNtuple *ntp_pion;
 
 
     int mRunNumber;

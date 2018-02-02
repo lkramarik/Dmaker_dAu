@@ -53,7 +53,8 @@ class StPicoCutsBase : public TNamed
 
   // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --   
   // -- TOF PID
-  // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --   
+  // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+  bool isTOFmatched(StPicoTrack const *trk) const;
   bool isTOFHadronPID(StPicoTrack const *trk, float const & tofBeta, int pidFlag) const;
   bool isTOFHadron(StPicoTrack const *trk, float const & tofBeta, int pidFlag) const;
   bool isHybridTOFHadron(StPicoTrack const *trk, float const & tofBeta, int pidFlag) const;
