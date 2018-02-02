@@ -55,8 +55,8 @@ int StPicoD0AnaMaker::InitHF() {
 //
 //    mOutList->Add(new TH2F("h_dedx","h_dedx", 1000, 0, 10, 1000, 0, 10));
 //h_tracktest
-//    mOutList->Add(new TH1D("h_tracktest","h_tracktest", 5, 0, 5));
-//    mOutList->Add(new TH1D("h_tracktest_TOF","h_tracktest_TOF", 5, 0, 5));
+    mOutList->Add(new TH1D("h_tracktest","h_tracktest", 5, 0, 5));
+    mOutList->Add(new TH1D("h_tracktest_TOF","h_tracktest_TOF", 5, 0, 5));
 
     mOutFileBaseName = mOutFileBaseName.ReplaceAll(".root", "");
 
@@ -253,14 +253,14 @@ int StPicoD0AnaMaker::createCandidates() {
 }
 
 int StPicoD0AnaMaker::analyzeCandidates() {
-//    TH1D *h_tracktest = static_cast<TH1D*>(mOutList->FindObject("h_tracktest"));
-//    TH1D *h_tracktest_TOF = static_cast<TH1D*>(mOutList->FindObject("h_tracktest_TOF"));
+    TH1D *h_tracktest = static_cast<TH1D*>(mOutList->FindObject("h_tracktest"));
+    TH1D *h_tracktest_TOF = static_cast<TH1D*>(mOutList->FindObject("h_tracktest_TOF"));
 
-    mOutList->Add(new TH1D("h_tracktest","h_tracktest", 5, -0.5, 4.5));
-    TH1D *h_tracktest = static_cast<TH1D*>(mOutList->Last());
+//    mOutList->Add(new TH1D("h_tracktest","h_tracktest", 5, -0.5, 4.5));
+//    TH1D *h_tracktest = static_cast<TH1D*>(mOutList->Last());
 
-    mOutList->Add(new TH1F("h_tracktest_TOF","h_tracktest_TOF", 5, -0.5, 4.5));
-    TH1D *h_tracktest_TOF = static_cast<TH1D*>(mOutList->Last());
+//    mOutList->Add(new TH1F("h_tracktest_TOF","h_tracktest_TOF", 5, -0.5, 4.5));
+//    TH1D *h_tracktest_TOF = static_cast<TH1D*>(mOutList->Last());
 
     const char *aNames[]   = {"all", "NHitFit>20", "pT>0.6", "TPC pion", "TPC kaon"};
     const char *aNamesTOF[]   = {"all TOF match", "NHitFit>20 & TOF", "pT>0.6 & TOF", "TPC & TOF pion", "TPC & TOF kaon"};
