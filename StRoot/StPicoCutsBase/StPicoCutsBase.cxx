@@ -254,7 +254,6 @@ bool StPicoCutsBase::isTPCHadron(StPicoTrack const * const trk, int pidFlag) con
   return (nSigma < mTPCNSigmaMax[pidFlag] && trk->gPt() >= mPtRange[pidFlag][0] && trk->gPt() < mPtRange[pidFlag][1] );
 }
 
-// _________________________________________________________
 bool StPicoCutsBase::isTOFHadronPID(StPicoTrack const *trk, float const & tofBeta, int pidFlag) const {
   if (tofBeta <= 0) {return false;}
 
@@ -263,7 +262,16 @@ bool StPicoCutsBase::isTOFHadronPID(StPicoTrack const *trk, float const & tofBet
   return ( fabs(1/tofBeta - 1/betaInv) < mTOFDeltaOneOverBetaMax[pidFlag] );
 }
 
-// _________________________________________________________
+bool StPicoCutsBase::isTOFKaon(StPicoTrack const *trk) const {
+  float tofBeta = getTofBetaBase(trk);
+  if (tofBeta <= 0) {return false;}
+
+  double ptot    = trk->gPtot();
+  float betaInv = ptot / sqrt(ptot*ptot + M_KAON_PLUS*M_KAON_PLUS);
+  return ( fabs(1/tofBeta - 1/betaInv) < mTOFDeltaOneOverBetaMax[pidFlag] );
+}
+
+
 bool StPicoCutsBase::isTOFHadron(StPicoTrack const *trk, float const & tofBeta, int pidFlag) const {
   // -- check for good hadron in TOF in ptot range
   //    use for 

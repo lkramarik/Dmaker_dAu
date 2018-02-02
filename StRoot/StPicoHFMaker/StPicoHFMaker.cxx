@@ -54,9 +54,9 @@ Int_t StPicoHFMaker::Init() {
   if (!mHFCuts)    mHFCuts = new StHFCuts;
   mHFCuts->init();
   // -- create HF event - using the proper decay mode to initialize
-  mPicoHFEvent = new StPicoHFEvent(mDecayMode);
+//  mPicoHFEvent = new StPicoHFEvent(mDecayMode);
 
-  // -- file which holds list of histograms
+  // -- file with outputs
   mOutputFileList = new TFile(Form("%s.%s.root", mOutputFileBaseName.Data(), GetName()), "RECREATE");
   mOutputFileList->SetCompressionLevel(1);
 
@@ -106,7 +106,7 @@ void StPicoHFMaker::resetEvent() {
   mIdxPicoKaons.clear();
 //  mIdxPicoProtons.clear();
 
-  mPicoHFEvent->clear("C");
+//  mPicoHFEvent->clear("C");
 }
 
 // _________________________________________________________
@@ -166,7 +166,7 @@ bool StPicoHFMaker::setupEvent() {
   // -- fill members from pico event, check for good eventa and fill event statistics
 
   mPicoEvent = mPicoDst->event();
-  mPicoHFEvent->addPicoEvent(*mPicoEvent);
+//  mPicoHFEvent->addPicoEvent(*mPicoEvent);
 
   mBField = mPicoEvent->bField();
   mPrimVtx = mPicoEvent->primaryVertex();

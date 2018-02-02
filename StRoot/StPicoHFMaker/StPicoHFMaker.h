@@ -73,6 +73,7 @@ class StPicoHFMaker : public StMaker
 //    StHFHists      *mHFHists; comm. LK 04012018
 
     StPicoHFEvent  *mPicoHFEvent;
+    StPicoEvent*    mPicoEvent;          // ptr to picoDstEvent
 
     float           mBField;
     StThreeVectorF  mPrimVtx;
@@ -108,7 +109,6 @@ class StPicoHFMaker : public StMaker
 
     StPicoDstMaker* mPicoDstMaker;       // ptr to picoDst maker
 
-    StPicoEvent*    mPicoEvent;          // ptr to picoDstEvent
 
     TTree*          mTree;               // tree holding "mPicoHFEvent" for writing only
 

@@ -274,9 +274,10 @@ inline bool StPicoCutsBase::isTPCProton(StPicoTrack const * const trk) const {re
 
 inline bool StPicoCutsBase::isTOFPion(StPicoTrack const *trk)   const { float tofBeta = getTofBeta(trk);  
                                                                         return isTOFHadron(trk, tofBeta, StPicoCutsBase::kPion); }
-inline bool StPicoCutsBase::isTOFKaon(StPicoTrack const *trk)   const { float tofBeta = getTofBeta(trk);  
-                                                                        return isTOFHadron(trk, tofBeta, StPicoCutsBase::kKaon); }
-inline bool StPicoCutsBase::isTOFProton(StPicoTrack const *trk) const { float tofBeta = getTofBeta(trk);  
+//inline bool StPicoCutsBase::isTOFKaon(StPicoTrack const *trk)   const { float tofBeta = getTofBeta(trk);
+//                                                                        return isTOFHadron(trk, tofBeta, StPicoCutsBase::kKaon); }
+
+inline bool StPicoCutsBase::isTOFProton(StPicoTrack const *trk) const { float tofBeta = getTofBeta(trk);
                                                                         return isTOFHadron(trk, tofBeta, StPicoCutsBase::kProton); }
 
 inline bool StPicoCutsBase::isTOFPion(StPicoTrack const *trk,   float const & tofBeta) const { return isTOFHadron(trk, tofBeta, StPicoCutsBase::kPion); }
