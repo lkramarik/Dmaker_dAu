@@ -238,7 +238,7 @@ bool StPicoCutsBase::cutMinDcaToPrimVertexTertiary(StPicoTrack const * const trk
 // _________________________________________________________
 bool StPicoCutsBase::isTPCHadron(StPicoTrack const * const trk, int pidFlag) const {
   // -- check for good hadron in TPC
-  float nSigma = std::numeric_limits<float>::quiet_NaN();
+  float nSigma = 999;
 
   if (pidFlag == kPion)
     nSigma = fabs(trk->nSigmaPion());
@@ -247,7 +247,7 @@ bool StPicoCutsBase::isTPCHadron(StPicoTrack const * const trk, int pidFlag) con
   else if (pidFlag == kProton)
     nSigma = fabs(trk->nSigmaProton());
 
-  return (nSigma < mTPCNSigmaMax[pidFlag] && trk->gPt() >= mPtRange[pidFlag][0] && trk->gPt() < mPtRange[pidFlag][1] );
+  return (nSigma < mTPCNSigmaMax[pidFlag]);
 }
 
 bool StPicoCutsBase::isTOFHadronPID(StPicoTrack const *trk, float const & tofBeta, int pidFlag) const {
