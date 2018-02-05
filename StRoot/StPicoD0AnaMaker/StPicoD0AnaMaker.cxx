@@ -287,8 +287,10 @@ int StPicoD0AnaMaker::analyzeCandidates() {
         bool tpcPion = mHFCuts->isTPCHadron(t, StPicoCutsBase::kPion);
         bool tpcKaon = mHFCuts->isTPCHadron(t, StPicoCutsBase::kKaon);
         if ((pt>0.6) && (dca<1.5 ) && (mHFCuts->isGoodTrack(t))) {
-            if (tpcPion) h_tracktest->Fill(5);
-            if (tpcKaon) h_tracktest->Fill(6);
+//            if (tpcPion) h_tracktest->Fill(5);
+//            if (tpcKaon) h_tracktest->Fill(6);
+            if (fabs(t->nSigmaPion()<3)) h_tracktest->Fill(5);
+            if (fabs(t->nSigmaKaon()<2)) h_tracktest->Fill(6);
         }
         if (mHFCuts->isTOFmatched(t)) {
             h_tracktest_TOF->Fill(1);
@@ -296,8 +298,10 @@ int StPicoD0AnaMaker::analyzeCandidates() {
             if (pt>0.6 && mHFCuts->isGoodTrack(t)) h_tracktest_TOF->Fill(3);
             if (dca<1.5 && pt>0.6 && mHFCuts->isGoodTrack(t)) h_tracktest_TOF->Fill(4);
             if ((pt>0.6) && (dca<1.5 ) && (mHFCuts->isGoodTrack(t))) {
-                if (tpcPion && mHFCuts->isTOFHadronPID(t, mHFCuts->getTofBetaBase(t), StPicoCutsBase::kPion))  h_tracktest_TOF->Fill(5);
-                if (tpcKaon && mHFCuts->isTOFHadronPID(t, mHFCuts->getTofBetaBase(t), StPicoCutsBase::kKaon))  h_tracktest_TOF->Fill(6);
+//                if (tpcPion && mHFCuts->isTOFHadronPID(t, mHFCuts->getTofBetaBase(t), StPicoCutsBase::kPion))  h_tracktest_TOF->Fill(5);
+//                if (tpcKaon && mHFCuts->isTOFHadronPID(t, mHFCuts->getTofBetaBase(t), StPicoCutsBase::kKaon))  h_tracktest_TOF->Fill(6);
+                if (fabs(t->nSigmaPion()<3) && mHFCuts->isTOFHadronPID(t, mHFCuts->getTofBetaBase(t), StPicoCutsBase::kPion))  h_tracktest_TOF->Fill(5);
+                if (fabs(t->nSigmaKaon()<2) && mHFCuts->isTOFHadronPID(t, mHFCuts->getTofBetaBase(t), StPicoCutsBase::kKaon))  h_tracktest_TOF->Fill(6);
             }
         }
 
