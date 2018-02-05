@@ -244,7 +244,7 @@ bool StPicoCutsBase::isTPCHadron(StPicoTrack const * const trk, int pidFlag) con
   if (pidFlag == kKaon) nSigma = fabs(trk->nSigmaKaon());
   if (pidFlag == kProton)  nSigma = fabs(trk->nSigmaProton());
 
-  return (nSigma < 2); //pozor
+  return (nSigma < mTPCNSigmaMax[pidFlag]); //pozor
 }
 
 bool StPicoCutsBase::isTOFHadronPID(StPicoTrack const *trk, float const & tofBeta, int pidFlag) const {
