@@ -240,12 +240,9 @@ bool StPicoCutsBase::isTPCHadron(StPicoTrack const * const trk, int pidFlag) con
   // -- check for good hadron in TPC
   float nSigma = 999;
 
-  if (pidFlag == kPion)
-    nSigma = fabs(trk->nSigmaPion());
-  else if (pidFlag == kKaon)
-    nSigma = fabs(trk->nSigmaKaon());
-  else if (pidFlag == kProton)
-    nSigma = fabs(trk->nSigmaProton());
+  if (pidFlag == kPion) nSigma = fabs(trk->nSigmaPion());
+  if (pidFlag == kKaon) nSigma = fabs(trk->nSigmaKaon());
+  if (pidFlag == kProton)  nSigma = fabs(trk->nSigmaProton());
 
   return (nSigma < 2); //pozor
 }
