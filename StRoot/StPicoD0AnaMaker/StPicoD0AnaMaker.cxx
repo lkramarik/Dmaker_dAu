@@ -281,9 +281,9 @@ int StPicoD0AnaMaker::analyzeCandidates() {
         if (mHFCuts->isGoodTrack(t)) h_tracktest->Fill(2); // NhitsFit
 
         float pt=t->gPt();
-        if (pt>0.6) h_tracktest->Fill(3);
+        if ((pt>0.6) && mHFCuts->isGoodTrack(t)) h_tracktest->Fill(3);
         float dca = (mPrimVtx - t->dcaPoint()).mag();
-        if (dca<1.5) h_tracktest->Fill(4);
+        if (dca<1.5 && (pt>0.6) && mHFCuts->isGoodTrack(t)) h_tracktest->Fill(4);
         bool tpcPion = mHFCuts->isTPCHadron(t, StPicoCutsBase::kPion);
         bool tpcKaon = mHFCuts->isTPCHadron(t, StPicoCutsBase::kKaon);
         if ((pt>0.6) && (dca<1.5 ) && (mHFCuts->isGoodTrack(t))) {
@@ -293,8 +293,8 @@ int StPicoD0AnaMaker::analyzeCandidates() {
         if (mHFCuts->isTOFmatched(t)) {
             h_tracktest_TOF->Fill(1);
             if (mHFCuts->isGoodTrack(t)) h_tracktest_TOF->Fill(2); // NhitsFit
-            if (pt>0.6) h_tracktest_TOF->Fill(3);
-            if (dca<1.5) h_tracktest_TOF->Fill(4);
+            if (pt>0.6 && mHFCuts->isGoodTrack(t)) h_tracktest_TOF->Fill(3);
+            if (dca<1.5 && pt>0.6 && mHFCuts->isGoodTrack(t)) h_tracktest_TOF->Fill(4);
             if ((pt>0.6) && (dca<1.5 ) && (mHFCuts->isGoodTrack(t))) {
                 if (tpcPion && mHFCuts->isTOFHadronPID(t, mHFCuts->getTofBetaBase(t), StPicoCutsBase::kPion))  h_tracktest_TOF->Fill(5);
                 if (tpcKaon && mHFCuts->isTOFHadronPID(t, mHFCuts->getTofBetaBase(t), StPicoCutsBase::kKaon))  h_tracktest_TOF->Fill(6);
