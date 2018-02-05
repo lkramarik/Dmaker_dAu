@@ -84,7 +84,7 @@ void runPicoD0AnaMaker(
 //   hfCuts->setCutDcaMin(0.007,StHFCuts::kKaon); // OK
     hfCuts->setCutTPCNSigmaPion(3.0);
     hfCuts->setCutTPCNSigmaKaon(2.0);
-    hfCuts->setCutTOFDeltaOneOverBetaKaon(0.04);
+    hfCuts->setCutTOFDeltaOneOverBetaKaon(0.03);
 //    hfCuts->setCutTOFDeltaOneOverBetaPion(999);
 
 //    float dcaDaughtersMax = 0.012;  // maximum toto ide

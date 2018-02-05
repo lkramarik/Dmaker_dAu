@@ -287,8 +287,8 @@ int StPicoD0AnaMaker::analyzeCandidates() {
         if ((pt>0.6) && (dca<1.5 ) && (mHFCuts->isGoodTrack(t))) {
 //            if (tpcPion) h_tracktest->Fill(5);
 //            if (tpcKaon) h_tracktest->Fill(6);
-            if (fabs(t->nSigmaPion()<3)) h_tracktest->Fill(5);
-            if (fabs(t->nSigmaKaon()<2)) h_tracktest->Fill(6);
+            if (fabs(t->nSigmaPion())<3) h_tracktest->Fill(5);
+            if (fabs(t->nSigmaKaon())<2) h_tracktest->Fill(6);
         }
         if (mHFCuts->isTOFmatched(t)) {
             h_tracktest_TOF->Fill(1);
