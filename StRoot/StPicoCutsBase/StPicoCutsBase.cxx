@@ -184,10 +184,6 @@ bool StPicoCutsBase::isGoodEvent(StPicoDst const * const picoDst, int *aEventCut
   ++iCut;
   if (fabs(picoEvent->primaryVertex().z() - picoEvent->vzVpd()) >= mVzVpdVzMax)
     aEventCuts[iCut] = 1;  
-  
-  // -- 5 check for centrality info
-
-  // ... if needed
 
   // -- is rejected
   bool isGoodEvent = true;
@@ -218,7 +214,7 @@ bool StPicoCutsBase::isGoodTrigger(StPicoEvent const * const picoEvent) const {
 // _________________________________________________________
 bool StPicoCutsBase::isGoodTrack(StPicoTrack const * const trk) const {
   // -- require at least one hit on every layer of PXL and IST.
-  return ((!mRequireHFT || trk->isHFTTrack()) && trk->nHitsFit() >= mNHitsFitMin);
+  return ((!mRequireHFT || trk->isHFTTrack()) && trk->nHitsFit() > mNHitsFitMin); //pozor, odobrate = na NhitFit
 }
 
 // _________________________________________________________

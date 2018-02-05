@@ -60,20 +60,7 @@ void runPicoD0AnaMaker(
 
     hfCuts->setBadRunListFileName(badRunListFileName);
 
-    hfCuts->addTriggerId(2); //ZDC-VPD-5 
-    hfCuts->addTriggerId(3); //VPD-5
-    hfCuts->addTriggerId(6);  //highMult-VPD-5
-    hfCuts->addTriggerId(7);  //highMult2-VPD-5
-    hfCuts->addTriggerId(15); //BHT1-VPD-10
-    hfCuts->addTriggerId(16); //BHT2-VPD-30
-    hfCuts->addTriggerId(17); //BHT3
-    hfCuts->addTriggerId(530002); //ZCD-VPD-5
     hfCuts->addTriggerId(530003); //VPD-5
-    hfCuts->addTriggerId(530101); //highMult-VPD-5
-    hfCuts->addTriggerId(530102); //highMult2-VPD-5
-    hfCuts->addTriggerId(530201); //BHT1-VPD-10
-    hfCuts->addTriggerId(530202); //BHT2-VPD-30 
-    hfCuts->addTriggerId(530213); //BHT3
 
     hfCuts->setCutPrimaryDCAtoVtxMax(10.);
     hfCuts->setCutVzMax(1000);
