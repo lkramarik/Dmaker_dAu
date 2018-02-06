@@ -251,7 +251,7 @@ bool StPicoCutsBase::isTOFHadronPID(StPicoTrack const *trk, float const & tofBet
   if (tofBeta <= 0) {return false;}
 
   double ptot    = trk->gPtot();
-  float betaInv = ptot / sqrt(ptot*ptot + mHypotheticalMass2[pidFlag]);
+  float betaInv = ptot / sqrt(ptot*ptot + mHypotheticalMass[pidFlag]*mHypotheticalMass[pidFlag]);
   return ( fabs(1/tofBeta - 1/betaInv) < mTOFDeltaOneOverBetaMax[pidFlag] );
 }
 
