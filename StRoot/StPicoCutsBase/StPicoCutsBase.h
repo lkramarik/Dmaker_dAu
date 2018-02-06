@@ -272,8 +272,8 @@ inline bool StPicoCutsBase::isTPCPion(StPicoTrack const * const trk)   const {re
 inline bool StPicoCutsBase::isTPCKaon(StPicoTrack const * const trk)   const {return isTPCHadron(trk, StPicoCutsBase::kKaon); }
 inline bool StPicoCutsBase::isTPCProton(StPicoTrack const * const trk) const {return isTPCHadron(trk, StPicoCutsBase::kProton); }
 
-inline bool StPicoCutsBase::isTOFPion(StPicoTrack const *trk)   const { float tofBeta = getTofBeta(trk);  
-                                                                        return isTOFHadron(trk, tofBeta, StPicoCutsBase::kPion); }
+//inline bool StPicoCutsBase::isTOFPion(StPicoTrack const *trk)   const { float tofBeta = getTofBeta(trk);
+//                                                                        return isTOFHadron(trk, tofBeta, StPicoCutsBase::kPion); }
 //inline bool StPicoCutsBase::isTOFKaon(StPicoTrack const *trk)   const { float tofBeta = getTofBeta(trk);
 //                                                                        return isTOFHadron(trk, tofBeta, StPicoCutsBase::kKaon); }
 

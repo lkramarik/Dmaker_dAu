@@ -75,16 +75,16 @@ void StPicoD0AnaMaker::ClearHF(Option_t *opt="") {
 
 // _________________________________________________________
 int StPicoD0AnaMaker::FinishHF() {
-//    ntp_DMeson_Signal -> Write(ntp_DMeson_Signal->GetName(), TObject::kOverwrite);
-//    ntp_DMeson_Background -> Write(ntp_DMeson_Background->GetName(), TObject::kOverwrite);
+    ntp_DMeson_Signal -> Write(ntp_DMeson_Signal->GetName(), TObject::kOverwrite);
+    ntp_DMeson_Background -> Write(ntp_DMeson_Background->GetName(), TObject::kOverwrite);
 //    ntp_pion -> Write(ntp_pion->GetName(), TObject::kOverwrite);
 //    ntp_kaon -> Write(ntp_kaon->GetName(), TObject::kOverwrite);
     return kStOK;
 }
 // _________________________________________________________
 int StPicoD0AnaMaker::MakeHF() {
-//    createCandidates();
-    analyzeCandidates();
+    createCandidates();
+//    analyzeCandidates();
 
 //    TH2F *h_piTOF = static_cast<TH2F*>(mOutList->FindObject("h_piTOF"));
 //    TH2F *h_kTOF = static_cast<TH2F*>(mOutList->FindObject("h_kTOF"));
@@ -295,9 +295,8 @@ int StPicoD0AnaMaker::analyzeCandidates() {
             if (dca<1.5 && pt>0.6 && mHFCuts->isGoodTrack(t)) h_tracktest_TOF->Fill(4);
             if ((pt>0.6) && (dca<1.5 ) && (mHFCuts->isGoodTrack(t))) {
 //                if (tpcPion && mHFCuts->isTOFHadronPID(t, mHFCuts->getTofBetaBase(t), StPicoCutsBase::kPion))  h_tracktest_TOF->Fill(5);
-//                if (tpcKaon && mHFCuts->isTOFHadronPID(t, mHFCuts->getTofBetaBase(t), StPicoCutsBase::kKaon))  h_tracktest_TOF->Fill(6);
-                if (mHFCuts->isTOFHadronPID(t, mHFCuts->getTofBetaBase(t), StPicoCutsBase::kPion))  h_tracktest_TOF->Fill(5);
-                if (mHFCuts->isTOFHadronPID(t, mHFCuts->getTofBetaBase(t), StPicoCutsBase::kKaon))  h_tracktest_TOF->Fill(6);
+                if (tpcPion)  h_tracktest_TOF->Fill(5);
+                if (tpcKaon && mHFCuts->isTOFHadronPID(t, mHFCuts->getTofBetaBase(t), StPicoCutsBase::kKaon))  h_tracktest_TOF->Fill(6);
             }
         }
 
@@ -333,7 +332,8 @@ bool StPicoD0AnaMaker::isKaon(StPicoTrack const * const trk) const {
     if (!mHFCuts->isTOFKaon(trk)) return false;
 //    if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon) ) return false;
 //    if (!mHFCuts->cutMinDcaToPrimVertex(trk, StPicoCutsBase::kKaon)) return false;
-    return (mHFCuts->isTPCHadron(trk, StPicoCutsBase::kKaon));
+//    if (!mHFCuts->isTPCHadron(trk, StPicoCutsBase::kKaon)) return false;
+    return true;
 }
 
 bool StPicoD0AnaMaker::isProton(StPicoTrack const * const trk) const {

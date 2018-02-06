@@ -256,13 +256,29 @@ bool StPicoCutsBase::isTOFHadronPID(StPicoTrack const *trk, float const & tofBet
 }
 
 bool StPicoCutsBase::isTOFKaon(StPicoTrack const *trk) const {
-  float tofBeta = getTofBetaBase(trk);
-  if (tofBeta <= 0) {return false;}
-
-  double ptot    = trk->gPtot();
-  float betaInv = ptot / sqrt(ptot*ptot + M_KAON_PLUS*M_KAON_PLUS);
-  return ( fabs(1/tofBeta - 1/betaInv) < mTOFDeltaOneOverBetaMax[kKaon] );
+    bool tof = false;
+    float tofBeta = getTofBetaBase(trk);
+  if (tofBeta > 0) {
+      double ptot    = trk->gPtot();
+      float betaInv = ptot / sqrt(ptot*ptot + M_KAON_PLUS*M_KAON_PLUS);
+      if (fabs(1/tofBeta - 1/betaInv) < mTOFDeltaOneOverBetaMax[kKaon]) tof = true;
+  }
+  return tof;
 }
+
+
+bool StPicoCutsBase::isTOFPion(StPicoTrack const *trk) const {
+    bool tof = false;
+    float tofBeta = getTofBetaBase(trk);
+
+    if (tofBeta > 0) {
+        double ptot = trk->gPtot();
+        float betaInv = ptot / sqrt(ptot*ptot + M_PION_PLUS*M_PION_PLUS);
+        if (fabs(1/tofBeta - 1/betaInv) < mTOFDeltaOneOverBetaMax[kPion]) tof = true;
+    }
+    return tof;
+}
+
 
 
 bool StPicoCutsBase::isTOFHadron(StPicoTrack const *trk, float const & tofBeta, int pidFlag) const {
@@ -272,11 +288,7 @@ bool StPicoCutsBase::isTOFHadron(StPicoTrack const *trk, float const & tofBeta, 
   //      - secondarys from charm decays (as an approximation)
   //    return:
   //      not in ptot range : true
-
-  // -- only apply, if in ptot range
-
-
-  float ptot = trk->gPtot();  
+  float ptot = trk->gPtot();
   if (ptot < mPtotRangeTOF[pidFlag][0] || ptot >= mPtotRangeTOF[pidFlag][1])
     return true;
 
