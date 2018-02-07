@@ -332,7 +332,7 @@ bool StPicoD0AnaMaker::isKaon(StPicoTrack const * const trk) const {
     bool tof = false;
     bool tpc = false;
     bool tofmatch = false;
-    float kBeta = getTofBetaBase(trk);
+    float kBeta = mHFCuts->getTofBetaBase(trk);
     bool tofAvailable = kBeta>0;
     if (mHFCuts->isTOFKaon(trk)) tof = true;
 //    if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon) ) return false;
