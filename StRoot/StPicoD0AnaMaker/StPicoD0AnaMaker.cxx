@@ -329,6 +329,7 @@ bool StPicoD0AnaMaker::isPion(StPicoTrack const * const trk) const {
 
 bool StPicoD0AnaMaker::isKaon(StPicoTrack const * const trk) const {
     if (!mHFCuts->isGoodTrack(trk)) return false;
+    if (!mHFCuts->isTOFmatched(trk)) return false;
     bool tof = false;
     bool tpc = false;
     bool tofmatch = false;
