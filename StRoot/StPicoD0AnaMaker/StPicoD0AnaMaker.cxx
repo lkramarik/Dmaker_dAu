@@ -329,11 +329,18 @@ bool StPicoD0AnaMaker::isPion(StPicoTrack const * const trk) const {
 
 bool StPicoD0AnaMaker::isKaon(StPicoTrack const * const trk) const {
     if (!mHFCuts->isGoodTrack(trk)) return false;
-    if (!mHFCuts->isTOFKaon(trk)) return false;
+    bool tof = false;
+    bool tpc = false;
+    bool tofmatch = false;
+    float kBeta = getTofBetaBase(trk);
+    bool tofAvailable = kBeta>0;
+    if (mHFCuts->isTOFKaon(trk)) tof = true;
 //    if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon) ) return false;
 //    if (!mHFCuts->cutMinDcaToPrimVertex(trk, StPicoCutsBase::kKaon)) return false;
-//    if (!mHFCuts->isTPCHadron(trk, StPicoCutsBase::kKaon)) return false;
-    return true;
+    if (mHFCuts->isTPCHadron(trk, StPicoCutsBase::kKaon)) tpc = true;
+    bool goodKaon = (tofAvailable && tof) || (!tofAvailable && tpc);
+
+    return goodKaon;
 }
 
 bool StPicoD0AnaMaker::isProton(StPicoTrack const * const trk) const {
