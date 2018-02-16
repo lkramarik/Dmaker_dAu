@@ -170,10 +170,10 @@ bool StPicoCutsBase::isGoodEvent(StPicoDst const * const picoDst, int *aEventCut
 
   // -- 2 - No Trigger fired
   ++iCut;
-  aEventCuts[iCut] = 0; //not looking at triggers
-  //trigger - is ok?
-//  if (!isGoodTrigger(picoEvent))
-//    aEventCuts[iCut] = 1;
+//  aEventCuts[iCut] = 0; //not looking at triggers
+//  trigger - is ok?
+  if (!isGoodTrigger(picoEvent))
+    aEventCuts[iCut] = 1;
 
   // -- 3 - Vertex z outside cut window
   ++iCut;
@@ -184,7 +184,7 @@ bool StPicoCutsBase::isGoodEvent(StPicoDst const * const picoDst, int *aEventCut
   ++iCut;
   if (fabs(picoEvent->primaryVertex().z() - picoEvent->vzVpd()) >= mVzVpdVzMax)
     aEventCuts[iCut] = 1;  
-
+  
   // -- is rejected
   bool isGoodEvent = true;
   for (unsigned int ii = 0; ii < mEventStatMax; ++ii)
@@ -213,18 +213,26 @@ bool StPicoCutsBase::isGoodTrigger(StPicoEvent const * const picoEvent) const {
 
 // _________________________________________________________
 bool StPicoCutsBase::isGoodTrack(StPicoTrack const * const trk) const {
-  // -- require at least one hit on every layer of PXL and IST.
-  return ((!mRequireHFT || trk->isHFTTrack()) && trk->nHitsFit() > mNHitsFitMin); //pozor, odobrate = na NhitFit
+  int tofIndex = trk->bTofPidTraitsIndex();
+  bool TofMatch = kFALSE;
+  StPicoBTofPidTraits* tofPidTraits;
+  if (tofIndex >= 0)  tofPidTraits = mPicoDst->btofPidTraits(tofIndex);
+  if (tofIndex >= 0 && tofPidTraits && tofPidTraits->btofMatchFlag() > 0)  TofMatch = kTRUE;
+  return ((!mRequireHFT || trk->isHFTTrack()) && trk->nHitsFit() >= mNHitsFitMin && TofMatch && cutMaxDcaToPrimVertex(trk) );
 }
 
-// _________________________________________________________
 bool StPicoCutsBase::cutMinDcaToPrimVertex(StPicoTrack const * const trk, int pidFlag) const {
   // -- check on min dca for identified particle
   float dca = (mPrimVtx - trk->dcaPoint()).mag();
   return (dca >= mDcaMin[pidFlag]);
 }
 
-// _________________________________________________________
+bool StPicoCutsBase::cutMaxDcaToPrimVertex(StPicoTrack const * const trk) const {
+  // -- check on max dca for all particles
+  float dca = (mPrimVtx - trk->dcaPoint()).mag();
+  return (dca <= mPrimaryDCAtoVtxMax);
+}
+
 bool StPicoCutsBase::cutMinDcaToPrimVertexTertiary(StPicoTrack const * const trk, int pidFlag) const {
   // -- check on min dca for identified particle - used for tertiary particles only
 
@@ -238,49 +246,28 @@ bool StPicoCutsBase::cutMinDcaToPrimVertexTertiary(StPicoTrack const * const trk
 // _________________________________________________________
 bool StPicoCutsBase::isTPCHadron(StPicoTrack const * const trk, int pidFlag) const {
   // -- check for good hadron in TPC
-  float nSigma = 999;
+  float nSigma = std::numeric_limits<float>::quiet_NaN();
 
-  if (pidFlag == kPion) nSigma = fabs(trk->nSigmaPion());
-  if (pidFlag == kKaon) nSigma = fabs(trk->nSigmaKaon());
-  if (pidFlag == kProton)  nSigma = fabs(trk->nSigmaProton());
+  if (pidFlag == kPion)
+    nSigma = fabs(trk->nSigmaPion());
+  else if (pidFlag == kKaon)
+    nSigma = fabs(trk->nSigmaKaon());
+  else if (pidFlag == kProton)
+    nSigma = fabs(trk->nSigmaProton());
 
-  return (nSigma < mTPCNSigmaMax[pidFlag]); //pozor
+  return (nSigma < mTPCNSigmaMax[pidFlag] && trk->gPt() >= mPtRange[pidFlag][0] && trk->gPt() < mPtRange[pidFlag][1] );
 }
 
+// _________________________________________________________
 bool StPicoCutsBase::isTOFHadronPID(StPicoTrack const *trk, float const & tofBeta, int pidFlag) const {
   if (tofBeta <= 0) {return false;}
 
   double ptot    = trk->gPtot();
-  float betaInv = ptot / sqrt(ptot*ptot + mHypotheticalMass[pidFlag]*mHypotheticalMass[pidFlag]);
+  float betaInv = ptot / sqrt(ptot*ptot + mHypotheticalMass2[pidFlag]);
   return ( fabs(1/tofBeta - 1/betaInv) < mTOFDeltaOneOverBetaMax[pidFlag] );
 }
 
-bool StPicoCutsBase::isTOFKaon(StPicoTrack const *trk) const {
-    bool tof = false;
-    float tofBeta = getTofBetaBase(trk);
-  if (tofBeta > 0) {
-      double ptot    = trk->gPtot();
-      float betaInv = ptot / sqrt(ptot*ptot + M_KAON_PLUS*M_KAON_PLUS);
-      if (fabs(1/tofBeta - 1/betaInv) < mTOFDeltaOneOverBetaMax[kKaon]) tof = true;
-  }
-  return tof;
-}
-
-
-bool StPicoCutsBase::isTOFPion(StPicoTrack const *trk) const {
-    bool tof = false;
-    float tofBeta = getTofBetaBase(trk);
-
-    if (tofBeta > 0) {
-        double ptot = trk->gPtot();
-        float betaInv = ptot / sqrt(ptot*ptot + M_PION_PLUS*M_PION_PLUS);
-        if (fabs(1/tofBeta - 1/betaInv) < mTOFDeltaOneOverBetaMax[kPion]) tof = true;
-    }
-    return tof;
-}
-
-
-
+// _________________________________________________________
 bool StPicoCutsBase::isTOFHadron(StPicoTrack const *trk, float const & tofBeta, int pidFlag) const {
   // -- check for good hadron in TOF in ptot range
   //    use for 
@@ -288,11 +275,24 @@ bool StPicoCutsBase::isTOFHadron(StPicoTrack const *trk, float const & tofBeta, 
   //      - secondarys from charm decays (as an approximation)
   //    return:
   //      not in ptot range : true
-  float ptot = trk->gPtot();
+
+  // -- only apply, if in ptot range
+
+
+  float ptot = trk->gPtot();  
   if (ptot < mPtotRangeTOF[pidFlag][0] || ptot >= mPtotRangeTOF[pidFlag][1])
     return true;
 
   return isTOFHadronPID(trk, tofBeta, pidFlag);
+}
+
+bool StPicoCutsBase::isTOFmatched(StPicoTrack const *trk) const {
+    int tofIndex = trk->bTofPidTraitsIndex();
+    bool TofMatch = kFALSE;
+    StPicoBTofPidTraits* tofPidTraits;
+    if (tofIndex >= 0)  tofPidTraits = mPicoDst->btofPidTraits(tofIndex);
+    if (tofIndex >= 0 && tofPidTraits && tofPidTraits->btofMatchFlag() > 0)  TofMatch = kTRUE;
+    return TofMatch;
 }
 
 // _________________________________________________________
@@ -317,16 +317,6 @@ bool StPicoCutsBase::isHybridTOFHadron(StPicoTrack const *trk, float const & tof
   return isTOFHadronPID(trk, tofBeta, pidFlag);
 }
 
-bool StPicoCutsBase::isTOFmatched(StPicoTrack const *trk) const {
-  int tofIndex = trk->bTofPidTraitsIndex();
-  bool TofMatch = kFALSE;
-  StPicoBTofPidTraits* tofPidTraits;
-  if (tofIndex >= 0)  tofPidTraits = mPicoDst->btofPidTraits(tofIndex);
-  if (tofIndex >= 0 && tofPidTraits && tofPidTraits->btofMatchFlag() > 0)  TofMatch = kTRUE;
-  return TofMatch;
-}
-
-
 // _________________________________________________________
 StPicoBTofPidTraits* StPicoCutsBase::hasTofPid(StPicoTrack const * const trk) const {
   // -- check if track has TOF pid information
@@ -335,7 +325,6 @@ StPicoBTofPidTraits* StPicoCutsBase::hasTofPid(StPicoTrack const * const trk) co
   int index2tof = trk->bTofPidTraitsIndex();
   return (index2tof >= 0) ? mPicoDst->btofPidTraits(index2tof) : NULL;
 }
-
 
 // _________________________________________________________
 float StPicoCutsBase::getTofBetaBase(StPicoTrack const * const trk) const {
