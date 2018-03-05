@@ -1,0 +1,74 @@
+******************************
+           MakeHF
+******************************
+
+pi = pion, fabs(trk->nSigmaPion())<3.0
+p = proton, fabs(trk->nSigmaProton())<3.0
+k = kaon, fabs(trk->nSigmaKaon())<3.0
+
+
+TH2F *h_piTOF 
+    trk->nSigmaPion())<3.0
+    h_piTOF->Fill(trk->gPt(),piTofAvailable); => piTofAvailable = 0 if no TOF, 1 if TOF
+
+TH2F *h_piTOFbeta
+    h_piTOFbeta->Fill(trk->gPt(),tofPion);
+    abs(1/Beta(exp) - 1/Beta(theoretical)) of pion 
+
+TH2F *h_piTOF_20 
+    same as h_piTOF, but for tracks with trk->nHitsFit()>=20
+
+TH2F *h_piTOF_HFT 
+    trk->isHFTTrack()
+    same as h_piTOF, but for tracks with HFT
+
+TH2F *h_piTOF_1sig 
+    fabs(trk->nSigmaPion())<1.0
+    same as h_piTOF, plus 1 sigma (TPC)
+
+TH2F *h_piTOF_HFT_1sig
+    ((trk->isHFTTrack()) && (fabs(trk->nSigmaPion())<1.0)
+    same as h_piTOF, plus HFT and 1 sigma
+
+ TH2F *h_piTOF_HFT_20 
+    (trk->isHFTTrack()) && (trk->nHitsFit()>=20)
+    same as h_piTOF, plus HFT and nHitsFit
+
+TH2F *h_piTOF_HFT_1sig_20 
+    (trk->isHFTTrack()) && (fabs(trk->nSigmaPion())<1.0) && (trk->nHitsFit()>=20)
+    same as h_piTOF, plus HFT and nHitsFit and 1 sigma
+
+TH2F *h_pinsigma 
+    h_pinsigma->Fill(momentum.mag(),trk->nSigmaPion());
+    all tracks
+    
+TH2F *h_dedx 
+    h_dedx->Fill(momentum.mag(),trk->dEdx());
+    all tracks
+
+TH2F *h_kTOF 
+TH2F *h_pTOF 
+
+TH2F *h_kTOF_20 
+TH2F *h_pTOF_20 
+  
+TH2F *h_kTOF_1sig 
+TH2F *h_pTOF_1sig 
+
+TH2F *h_kTOF_HFT 
+TH2F *h_pTOF_HFT 
+
+TH2F *h_kTOF_HFT_1sig 
+TH2F *h_pTOF_HFT_1sig 
+ 
+TH2F *h_kTOF_HFT_20 
+TH2F *h_pTOF_HFT_20
+  
+TH2F *h_kTOF_HFT_1sig_20
+TH2F *h_pTOF_HFT_1sig_20
+
+TH2F *h_kTOFbeta 
+TH2F *h_pTOFbeta 
+
+TH2F *h_knsigma 
+TH2F *h_pnsigma
