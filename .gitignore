@@ -8,5 +8,9 @@ analyse/*.root
 analyse/rootFiles/*
 analyse/analyse_job/*
 analyse/analyse_job2/*
+<<<<<<< HEAD
+notUsed_codes
 tmva/*.root
-notUsed*
+.idea/
+cmake-build-debug
+StRoot/cmake-build-debug/
