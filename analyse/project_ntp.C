@@ -50,8 +50,8 @@ void project_ntp(TString input) {
 
     
     
-//    hS -> Rebin(8);
-//    hB -> Rebin(8);
+    hS -> Rebin(8);
+    hB -> Rebin(8);
     
     
     hS -> Write("Dmass_sig");

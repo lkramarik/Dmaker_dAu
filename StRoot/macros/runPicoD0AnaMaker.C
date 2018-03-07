@@ -62,20 +62,20 @@ void runPicoD0AnaMaker(
 
     hfCuts->addTriggerId(530003); //VPD-5
 
-    hfCuts->setCutPrimaryDCAtoVtxMax(10.);
-    hfCuts->setCutVzMax(1000);
+    hfCuts->setCutPrimaryDCAtoVtxMax(1.5);
+    hfCuts->setCutVzMax(6);
     hfCuts->setCutVzVpdVzMax(1000.);
     hfCuts->setCutNHitsFitMin(20);
     hfCuts->setCutRequireHFT(true);
 
 //    WIDE
-    hfCuts->setCutDcaMin(0.00,StHFCuts::kPion); // OK
-    hfCuts->setCutDcaMin(0.00,StHFCuts::kKaon); // OK
+    hfCuts->setCutDcaMin(0.003,StHFCuts::kPion); // OK
+    hfCuts->setCutDcaMin(0.003,StHFCuts::kKaon); // OK
 
     float dcaDaughtersMax = 999;  // maximum toto ide
     float decayLengthMin  = 0.00; // minimum
     float decayLengthMax  = 999; //std::numeric_limits<float>::max(); toto ide (cutuje)
-    float cosThetaMin     = -2.;   // minimum
+    float cosThetaMin     = 0.5;   // minimum
     float minMass         = 0.4;
     float maxMass         = 2.4;
 
@@ -117,9 +117,8 @@ void runPicoD0AnaMaker(
 //    hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass); //ok
     
     //Single track pt
-//    hfCuts->setCutPtRange(0.,50.0,StHFCuts::kPion); //small test
-//    hfCuts->setCutPtRange(0.,50.0,StHFCuts::kKaon); //small test
-    
+    hfCuts->setCutPtMin(0.2);
+
     clock_t start = clock(); // getting starting time
 
     chain->Init();

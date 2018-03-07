@@ -16,23 +16,23 @@ void fitting() {
 //    TString input = "res_ntp_dau_p17ib_hpss_all_dca60.root";
 
 
-    TString folder = "res_ntp/p17id/";
+    TString folder = "";
 //    TString folder = "res_ntp/p17id/compareToTMVA/01/";
 //    TString input = "res_ntp_dau_p17id_cos095_dca30.root";
 //    TString input = "res_ntp_dau_p17id_cos095_tof003.root";
 //    TString input = "res_ntp_dau_p17id_dca30.root";
 // TString input = "res_ntp_dau_cos095_dca30_decay60.root";
 //    TString input = "res_ntp_dau_p17id_wide.root";
-    TString input = "res_ntp_dau_p17id_wide_NoTof.root";
+    TString input = "res_MLPoutput.root";
 
 //    TString input = "res_ntp_dau_p17id_costheta095.root";
     cout<<input<<endl;
     TFile* data = new TFile(folder + input ,"r");
 
-    hInvMassBackMin = (TH1F*)data -> Get("background minus");
-    hInvMassBackPlus = (TH1F*)data -> Get("background plus");
-    hInvMassBackMin -> Sumw2();
-    hInvMassBackPlus -> Sumw2();
+//     hInvMassBackMin = (TH1F*)data -> Get("background minus");
+//     hInvMassBackPlus = (TH1F*)data -> Get("background plus");
+//     hInvMassBackMin -> Sumw2();
+//     hInvMassBackPlus -> Sumw2();
     //background from geometric average
     hInvMassBack = (TH1F*)data -> Get("background");
 

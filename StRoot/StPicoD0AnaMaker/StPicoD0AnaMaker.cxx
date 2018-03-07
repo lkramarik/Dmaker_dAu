@@ -313,16 +313,17 @@ bool StPicoD0AnaMaker::isHadron(StPicoTrack const * const trk, int pidFlag) cons
 }
 
 bool StPicoD0AnaMaker::isPion(StPicoTrack const * const trk) const {
+    if (!mHFCuts->cutMinDcaToPrimVertex(trk, StPicoCutsBase::kPion)) return false;
     if (!mHFCuts->isGoodTrack(trk)) return false; //HFT, NhitsFit, pt range
     if (!mHFCuts->isTOFmatched(trk)) return false;
     return (mHFCuts->isTPCHadron(trk, StPicoCutsBase::kPion)); //TPC NsigmaKaon
     //    if (!mHFCuts->isTOFHadronPID(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kPion) ) return false; // 1/beta diff
 //    if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kPion) ) return false;
-//    if (!mHFCuts->cutMinDcaToPrimVertex(trk, StPicoCutsBase::kPion)) return false;
 
 }
 
 bool StPicoD0AnaMaker::isKaon(StPicoTrack const * const trk) const {
+    if (!mHFCuts->cutMinDcaToPrimVertex(trk, StPicoCutsBase::kKaon)) return false;
     if (!mHFCuts->isGoodTrack(trk)) return false;
     if (!mHFCuts->isTOFmatched(trk)) return false;
     bool tof = false;
@@ -331,15 +332,16 @@ bool StPicoD0AnaMaker::isKaon(StPicoTrack const * const trk) const {
     bool tofAvailable = kBeta>0;
     if (mHFCuts->isTOFHadronPID(trk, kBeta, StPicoCutsBase::kKaon)) tof = true; // 1/beta diff
     if (mHFCuts->isTPCHadron(trk, StPicoCutsBase::kKaon)) tpc = true; //TPC NsigmaKaon
+
 //    LIANG:
     // bool goodKaon = (tofAvailable && tof) || (!tofAvailable && tpc);
 
 //    LUKAS:
-    bool goodKaon = tof && tpc;
+//    bool goodKaon = tof && tpc;
+    bool goodKaon = true;
     return goodKaon;
 
     //    if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon) ) return false;
-//    if (!mHFCuts->cutMinDcaToPrimVertex(trk, StPicoCutsBase::kKaon)) return false;
 
 }
 

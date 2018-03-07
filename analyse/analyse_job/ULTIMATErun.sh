@@ -4,7 +4,7 @@
 cp /gpfs01/star/pwg/lkramarik/Dmaker_dAu/analyse/analyse_job/files_all.list  ./
 
 #divide list
-list=${1:-"files_all.list"}
+l0.ist=${1:-"files_all.list"}
 baseName=${2:-""}
 if [ ! -e "$list" ]; then
   echo $list does not exist or is not a file
