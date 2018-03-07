@@ -8,3 +8,6 @@ analyse/*.root
 analyse/rootFiles/*
 analyse/analyse_job/*
 analyse/analyse_job2/*
+notUsed_codes
+tmva/*.root
+cmake-build-debug
