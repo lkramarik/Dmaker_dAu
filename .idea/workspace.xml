@@ -9,9 +9,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3c7abcb2-cd09-44e5-b569-0733b264b695" name="Default" comment="project.cxx corrected">
-      <change beforePath="$PROJECT_DIR$/StRoot/macros/runPicoD0AnaMaker.C" afterPath="$PROJECT_DIR$/StRoot/macros/runPicoD0AnaMaker.C" />
-    </list>
+    <list default="true" id="3c7abcb2-cd09-44e5-b569-0733b264b695" name="Default" comment="project.cxx corrected" />
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -46,16 +44,16 @@
         <entry file="file://$PROJECT_DIR$/StRoot/StPicoCutsBase/StPicoCutsBase.h">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="218">
-              <caret line="102" column="34" lean-forward="true" selection-start-line="102" selection-start-column="34" selection-end-line="102" selection-end-column="34" />
+              <caret line="102" column="34" lean-forward="false" selection-start-line="102" selection-start-column="34" selection-end-line="102" selection-end-column="34" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="StPicoD0AnaMaker.cxx" pinned="false" current-in-tab="false">
+      <file leaf-file-name="StPicoD0AnaMaker.cxx" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/StRoot/StPicoD0AnaMaker/StPicoD0AnaMaker.cxx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
+            <state relative-caret-position="1552">
               <caret line="315" column="0" lean-forward="false" selection-start-line="315" selection-start-column="0" selection-end-line="315" selection-end-column="0" />
               <folding />
             </state>
@@ -112,7 +110,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="runPicoD0AnaMaker.C" pinned="false" current-in-tab="true">
+      <file leaf-file-name="runPicoD0AnaMaker.C" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/StRoot/macros/runPicoD0AnaMaker.C">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="141">
@@ -224,7 +222,7 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="OCFindUsagesOptions" text="false" ivars="false" properties="true" derivedClasses="false" />
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="width" value="952" />
     <option name="height" value="1057" />
   </component>
@@ -260,11 +258,6 @@
               <item name="Dmaker_dAu" type="462c0819:PsiDirectoryNode" />
               <item name="analyse" type="462c0819:PsiDirectoryNode" />
               <item name="analyse_job" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Dmaker_dAu" type="dad4c3:CidrFilesViewHelper$MyProjectTreeStructure$1" />
-              <item name="Dmaker_dAu" type="462c0819:PsiDirectoryNode" />
-              <item name="notUsed_codes" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Dmaker_dAu" type="dad4c3:CidrFilesViewHelper$MyProjectTreeStructure$1" />
@@ -426,7 +419,7 @@
       <workItem from="1518741923335" duration="4372000" />
       <workItem from="1520259458247" duration="1027000" />
       <workItem from="1520262555351" duration="3674000" />
-      <workItem from="1520414123957" duration="3791000" />
+      <workItem from="1520414123957" duration="4910000" />
     </task>
     <task id="LOCAL-00001" summary="project.cxx corrected">
       <created>1512770352996</created>
@@ -446,10 +439,10 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="507864000" />
+    <option name="totallyTimeSpent" value="508983000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="0" width="1922" height="1058" extended-state="6" />
+    <frame x="-1" y="0" width="1922" height="1058" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1686874" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -787,14 +780,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/StRoot/StPicoD0AnaMaker/StPicoD0AnaMaker.cxx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="315" column="0" lean-forward="false" selection-start-line="315" selection-start-column="0" selection-end-line="315" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/StRoot/StPicoD0AnaMaker/StPicoD0AnaMaker.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
@@ -814,7 +799,7 @@
     <entry file="file://$PROJECT_DIR$/StRoot/StPicoCutsBase/StPicoCutsBase.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="218">
-          <caret line="102" column="34" lean-forward="true" selection-start-line="102" selection-start-column="34" selection-end-line="102" selection-end-column="34" />
+          <caret line="102" column="34" lean-forward="false" selection-start-line="102" selection-start-column="34" selection-end-line="102" selection-end-column="34" />
           <folding />
         </state>
       </provider>
@@ -823,6 +808,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="141">
           <caret line="76" column="34" lean-forward="false" selection-start-line="76" selection-start-column="34" selection-end-line="76" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/StRoot/StPicoD0AnaMaker/StPicoD0AnaMaker.cxx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1552">
+          <caret line="315" column="0" lean-forward="false" selection-start-line="315" selection-start-column="0" selection-end-line="315" selection-end-column="0" />
           <folding />
         </state>
       </provider>

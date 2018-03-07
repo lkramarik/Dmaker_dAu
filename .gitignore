@@ -10,4 +10,6 @@ analyse/analyse_job/*
 analyse/analyse_job2/*
 notUsed_codes
 tmva/*.root
+.idea/
 cmake-build-debug
+StRoot/cmake-build-debug/
