@@ -10,14 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3c7abcb2-cd09-44e5-b569-0733b264b695" name="Default" comment="project.cxx corrected">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/StRoot/StPicoCutsBase/StPicoCutsBase.cxx" afterPath="$PROJECT_DIR$/StRoot/StPicoCutsBase/StPicoCutsBase.cxx" />
-      <change beforePath="$PROJECT_DIR$/StRoot/StPicoCutsBase/StPicoCutsBase.h" afterPath="$PROJECT_DIR$/StRoot/StPicoCutsBase/StPicoCutsBase.h" />
-      <change beforePath="$PROJECT_DIR$/StRoot/StPicoD0AnaMaker/StPicoD0AnaMaker.cxx" afterPath="$PROJECT_DIR$/StRoot/StPicoD0AnaMaker/StPicoD0AnaMaker.cxx" />
       <change beforePath="$PROJECT_DIR$/StRoot/macros/runPicoD0AnaMaker.C" afterPath="$PROJECT_DIR$/StRoot/macros/runPicoD0AnaMaker.C" />
-      <change beforePath="$PROJECT_DIR$/analyse/analyse_job/ULTIMATErun.sh" afterPath="$PROJECT_DIR$/analyse/analyse_job/ULTIMATErun.sh" />
-      <change beforePath="$PROJECT_DIR$/analyse/project_ntp.C" afterPath="$PROJECT_DIR$/analyse/project_ntp.C" />
-      <change beforePath="$PROJECT_DIR$/res_analyse/fitting.C" afterPath="$PROJECT_DIR$/res_analyse/fitting.C" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -49,7 +42,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="StPicoCutsBase.h" pinned="false" current-in-tab="true">
+      <file leaf-file-name="StPicoCutsBase.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/StRoot/StPicoCutsBase/StPicoCutsBase.h">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="218">
@@ -119,11 +112,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="runPicoD0AnaMaker.C" pinned="false" current-in-tab="false">
+      <file leaf-file-name="runPicoD0AnaMaker.C" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/StRoot/macros/runPicoD0AnaMaker.C">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="561">
-              <caret line="119" column="16" lean-forward="false" selection-start-line="119" selection-start-column="16" selection-end-line="119" selection-end-column="16" />
+            <state relative-caret-position="141">
+              <caret line="76" column="34" lean-forward="false" selection-start-line="76" selection-start-column="34" selection-end-line="76" selection-end-column="34" />
               <folding />
             </state>
           </provider>
@@ -161,8 +154,8 @@
       <find>mPrimaryDCAtoVtxMax</find>
       <find>mPtRange</find>
       <find>setCutPtMin</find>
-      <find>setCutPtRange</find>
       <find>mPtMin</find>
+      <find>setCutPtRange</find>
     </findStrings>
     <replaceStrings>
       <replace>PicoD0Ana</replace>
@@ -219,8 +212,8 @@
         <option value="$PROJECT_DIR$/analyse/analyse_job/ULTIMATErun.sh" />
         <option value="$PROJECT_DIR$/StRoot/StPicoD0AnaMaker/StPicoD0AnaMaker.cxx" />
         <option value="$PROJECT_DIR$/StRoot/StPicoCutsBase/StPicoCutsBase.cxx" />
-        <option value="$PROJECT_DIR$/StRoot/macros/runPicoD0AnaMaker.C" />
         <option value="$PROJECT_DIR$/StRoot/StPicoCutsBase/StPicoCutsBase.h" />
+        <option value="$PROJECT_DIR$/StRoot/macros/runPicoD0AnaMaker.C" />
       </list>
     </option>
   </component>
@@ -433,7 +426,7 @@
       <workItem from="1518741923335" duration="4372000" />
       <workItem from="1520259458247" duration="1027000" />
       <workItem from="1520262555351" duration="3674000" />
-      <workItem from="1520414123957" duration="3227000" />
+      <workItem from="1520414123957" duration="3791000" />
     </task>
     <task id="LOCAL-00001" summary="project.cxx corrected">
       <created>1512770352996</created>
@@ -453,7 +446,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="507300000" />
+    <option name="totallyTimeSpent" value="507864000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="0" width="1922" height="1058" extended-state="6" />
@@ -810,14 +803,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/StRoot/macros/runPicoD0AnaMaker.C">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="119" column="16" lean-forward="false" selection-start-line="119" selection-start-column="16" selection-end-line="119" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/StRoot/StPicoCutsBase/StPicoCutsBase.cxx">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="293">
@@ -830,6 +815,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="218">
           <caret line="102" column="34" lean-forward="true" selection-start-line="102" selection-start-column="34" selection-end-line="102" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/StRoot/macros/runPicoD0AnaMaker.C">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="141">
+          <caret line="76" column="34" lean-forward="false" selection-start-line="76" selection-start-column="34" selection-end-line="76" selection-end-column="34" />
           <folding />
         </state>
       </provider>
