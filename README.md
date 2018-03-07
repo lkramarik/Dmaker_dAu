@@ -2,6 +2,6 @@
 
 Run analysis on one picoDst with:
 ```sh
-starver SL17b
+starver SL17d
 root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runPicoD0AnaMakerLocal.C++
 ```
