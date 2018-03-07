@@ -8,3 +8,5 @@ analyse/*.root
 analyse/rootFiles/*
 analyse/analyse_job/*
 analyse/analyse_job2/*
+tmva/*.root
+notUsed*
