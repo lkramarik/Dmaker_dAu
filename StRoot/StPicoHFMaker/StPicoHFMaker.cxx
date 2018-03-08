@@ -141,7 +141,7 @@ Int_t StPicoHFMaker::Make() {
 
   Int_t iReturn = kStOK;
   if (setupEvent()) {
-    UInt_t nTracks = mPicoDst->numberOfTracks();
+//    UInt_t nTracks = mPicoDst->numberOfTracks();
 //    for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
 //        StPicoTrack* trk = mPicoDst->track(iTrack);
 //

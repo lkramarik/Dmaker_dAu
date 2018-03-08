@@ -73,6 +73,8 @@ class StPicoHFMaker : public StMaker
 //    StHFHists      *mHFHists; comm. LK 04012018
 
     StPicoHFEvent  *mPicoHFEvent;
+    StPicoDstMaker* mPicoDstMaker;       // ptr to picoDst maker
+
     StPicoEvent*    mPicoEvent;          // ptr to picoDstEvent
 
     float           mBField;
@@ -107,7 +109,6 @@ class StPicoHFMaker : public StMaker
     TString         mInputFileName;      // filename of input list of HF trees (needs to be in the 
                                          // same order as the picoDstList
 
-    StPicoDstMaker* mPicoDstMaker;       // ptr to picoDst maker
 
 
     TTree*          mTree;               // tree holding "mPicoHFEvent" for writing only
