@@ -83,8 +83,8 @@ int StPicoD0AnaMaker::FinishHF() {
 }
 // _________________________________________________________
 int StPicoD0AnaMaker::MakeHF() {
-//    createCandidates();
-    analyzeCandidates();
+    createCandidates();
+//    analyzeCandidates();
 
 //    TH2F *h_piTOF = static_cast<TH2F*>(mOutList->FindObject("h_piTOF"));
 //    TH2F *h_kTOF = static_cast<TH2F*>(mOutList->FindObject("h_kTOF"));
@@ -184,10 +184,10 @@ int StPicoD0AnaMaker::createCandidates() {
             if (!isKaon(kaon)) continue;
 
             StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), i, j, mPrimVtx, mBField, kTRUE);
-//            if (!mHFCuts->isClosePair(pair)) continue;
+            if (!mHFCuts->isClosePair(pair)) continue;
 
-            if(pair->pt() < 1) continue;
-            if(pair->pt() > 2) continue;
+//            if(pair->pt() < 1) continue;
+//            if(pair->pt() > 2) continue;
 
             float flag = -99.;
 
