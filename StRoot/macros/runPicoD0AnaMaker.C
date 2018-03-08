@@ -72,7 +72,7 @@ void runPicoD0AnaMaker(
     hfCuts->setCutDcaMin(0.003,StHFCuts::kPion); // OK
     hfCuts->setCutDcaMin(0.003,StHFCuts::kKaon); // OK
 
-    float dcaDaughtersMax = 999;  // maximum toto ide
+    float dcaDaughtersMax = 0.05;  // maximum toto ide
     float decayLengthMin  = 0.009; // minimum
     float decayLengthMax  = 999;  //std::numeric_limits<float>::max(); toto ide (cutuje)
     float cosThetaMin     = 0.5;   // minimum
@@ -86,7 +86,7 @@ void runPicoD0AnaMaker(
     hfCuts->setCutTPCNSigmaKaon(2.0);
     hfCuts->setCutTOFDeltaOneOverBetaKaon(0.03);
 //    hfCuts->setCutTOFDeltaOneOverBetaPion(999);
-
+    hfCuts->setCutPtMin(0.2);
 //    float dcaDaughtersMax = 0.012;  // maximum toto ide
 //    float decayLengthMin  = 0.005; // minimum
 //    float decayLengthMax  = 4; //std::numeric_limits<float>::max(); toto ide (cutuje)
@@ -117,7 +117,7 @@ void runPicoD0AnaMaker(
 //    hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass); //ok
     
     //Single track pt
-    hfCuts->setCutPtMin(0.2);
+
 
     clock_t start = clock(); // getting starting time
 

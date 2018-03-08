@@ -10,9 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3c7abcb2-cd09-44e5-b569-0733b264b695" name="Default" comment="project.cxx corrected">
+      <change beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/StRoot/StPicoCutsBase/StPicoCutsBase.cxx" afterPath="$PROJECT_DIR$/StRoot/StPicoCutsBase/StPicoCutsBase.cxx" />
-      <change beforePath="$PROJECT_DIR$/StRoot/StPicoD0AnaMaker/StPicoD0AnaMaker.cxx" afterPath="$PROJECT_DIR$/StRoot/StPicoD0AnaMaker/StPicoD0AnaMaker.cxx" />
       <change beforePath="$PROJECT_DIR$/StRoot/macros/runPicoD0AnaMaker.C" afterPath="$PROJECT_DIR$/StRoot/macros/runPicoD0AnaMaker.C" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
@@ -28,9 +27,11 @@
       <file leaf-file-name="StPicoCutsBase.cxx" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/StRoot/StPicoCutsBase/StPicoCutsBase.cxx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="293">
-              <caret line="61" column="94" lean-forward="false" selection-start-line="61" selection-start-column="88" selection-end-line="61" selection-end-column="94" />
-              <folding />
+            <state relative-caret-position="-165">
+              <caret line="61" column="94" lean-forward="false" selection-start-line="61" selection-start-column="94" selection-end-line="61" selection-end-column="94" />
+              <folding>
+                <marker date="1520499693594" expanded="true" signature="8113:15087" ph="{...}" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -45,21 +46,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="StPicoCutsBase.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/StRoot/StPicoCutsBase/StPicoCutsBase.h">
+      <file leaf-file-name="StPicoD0AnaMaker.cxx" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/StRoot/StPicoD0AnaMaker/StPicoD0AnaMaker.cxx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="278">
-              <caret line="231" column="0" lean-forward="true" selection-start-line="231" selection-start-column="0" selection-end-line="231" selection-end-column="0" />
+            <state relative-caret-position="821">
+              <caret line="353" column="18" lean-forward="true" selection-start-line="353" selection-start-column="18" selection-end-line="353" selection-end-column="18" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="StPicoD0AnaMaker.cxx" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/StRoot/StPicoD0AnaMaker/StPicoD0AnaMaker.cxx">
+      <file leaf-file-name="StPicoCutsBase.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/StRoot/StPicoCutsBase/StPicoCutsBase.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="262">
-              <caret line="187" column="0" lean-forward="true" selection-start-line="187" selection-start-column="0" selection-end-line="187" selection-end-column="0" />
+            <state relative-caret-position="278">
+              <caret line="231" column="0" lean-forward="false" selection-start-line="231" selection-start-column="0" selection-end-line="231" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -118,8 +119,8 @@
       <file leaf-file-name="runPicoD0AnaMaker.C" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/StRoot/macros/runPicoD0AnaMaker.C">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="831">
-              <caret line="126" column="0" lean-forward="true" selection-start-line="126" selection-start-column="0" selection-end-line="126" selection-end-column="0" />
+            <state relative-caret-position="291">
+              <caret line="74" column="32" lean-forward="false" selection-start-line="74" selection-start-column="32" selection-end-line="74" selection-end-column="32" />
               <folding>
                 <element signature="e#449#463#0" expanded="true" />
                 <element signature="e#948#1021#0" expanded="true" />
@@ -443,7 +444,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="510250000" />
+    <option name="totallyTimeSpent" value="510914000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="0" width="1922" height="1058" extended-state="6" />
@@ -460,13 +461,23 @@
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6855615" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3291536" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.09404389" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1686874" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3291536" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3291536" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -752,16 +763,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/StRoot/StPicoCutsBase/StPicoCutsBase.cxx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="293">
-          <caret line="61" column="94" lean-forward="false" selection-start-line="61" selection-start-column="88" selection-end-line="61" selection-end-column="94" />
-          <folding />
+        <state relative-caret-position="-165">
+          <caret line="61" column="94" lean-forward="false" selection-start-line="61" selection-start-column="94" selection-end-line="61" selection-end-column="94" />
+          <folding>
+            <marker date="1520499693594" expanded="true" signature="8113:15087" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/StRoot/StPicoCutsBase/StPicoCutsBase.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="278">
-          <caret line="231" column="0" lean-forward="true" selection-start-line="231" selection-start-column="0" selection-end-line="231" selection-end-column="0" />
+          <caret line="231" column="0" lean-forward="false" selection-start-line="231" selection-start-column="0" selection-end-line="231" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -776,16 +789,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/StRoot/StPicoD0AnaMaker/StPicoD0AnaMaker.cxx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="262">
-          <caret line="187" column="0" lean-forward="true" selection-start-line="187" selection-start-column="0" selection-end-line="187" selection-end-column="0" />
+        <state relative-caret-position="821">
+          <caret line="353" column="18" lean-forward="true" selection-start-line="353" selection-start-column="18" selection-end-line="353" selection-end-column="18" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/StRoot/macros/runPicoD0AnaMaker.C">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="831">
-          <caret line="126" column="0" lean-forward="true" selection-start-line="126" selection-start-column="0" selection-end-line="126" selection-end-column="0" />
+        <state relative-caret-position="291">
+          <caret line="74" column="32" lean-forward="false" selection-start-line="74" selection-start-column="32" selection-end-line="74" selection-end-column="32" />
           <folding>
             <element signature="e#449#463#0" expanded="true" />
             <element signature="e#948#1021#0" expanded="true" />
