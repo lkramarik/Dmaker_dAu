@@ -334,10 +334,10 @@ bool StPicoD0AnaMaker::isKaon(StPicoTrack const * const trk) const {
     if (mHFCuts->isTPCHadron(trk, StPicoCutsBase::kKaon)) tpc = true; //TPC NsigmaKaon
 
 //    LIANG:
-     bool goodKaon = (tofAvailable && tof) || (!tofAvailable && tpc);
+//     bool goodKaon = (tofAvailable && tof) || (!tofAvailable && tpc);
 
 //    LUKAS:
-//    bool goodKaon = tof && tpc;
+    bool goodKaon = tof && tpc;
 //    bool goodKaon = true;
     return goodKaon;
 
