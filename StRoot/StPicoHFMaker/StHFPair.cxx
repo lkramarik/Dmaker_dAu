@@ -1,8 +1,6 @@
 #include <limits>
 #include <cmath>
-
 #include "StHFPair.h"
-
 #include "StarClassLibrary/StPhysicalHelixD.hh"
 #include "StarClassLibrary/SystemOfUnits.h"
 #include "StPicoEvent/StPicoTrack.h"
