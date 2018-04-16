@@ -255,14 +255,15 @@ bool StPicoCutsBase::isTPCHadron(StPicoTrack const * const trk, int pidFlag) con
   else if (pidFlag == kProton)
     nSigma = fabs(trk->nSigmaProton());
 
-  return (nSigma < mTPCNSigmaMax[pidFlag] && trk->gPt() >= mPtRange[pidFlag][0] && trk->gPt() < mPtRange[pidFlag][1] );
+  return (nSigma < mTPCNSigmaMax[pidFlag]);
 }
 
 // _________________________________________________________
 bool StPicoCutsBase::isTOFHadronPID(StPicoTrack const *trk, float const & tofBeta, int pidFlag) const {
   if (tofBeta <= 0) {return false;}
 
-  double ptot    = trk->gPtot();
+//  double ptot    = trk->gPtot();
+    double ptot = trk->dcaGeometry().momentum().mag();
   float betaInv = ptot / sqrt(ptot*ptot + mHypotheticalMass2[pidFlag]);
   return ( fabs(1/tofBeta - 1/betaInv) < mTOFDeltaOneOverBetaMax[pidFlag] );
 }

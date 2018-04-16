@@ -2,7 +2,6 @@
 
 #copylist
 cp /gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoLists/runs_path_all.list  ./
-#cp /gpfs01/star/pwg/lkramarik/picoDst_dAu/production/runs_path_all.list  ./
 
 #divide list
 list=${1:-"runs_path_all.list"}
@@ -41,8 +40,8 @@ path=`pwd -P`
 path=$( echo $path | sed 's|//|/|g' )
 
 for j in $(eval echo "{0..$listNumber}"); do
-  echo executing submitPicoHFMaker.csh for $path and $baseName$j.list
-  csh starSubmit/submitPicoHFMaker.csh $path $baseName$j.list
+  echo executing submitPicoHFMaker.csh for $path and $list.list
+  csh starSubmit/submitPicoHFMaker.csh $path $list.list
 done
 
 

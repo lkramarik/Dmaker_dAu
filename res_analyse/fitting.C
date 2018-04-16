@@ -2,6 +2,17 @@
 
 
 void fitting() {
+    bool scale = false;
+    bool subtract = true;
+    Double_t ptminText = 1;
+    Double_t ptmaxText = 2;
+
+
+
+    //     int rebin = 4;
+    int rebin = 8; //this is good
+//     int rebin = 10;
+   
     Float_t fitRMin = 1.65;
     Float_t fitRMax = 2.35;
 
@@ -10,39 +21,36 @@ void fitting() {
     TString intUpLow = "1.92";
     TString intUpUp = "2.2";
 
-    int rebin = 5;
-//     int rebin = 10;
 //    TString folder = "res_ntp/p17ib/";
 //    TString input = "res_ntp_dau_p17ib_hpss_all_dca60.root";
 
 
+//    TString folder = "figs/";
     TString folder = "";
 //    TString folder = "res_ntp/p17id/compareToTMVA/01/";
-//    TString input = "res_ntp_dau_p17id_cos095_dca30.root";
-//    TString input = "res_ntp_dau_p17id_cos095_tof003.root";
-//    TString input = "res_ntp_dau_p17id_dca30.root";
-// TString input = "res_ntp_dau_cos095_dca30_decay60.root";
-//    TString input = "res_ntp_dau_p17id_wide.root";
-    TString input = "res_MLPoutput.root";
 
-//    TString input = "res_ntp_dau_p17id_costheta095.root";
+//     TString input = "res_ntp_all.root";
+    TString input = "res_ntp_1903_lukas.root";
+
     cout<<input<<endl;
     TFile* data = new TFile(folder + input ,"r");
-
 //     hInvMassBackMin = (TH1F*)data -> Get("background minus");
 //     hInvMassBackPlus = (TH1F*)data -> Get("background plus");
 //     hInvMassBackMin -> Sumw2();
 //     hInvMassBackPlus -> Sumw2();
     //background from geometric average
-    hInvMassBack = (TH1F*)data -> Get("background");
-
+//     hInvMassBack = (TH1F*)data -> Get("background");
+    
+    //just number of pairs:
+     hInvMassBack = (TH1F*)data -> Get(Form("hB_%.1f_%.1f", ptminText, ptmaxText));
+     cout<<Form("hB_%.1f_%.1f", ptminText, ptmaxText)<<endl;
     //background from sum of background minus and plus combos
 //    TH1F* hInvMassBack = new TH1F("background", "background", 2000, 0.4, 2.4);
 //    hInvMassBack -> Add(hInvMassBackPlus,1);
 //    hInvMassBack -> Add(hInvMassBackMin,1);
+//     hInvMassSign = (TH1F*)data -> Get("signal");
+    hInvMassSign = (TH1F*)data -> Get(Form("hS_%.1f_%.1f", ptminText, ptmaxText));
     hInvMassBack -> Sumw2();
-
-    hInvMassSign = (TH1F*)data -> Get("signal");
     hInvMassSign -> Sumw2();
     hInvMassSign -> Rebin(rebin);
     hInvMassBack -> Rebin(rebin);
@@ -59,7 +67,7 @@ void fitting() {
     cout<<"Backgroung Integral: "<<hBackIntegral<<endl;
     cout<<"Signal Integral :"<<hSignIntegral<<endl;
 
-    hInvMassBack -> Scale(hSignIntegral/hBackIntegral);
+    if(scale)   hInvMassBack -> Scale(hSignIntegral/hBackIntegral);
 
     const int Nbins = 2000/rebin;
     float err[Nbins], errS[Nbins];
@@ -73,14 +81,20 @@ void fitting() {
 //        hInvMassBack -> SetBinError(j, err[j]);
 //    }   //scaling error
 
-//    hInvMassSign->Clone("signal_orig");
     TH1F *hInvMassSignOrig = (TH1F*)hInvMassSign->Clone("signal_orig");
     Double_t nentriesSig = hInvMassSignOrig->Integral(hInvMassSignOrig->FindBin(1.7), hInvMassSignOrig->FindBin(2),"");
 
-    hInvMassSign -> Add(hInvMassBack,-1);
-    for (j=0; j<Nbins; j++) {
-        hInvMassSign -> SetBinError(j, sqrt(err[j]*err[j] + errS[j]*errS[j]));
-    }
+//    ****ADDING AND ADDING ERRROR****
+ if(subtract)   hInvMassSign -> Add(hInvMassBack,-1);
+//     for (j=0; j<Nbins; j++) {
+//         hInvMassSign -> SetBinError(j, sqrt(err[j]*err[j] + errS[j]*errS[j]));
+//     }
+    
+//    Double_t tmp;
+//    for (j=0; j<Nbins; j++) {
+//        tmp = hInvMassSign -> GetBinContent(j);
+//        hInvMassSign -> SetBinError(j,sqrt(tmp));
+//    }
 
     TCanvas *c3 = new TCanvas("c3","c3",1200,900);
     gStyle->SetOptFit(1);
@@ -121,7 +135,6 @@ void fitting() {
     cout<<"sigma: "<<sigma<<endl;
     Double_t nsigma = 3;
 
-
     TF1 *resfunm = new TF1("resfunm","pol1",fitRMin,fitRMax);
     resfunm->SetParameters(fun0->GetParameter(0),fun0->GetParameter(1));
     resfunm->SetLineStyle(7);
@@ -129,11 +142,14 @@ void fitting() {
     //resfunm->Draw("same");
     //fun0->Draw("same");
 
-    TF1 *resfunm1 = new TF1("resfunm1","pol1(0)+gaus(2)",fitRMin,fitRMax);
-    resfunm1->SetParameters(0.,0.,fun0->GetParameter(2),fun0->GetParameter(3),fun0->GetParameter(4));
+    TF1 *resfunm1 = new TF1("resfunm1","gaus(0)",fitRMin,fitRMax);
+//    TF1 *resfunm1 = new TF1("resfunm1","pol1(0)+gaus(2)",fitRMin,fitRMax);
+    resfunm1->SetParameters(fun0->GetParameter(2),fun0->GetParameter(3),fun0->GetParameter(4));
+//    resfunm1->SetParameters(0.,0.,fun0->GetParameter(2),fun0->GetParameter(3),fun0->GetParameter(4));
     resfunm1->SetLineColor(4);
     resfunm1->SetLineStyle(7);
-    //resfunm1->Draw("same");
+//    resfunm1->Draw("same");
+    Double_t binSize = (2.4-0.4)*rebin/2000;
 
     Double_t intLow = hInvMassSignOrig -> FindBin(mean-nsigma*sigma);
     Double_t intUp = hInvMassSignOrig -> FindBin(mean+nsigma*sigma);
@@ -143,14 +159,10 @@ void fitting() {
     cout<<"Integral: "<<hInvMassBack->GetBinCenter(intLow)<<" "<<hInvMassBack->GetBinCenter(intUp)<<endl;
     Double_t integral_function_yield = resfunm1->Integral(mean-nsigma*sigma, mean+nsigma*sigma);
 //    Double_t integral_function_yield = fun0->Integral(mean-nsigma*sigma, mean+nsigma*sigma);
-    cout<<"Integral raw yield: "<<integral_function_yield<<endl;
+    cout<<"Integral raw yield from fct.: "<<integral_function_yield/binSize<<endl;
 //    Double_t integral_function_yield_error = resfunm1->IntegralError(mean-nsigma*sigma, mean+nsigma*sigma);
     Double_t integral_function_yield_error = fun0->IntegralError(mean-nsigma*sigma, mean+nsigma*sigma);
-    cout<<"Integral raw yield error: "<<integral_function_yield_error<<endl;
-
-
-
-
+    cout<<"Integral raw yield error: "<<integral_function_yield_error/binSize<<endl;
 
     gm->GetYaxis()->SetTitle("Raw Counts");
     gm->GetYaxis()->SetTitleOffset(1.5);
@@ -159,7 +171,7 @@ void fitting() {
     gm->PaintStats(fun0);
 //    gm->GetXaxis()->SetRangeUser(0.4,2.4);
     gm->GetXaxis()->SetRangeUser(1.72,2.0);
-    gm->GetYaxis()->SetRangeUser(-1000.,2000.0);
+   gm->GetYaxis()->SetRangeUser(-70.,200.0);
     gm->Draw("ap");
 
     for(j=0; j<Nbins; j++) ym1[j] = ym[j] - resfunm->Eval(mm[j]);
@@ -170,29 +182,15 @@ void fitting() {
     gm1->SetLineColor(2);
 //    gm1->Draw("same,AP");
 
-//    TMultiGraph *mg = new TMultiGraph();
-//    mg->Add(gm);
-//    mg->Add(gm1);
-//    mg->Draw("ap");
-//    //mg->GetYaxis()->SetTitle("Raw Counts (#times 10^{3})");
-//    mg->GetYaxis()->SetTitle("Raw Counts");
-//    //mg->GetYaxis()->SetTitleSize(titsize);
-//    mg->GetYaxis()->SetTitleOffset(1.8);
-//    //mg->GetYaxis()->SetLabelOffset(0.03);
-//    //mg->GetYaxis()->SetLabelSize(0.047);
-//    //mg->GetXaxis()->SetNdivisions(208);
-//    //  mg->GetXaxis()->CenterTitle();
-//    mg->GetXaxis()->SetTitle("Mass_{K#pi} (GeV/c^{2})");
-
-
-//    c3->Update();
-
     resfunm->SetLineColor(46);
     resfunm1->SetLineColor(9);
 
 //    resfunm->Draw("same");
 //    resfunm1->Draw("same");
     Double_t S = hInvMassSign -> Integral(hInvMassSign->FindBin(mean-nsigma*sigma), hInvMassSign->FindBin(mean+nsigma*sigma) ,"");
+    Double_t rawYieldError;
+    Double_t rawYield = hInvMassSign -> IntegralAndError(hInvMassSign->FindBin(mean-nsigma*sigma), hInvMassSign->FindBin(mean+nsigma*sigma) , rawYieldError, "");
+    cout<<"raw yield with error: "<<rawYield<<" "<<rawYieldError<<endl;
     Double_t xtest, ytest;
     cout<<gm1->GetPoint(hInvMassSignOrig->FindBin(mean-nsigma*sigma), xtest, ytest)<<endl;
     cout<<xtest<<endl;
@@ -202,12 +200,12 @@ void fitting() {
     cout<<ytest<<endl;
 //    Double_t S = gm1 -> Integral(hInvMassSignOrig->FindBin(mean-nsigma*sigma), hInvMassSignOrig->FindBin(mean+nsigma*sigma) );
     Double_t B = hInvMassBack -> Integral(hInvMassBack->FindBin(mean-nsigma*sigma), hInvMassBack->FindBin(mean+nsigma*sigma) ,"");
-    Double_t binSize = (2.4-0.4)*rebin/2000;
 //    Double_t B  = resfunm->Integral((mean-nsigma*sigma), (mean+nsigma*sigma))/binSize;
-    TLine *leftline = new TLine(mean-nsigma*sigma,-1000,mean-nsigma*sigma,2000);
+    Double_t SoverB = S/B;
+    TLine *leftline = new TLine(mean-nsigma*sigma,gm->GetMinimum(),mean-nsigma*sigma,gm->GetMaximum());
     leftline->SetLineStyle(3);
     leftline->SetLineColor(46);
-    TLine *rightline = new TLine(mean+nsigma*sigma,-1000,mean+nsigma*sigma,2000);
+    TLine *rightline = new TLine(mean+nsigma*sigma,gm->GetMinimum(),mean+nsigma*sigma,gm->GetMaximum());
     rightline->SetLineStyle(3);
     rightline->SetLineColor(46);
 
@@ -216,6 +214,7 @@ void fitting() {
 
     cout<<"S: "<<S<<endl;
     cout<<"B: "<<B<<endl;
+    cout<<"S/B: "<<SoverB<<endl;
     Double_t significance_fit = integral_function_yield/integral_function_yield_error ;
     Double_t significance_bins = S/TMath::Sqrt(S+B);
     cout<<"Significance from fit: "<<abs(significance_fit)<<endl;
@@ -231,7 +230,8 @@ void fitting() {
 
     text -> AddText(Form("N_entries in sig. 1.7-2.0 GeV/c^{2}: %g", nentriesSig));
     text -> AddText(Form("Bin size: %g GeV/c^{2}", binSize));
-    TString paveSc = "Scaling integral: " + intLowLow + "-" + intLowUp +", " + intUpLow + "-" + intUpUp + " GeV/c^{2}";
+    TString paveSc = "No scaling";
+//    TString paveSc = "Scaling integral: " + intLowLow + "-" + intLowUp +", " + intUpLow + "-" + intUpUp + " GeV/c^{2}";
     text -> AddText(paveSc);
 //    text -> AddText(Form("Significance from fit: %0.3g", significance_fit));
 //    text -> AddText(Form("Significance: %0.3g", significance_bins));
@@ -251,18 +251,17 @@ void fitting() {
     text3 -> SetFillColor(0);
     text3 -> AddText(input);
 
-    TPaveText *text4 = new TPaveText(0.19,0.848,0.229,0.873,"brNDC");
+    TPaveText *text4 = new TPaveText(0.29,0.848,0.229,0.873,"brNDC");
     text4 -> SetTextSize(0.03);
 //    text4->SetTextColor(39);
     text4 -> SetLineColor(0);
     text4 -> SetShadowColor(0);
     text4 -> SetFillColor(0);
-    text4 -> AddText(Form("Significance: %0.3g", significance_bins));
+    text4 -> AddText(Form("Significance: %0.3g, S/B: %0.4g", significance_bins, S/B));
     TLatex tx2;
     tx2.SetNDC();
     tx2.SetTextSize(0.04);
-    tx2.DrawLatex(0.1,0.93,Form("p_{T}: %3.1f-%3.1f GeV/c", 1, 2));
-
+    tx2.DrawLatex(0.1,0.93,Form("p_{T}: %3.1f-%3.1f GeV/c", ptminText, ptmaxText));
 
     text -> Draw("same");
     text1 -> Draw("same");
@@ -292,6 +291,8 @@ void fitting() {
     hInvMassSign->GetXaxis()->SetTitleFont(42);
     hInvMassSign->GetYaxis()->SetLabelFont(42);
     hInvMassSign->GetYaxis()->SetTitleFont(42);
+//     hInvMassSign -> GetYaxis()->SetRangeUser(-50,100);
+
     hInvMassSign -> GetXaxis()->SetRangeUser(0.65,2.4);
     hInvMassSign -> Draw("");
 
@@ -307,11 +308,11 @@ void fitting() {
     leftline2->Draw("same");
 
 //    legend -> AddEntry(hInvMassBack, Form("scaled background (%g-%g & %g-%g GeV/c^{2})", intLowLow.Atof(), intLowUp.Atof(), intUpLow.Atof(), intUpUp.Atof()), "pl");
-    legend -> AddEntry(hInvMassSign, "Unlike-sign - like-sign pairs", "pl");
+    legend -> AddEntry(hInvMassSignOrig, "Unlike-sign - like-sign pairs", "pl");
     TLatex tx1;
     tx1.SetNDC();
     tx1.SetTextSize(0.04);
-    tx1.DrawLatex(0.1,0.93,Form("p_{T}: %3.1f-%3.1f GeV/c", 0.2, 6.0));
+    tx1.DrawLatex(0.1,0.93,Form("p_{T}: %3.1f-%3.1f GeV/c", ptminText, ptmaxText));
     legend -> SetFillStyle(0);
     legend -> SetLineColor(0);
     legend -> SetTextSize(0.035);
@@ -343,21 +344,21 @@ void fitting() {
     hInvMassSignOrig -> Draw("");
     hInvMassBack->Draw("same");
 
-    legend3 -> AddEntry(hInvMassBack, Form("Scaled background (%g-%g & %g-%g GeV/c^{2})", intLowLow.Atof(), intLowUp.Atof(), intUpLow.Atof(), intUpUp.Atof()), "pl");
+    legend3 -> AddEntry(hInvMassBack, "Like-sign background", "pl");
     legend3 -> AddEntry(hInvMassSign, "Unlike-sign (signal) pairs", "pl");
     TLatex tx2;
     tx2.SetNDC();
     tx2.SetTextSize(0.04);
-    tx2.DrawLatex(0.1,0.93,Form("p_{T}: %3.1f-%3.1f GeV/c", 0.2, 6.0));
+    tx2.DrawLatex(0.1,0.93,Form("p_{T}: %3.1f-%3.1f GeV/c", ptminText, ptmaxText));
     legend3 -> SetFillStyle(0);
     legend3 -> SetLineColor(0);
     legend3 -> SetTextSize(0.035);
     legend3 -> Draw("same");
     text1 -> Draw("same");
 
-    c3 -> SaveAs("signal_"+input+".png");
-    c4 -> SaveAs("mass_"+input+".png");
-    c5 -> SaveAs("mass_zoom_"+input+".png");
+//    c3 -> SaveAs("signal_"+input+".png");
+//    c4 -> SaveAs("mass_"+input+".png");
+//    c5 -> SaveAs("mass_zoom_"+input+".png");
 
 
 //     hInvMassBack -> Draw();
