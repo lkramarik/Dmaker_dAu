@@ -1,33 +1,28 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<job fileListSyntax="xrootd" minFilesPerProcess="&minNFiles;" maxFilesPerProcess="&maxNFiles;" simulateSubmission="false">
-  <stdout URL="file:&basePath;/jobs/&prodId;/log/$JOBID.out"/>
-  <stderr URL="file:&basePath;/jobs/&prodId;/err/$JOBID.err"/>
+<job fileListSyntax="xrootd" minFilesPerProcess="90" maxFilesPerProcess="100" simulateSubmission="false">
+  <stdout URL="file:&basePath;/jobs/log/$JOBID.out"/>
+  <stderr URL="file:&basePath;/jobs/err/$JOBID.err"/>
 
-  <input URL="filelist:&listOfFiles;" />
-  
+  <input URL="filelist:&basePath;/&listOfFiles;" />
+
   <Generator>
     <Location>./report/</Location>
     <ScriptLocation>./csh/</ScriptLocation>
     <ListLocation>./list/</ListLocation>
   </Generator>
-  
+
   <command>
-    starver &starVersion;
-    
-    setenv PRODPATH &basePath;/production/&prodId;
-    setenv LOGPATH  &basePath;/jobs/&prodId;/log
-
-    mkdir -p ${PRODPATH} ${LOGPATH}
-
+    starver SL17d
     root -q -b -l StRoot/macros/loadSharedHFLibraries.C StRoot/macros/&rootMacro;++\(\"$FILELIST\",\"&prodId;_$JOBINDEX\",\"picoList_bad.list\",\"&treeName;\",\"&productionBasePath;\"\) &gt;&amp; ${JOBID}.log
     tar -zcvf ${JOBID}.log.tgz ${JOBID}.log
 
   </command>
 
-  <output fromScratch="*.root"    toURL="$PRODPATH/" />
-  <output fromScratch="*.log.tgz" toURL="$LOGPATH/" />
-  <output fromScratch="*.log"     toURL="$LOGPATH/" />
-  
+  <output fromScratch="*.root"    toURL="&basePath;/production/" />
+  <output fromScratch="*.log.tgz" toURL="&basePath;/jobs/log/" />
+  <output fromScratch="*.log"     toURL="&basePath;/jobs/log/" />
+
+
   <SandBox installer="ZIP">
     <Package name="LocalLibraries">
       <File>file:./StRoot/</File>
