@@ -228,8 +228,8 @@ int StPicoD0AnaMaker::createCandidates() {
             ntVar[ii++] = pair->dcaDaughters();
             ntVar[ii++] = flag;
             ntVar[ii++] = mPrimVtx.z();
-            ntVar[ii++] = picoEvent->vzVpd();
-            ntVar[ii++] = fabs(picoEvent->primaryVertex().z() - picoEvent->vzVpd());
+            ntVar[ii++] = mPicoEvent->vzVpd();
+            ntVar[ii++] = fabs(mPicoEvent->primaryVertex().z() - mPicoEvent->vzVpd());
 
             ntVar[ii++] = pair->rapidity();
             ntVar[ii++] = pair->pointingAngle();
