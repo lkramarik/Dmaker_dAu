@@ -44,4 +44,4 @@ mkdir -p jobs/err
 
 echo ${baseFolder}${productionId}
 
-star-submit-template -template submit/submit.xml -entities basePath=${baseFolder}${productionId},prodId=${productionId}
+#star-submit-template -template submit/submit.xml -entities basePath=${baseFolder}${productionId},prodId=${productionId}
