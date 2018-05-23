@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<job maxFilesPerProcess="5" fileListSyntax="paths" simulateSubmission="false">
+    <stdout URL="file:./jobs/log/$JOBID.out"/>
+    <stderr URL="file:./jobs/err/$JOBID.err"/>
+
+    <command>
+        starver SL17d
+        echo $INPUTFILE0
+        echo $JOBID.root
+        root -l -b -q TMVAClassificationApplication.C\(\"$INPUTFILE0\",\"${JOBID}.root\"\)
+
+    </command>
+
+    <Generator>
+        <Location>./report/</Location>
+        <ScriptLocation>./csh/</ScriptLocation>
+        <ListLocation>./list/</ListLocation>
+    </Generator>
+
+    <input URL="filelist:&basePath;/files_to_run.list"/>
+
+    <SandBox installer="ZIP">
+        <Package name="LocalLibraries">
+            <File>file:./StRoot/</File>
+            <!--<File>file:./run_StMcAnalysisMaker.C</File>-->
+            <!--<File>file:./.sl64_gcc482/</File>-->
+            <File>file:./.sl73_gcc485/</File>
+        </Package>
+    </SandBox>
+    <output fromScratch="*.root" toURL="file:&basePath;/production/"/>
+</job>
