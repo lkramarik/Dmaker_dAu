@@ -4,10 +4,9 @@
     <stderr URL="file:./jobs/err/$JOBID.err"/>
 
     <command>
-        starver SL17d
-        echo $INPUTFILE0
+        <!--starver SL17d-->
         echo $JOBID.root
-        root -l -b -q TMVAClassificationApplication.C\(\"$INPUTFILE0\",\"${JOBID}.root\"\)
+        root -l -b -q TMVAClassificationApplication.C\(\"$FILELIST\",\"${JOBID}.root\"\)
 
     </command>
 
@@ -21,10 +20,9 @@
 
     <SandBox installer="ZIP">
         <Package name="LocalLibraries">
-            <File>file:./StRoot/</File>
-            <!--<File>file:./run_StMcAnalysisMaker.C</File>-->
+            <File>file:./weights</File>
+            <File>file:./TMVAClassificationApplication.C</File>
             <!--<File>file:./.sl64_gcc482/</File>-->
-            <File>file:./.sl73_gcc485/</File>
         </Package>
     </SandBox>
     <output fromScratch="*.root" toURL="file:&basePath;/production/"/>
