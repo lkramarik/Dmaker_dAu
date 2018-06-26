@@ -353,6 +353,17 @@ float StPicoCutsBase::getTofBetaBase(StPicoTrack const * const trk) const {
   return beta;
 }
 
+
+float StPicoCutsBase::getOneOverBeta(StPicoTrack const * const trk,  float const & tofBeta, int pidFlag) const {
+  if ((tofBeta <= 0) || (tofBeta!=tofBeta))
+    return -5;
+  float m2 = mHypotheticalMass[pidFlag]*mHypotheticalMass[pidFlag];
+  float ptot = trk->gPtot();
+  float betaInv = ptot / sqrt(ptot*ptot + m2);
+  return fabs(1/tofBeta - 1/betaInv);
+}
+
+
 // _________________________________________________________
 float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk) const { //liangs
     int index2tof = trk->bTofPidTraitsIndex();

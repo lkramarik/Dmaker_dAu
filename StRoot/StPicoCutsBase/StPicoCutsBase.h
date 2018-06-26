@@ -146,6 +146,7 @@ public:
 
     // -- calculate beta of track -- basic calculation
     float getTofBetaBase(StPicoTrack const* const trk) const;
+    float getOneOverBeta(StPicoTrack const * const trk,  float const & tofBeta, int pidFlag) const;
 
     // -- calculate beta of track -- for primary particles
     float getTofBeta(StPicoTrack const* const trk) const;

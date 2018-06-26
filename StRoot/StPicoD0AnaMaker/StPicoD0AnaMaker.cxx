@@ -2,8 +2,6 @@
 #include "StPicoDstMaker/StPicoDst.h"
 #include "StPicoEvent/StPicoEvent.h"
 #include "StPicoEvent/StPicoTrack.h"
-//#include "StPicoD0EventMaker/StPicoD0Event.h"
-//#include "StPicoD0EventMaker/StKaonPion.h"
 #include "StPicoHFMaker/StHFCuts.h"
 #include "phys_constants.h"
 #include "StBTofUtil/tofPathLength.hh"
@@ -364,12 +362,4 @@ bool StPicoD0AnaMaker::isProton(StPicoTrack const * const trk) const {
     return (mHFCuts->isGoodTrack(trk) && mHFCuts->isTPCHadron(trk, StPicoCutsBase::kProton));
 }
 
-float StPicoD0AnaMaker::getOneOverBeta(StPicoTrack const * const trk,  float const & tofBeta, int pidFlag){
-    if ((tofBeta <= 0) || (tofBeta!=tofBeta))
-        return -5;
-    float m2 = mHFCuts->getHypotheticalMass(pidFlag)*mHFCuts->getHypotheticalMass(pidFlag);
-    float ptot = trk->gPtot();
-    float betaInv = ptot / sqrt(ptot*ptot + m2);
-    return fabs(1/tofBeta - 1/betaInv);
-}
 
