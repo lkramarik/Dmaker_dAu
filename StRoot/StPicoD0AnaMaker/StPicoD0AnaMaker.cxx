@@ -209,7 +209,7 @@ int StPicoD0AnaMaker::createCandidates() {
             ntVar[ii++] = pion1->nSigmaPion();
             ntVar[ii++] = pion1->nHitsFit();
             ntVar[ii++] = pion1->nHitsDedx();
-            ntVar[ii++] = getOneOverBeta(pion1, mHFCuts->getTofBetaBase(pion1), StPicoCutsBase::kPion);
+            ntVar[ii++] = mHFCuts->getOneOverBeta(pion1, mHFCuts->getTofBetaBase(pion1), StPicoCutsBase::kPion);
             ntVar[ii++] = mHFCuts->getTofBetaBase(pion1);
 
             ntVar[ii++] = kaon->gMom().phi();
@@ -220,7 +220,7 @@ int StPicoD0AnaMaker::createCandidates() {
             ntVar[ii++] = kaon->nSigmaKaon();
             ntVar[ii++] = kaon->nHitsFit();
             ntVar[ii++] = kaon->nHitsDedx();
-            ntVar[ii++] = getOneOverBeta(kaon, mHFCuts->getTofBetaBase(kaon), StPicoCutsBase::kKaon);
+            ntVar[ii++] = mHFCuts->getOneOverBeta(kaon, mHFCuts->getTofBetaBase(kaon), StPicoCutsBase::kKaon);
             ntVar[ii++] = mHFCuts->getTofBetaBase(kaon);
 
             ntVar[ii++] = pair->dcaDaughters();
