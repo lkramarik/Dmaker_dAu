@@ -61,10 +61,10 @@ class StPicoMixedEventMaker : public StMaker
     StPicoEvent*    mPicoEvent;         
     StHFCuts*	    mHFCuts;
 
-    TNtuple *ntp_signal_SE;
-    TNtuple *ntp_signal_ME;
-    TNtuple *ntp_background_SE;
-    TNtuple *ntp_background_ME;
+    TNtuple *mSETupleSig;
+    TNtuple *mSETupleBack;
+    TNtuple *mMETupleSig;
+    TNtuple *mMETupleBack;
 
     StPicoEventMixer* mPicoEventMixer[10][9];
 
