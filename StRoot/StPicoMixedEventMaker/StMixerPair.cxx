@@ -33,7 +33,7 @@ StMixerPair::StMixerPair(StPicoTrack const  particle1, StPicoTrack const particl
                          StThreeVectorF const& vtx1, StThreeVectorF const& vtx2, float const bField) :  mLorentzVector(StLorentzVectorF()), mDecayVertex(StThreeVectorF()),
     mPointingAngle(std::numeric_limits<float>::quiet_NaN()), mDecayLength(std::numeric_limits<float>::quiet_NaN()),
     mParticle1Dca(std::numeric_limits<float>::quiet_NaN()), mParticle2Dca(std::numeric_limits<float>::quiet_NaN()),
-    mParticle1Mom(particle1 -> gMom()), mParticle2Mom(particle2 -> gMom()),
+    mParticle1Mom(particle1.gMom()), mParticle2Mom(particle2.gMom()),
     mDcaDaughters(std::numeric_limits<float>::max()), mCosThetaStar(std::numeric_limits<float>::quiet_NaN()) {
     // -- Create pair out of 2 tracks
     //     prefixes code:
