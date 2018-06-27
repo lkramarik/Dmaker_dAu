@@ -164,16 +164,16 @@ void StPicoEventMixer::mixEvents() {
 
                 int ii=0;
                 float ntVar[21];
-                ntVar[ii++] = pion->gPt();
+                ntVar[ii++] = pion.gPt();
                 ntVar[ii++] = pair->particle1Dca();
                 ntVar[ii++] = pion->nSigmaPion();
                 ntVar[ii++] = pion->nHitsFit();
-                ntVar[ii++] = mHFCuts->getOneOverBeta(pion, mHFCuts->getTofBetaBase(pion), StPicoCutsBase::kPion);
+                ntVar[ii++] = mHFCuts->getOneOverBeta(&pion, mHFCuts->getTofBetaBase(&pion), StPicoCutsBase::kPion);
                 ntVar[ii++] = kaon.gPt();
                 ntVar[ii++] = pair->particle2Dca();
                 ntVar[ii++] = kaon->nSigmaKaon();
                 ntVar[ii++] = kaon->nHitsFit();
-                ntVar[ii++] = mHFCuts->getOneOverBeta(kaon, mHFCuts->getTofBetaBase(kaon), StPicoCutsBase::kKaon);
+                ntVar[ii++] = mHFCuts->getOneOverBeta(&kaon, mHFCuts->getTofBetaBase(&kaon), StPicoCutsBase::kKaon);
                 ntVar[ii++] = pair->dcaDaughters();
                 ntVar[ii++] = pair->rapidity();
                 ntVar[ii++] = pair->pointingAngle();
