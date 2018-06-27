@@ -36,7 +36,7 @@ class StMixerPair : public TObject
 //	   StThreeVectorF const& vtx1, StThreeVectorF const& vtx2,
 //	   float bField);
 
-  StMixerPair(StPicoTrack const&  particle1, StPicoTrack const& particle2,
+  StMixerPair(StPicoTrack const*  particle1, StPicoTrack const* particle2,
 	   float p1MassHypo, float p2MassHypo,
 	   StThreeVectorF const& vtx1, StThreeVectorF const& vtx2,
 	   float bField);
