@@ -152,7 +152,7 @@ void StPicoEventMixer::mixEvents() {
 //                StMixerTrack const* kaon = mEvents.at(iEvt2)->kaonAt(iTrk2);
                 StPicoTrack const* kaon = mEvents.at(iEvt2)->kaonAt(iTrk2);
 
-                StMixerPair *pair = new StcPair(pion, kaon,
+                StMixerPair *pair = new StMixerPair(pion, kaon,
                                  mHFCuts->getHypotheticalMass(StHFCuts::kPion),
                                  mHFCuts->getHypotheticalMass(StHFCuts::kKaon),
                                  mEvents.at(0)->vertex(), mEvents.at(iEvt2)->vertex(),
@@ -187,9 +187,9 @@ void StPicoEventMixer::mixEvents() {
                 int charge = mEvents.at(0)->pionAt(iTrk1).charge() +  mEvents.at(iEvt2)->kaonAt(iTrk2).charge(); // 0 = signal
 
                 if(iEvt2 == 0)
-                    fillNtpSameEvtPair(ntVar, pair, charge );
+                    fillNtpSameEvtPair(ntVar, charge );
                 else
-                    fillNtpMixedEvtPair(ntVar, pair, charge);
+                    fillNtpMixedEvtPair(ntVar, charge);
             }
         } //second track track loop
     } // the first track track loop
