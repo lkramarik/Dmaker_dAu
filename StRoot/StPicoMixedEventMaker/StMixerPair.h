@@ -85,6 +85,7 @@ class StMixerPair : public TObject
   ClassDef(StMixerPair,1)
 };
 inline StLorentzVectorF const& StMixerPair::lorentzVector() const { return mLorentzVector;}
+inline float StMixerPair::rapidity()    const { return mLorentzVector.rapidity();}
 inline float StMixerPair::m()    const { return mLorentzVector.m();}
 inline float StMixerPair::pt()   const { return mLorentzVector.perp();}
 inline float StMixerPair::eta()  const { return mLorentzVector.pseudoRapidity();}
@@ -104,5 +105,7 @@ inline StThreeVectorF const & StMixerPair::decayVertex() const { return mDecayVe
 inline float StMixerPair::v0x() const { return mDecayVertex.x();}
 inline float StMixerPair::v0y() const { return mDecayVertex.y();}
 inline float StMixerPair::v0z() const { return mDecayVertex.z();}
+inline float StMixerPair::DcaToPrimaryVertex() const { return mDecayLength*std::sin(mPointingAngle); }
+
 #endif
 

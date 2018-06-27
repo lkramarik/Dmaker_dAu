@@ -160,19 +160,19 @@ void StPicoEventMixer::mixEvents() {
                                  mEvents.at(0)->vertex(), mEvents.at(iEvt2)->vertex(),
                                  mEvents.at(0)->field() );
 
-                if (!mHFCuts->isClosePair(pair)) continue;
+                if (!mHFCuts->isCloseMixerPair(pair)) continue;
 
                 int ii=0;
                 float ntVar[21];
                 ntVar[ii++] = pion.gPt();
                 ntVar[ii++] = pair->particle1Dca();
-                ntVar[ii++] = pion->nSigmaPion();
-                ntVar[ii++] = pion->nHitsFit();
+                ntVar[ii++] = pion.nSigmaPion();
+                ntVar[ii++] = pion.nHitsFit();
                 ntVar[ii++] = mHFCuts->getOneOverBeta(&pion, mHFCuts->getTofBetaBase(&pion), StPicoCutsBase::kPion);
                 ntVar[ii++] = kaon.gPt();
                 ntVar[ii++] = pair->particle2Dca();
-                ntVar[ii++] = kaon->nSigmaKaon();
-                ntVar[ii++] = kaon->nHitsFit();
+                ntVar[ii++] = kaon.nSigmaKaon();
+                ntVar[ii++] = kaon.nHitsFit();
                 ntVar[ii++] = mHFCuts->getOneOverBeta(&kaon, mHFCuts->getTofBetaBase(&kaon), StPicoCutsBase::kKaon);
                 ntVar[ii++] = pair->dcaDaughters();
                 ntVar[ii++] = pair->rapidity();
@@ -342,3 +342,11 @@ bool StPicoEventMixer::isGoodTrigger(StPicoEvent const * const mPicoEvent) const
 {
     return mHFCuts->isGoodTrigger(mPicoEvent);
 }
+//-----------------------------------------------------------
+bool StPicoEventMixer::isCloseMixerPair(StMixerPair const * pair) const {
+    return ( std::cos(pair.pointingAngle()) > mHFCuts->cutSecondaryPairCosThetaMin() &&
+             pair.decayLength() > mHFCuts->cutSecondaryPairDecayLengthMin() && pair.decayLength() < mHFCuts->cutSecondaryPairDecayLengthMax() &&
+             pair.dcaDaughters() < mHFCuts->cutSecondaryPairDcaDaughtersMax());
+}
+
+

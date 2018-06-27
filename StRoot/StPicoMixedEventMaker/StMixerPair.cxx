@@ -90,5 +90,3 @@ StMixerPair::StMixerPair(StPicoTrack const  particle1, StPicoTrack const particl
     mParticle1Dca = (p1Helix.origin() - vtx1).mag();
     mParticle2Dca = (p2Helix.origin() - vtx1).mag();
 }
-
-
