@@ -150,9 +150,9 @@ void StPicoEventMixer::mixEvents() {
                         continue;
                 }
 
-                StPicoTrack const* pion = mEvents.at(0)->pionAt(iTrk1);
+                StPicoTrack const pion = mEvents.at(0)->pionAt(iTrk1);
 //                StMixerTrack const* kaon = mEvents.at(iEvt2)->kaonAt(iTrk2);
-                StPicoTrack const* kaon = mEvents.at(iEvt2)->kaonAt(iTrk2);
+                StPicoTrack const kaon = mEvents.at(iEvt2)->kaonAt(iTrk2);
 
                 StMixerPair *pair = new StMixerPair(pion, kaon,
                                  mHFCuts->getHypotheticalMass(StHFCuts::kPion),
