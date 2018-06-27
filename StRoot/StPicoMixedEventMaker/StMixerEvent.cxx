@@ -1,7 +1,7 @@
 #include <limits>
 
 #include "StMixerEvent.h"
-#include "StPicoDstMaker/StPicoEvent.h"
+#include "StPicoEvent/StPicoEvent.h"
 
 StMixerEvent::StMixerEvent() :  mVtx(StThreeVectorF()),
     mBField(std::numeric_limits<float>::quiet_NaN()),

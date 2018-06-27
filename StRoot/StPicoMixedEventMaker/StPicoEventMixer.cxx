@@ -8,8 +8,8 @@
 #include "TList.h"
 
 #include "StPicoEventMixer.h"
-#include "StPicoDstMaker/StPicoEvent.h"
-#include "StPicoDstMaker/StPicoTrack.h"
+#include "StPicoEvent/StPicoEvent.h"
+#include "StPicoEvent/StPicoTrack.h"
 #include "StPicoDstMaker/StPicoDst.h"
 
 #include "StPicoMixedEventMaker.h"
@@ -17,7 +17,6 @@
 #include "StMixerTriplet.h"
 #include "StMixerHists.h"
 #include "StPicoHFMaker/StHFCuts.h"
-#include "StPicoHFMaker/StHFClosePair.h"
 #include "StPicoHFMaker/StHFPair.h"
 #include "StPicoHFMaker/StHFTriplet.h"
 #include "StRoot/StRefMultCorr/StRefMultCorr.h"
