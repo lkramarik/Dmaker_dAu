@@ -35,6 +35,7 @@ class StPicoTrack;
 class StPicoDst;
 class StMixerTrack;
 class StMixerEvent;
+class StMixerPair;
 class StMixerHists;
 
 class StPicoEventMixer {

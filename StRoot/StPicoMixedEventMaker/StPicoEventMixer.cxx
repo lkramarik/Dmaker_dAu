@@ -17,6 +17,8 @@
 #include "StMixerHists.h"
 #include "StPicoHFMaker/StHFCuts.h"
 #include "StPicoHFMaker/StHFPair.h"
+#include "StMixerPair.h"
+
 
 //-----------------------------------------------------------
 StPicoEventMixer::StPicoEventMixer(char* category):
