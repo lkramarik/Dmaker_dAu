@@ -30,8 +30,8 @@ class StMixerHists
   StMixerHists(char* fileBaseName);
   ~StMixerHists();
 
-  void fillSameEvt(const StThreeVectorF& vtx, float weight);
-  void fillMixedEvt(const StThreeVectorF& vtx, float weight);
+  void fillSameEvt(const StThreeVectorF& vtx);
+  void fillMixedEvt(const StThreeVectorF& vtx);
 //  void fillSameEvtTriplet(StMixerTriplet const* const, int charge, float weight);
 //  void fillMixedEvtTriplet(StMixerTriplet const* const, int charge, float weight);
   void closeFile();
@@ -45,13 +45,13 @@ class StMixerHists
   TH2F* mME_US_plus;
   TH2F* mME_US_minus;
 };
-inline void StMixerHists::fillSameEvt(const StThreeVectorF& vtx, float weight)
+inline void StMixerHists::fillSameEvt(const StThreeVectorF& vtx)
 {
-  mSE_Vtx->Fill(vtx.x(), vtx.y(), weight);
+  mSE_Vtx->Fill(vtx.x(), vtx.y(), 1);
 }
-inline void StMixerHists::fillMixedEvt(const StThreeVectorF& vtx, float weight)
+inline void StMixerHists::fillMixedEvt(const StThreeVectorF& vtx)
 {
-  mME_Vtx->Fill(vtx.x(), vtx.y(), weight);
+  mME_Vtx->Fill(vtx.x(), vtx.y(), 1);
 }
 //inline void StMixerHists::fillSameEvtTriplet(StMixerTriplet const* const triplet, int charge, float weight)
 //{

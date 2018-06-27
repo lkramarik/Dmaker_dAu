@@ -52,8 +52,6 @@ class StPicoMixedEventMaker : public StMaker
     Int_t SetCategories();
     void setBufferSize(int size) { mBufferSize = size; }
 
-    StRefMultCorr* getRefMultCorr() { return mGRefMultCorrUtil; }
-
     enum  mixerConst { defaultBufferSize = 5, fillSingleTrackHistos = 1}; // enum trick to setting class-speciffic constants
  private:
     int categorize(StPicoDst const*);

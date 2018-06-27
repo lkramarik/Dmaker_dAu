@@ -77,21 +77,21 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
 
         bool saveTrack = false;
         int pidFlag = StPicoCutsBase::kPion;
-        if( isTpcPion(trk) && mHFCuts->isHybridTOFPion(trk, beta, pVertex) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
+        if( isTpcPion(trk) && mHFCuts->isHybridTOFPion(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
             isTpcPi = true;
             isTofPi = true;
             saveTrack = true;
             event->addPion(event->getNoTracks());
         }
         pidFlag = StPicoCutsBase::kKaon;
-        if(isTpcKaon(trk) && mHFCuts->isTOFKaon(trk, beta, pVertex) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
+        if(isTpcKaon(trk) && mHFCuts->isTOFKaon(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
             isTpcK = true;
             isTofK = true;
             saveTrack = true;
             event->addKaon(event->getNoTracks());
         }
         pidFlag = StPicoCutsBase::kProton;
-        if(isTpcProton(trk) && mHFCuts->isTOFProton(trk, beta, pVertex) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
+        if(isTpcProton(trk) && mHFCuts->isTOFProton(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
             isTpcP = true;
             isTofP = true;
             saveTrack = true;
