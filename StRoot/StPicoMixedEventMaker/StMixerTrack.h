@@ -25,7 +25,8 @@
 
 //class StPicoTrack;
 
-class StMixerTrack : public StPicoTrack{
+class StMixerTrack : public StPicoTrack
+        {
  public:
   StMixerTrack();
   StMixerTrack(StMixerTrack const *);
