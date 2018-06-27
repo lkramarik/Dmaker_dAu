@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "StarClassLibrary/StThreeVectorF.hh"
+#include "StPicoEvent/StPicoTrack.h"
 
 #include "StMixerTrack.h"
 /* **************************************************
@@ -27,6 +28,7 @@
  */
 
 class StMixerTrack;
+class StPicoTrack;
 class StPicoEvent;
 
 class StMixerEvent{
@@ -48,9 +50,12 @@ class StMixerEvent{
   int pionId(int counter);
   int kaonId(int counter);
   int protonId(int counter);
-  StMixerTrack pionAt(int const); 
-  StMixerTrack kaonAt(int const); 
-  StMixerTrack protonAt(int const); 
+//  StMixerTrack pionAt(int const);
+//  StMixerTrack kaonAt(int const);
+//  StMixerTrack protonAt(int const);
+  StPicoTrack pionAt(int const);
+  StPicoTrack kaonAt(int const);
+  StPicoTrack protonAt(int const);
   StThreeVectorF const & vertex() const;
   double const field() const;
   void setWeight(float weight) { mWeightFromCentrality = weight; }
