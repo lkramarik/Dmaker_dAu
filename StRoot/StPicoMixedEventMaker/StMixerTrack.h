@@ -25,7 +25,7 @@
 
 class StPicoTrack;
 
-class StMixerTrack : public StPicoTrack
+class StMixerTrack
         {
  public:
   StMixerTrack();
