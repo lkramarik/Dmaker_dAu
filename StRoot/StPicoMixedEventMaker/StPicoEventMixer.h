@@ -26,7 +26,6 @@
 #include "TList.h"
 
 #include "StarClassLibrary/StThreeVectorF.hh"
-#include "StMixerCuts.h"
 #include "StPicoHFMaker/StHFCuts.h"
 
 class TTree;
