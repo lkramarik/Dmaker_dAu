@@ -187,9 +187,9 @@ void StPicoEventMixer::mixEvents() {
                 int charge = mEvents.at(0)->pionAt(iTrk1).charge() +  mEvents.at(iEvt2)->kaonAt(iTrk2).charge(); // 0 = signal
 
                 if(iEvt2 == 0)
-                    fillNtpSameEvtPair(ntVar, &pair, charge );
+                    fillNtpSameEvtPair(ntVar, pair, charge );
                 else
-                    fillNtpMixedEvtPair(ntVar, &pair, charge);
+                    fillNtpMixedEvtPair(ntVar, pair, charge);
             }
         } //second track track loop
     } // the first track track loop
@@ -256,7 +256,8 @@ void StPicoEventMixer::fillTracks(StMixerEvent* evt, bool isSameEvt, int pidFlag
     const float weight = evt->weight();
     for (int i = 0; i < nTracks; ++i)
     {
-        StMixerTrack trk;
+        StPicoTrack trk;
+//        StMixerTrack trk;
         switch (pidFlag)
         {
             case StHFCuts::kProton: trk = evt->protonAt(i);

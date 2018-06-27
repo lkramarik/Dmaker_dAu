@@ -27,7 +27,7 @@
  * **************************************************
  */
 
-class StMixerTrack;
+//class StMixerTrack;
 class StPicoTrack;
 class StPicoEvent;
 
