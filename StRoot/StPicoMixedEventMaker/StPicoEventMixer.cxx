@@ -25,8 +25,10 @@ StPicoEventMixer::StPicoEventMixer(char* category):
         mHFCuts(NULL),
         mEventsBuffer(StPicoMixedEventMaker::defaultBufferSize),
         filledBuffer(0),
-        mSETuple(NULL),
-        mMETuple(NULL),
+        mSETupleSig(NULL),
+        mSETupleBack(NULL),
+        mMETupleSig(NULL),
+        mMETupleBack(NULL),
         mSingleParticleList(NULL),
         fillSinglePartHists(false)
 {
@@ -149,7 +151,7 @@ void StPicoEventMixer::mixEvents() {
                 StMixerTrack const pion = mEvents.at(0)->pionAt(iTrk1);
                 StMixerTrack const kaon = mEvents.at(iEvt2)->kaonAt(iTrk2);
 
-                StHFPair pair(pion, kaon,
+                StHFPair *pair = new StHFPair(pion, kaon,
                                  mHFCuts->getHypotheticalMass(StHFCuts::kPion),
                                  mHFCuts->getHypotheticalMass(StHFCuts::kKaon),
                                  mEvents.at(0)->vertex(), mEvents.at(iEvt2)->vertex(),
@@ -184,9 +186,9 @@ void StPicoEventMixer::mixEvents() {
                 int charge = mEvents.at(0)->pionAt(iTrk1).charge() +  mEvents.at(iEvt2)->kaonAt(iTrk2).charge(); // 0 = signal
 
                 if(iEvt2 == 0)
-                    fillSameEvtPair(ntVar, &pair, charge );
+                    fillNtpSameEvtPair(ntVar, &pair, charge );
                 else
-                    fillMixedEvtPair(ntVar, &pair, charge);
+                    fillNtpMixedEvtPair(ntVar, &pair, charge);
             }
         } //second track track loop
     } // the first track track loop
@@ -196,22 +198,22 @@ delete mEvents.at(0);
 mEvents.erase(mEvents.begin());
 }
 
-void StPicoEventMixer::fillNtpSameEvtPair(float ntVar[21], StMixerPair const* const pair, int charge)
+void StPicoEventMixer::fillNtpSameEvtPair(float ntVar[21], StHFPair const* const pair, int charge)
 {
     if(charge == 0 )
-        ntp_signal_SE -> Fill(ntVar);
+        mSETupleSig -> Fill(ntVar);
     else
-        ntp_background_SE-> Fill(ntVar);
+        mSETupleBack-> Fill(ntVar);
     return;
 }
 
 
-void StPicoEventMixer::fillNtpMixedEvtPair(float ntVar[21], StMixerPair const* const pair, int charge)
+void StPicoEventMixer::fillNtpMixedEvtPair(float ntVar[21], StHFPair const* const pair, int charge)
 {
     if(charge == 0 )
-        ntp_signal_ME -> Fill(ntVar);
+        mMETupleSig -> Fill(ntVar);
     else
-        ntp_background_ME-> Fill(ntVar);
+        mMETupleBack-> Fill(ntVar);
     return;
 }
 
@@ -330,17 +332,6 @@ bool StPicoEventMixer::isTPCHadron(StPicoTrack const * const trk, int pidFlag)
 bool StPicoEventMixer::isGoodTrack(StPicoTrack const * const trk)
 {
     return (mHFCuts->isGoodTrack(trk));
-}
-//-----------------------------------------------------------
-bool StPicoEventMixer::isGoodTriplet(StMixerTriplet const& triplet)
-{
-    // int ptIndex = getLcPtIndex(triplet);
-    return mHFCuts->isGoodSecondaryVertexTriplet(triplet);
-}
-//-----------------------------------------------------------------------------
-int StPicoEventMixer::getLcPtIndex(StMixerTriplet const& triplet) const
-{
-    return 0; // so far, we only use one pT index
 }
 //-----------------------------------------------------------
 bool StPicoEventMixer::isGoodTrigger(StPicoEvent const * const mPicoEvent) const

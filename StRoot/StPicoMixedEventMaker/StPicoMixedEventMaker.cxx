@@ -34,8 +34,10 @@ StPicoMixedEventMaker::StPicoMixedEventMaker(char const* name, StPicoDstMaker* p
         mInputFileName(inputHFListHFtree),
         mEventCounter(0),
         mBufferSize(defaultBufferSize),
-        mSETuple(NULL),
-        mMETuple(NULL),
+        mSETupleSig(NULL),
+        mSETupleBack(NULL),
+        mMETupleSig(NULL),
+        mMETupleBack(NULL),
         mOutputFileTree(NULL),
         mSingePartHists(NULL)
 {
@@ -50,10 +52,10 @@ StPicoMixedEventMaker::StPicoMixedEventMaker(char const* name, StPicoDstMaker* p
                           "k_pt:k_dca:k_nSigma:k_nHitFit:k_TOFinvbeta:"
                           "dcaDaughters:D_rapidity:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_phi:D_eta:D_cosThetaStar:D_pt:D_mass";
 
-    ntp_signal_SE = new TNtuple("ntp_signal_SE","ntp_signal_SE", varList.data());
-    ntp_signal_ME = new TNtuple("ntp_signal_ME","ntp_signal_ME", varList.data());
-    ntp_background_SE = new TNtuple("ntp_background_SE","ntp_background_SE", varList.data());
-    ntp_background_ME = new TNtuple("ntp_background_ME","ntp_background_ME", varList.data());
+    mSETupleSig = new TNtuple("ntp_signal_SE","ntp_signal_SE", varList.data());
+    mMETupleSig = new TNtuple("ntp_signal_ME","ntp_signal_ME", varList.data());
+    mSETupleBack = new TNtuple("ntp_background_SE","ntp_background_SE", varList.data());
+    mMETupleBack = new TNtuple("ntp_background_ME","ntp_background_ME", varList.data());
 
     mSingePartHists = new TList();
     mSingePartHists->SetOwner(true);
@@ -126,8 +128,10 @@ Int_t StPicoMixedEventMaker::Init() {
             mPicoEventMixer[iVz][iCentrality] = new StPicoEventMixer(Form("Cent_%i_Vz_%i",iCentrality,iVz));
             mPicoEventMixer[iVz][iCentrality]->setEventBuffer(mBufferSize);
             mPicoEventMixer[iVz][iCentrality]->setHFCuts(mHFCuts);
-            mPicoEventMixer[iVz][iCentrality]->setSameEvtNtuple(mSETuple);
-            mPicoEventMixer[iVz][iCentrality]->setMixedEvtNtuple(mMETuple);
+            mPicoEventMixer[iVz][iCentrality]->setSameEvtNtupleSig(mSETupleSig);
+            mPicoEventMixer[iVz][iCentrality]->setSameEvtNtupleBack(mSETupleBack);
+            mPicoEventMixer[iVz][iCentrality]->setMixedEvtNtupleSig(mMETupleSig);
+            mPicoEventMixer[iVz][iCentrality]->setMixedEvtNtupleBack(mMETupleBack);
             mPicoEventMixer[iVz][iCentrality]->setSinglePartHistsList(mSingePartHists);
             mPicoEventMixer[iVz][iCentrality]->setFillSinglePartHists(fillSingleTrackHistos);
         }
@@ -149,10 +153,10 @@ Int_t StPicoMixedEventMaker::Finish() {
     }
     mSingePartHists->Write();
 
-    ntp_signal_SE -> Write(ntp_signal_SE->GetName(), TObject::kOverwrite);
-    ntp_signal_ME -> Write(ntp_signal_ME->GetName(), TObject::kOverwrite);
-    ntp_background_SE -> Write(ntp_background_SE->GetName(), TObject::kOverwrite);
-    ntp_background_ME -> Write(ntp_background_ME->GetName(), TObject::kOverwrite);
+    mSETupleSig -> Write(mSETupleSig->GetName(), TObject::kOverwrite);
+    mMETupleSig -> Write(mMETupleSig->GetName(), TObject::kOverwrite);
+    mSETupleBack -> Write(mSETupleBack->GetName(), TObject::kOverwrite);
+    mMETupleBack -> Write(mMETupleBack->GetName(), TObject::kOverwrite);
 
     return kStOK;
 }

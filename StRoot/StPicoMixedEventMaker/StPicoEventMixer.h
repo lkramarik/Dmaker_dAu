@@ -45,8 +45,10 @@ class StPicoEventMixer {
   ~StPicoEventMixer();
   bool addPicoEvent(StPicoDst const* picoDst, float weight = 1.);
   void setEventBuffer(int buffer);
-  void setSameEvtNtuple(TNtuple *tuple)  { mSETuple = tuple; }
-  void setMixedEvtNtuple(TNtuple *tuple) { mMETuple = tuple; }
+  void setSameEvtNtupleSig(TNtuple *tuple)  { mSETupleSig = tuple; }
+  void setSameEvtNtupleBack(TNtuple *tuple)  { mSETupleBack = tuple; }
+  void setMixedEvtNtupleSig(TNtuple *tuple) { mMETupleSig = tuple; }
+  void setMixedEvtNtupleBack(TNtuple *tuple) { mMETupleBack = tuple; }
   void mixEvents();
   void finish();
   void setHFCuts(StHFCuts * hfCuts) { mHFCuts = hfCuts; }
@@ -67,12 +69,10 @@ class StPicoEventMixer {
   bool isTpcKaon(StPicoTrack const * const);
   bool isTpcProton(StPicoTrack const * const);
   bool isTPCHadron(StPicoTrack const * const, int pidFlag);
-  bool isGoodTriplet(StMixerTriplet const& triplet);
-  int getLcPtIndex(StMixerTriplet const& pair) const;
 
   void fillTracks(StMixerEvent* evt, bool isSameEvt, int PidFlag);
-  void fillNtpSameEvtPair(float ntVar[21], StMixerPair const* const pair, int charge);
-  void fillNtpMixedEvtPair(float ntVar[21], StMixerPair const* const pair, int charge);
+  void fillNtpSameEvtPair(float ntVar[21], StHFPair const* const pair, int charge);
+  void fillNtpMixedEvtPair(float ntVar[21], StHFPair const* const pair, int charge);
 
     std::vector <StMixerEvent*> mEvents;
   StMixerHists* mHists;
@@ -82,8 +82,10 @@ class StPicoEventMixer {
   float dca1, dca2, dcaDaughters, theta_hs, decayL_hs;
   float pt_hs, mass_hs, eta_hs, phi_hs;
 
-  TNtuple *mSETuple;
-  TNtuple *mMETuple;
+  TNtuple *mSETupleSig;
+  TNtuple *mSETupleBack;
+  TNtuple *mMETupleSig;
+  TNtuple *mMETupleBack;
   TList *mSingleParticleList;
 
   bool fillSinglePartHists;
