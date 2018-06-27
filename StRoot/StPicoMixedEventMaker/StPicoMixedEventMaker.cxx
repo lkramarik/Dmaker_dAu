@@ -12,7 +12,7 @@
 #include "StPicoDstMaker/StPicoDstMaker.h"
 #include "StPicoEvent/StPicoEvent.h"
 #include "StPicoEvent/StPicoTrack.h"
-#include "StPicoDstMaker/StPicoBTofPidTraits.h"
+#include "StPicoEvent/StPicoBTofPidTraits.h"
 #include "StPicoMixedEventMaker.h"
 #include "StPicoEventMixer.h"
 #include "StPicoHFMaker/StHFCuts.h"
