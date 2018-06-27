@@ -40,7 +40,8 @@ class StMixerEvent{
   void addPion(int);
   void addKaon(int);
   void addProton(int);
-  void addTrack(StMixerTrack);
+  void addTrack(StPicoTrack);
+//  void addTrack(StMixerTrack);
   void setPos( float const, float const, float const);
   void setField( float const );
   int getNoTracks();
@@ -68,7 +69,8 @@ class StMixerEvent{
  private:
   StThreeVectorF mVtx;
   float mBField;
-  std::vector <StMixerTrack  > mTracks;
+  std::vector <StPicoTrack  > mTracks;
+//  std::vector <StMixerTrack  > mTracks;
   std::vector <int  > mEventKaons;
   std::vector <int  > mEventPions;
   std::vector <int  > mEventProtons;
