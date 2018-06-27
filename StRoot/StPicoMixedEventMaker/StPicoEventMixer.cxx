@@ -344,9 +344,9 @@ bool StPicoEventMixer::isGoodTrigger(StPicoEvent const * const mPicoEvent) const
 }
 //-----------------------------------------------------------
 bool StPicoEventMixer::isCloseMixerPair(StMixerPair const * pair) const {
-    return ( std::cos(pair.pointingAngle()) > mHFCuts->cutSecondaryPairCosThetaMin() &&
-             pair.decayLength() > mHFCuts->cutSecondaryPairDecayLengthMin() && pair.decayLength() < mHFCuts->cutSecondaryPairDecayLengthMax() &&
-             pair.dcaDaughters() < mHFCuts->cutSecondaryPairDcaDaughtersMax());
+    return ( std::cos(pair->pointingAngle()) > mHFCuts->cutSecondaryPairCosThetaMin() &&
+             pair->decayLength() > mHFCuts->cutSecondaryPairDecayLengthMin() && pair->decayLength() < mHFCuts->cutSecondaryPairDecayLengthMax() &&
+             pair->dcaDaughters() < mHFCuts->cutSecondaryPairDcaDaughtersMax());
 }
 
 
