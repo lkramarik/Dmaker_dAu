@@ -21,8 +21,10 @@
 #include "TObject.h"
 #include "StarClassLibrary/StLorentzVectorF.hh"
 #include "StarClassLibrary/StThreeVectorF.hh"
+#include "TClonesArray.h"
+#include "StPicoEvent/StPicoEvent.h"
 
-//class StPicoTrack;
+class StPicoTrack;
 //class StMixerTrack;
 
 class StMixerPair : public TObject
