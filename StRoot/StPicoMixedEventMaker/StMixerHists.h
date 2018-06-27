@@ -21,8 +21,6 @@
 #include "StarClassLibrary/StThreeVectorF.hh"
 #include "TH2F.h"
 
-#include "StMixerTriplet.h"
-
 #include <iostream>
 using namespace std;
 
@@ -34,8 +32,8 @@ class StMixerHists
 
   void fillSameEvt(const StThreeVectorF& vtx, float weight);
   void fillMixedEvt(const StThreeVectorF& vtx, float weight);
-  void fillSameEvtTriplet(StMixerTriplet const* const, int charge, float weight);
-  void fillMixedEvtTriplet(StMixerTriplet const* const, int charge, float weight);
+//  void fillSameEvtTriplet(StMixerTriplet const* const, int charge, float weight);
+//  void fillMixedEvtTriplet(StMixerTriplet const* const, int charge, float weight);
   void closeFile();
  private:
   TH2F* mSE_Vtx;
@@ -55,30 +53,30 @@ inline void StMixerHists::fillMixedEvt(const StThreeVectorF& vtx, float weight)
 {
   mME_Vtx->Fill(vtx.x(), vtx.y(), weight);
 }
-inline void StMixerHists::fillSameEvtTriplet(StMixerTriplet const* const triplet, int charge, float weight)
-{
-  if(charge == 3) // binary b011 for LC+ or b100 for LC-
-  {
-    mSE_US_plus-> Fill(triplet->pt(),triplet->m(), weight);
-  }
-  else if (charge == 4)
-  {
-    mSE_US_minus-> Fill(triplet->pt(),triplet->m(), weight);
-  }
-  else
-  {
-    mSE_LS-> Fill(triplet->pt(),triplet->m(), weight);
-  }
-  // cout << "SE triplet" << endl;
-}
-inline void StMixerHists::fillMixedEvtTriplet(StMixerTriplet const* const triplet, int charge, float weight)
-{
-  if(charge == 3) // binary b011 for LC+ or b100 for LC-
-    mME_US_plus-> Fill(triplet->pt(),triplet->m(), weight);
-  else if(charge == 4)
-    mME_US_minus-> Fill(triplet->pt(),triplet->m(), weight);
-  else
-    mME_LS-> Fill(triplet->pt(),triplet->m(), weight);
+//inline void StMixerHists::fillSameEvtTriplet(StMixerTriplet const* const triplet, int charge, float weight)
+//{
+//  if(charge == 3) // binary b011 for LC+ or b100 for LC-
+//  {
+//    mSE_US_plus-> Fill(triplet->pt(),triplet->m(), weight);
+//  }
+//  else if (charge == 4)
+//  {
+//    mSE_US_minus-> Fill(triplet->pt(),triplet->m(), weight);
+//  }
+//  else
+//  {
+//    mSE_LS-> Fill(triplet->pt(),triplet->m(), weight);
+//  }
+//   cout << "SE triplet" << endl;
+//}
+//inline void StMixerHists::fillMixedEvtTriplet(StMixerTriplet const* const triplet, int charge, float weight)
+//{
+//  if(charge == 3) // binary b011 for LC+ or b100 for LC-
+//    mME_US_plus-> Fill(triplet->pt(),triplet->m(), weight);
+//  else if(charge == 4)
+//    mME_US_minus-> Fill(triplet->pt(),triplet->m(), weight);
+//  else
+//    mME_LS-> Fill(triplet->pt(),triplet->m(), weight);
   // cout << "ME triplet" << endl;
-}
+//}
 #endif

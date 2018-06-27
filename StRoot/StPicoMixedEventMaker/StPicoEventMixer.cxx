@@ -14,12 +14,9 @@
 
 #include "StPicoMixedEventMaker.h"
 #include "StMixerEvent.h"
-#include "StMixerTriplet.h"
 #include "StMixerHists.h"
 #include "StPicoHFMaker/StHFCuts.h"
 #include "StPicoHFMaker/StHFPair.h"
-#include "StPicoHFMaker/StHFTriplet.h"
-#include "StRoot/StRefMultCorr/StRefMultCorr.h"
 
 //-----------------------------------------------------------
 StPicoEventMixer::StPicoEventMixer(char* category):

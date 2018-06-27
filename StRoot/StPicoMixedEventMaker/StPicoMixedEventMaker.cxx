@@ -15,7 +15,6 @@
 #include "StPicoDstMaker/StPicoBTofPidTraits.h"
 #include "StPicoMixedEventMaker.h"
 #include "StPicoEventMixer.h"
-#include "StRoot/StRefMultCorr/StRefMultCorr.h"
 #include "StPicoHFMaker/StHFCuts.h"
 
 #include <vector>
