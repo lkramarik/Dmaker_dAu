@@ -7,14 +7,14 @@ StMixerTrack::StMixerTrack() :
   mOrigin(StThreeVectorF()), 
   mMom(StThreeVectorF()), 
   mTrackInfo(std::numeric_limits<short>::min()),
-  StPicoTrack()
+//  StPicoTrack()
 {
 }
 StMixerTrack::StMixerTrack(StThreeVectorF const & pVtx, float B, StPicoTrack const& picoTrack, bool isTpcPi, bool isTofPi, bool isTpcK, bool isTofK, bool isTpcP, bool isTofP) :
     mOrigin(), 
     mMom(picoTrack.gMom(pVtx,B)), 
-    mTrackInfo(0),
-    StPicoTrack()
+    mTrackInfo(0)
+//    StPicoTrack()
 {
   StPhysicalHelix helix = picoTrack.helix(B);
   helix.moveOrigin(helix.pathLength(pVtx));
