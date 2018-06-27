@@ -28,7 +28,7 @@ StMixerPair::StMixerPair(StMixerPair const * t) : mLorentzVector(t->mLorentzVect
 
 // _________________________________________________________
 //StMixerPair::StMixerPair(StMixerTrack const& particle1, StMixerTrack const& particle2,
-StMixerPair::StMixerPair(StPicoTrack const  particle1, StPicoTrack const particle2,
+StMixerPair::StMixerPair(StPicoTrack const&  particle1, StPicoTrack const& particle2,
                          float p1MassHypo, float p2MassHypo,
                          StThreeVectorF const& vtx1, StThreeVectorF const& vtx2, float const bField) :  mLorentzVector(StLorentzVectorF()), mDecayVertex(StThreeVectorF()),
     mPointingAngle(std::numeric_limits<float>::quiet_NaN()), mDecayLength(std::numeric_limits<float>::quiet_NaN()),
