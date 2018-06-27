@@ -95,7 +95,7 @@ inline const StPicoTrack StMixerEvent::pionAt(int const counter) { return( mTrac
 //inline StMixerTrack StMixerEvent::kaonAt(int const counter) { return( mTracks.at(mEventKaons.at(counter)) );}
 inline const StPicoTrack StMixerEvent::kaonAt(int const counter) { return( mTracks.at(mEventKaons.at(counter)) );}
 //inline StMixerTrack StMixerEvent::protonAt(int const counter) { return( mTracks.at(mEventProtons.at(counter)) );}
-inline StPicoTrack StMixerEvent::protonAt(int const counter) { return( mTracks.at(mEventProtons.at(counter)) );}
+inline const StPicoTrack StMixerEvent::protonAt(int const counter) { return( mTracks.at(mEventProtons.at(counter)) );}
 inline StThreeVectorF const & StMixerEvent::vertex() const { return mVtx; }
 inline double const StMixerEvent::field() const {return mBField; }
 #endif
