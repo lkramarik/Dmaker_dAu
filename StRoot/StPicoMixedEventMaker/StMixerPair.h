@@ -27,62 +27,65 @@ class StPicoTrack;
 
 class StMixerPair : public TObject
 {
- public:
-  StMixerPair();
-  StMixerPair(StMixerPair const*);
+public:
+    StMixerPair();
+    StMixerPair(StMixerPair const*);
 
 //  StMixerPair(StMixerTrack const&  particle1, StMixerTrack const& particle2,
 //	   float p1MassHypo, float p2MassHypo,
 //	   StThreeVectorF const& vtx1, StThreeVectorF const& vtx2,
 //	   float bField);
 
-  StMixerPair(StPicoTrack const  particle1, StPicoTrack const particle2,
-	   float p1MassHypo, float p2MassHypo,
-	   StThreeVectorF const& vtx1, StThreeVectorF const& vtx2,
-	   float bField);
+    StMixerPair(StPicoTrack const  particle1, StPicoTrack const particle2,
+                float p1MassHypo, float p2MassHypo,
+                StThreeVectorF const& vtx1, StThreeVectorF const& vtx2,
+                float bField);
 
-  ~StMixerPair() {;}
-  
+    ~StMixerPair() {;}
 
-  StLorentzVectorF const & lorentzVector() const;
-  StThreeVectorF const & decayVertex() const;
-  float m()    const;
-  float pt()   const;
-  float eta()  const;
-  float phi()  const;
-  float pointingAngle() const;
-  float decayLength() const;
-  float particle1Dca() const;
-  float particle2Dca() const;
-  StThreeVectorF const & particle1Mom() const;
-  StThreeVectorF const & particle2Mom() const;
-  float dcaDaughters() const;
-  float cosThetaStar() const;
-  float v0x() const;
-  float v0y() const;
-  float v0z() const;
-  float px() const;
-  float py() const;
-  float pz() const;
 
- private:
-  StMixerPair(StMixerPair const &);
-  StMixerPair& operator=(StMixerPair const &);
-  StLorentzVectorF mLorentzVector; 
-  StThreeVectorF   mDecayVertex; 
+    StLorentzVectorF const & lorentzVector() const;
+    StThreeVectorF const & decayVertex() const;
+    float rapidity()    const;
+    float m()    const;
+    float pt()   const;
+    float eta()  const;
+    float phi()  const;
+    float pointingAngle() const;
+    float decayLength() const;
+    float particle1Dca() const;
+    float particle2Dca() const;
+    StThreeVectorF const & particle1Mom() const;
+    StThreeVectorF const & particle2Mom() const;
+    float dcaDaughters() const;
+    float cosThetaStar() const;
+    float v0x() const;
+    float v0y() const;
+    float v0z() const;
+    float px() const;
+    float py() const;
+    float pz() const;
+    float DcaToPrimaryVertex() const;
 
-  float mPointingAngle;
-  float mDecayLength;
-  float mParticle1Dca;
-  float mParticle2Dca;
 
-  StThreeVectorF mParticle1Mom;
-  StThreeVectorF mParticle2Mom;
+private:
+    StMixerPair(StMixerPair const &);
+    StMixerPair& operator=(StMixerPair const &);
+    StLorentzVectorF mLorentzVector;
+    StThreeVectorF   mDecayVertex;
 
-  float mDcaDaughters;
-  float mCosThetaStar;
+    float mPointingAngle;
+    float mDecayLength;
+    float mParticle1Dca;
+    float mParticle2Dca;
 
-  ClassDef(StMixerPair,1)
+    StThreeVectorF mParticle1Mom;
+    StThreeVectorF mParticle2Mom;
+
+    float mDcaDaughters;
+    float mCosThetaStar;
+
+    ClassDef(StMixerPair,1)
 };
 inline StLorentzVectorF const& StMixerPair::lorentzVector() const { return mLorentzVector;}
 inline float StMixerPair::rapidity()    const { return mLorentzVector.rapidity();}
