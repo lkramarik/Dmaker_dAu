@@ -100,7 +100,7 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
         if(saveTrack == true){
 //            StMixerTrack mTrack(pVertex, picoDst->event()->bField(), *trk, isTpcPi, isTofPi, isTpcK, isTofK, isTpcP, isTofP);
 //            event->addTrack(mTrack);
-            event->addTrack(trk);
+            event->addTrack(picoDst.track(iTrk));
         }
     }
     // if ( event->getNoPions() > 0 ||  event->getNoKaons() > 0 || event->getNoProtons() > 0) {
