@@ -12,7 +12,8 @@ StMixerTrack::StMixerTrack() :
 StMixerTrack::StMixerTrack(StThreeVectorF const & pVtx, float B,StPicoTrack const& picoTrack, bool isTpcPi, bool isTofPi, bool isTpcK, bool isTofK, bool isTpcP, bool isTofP) :
     mOrigin(), 
     mMom(picoTrack.gMom(pVtx,B)), 
-    mTrackInfo(0)
+    mTrackInfo(0),
+    StPicoTrack()
 {
   StPhysicalHelix helix = picoTrack.helix(B);
   helix.moveOrigin(helix.pathLength(pVtx));
