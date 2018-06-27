@@ -54,9 +54,9 @@ class StMixerEvent{
 //  StMixerTrack pionAt(int const);
 //  StMixerTrack kaonAt(int const);
 //  StMixerTrack protonAt(int const);
-  StPicoTrack pionAt(int const);
-  StPicoTrack kaonAt(int const);
-  StPicoTrack protonAt(int const);
+  const StPicoTrack pionAt(int const);
+  const StPicoTrack kaonAt(int const);
+  const StPicoTrack protonAt(int const);
   StThreeVectorF const & vertex() const;
   double const field() const;
   void setWeight(float weight) { mWeightFromCentrality = weight; }
