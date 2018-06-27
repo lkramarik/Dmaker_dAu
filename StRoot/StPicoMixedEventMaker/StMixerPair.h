@@ -22,7 +22,7 @@
 #include "StarClassLibrary/StLorentzVectorF.hh"
 #include "StarClassLibrary/StThreeVectorF.hh"
 
-class StPicoTrack;
+//class StPicoTrack;
 //class StMixerTrack;
 
 class StMixerPair : public TObject
@@ -108,7 +108,7 @@ inline StThreeVectorF const & StMixerPair::decayVertex() const { return mDecayVe
 inline float StMixerPair::v0x() const { return mDecayVertex.x();}
 inline float StMixerPair::v0y() const { return mDecayVertex.y();}
 inline float StMixerPair::v0z() const { return mDecayVertex.z();}
-inline float StMixerPair::DcaToPrimaryVertex() const { return mDecayLength*std::sin(mPointingAngle); }
+inline float StMixerPair::DcaToPrimaryVertex() const { return mDecayLength*sin(mPointingAngle); }
 
 #endif
 
