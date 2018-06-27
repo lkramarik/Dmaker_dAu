@@ -169,7 +169,7 @@ void StPicoEventMixer::mixEvents() {
                 ntVar[ii++] = pion->nSigmaPion();
                 ntVar[ii++] = pion->nHitsFit();
                 ntVar[ii++] = mHFCuts->getOneOverBeta(pion, mHFCuts->getTofBetaBase(pion), StPicoCutsBase::kPion);
-                ntVar[ii++] = *kaon->gPt();
+                ntVar[ii++] = kaon.gPt();
                 ntVar[ii++] = pair->particle2Dca();
                 ntVar[ii++] = kaon->nSigmaKaon();
                 ntVar[ii++] = kaon->nHitsFit();
