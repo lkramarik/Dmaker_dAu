@@ -83,9 +83,12 @@ inline int StMixerEvent::getNoTracks(){ return mTracks.size();}
 inline int StMixerEvent::pionId(int counter){ return mEventPions.at(counter); }
 inline int StMixerEvent::kaonId(int counter){ return mEventKaons.at(counter); }
 inline int StMixerEvent::protonId(int counter){ return mEventProtons.at(counter); }
-inline StMixerTrack StMixerEvent::pionAt(int const counter) { return( mTracks.at(mEventPions.at(counter)) );} 
-inline StMixerTrack StMixerEvent::kaonAt(int const counter) { return( mTracks.at(mEventKaons.at(counter)) );} 
-inline StMixerTrack StMixerEvent::protonAt(int const counter) { return( mTracks.at(mEventProtons.at(counter)) );} 
+//inline StMixerTrack StMixerEvent::pionAt(int const counter) { return( mTracks.at(mEventPions.at(counter)) );}
+inline StPicoTrack StMixerEvent::pionAt(int const counter) { return( mTracks.at(mEventPions.at(counter)) );}
+//inline StMixerTrack StMixerEvent::kaonAt(int const counter) { return( mTracks.at(mEventKaons.at(counter)) );}
+inline StPicoTrack StMixerEvent::kaonAt(int const counter) { return( mTracks.at(mEventKaons.at(counter)) );}
+//inline StMixerTrack StMixerEvent::protonAt(int const counter) { return( mTracks.at(mEventProtons.at(counter)) );}
+inline StPicoTrack StMixerEvent::protonAt(int const counter) { return( mTracks.at(mEventProtons.at(counter)) );}
 inline StThreeVectorF const & StMixerEvent::vertex() const { return mVtx; }
 inline double const StMixerEvent::field() const {return mBField; }
 #endif

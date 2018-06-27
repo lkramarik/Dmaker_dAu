@@ -148,8 +148,9 @@ void StPicoEventMixer::mixEvents() {
                         continue;
                 }
 
-                StMixerTrack const* pion = mEvents.at(0)->pionAt(iTrk1);
-                StMixerTrack const* kaon = mEvents.at(iEvt2)->kaonAt(iTrk2);
+                StPicoTrack const* pion = mEvents.at(0)->pionAt(iTrk1);
+//                StMixerTrack const* kaon = mEvents.at(iEvt2)->kaonAt(iTrk2);
+                StPicoTrack const* kaon = mEvents.at(iEvt2)->kaonAt(iTrk2);
 
                 StHFPair *pair = new StHFPair(pion, kaon,
                                  mHFCuts->getHypotheticalMass(StHFCuts::kPion),
@@ -165,12 +166,12 @@ void StPicoEventMixer::mixEvents() {
                 ntVar[ii++] = pair->particle1Dca();
                 ntVar[ii++] = pion->nSigmaPion();
                 ntVar[ii++] = pion->nHitsFit();
-                ntVar[ii++] = getOneOverBeta(pion, mHFCuts->getTofBetaBase(pion), StPicoCutsBase::kPion);
+                ntVar[ii++] = mHFCuts->getOneOverBeta(pion, mHFCuts->getTofBetaBase(pion), StPicoCutsBase::kPion);
                 ntVar[ii++] = kaon->gPt();
                 ntVar[ii++] = pair->particle2Dca();
                 ntVar[ii++] = kaon->nSigmaKaon();
                 ntVar[ii++] = kaon->nHitsFit();
-                ntVar[ii++] = getOneOverBeta(kaon, mHFCuts->getTofBetaBase(kaon), StPicoCutsBase::kKaon);
+                ntVar[ii++] = mHFCuts->getOneOverBeta(kaon, mHFCuts->getTofBetaBase(kaon), StPicoCutsBase::kKaon);
                 ntVar[ii++] = pair->dcaDaughters();
                 ntVar[ii++] = pair->rapidity();
                 ntVar[ii++] = pair->pointingAngle();
@@ -198,7 +199,7 @@ delete mEvents.at(0);
 mEvents.erase(mEvents.begin());
 }
 
-void StPicoEventMixer::fillNtpSameEvtPair(float ntVar[21], StHFPair const* & pair, int charge)
+void StPicoEventMixer::fillNtpSameEvtPair(float ntVar[21], StHFPair const & pair, int charge)
 {
     if(charge == 0 )
         mSETupleSig -> Fill(ntVar);
@@ -208,7 +209,7 @@ void StPicoEventMixer::fillNtpSameEvtPair(float ntVar[21], StHFPair const* & pai
 }
 
 
-void StPicoEventMixer::fillNtpMixedEvtPair(float ntVar[21], StHFPair const* & pair, int charge)
+void StPicoEventMixer::fillNtpMixedEvtPair(float ntVar[21], StHFPair const & pair, int charge)
 {
     if(charge == 0 )
         mMETupleSig -> Fill(ntVar);
