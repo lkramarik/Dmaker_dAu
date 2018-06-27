@@ -6,7 +6,8 @@
 StMixerTrack::StMixerTrack() : 
   mOrigin(StThreeVectorF()), 
   mMom(StThreeVectorF()), 
-  mTrackInfo(std::numeric_limits<short>::min())
+  mTrackInfo(std::numeric_limits<short>::min()),
+  StPicoTrack()
 {
 }
 StMixerTrack::StMixerTrack(StThreeVectorF const & pVtx, float B,StPicoTrack const& picoTrack, bool isTpcPi, bool isTofPi, bool isTpcK, bool isTofK, bool isTpcP, bool isTofP) :
