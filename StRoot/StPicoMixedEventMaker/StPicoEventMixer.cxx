@@ -160,7 +160,7 @@ void StPicoEventMixer::mixEvents() {
                                  mEvents.at(0)->vertex(), mEvents.at(iEvt2)->vertex(),
                                  mEvents.at(0)->field() );
 
-                if (!mHFCuts->isCloseMixerPair(pair)) continue;
+                if (!isCloseMixerPair(pair)) continue;
 
                 int ii=0;
                 float ntVar[21];
