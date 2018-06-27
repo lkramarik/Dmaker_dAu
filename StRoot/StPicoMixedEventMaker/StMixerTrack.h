@@ -23,7 +23,7 @@
 
 #include "StarClassLibrary/StThreeVectorF.hh"
 
-class StPicoTrack;
+//class StPicoTrack;
 
 class StMixerTrack : public StPicoTrack{
  public:
