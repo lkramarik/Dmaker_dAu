@@ -148,8 +148,8 @@ void StPicoEventMixer::mixEvents() {
                         continue;
                 }
 
-                StMixerTrack const pion = mEvents.at(0)->pionAt(iTrk1);
-                StMixerTrack const kaon = mEvents.at(iEvt2)->kaonAt(iTrk2);
+                StMixerTrack const* pion = mEvents.at(0)->pionAt(iTrk1);
+                StMixerTrack const* kaon = mEvents.at(iEvt2)->kaonAt(iTrk2);
 
                 StHFPair *pair = new StHFPair(pion, kaon,
                                  mHFCuts->getHypotheticalMass(StHFCuts::kPion),
@@ -198,7 +198,7 @@ delete mEvents.at(0);
 mEvents.erase(mEvents.begin());
 }
 
-void StPicoEventMixer::fillNtpSameEvtPair(float ntVar[21], StHFPair const* const pair, int charge)
+void StPicoEventMixer::fillNtpSameEvtPair(float ntVar[21], StHFPair const* & pair, int charge)
 {
     if(charge == 0 )
         mSETupleSig -> Fill(ntVar);
@@ -208,7 +208,7 @@ void StPicoEventMixer::fillNtpSameEvtPair(float ntVar[21], StHFPair const* const
 }
 
 
-void StPicoEventMixer::fillNtpMixedEvtPair(float ntVar[21], StHFPair const* const pair, int charge)
+void StPicoEventMixer::fillNtpMixedEvtPair(float ntVar[21], StHFPair const* & pair, int charge)
 {
     if(charge == 0 )
         mMETupleSig -> Fill(ntVar);
