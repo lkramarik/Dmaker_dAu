@@ -59,8 +59,7 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
     StMixerEvent* event = new StMixerEvent(pVertex, picoDst->event()->bField());
 
     event->addPicoEvent(*(picoDst->event()));
-    event->setWeight(weight);
-
+    cout<<"event->addPicoEvent(*(picoDst->event()));"<<endl;
     bool isTpcPi = false;
     bool isTofPi = false;
     bool isTpcP  = false;
@@ -87,6 +86,7 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
         }
         pidFlag = StPicoCutsBase::kKaon;
         if(isTpcKaon(trk) && mHFCuts->isTOFKaon(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
+            cout<<"lets add kaon"<<endl;
             isTpcK = true;
             isTofK = true;
             saveTrack = true;
