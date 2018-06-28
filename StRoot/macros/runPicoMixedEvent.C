@@ -8,6 +8,7 @@
 #include "StPicoHFMaker/StPicoHFEvent.h"
 #include "StPicoHFMaker/StHFCuts.h"
 #include "StPicoEvent/StPicoEvent.h"
+#include "StPicoMixedEventMaker/StPicoMixedEventMaker.h"
 #include "macros/loadSharedHFLibraries.C"
 #include <iostream>
 #include <ctime>
@@ -104,7 +105,7 @@ void runPicoMixedEvent(
   chain->Finish();
   double duration = (double) (clock() - start) / (double) CLOCKS_PER_SEC;
   cout << "****************************************** " << endl;
-  cout << "total number of events  " << nEvents << endl;
+  cout << "total number of events  " << picoDstMaker->chain()->GetEntries() << endl;
   cout << "****************************************** " << endl;
   cout << "Time needed " << duration << " s" << endl;
   cout << "****************************************** " << endl;
