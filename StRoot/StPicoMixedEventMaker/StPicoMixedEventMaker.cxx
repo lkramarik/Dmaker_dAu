@@ -194,13 +194,13 @@ Int_t StPicoMixedEventMaker::Make() {
 
     if(centrality < 0 || centrality >8 ) return kStOk;
     int const vz_bin = (int)((6 +pVtx.z())/1.2) ;
-
+    cout<<"vz set"<<endl;
 //    if( mPicoEventMixer[vz_bin][centrality] -> addPicoEvent(picoDst, mGRefMultCorrUtil->getWeight()) ==  true )
 //        mPicoEventMixer[vz_bin][centrality]->mixEvents();
 
     if( mPicoEventMixer[vz_bin][centrality] -> addPicoEvent(picoDst, 1 ))
         mPicoEventMixer[vz_bin][centrality]->mixEvents();
-
+    cout<<"end of Make()"<<endl;
     return kStOk;
 }
 // _________________________________________________________
