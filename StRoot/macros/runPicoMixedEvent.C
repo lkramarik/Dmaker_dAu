@@ -39,7 +39,6 @@ void runPicoMixedEvent(
   
   gROOT->LoadMacro("loadSharedHFLibraries.C");
   loadSharedHFLibraries();
-
   chain = new StChain();
 
   TString sInputFile(inputFile);
@@ -91,7 +90,6 @@ void runPicoMixedEvent(
   
   cout << " Total entries = " << picoDstMaker->chain()->GetEntries() << endl;
 
-//  for (Int_t i=0; i<nEvents; i++) {
   for (Int_t i=0; i<2000; i++) {
     if(i%10==0)       cout << "Working on eventNumber " << i << endl;
     chain->Clear();
