@@ -198,8 +198,10 @@ Int_t StPicoMixedEventMaker::Make() {
 //    if( mPicoEventMixer[vz_bin][centrality] -> addPicoEvent(picoDst, mGRefMultCorrUtil->getWeight()) ==  true )
 //        mPicoEventMixer[vz_bin][centrality]->mixEvents();
 
-    if( mPicoEventMixer[vz_bin][centrality] -> addPicoEvent(picoDst, 1 ))
+    if( mPicoEventMixer[vz_bin][centrality] -> addPicoEvent(picoDst, 1 )) {
         mPicoEventMixer[vz_bin][centrality]->mixEvents();
+        cout<<"mixed in Make()"<<endl;
+    }
     cout<<"end of Make()"<<endl;
     return kStOk;
 }
