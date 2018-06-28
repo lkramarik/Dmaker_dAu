@@ -55,9 +55,9 @@ class StPicoEventMixer {
   void setHFCuts(StHFCuts * hfCuts) { mHFCuts = hfCuts; }
   StHFCuts * getHFCuts() { return mHFCuts; }
 
-  void setFillSinglePartHists(bool yesOrNo) { fillSinglePartHists = yesOrNo; }
-  bool isFillingSinglePartHists() { return fillSinglePartHists; }
-  void setSinglePartHistsList(TList *list) { mSingleParticleList = list; } 
+//  void setFillSinglePartHists(bool yesOrNo) { fillSinglePartHists = yesOrNo; }
+//  bool isFillingSinglePartHists() { return fillSinglePartHists; }
+//  void setSinglePartHistsList(TList *list) { mSingleParticleList = list; }
 
  private:
   bool isMixerPion(StMixerTrack const&);
@@ -77,7 +77,7 @@ class StPicoEventMixer {
   void fillNtpMixedEvtPair(float ntVar[21], int charge);
 
   std::vector <StMixerEvent*> mEvents;
-  StMixerHists* mHists;
+//  StMixerHists* mHists;
   StHFCuts *mHFCuts;
   unsigned short int mEventsBuffer; 
   unsigned short int filledBuffer;
@@ -90,7 +90,7 @@ class StPicoEventMixer {
   TNtuple *mMETupleBack;
   TList *mSingleParticleList;
 
-  bool fillSinglePartHists;
+//  bool fillSinglePartHists;
 };
 
 inline void StPicoEventMixer::setEventBuffer(int buffer){ mEventsBuffer = buffer;}

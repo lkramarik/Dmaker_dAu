@@ -132,8 +132,8 @@ Int_t StPicoMixedEventMaker::Init() {
             mPicoEventMixer[iVz][iCentrality]->setSameEvtNtupleBack(mSETupleBack);
             mPicoEventMixer[iVz][iCentrality]->setMixedEvtNtupleSig(mMETupleSig);
             mPicoEventMixer[iVz][iCentrality]->setMixedEvtNtupleBack(mMETupleBack);
-            mPicoEventMixer[iVz][iCentrality]->setSinglePartHistsList(mSingePartHists);
-            mPicoEventMixer[iVz][iCentrality]->setFillSinglePartHists(false);
+//            mPicoEventMixer[iVz][iCentrality]->setSinglePartHistsList(mSingePartHists);
+//            mPicoEventMixer[iVz][iCentrality]->setFillSinglePartHists(false);
         }
     }
 

@@ -23,7 +23,7 @@
 //-----------------------------------------------------------
 StPicoEventMixer::StPicoEventMixer(char* category):
         mEvents(),
-        mHists(NULL),
+//        mHists(NULL),
         mHFCuts(NULL),
         mEventsBuffer(StPicoMixedEventMaker::defaultBufferSize),
         filledBuffer(0),
@@ -34,12 +34,12 @@ StPicoEventMixer::StPicoEventMixer(char* category):
         mSingleParticleList(NULL),
         fillSinglePartHists(false)
 {
-    mHists = new StMixerHists(category);
+//    mHists = new StMixerHists(category);
 }
 //-----------------------------------------------------------
 StPicoEventMixer::~StPicoEventMixer()
 {
-    delete mHists;
+//    delete mHists;
     for(unsigned int i =0 ; i<mEvents.size() ; i++){
         delete mEvents.at(i);
     }
