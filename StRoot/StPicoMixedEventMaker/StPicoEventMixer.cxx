@@ -51,8 +51,9 @@ void StPicoEventMixer::finish() {
 //-----------------------------------------------------------
 bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight)
 {
-    if( !isGoodEvent(picoDst) )
-        return false;
+    cout<<"adding event to mixer"<<endl;
+//    if( !isGoodEvent(picoDst) )
+//        return false;
     int nTracks = picoDst->numberOfTracks();
     StThreeVectorF pVertex = picoDst->event()->primaryVertex();
     StMixerEvent* event = new StMixerEvent(pVertex, picoDst->event()->bField());
@@ -82,6 +83,7 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
             isTofPi = true;
             saveTrack = true;
             event->addPion(event->getNoTracks());
+            cout<<"pions added"<<endl;
         }
         pidFlag = StPicoCutsBase::kKaon;
         if(isTpcKaon(trk) && mHFCuts->isTOFKaon(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
@@ -89,6 +91,7 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
             isTofK = true;
             saveTrack = true;
             event->addKaon(event->getNoTracks());
+            cout<<"kaons added"<<endl;
         }
 //        pidFlag = StPicoCutsBase::kProton;
 //        if(isTpcProton(trk) && mHFCuts->isTOFProton(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
