@@ -57,51 +57,51 @@ StPicoMixedEventMaker::StPicoMixedEventMaker(char const* name, StPicoDstMaker* p
     mSETupleBack = new TNtuple("ntp_background_SE","ntp_background_SE", varList.data());
     mMETupleBack = new TNtuple("ntp_background_ME","ntp_background_ME", varList.data());
 
-    mSingePartHists = new TList();
-    mSingePartHists->SetOwner(true);
-    mSingePartHists->SetName("HFSinglePartHists");
+//    mSingePartHists = new TList();
+//    mSingePartHists->SetOwner(true);
+//    mSingePartHists->SetName("HFSinglePartHists");
 
     // create single particle hists
-    const std::string evtNames[2] = {"SE", "ME"};
-    const std::string partNames[3] = {"pi", "K"};
-
-    for (int i = 0; i < 2; ++i)
-    {
+//    const std::string evtNames[2] = {"SE", "ME"};
+//    const std::string partNames[3] = {"pi", "K"};
+//
+//    for (int i = 0; i < 2; ++i)
+//    {
         // mSingePartHists->Add(new TH1D(Form("centrality%s", evtNames[i].data()),Form("centrality%s", evtNames[i].data()), 10, -1.5, 8.5));
         // mSingePartHists->Add(new TH1D(Form("centralityCorrection%s", evtNames[i].data()),Form("centrality corrected %s", evtNames[i].data()), 10, -1.5, 8.5));
         // mSingePartHists->Add(new TH1D(Form("refMult%s", evtNames[i].data()), Form("corrected refferernce multiplicity %s", evtNames[i].data()), 100, 0, 800));
 
-        for (int iPart = 0; iPart < 2; ++iPart)
-        {
-            // eta phi
-            mSingePartHists->Add(new TH2D(Form("%sEtaPhi%s",partNames[ iPart ].data(), evtNames[i].data()),
-                                          Form("%s Eta phi distribution %s",partNames[ iPart ].data(), evtNames[i].data()),
-                                          100, -TMath::Pi(), TMath::Pi(), 100, -1.1, 1.1));
+//        for (int iPart = 0; iPart < 2; ++iPart)
+//        {
+//             eta phi
+//    mSingePartHists->Add(new TH2D(Form("%sEtaPhi%s",partNames[ iPart ].data(), evtNames[i].data()),
+//                                          Form("%s Eta phi distribution %s",partNames[ iPart ].data(), evtNames[i].data()),
+//                                          100, -TMath::Pi(), TMath::Pi(), 100, -1.1, 1.1));
 
             // phi vs pT
-            mSingePartHists->Add(new TH2D(Form("%sPhiPt%s",partNames[ iPart ].data(), evtNames[i].data()),
-                                          Form("%s phi vs pT %s",partNames[ iPart ].data(), evtNames[i].data()),
-                                          100, 0, 15, 100, -TMath::Pi(), TMath::Pi()));
+//            mSingePartHists->Add(new TH2D(Form("%sPhiPt%s",partNames[ iPart ].data(), evtNames[i].data()),
+//                                          Form("%s phi vs pT %s",partNames[ iPart ].data(), evtNames[i].data()),
+//                                          100, 0, 15, 100, -TMath::Pi(), TMath::Pi()));
 
             // DCA
-            mSingePartHists->Add(new TH1D(Form("%sDCA%s",partNames[ iPart ].data(), evtNames[i].data()),
-                                          Form("%s DCA %s",partNames[ iPart ].data(), evtNames[i].data()),
-                                          200, 0, 0.02));
+//            mSingePartHists->Add(new TH1D(Form("%sDCA%s",partNames[ iPart ].data(), evtNames[i].data()),
+//                                          Form("%s DCA %s",partNames[ iPart ].data(), evtNames[i].data()),
+//                                          200, 0, 0.02));
             // nTracks
-            mSingePartHists->Add(new TH1D(Form("%stracks%s",partNames[ iPart ].data(), evtNames[i].data()),
-                                          Form("Number of %s tracks %s",partNames[ iPart ].data(), evtNames[i].data()),
-                                          100, -0.5, 99.5));
-        }
-    }
+//            mSingePartHists->Add(new TH1D(Form("%stracks%s",partNames[ iPart ].data(), evtNames[i].data()),
+//                                          Form("Number of %s tracks %s",partNames[ iPart ].data(), evtNames[i].data()),
+//                                          100, -0.5, 99.5));
+//        }
+//    }
 
     // loop over all histograms to set Sumw2
-    TH1* hist = static_cast<TH1*>(mSingePartHists->First());
-    hist->Sumw2();
-    while(hist != static_cast<TH1*>(mSingePartHists->Last()))
-    {
-        hist = static_cast<TH1*>(mSingePartHists->After(hist));
-        hist->Sumw2();
-    }
+//    TH1* hist = static_cast<TH1*>(mSingePartHists->First());
+//    hist->Sumw2();
+//    while(hist != static_cast<TH1*>(mSingePartHists->Last()))
+//    {
+//        hist = static_cast<TH1*>(mSingePartHists->After(hist));
+//        hist->Sumw2();
+//    }
 
 }
 
@@ -133,7 +133,7 @@ Int_t StPicoMixedEventMaker::Init() {
             mPicoEventMixer[iVz][iCentrality]->setMixedEvtNtupleSig(mMETupleSig);
             mPicoEventMixer[iVz][iCentrality]->setMixedEvtNtupleBack(mMETupleBack);
             mPicoEventMixer[iVz][iCentrality]->setSinglePartHistsList(mSingePartHists);
-            mPicoEventMixer[iVz][iCentrality]->setFillSinglePartHists(fillSingleTrackHistos);
+            mPicoEventMixer[iVz][iCentrality]->setFillSinglePartHists(false);
         }
     }
 
@@ -144,14 +144,15 @@ Int_t StPicoMixedEventMaker::Init() {
 // _________________________________________________________
 Int_t StPicoMixedEventMaker::Finish() {
     mOutputFileTree->cd();
+    cout<<"lets save stuff"<<endl;
 
     for(int iVz =0 ; iVz < 10 ; ++iVz){
         for(int iCentrality = 0 ; iCentrality < 9 ; ++iCentrality){
             mPicoEventMixer[iVz][iCentrality]->finish();
-            //delete mPicoEventMixer[iVz][iCentrality];
+            delete mPicoEventMixer[iVz][iCentrality];
         }
     }
-    mSingePartHists->Write();
+//    mSingePartHists->Write();
 
     mSETupleSig -> Write(mSETupleSig->GetName(), TObject::kOverwrite);
     mMETupleSig -> Write(mMETupleSig->GetName(), TObject::kOverwrite);

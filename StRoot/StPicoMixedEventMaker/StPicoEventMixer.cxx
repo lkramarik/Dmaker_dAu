@@ -46,7 +46,7 @@ StPicoEventMixer::~StPicoEventMixer()
 }
 //-----------------------------------------------------------
 void StPicoEventMixer::finish() {
-    mHists->closeFile();
+//    mHists->closeFile();
 }
 //-----------------------------------------------------------
 bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight)
@@ -137,10 +137,10 @@ void StPicoEventMixer::mixEvents() {
     for( size_t iEvt2 = 0; iEvt2 < nEvent; ++iEvt2) {
         int const nTracksEvt2 = mEvents.at(iEvt2)->getNoKaons();
 
-        if( iEvt2 == 0 )
-            mHists->fillSameEvt(mEvents.at(0)->vertex());
-        else
-            mHists->fillMixedEvt(mEvents.at(0)->vertex());
+//        if( iEvt2 == 0 )
+//            mHists->fillSameEvt(mEvents.at(0)->vertex());
+//        else
+//            mHists->fillMixedEvt(mEvents.at(0)->vertex());
 
         // evts trk loops
         for(int iTrk1 = 0; iTrk1 < nTracksEvt1; ++iTrk1) {
