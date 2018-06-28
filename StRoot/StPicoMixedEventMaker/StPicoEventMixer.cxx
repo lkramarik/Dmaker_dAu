@@ -119,19 +119,19 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
 //-----------------------------------------------------------
 void StPicoEventMixer::mixEvents() {
     size_t const nEvent = mEvents.size();
-    if(StPicoMixedEventMaker::fillSingleTrackHistos)
-    {
-    }
+//    if(StPicoMixedEventMaker::fillSingleTrackHistos)
+//    {
+//    }
 
     int const nTracksEvt1 = mEvents.at(0)->getNoPions();
 
     // Check if there are kaons in the first evt for saving time (cannot be done if
     // we want to save the single particle ctrl plots)
-    if(!StPicoMixedEventMaker::fillSingleTrackHistos && nTracksEvt1 == 0)
-    {
-        --filledBuffer;
-        return;
-    }
+//    if(!StPicoMixedEventMaker::fillSingleTrackHistos && nTracksEvt1 == 0)
+//    {
+//        --filledBuffer;
+//        return;
+//    }
 
     // Go through the event buffer
     for( size_t iEvt2 = 0; iEvt2 < nEvent; ++iEvt2) {
@@ -204,6 +204,7 @@ mEvents.erase(mEvents.begin());
 
 void StPicoEventMixer::fillNtpSameEvtPair(float ntVar[21], int charge)
 {
+    cout<<"fillNtpSameEvtPair"<<endl;
     if(charge == 0 )
         mSETupleSig -> Fill(ntVar);
     else
@@ -214,6 +215,7 @@ void StPicoEventMixer::fillNtpSameEvtPair(float ntVar[21], int charge)
 
 void StPicoEventMixer::fillNtpMixedEvtPair(float ntVar[21], int charge)
 {
+    cout<<"fillNtpMixedEvtPair"<<endl;
     if(charge == 0 )
         mMETupleSig -> Fill(ntVar);
     else
