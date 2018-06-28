@@ -224,8 +224,8 @@ void StPicoEventMixer::fillNtpMixedEvtPair(float ntVar[21], int charge)
 // _________________________________________________________
 void StPicoEventMixer::fillTracks(StMixerEvent* evt, bool isSameEvt, int pidFlag)
 {
-    if (!fillSinglePartHists)
-        return;
+//    if (!fillSinglePartHists)
+//        return;
 
     // get the corresponting histograms and track vectors
     const std::string evtName = isSameEvt ? "SE" : "ME";
@@ -249,11 +249,11 @@ void StPicoEventMixer::fillTracks(StMixerEvent* evt, bool isSameEvt, int pidFlag
             cerr << "StPicoEventMixer::fillTracks: unknown pidFlag ... exiting" << endl;
             throw;
     }
-    TH2D *etaPhiHist = static_cast<TH2D*>(mSingleParticleList->FindObject(Form("%sEtaPhi%s",particleName.data(), evtName.data())));
-    TH2D *phiPtHist  = static_cast<TH2D*>(mSingleParticleList->FindObject(Form("%sPhiPt%s",particleName.data(), evtName.data())));
-    TH1D *dcaHist = static_cast<TH1D*>(mSingleParticleList->FindObject(Form("%sDCA%s",particleName.data(), evtName.data())));
-    TH1D *nTracksHist = static_cast<TH1D*>(mSingleParticleList->FindObject(Form("%stracks%s",particleName.data(), evtName.data())));
-    nTracksHist->Fill(nTracks);
+//    TH2D *etaPhiHist = static_cast<TH2D*>(mSingleParticleList->FindObject(Form("%sEtaPhi%s",particleName.data(), evtName.data())));
+//    TH2D *phiPtHist  = static_cast<TH2D*>(mSingleParticleList->FindObject(Form("%sPhiPt%s",particleName.data(), evtName.data())));
+//    TH1D *dcaHist = static_cast<TH1D*>(mSingleParticleList->FindObject(Form("%sDCA%s",particleName.data(), evtName.data())));
+//    TH1D *nTracksHist = static_cast<TH1D*>(mSingleParticleList->FindObject(Form("%stracks%s",particleName.data(), evtName.data())));
+//    nTracksHist->Fill(nTracks);
 
     // particle loop
     const float weight = evt->weight();
@@ -275,9 +275,9 @@ void StPicoEventMixer::fillTracks(StMixerEvent* evt, bool isSameEvt, int pidFlag
         const float pt = trk.gMom().perp();
         const float dca  = (trk.origin() - evt->vertex()).mag();
 
-        etaPhiHist->Fill(phi,eta,weight);
-        phiPtHist->Fill(pt,phi, weight);
-        dcaHist->Fill(dca, weight);
+//        etaPhiHist->Fill(phi,eta,weight);
+//        phiPtHist->Fill(pt,phi, weight);
+//        dcaHist->Fill(dca, weight);
     }
 
 }
