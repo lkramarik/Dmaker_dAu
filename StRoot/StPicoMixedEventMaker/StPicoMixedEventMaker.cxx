@@ -143,8 +143,9 @@ Int_t StPicoMixedEventMaker::Init() {
 
 // _________________________________________________________
 Int_t StPicoMixedEventMaker::Finish() {
-    mOutputFileTree->cd();
     cout<<"lets save stuff"<<endl;
+
+    mOutputFileTree->cd();
 
     for(int iVz =0 ; iVz < 10 ; ++iVz){
         for(int iCentrality = 0 ; iCentrality < 9 ; ++iCentrality){
