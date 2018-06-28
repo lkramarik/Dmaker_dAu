@@ -32,7 +32,7 @@ StPicoEventMixer::StPicoEventMixer(char* category):
         mMETupleSig(NULL),
         mMETupleBack(NULL),
         mSingleParticleList(NULL),
-        fillSinglePartHists(false)
+//        fillSinglePartHists(false)
 {
 //    mHists = new StMixerHists(category);
 }
