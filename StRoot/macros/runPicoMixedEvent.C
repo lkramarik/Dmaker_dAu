@@ -83,8 +83,7 @@ void runPicoMixedEvent(
 
   StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
   cout<<"ok, picoDstMaker created"<<endl;
-  StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile, sInputListHF);
-    picoMixedEventMaker->setHFBaseCuts(hfCuts);
+  StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile, "");
 
   clock_t start = clock(); // getting starting time
   chain->Init();
