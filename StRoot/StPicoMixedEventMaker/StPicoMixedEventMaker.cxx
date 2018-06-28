@@ -182,11 +182,11 @@ Int_t StPicoMixedEventMaker::Make() {
 //    int aEventStat[mHFCuts->eventStatMax()];
     int* aEventStat = NULL;
 //    bool bResult = mHFCuts->isGoodEvent(picoDst, aEventStat);
-    bool bResult = mHFCuts->isGoodEvent(picoDst);
+//    bool bResult = mHFCuts->isGoodEvent(picoDst);
 
+    if (!mHFCuts->isGoodEvent(picoDst, aEventStat))
+        return kStOk;
     cout<<"good event"<<endl;
-//    if (!mHFCuts->isGoodEvent(picoDst))
-//        return kStOk;
 
     StThreeVectorF const pVtx = picoDst->event()->primaryVertex();
 
