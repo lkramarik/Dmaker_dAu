@@ -103,7 +103,7 @@ void runPicoMixedEvent(
   chain->Finish();
   double duration = (double) (clock() - start) / (double) CLOCKS_PER_SEC;
   cout << "****************************************** " << endl;
-  cout << "total number of events  " << picoDstMaker->chain()->GetEntries() << endl;
+//  cout << "total number of events  " << picoDstMaker->chain()->GetEntries() << endl;
   cout << "****************************************** " << endl;
   cout << "Time needed " << duration << " s" << endl;
   cout << "****************************************** " << endl;
