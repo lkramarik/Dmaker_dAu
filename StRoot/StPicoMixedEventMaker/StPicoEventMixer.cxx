@@ -90,13 +90,13 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
             saveTrack = true;
             event->addKaon(event->getNoTracks());
         }
-        pidFlag = StPicoCutsBase::kProton;
-        if(isTpcProton(trk) && mHFCuts->isTOFProton(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
-            isTpcP = true;
-            isTofP = true;
-            saveTrack = true;
-            event->addProton(event->getNoTracks());
-        }
+//        pidFlag = StPicoCutsBase::kProton;
+//        if(isTpcProton(trk) && mHFCuts->isTOFProton(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
+//            isTpcP = true;
+//            isTofP = true;
+//            saveTrack = true;
+//            event->addProton(event->getNoTracks());
+//        }
         if(saveTrack == true){
 //            StMixerTrack mTrack(pVertex, picoDst->event()->bField(), *trk, isTpcPi, isTofPi, isTpcK, isTofK, isTpcP, isTofP);
 //            event->addTrack(mTrack);
