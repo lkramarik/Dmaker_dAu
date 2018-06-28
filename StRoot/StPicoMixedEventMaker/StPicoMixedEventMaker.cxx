@@ -179,11 +179,14 @@ Int_t StPicoMixedEventMaker::Make() {
         return kStWarn;
     }
 
-    if (!mHFCuts->isGoodEvent(picoDst))
-        return kStOk;
+    int aEventStat[mHFCuts->eventStatMax()];
+    bool bResult = mHFCuts->isGoodEvent(picoDst, aEventStat);
+
+    cout<<"good event"<<endl;
+//    if (!mHFCuts->isGoodEvent(picoDst))
+//        return kStOk;
+
     StThreeVectorF const pVtx = picoDst->event()->primaryVertex();
-    if( fabs(pVtx.z()) >=6.0 )
-        return kStOk;
 
     int const centrality  = 1;
 

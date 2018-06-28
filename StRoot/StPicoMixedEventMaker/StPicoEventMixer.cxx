@@ -118,6 +118,7 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
 }
 //-----------------------------------------------------------
 void StPicoEventMixer::mixEvents() {
+    cout<<"mixing"<<endl;
     size_t const nEvent = mEvents.size();
 //    if(StPicoMixedEventMaker::fillSingleTrackHistos)
 //    {
