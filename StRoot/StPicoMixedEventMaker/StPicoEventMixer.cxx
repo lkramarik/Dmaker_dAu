@@ -51,46 +51,42 @@ void StPicoEventMixer::finish() {
 //-----------------------------------------------------------
 bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight)
 {
-//    cout<<"adding event to mixer"<<endl;
-//    if( !isGoodEvent(picoDst) )
-//        return false;
     unsigned int nTracks = picoDst->numberOfTracks();
     StThreeVectorF pVertex = picoDst->event()->primaryVertex();
     StMixerEvent* event = new StMixerEvent(pVertex, picoDst->event()->bField());
-//    event->addPicoEvent(*(picoDst->event()));
-
+    event->addPicoEvent(*(picoDst->event()));
 
     for(unsigned int iTrk = 0; iTrk < nTracks; ++iTrk) {
         StPicoTrack const* trk = picoDst->track(iTrk);
         if(!trk) continue;
         cout<<trk->gPt()<<endl;
-//        if(!mHFCuts->isGoodTrack(trk)) {
+        if(!mHFCuts->isGoodTrack(trk)) {
 //            cout<<"not good track"<<endl;
-//            continue;
-//        }
+            continue;
+        }
 //        cout<<"GOOOOOOOOD TRACK"<<endl;
         const float beta = mHFCuts->getTofBetaBase(trk);
 //        cout<<"const float beta = mHFCuts->getTofBetaBase(trk);"<<endl;
-//        bool saveTrack = false;
-//        int pidFlag = StPicoCutsBase::kPion;
-//        if( isTpcPion(trk) && mHFCuts->isHybridTOFPion(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
-//            saveTrack = true;
-//            event->addPion(event->getNoTracks());
+        bool saveTrack = false;
+        int pidFlag = StPicoCutsBase::kPion;
+        if( isTpcPion(trk) && mHFCuts->isHybridTOFPion(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
+            saveTrack = true;
+            event->addPion(event->getNoTracks());
 //            cout<<"pions added"<<endl;
-//        }
-//        pidFlag = StPicoCutsBase::kKaon;
+        }
+        pidFlag = StPicoCutsBase::kKaon;
 //        if(isTpcKaon(trk) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
-//        if(isTpcKaon(trk) && mHFCuts->isTOFKaon(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
+        if(isTpcKaon(trk) && mHFCuts->isTOFKaon(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
 //            cout<<"lets add kaon"<<endl;
-//            saveTrack = true;
-//            event->addKaon(event->getNoTracks());
+            saveTrack = true;
+            event->addKaon(event->getNoTracks());
 //            cout<<"kaons added"<<endl;
-//        }
+        }
 //
-//        if(saveTrack == true){
-//            event->addTrack(*trk);
+        if(saveTrack == true){
+            event->addTrack(*trk);
 //            cout<<"event->addTrack(*trk);"<<endl;
-//        }
+        }
         cout<<"end of for trakcs"<<endl;
         trk=0x0;
     }
