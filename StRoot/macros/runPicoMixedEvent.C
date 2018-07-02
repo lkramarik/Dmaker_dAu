@@ -82,7 +82,6 @@ void runPicoMixedEvent(
   hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kPion); 
 
   StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
-  cout<<"ok, picoDstMaker created"<<endl;
   StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile, inputFile);
   picoMixedEventMaker->setBufferSize(7);
 
@@ -104,8 +103,6 @@ void runPicoMixedEvent(
   cout << "****************************************** " << endl;
   chain->Finish();
   double duration = (double) (clock() - start) / (double) CLOCKS_PER_SEC;
-  cout << "****************************************** " << endl;
-//  cout << "total number of events  " << picoDstMaker->chain()->GetEntries() << endl;
   cout << "****************************************** " << endl;
   cout << "Time needed " << duration << " s" << endl;
   cout << "****************************************** " << endl;
