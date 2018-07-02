@@ -76,6 +76,7 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
 //        }
         cout<<"if(!mHFCuts->isGoodTrack(trk))"<<endl;
 //        const float beta = mHFCuts->getTofBetaBase(trk);
+        float beta = 1;
         cout<<"const float beta = mHFCuts->getTofBetaBase(trk);"<<endl;
         bool saveTrack = false;
         int pidFlag = StPicoCutsBase::kPion;
