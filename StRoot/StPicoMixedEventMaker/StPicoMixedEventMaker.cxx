@@ -179,13 +179,13 @@ Int_t StPicoMixedEventMaker::Make() {
         return kStWarn;
     }
 
-//    int* aEventStat = NULL;
-//    if (!mHFCuts->isGoodEvent(picoDst, aEventStat))
-//        return kStOk;
-
-
-    if (!mHFCuts->isGoodEvent(picoDst))
+    int* aEventStat = NULL;
+    if (!mHFCuts->isGoodEvent(picoDst, aEventStat))
         return kStOk;
+
+
+//    if (!mHFCuts->isGoodEvent(picoDst))
+//        return kStOk;
     cout<<"good event"<<endl;
 
     StThreeVectorF const pVtx = picoDst->event()->primaryVertex();
