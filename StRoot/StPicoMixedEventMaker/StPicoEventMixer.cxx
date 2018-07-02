@@ -69,7 +69,7 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
 //    Event.setNoTracks( nTracks );
     for( int iTrk = 0; iTrk < nTracks; ++iTrk) {
         StPicoTrack const* trk = picoDst->track(iTrk);
-
+    cout<<"StPicoTrack const* trk = picoDst->track(iTrk);"<<endl;
         if(!mHFCuts->isGoodTrack(trk))
             continue;
 
@@ -105,6 +105,7 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
 //            StMixerTrack mTrack(pVertex, picoDst->event()->bField(), *trk, isTpcPi, isTofPi, isTpcK, isTofK, isTpcP, isTofP);
 //            event->addTrack(mTrack);
             event->addTrack(*trk);
+            cout<<"event->addTrack(*trk);"<<endl;
         }
     }
     // if ( event->getNoPions() > 0 ||  event->getNoKaons() > 0 || event->getNoProtons() > 0) {
