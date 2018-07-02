@@ -59,8 +59,8 @@ class StMixerEvent{
   const StPicoTrack protonAt(int const);
   StThreeVectorF const & vertex() const;
   double const field() const;
-  void setWeight(float weight) { mWeightFromCentrality = weight; }
-  float weight() { return mWeightFromCentrality; }
+//  void setWeight(float weight) { mWeightFromCentrality = weight; }
+//  float weight() { return mWeightFromCentrality; }
 
   int eventId() { return mEventId; }
   int runId() { return mRunId; }
@@ -74,7 +74,7 @@ class StMixerEvent{
   std::vector <int  > mEventKaons;
   std::vector <int  > mEventPions;
   std::vector <int  > mEventProtons;
-  float mWeightFromCentrality;
+//  float mWeightFromCentrality;
 
   int mEventId;
   int mRunId;

@@ -74,8 +74,8 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
             continue;
 
         const float beta = mHFCuts->getTofBetaBase(trk);
-
-        bool saveTrack = true;
+        cout<<"const float beta = mHFCuts->getTofBetaBase(trk);"<<endl;
+        bool saveTrack = false;
         int pidFlag = StPicoCutsBase::kPion;
         if( isTpcPion(trk) && mHFCuts->isHybridTOFPion(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
             isTpcPi = true;
