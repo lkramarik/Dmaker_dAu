@@ -52,8 +52,8 @@ void StPicoEventMixer::finish() {
 bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight)
 {
 //    cout<<"adding event to mixer"<<endl;
-//    if( !isGoodEvent(picoDst) )
-//        return false;
+    if( !isGoodEvent(picoDst) )
+        return false;
     unsigned int nTracks = picoDst->numberOfTracks();
     StThreeVectorF pVertex = picoDst->event()->primaryVertex();
     StMixerEvent* event = new StMixerEvent(pVertex, picoDst->event()->bField());
@@ -68,7 +68,7 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
 //            continue;
 //        }
 //        cout<<"GOOOOOOOOD TRACK"<<endl;
-        const float beta = mHFCuts->getTofBetaBase(*trk);
+        const float beta = mHFCuts->getTofBetaBase(trk);
 //        cout<<"const float beta = mHFCuts->getTofBetaBase(trk);"<<endl;
 //        bool saveTrack = false;
 //        int pidFlag = StPicoCutsBase::kPion;
@@ -99,12 +99,12 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
         filledBuffer+=1;
         cout<<"filledBuffer"<<endl;
     }
-     else {
-       delete event;
-       return false;
-     }
+//     else {
+//       delete event;
+//       return false;
+//     }
     //Returns true if need to do mixing, false if buffer has space still
-    if ( filledBuffer == mEventsBuffer-1)
+    if ( filledBuffer == mEventsBuffer)
         return true;
     return false;
 }
