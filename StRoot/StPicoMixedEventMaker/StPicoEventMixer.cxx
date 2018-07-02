@@ -85,7 +85,8 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
             cout<<"pions added"<<endl;
         }
         pidFlag = StPicoCutsBase::kKaon;
-        if(isTpcKaon(trk) && mHFCuts->isTOFKaon(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
+        if(isTpcKaon(trk) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
+//        if(isTpcKaon(trk) && mHFCuts->isTOFKaon(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
             cout<<"lets add kaon"<<endl;
             isTpcK = true;
             isTofK = true;
