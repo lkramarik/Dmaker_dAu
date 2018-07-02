@@ -65,7 +65,6 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
     for(unsigned int iTrk = 0; iTrk < nTracks; ++iTrk) {
         StPicoTrack const* trk = picoDst->track(iTrk);
         cout<<"StPicoTrack const* trk = picoDst->track(iTrk);"<<endl;
-        if (!(*trk)) continue;
         if(!mHFCuts->isGoodTrack(trk)) {
             cout<<"not good track"<<endl;
             continue;
