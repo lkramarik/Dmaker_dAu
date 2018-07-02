@@ -93,7 +93,7 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
 //            cout<<"event->addTrack(*trk);"<<endl;
 //        }
         cout<<"end of for trakcs"<<endl;
-        delete trk;
+        trk=0x0;
     }
      if ( event->getNoPions() > 0 ||  event->getNoKaons() > 0) {
     mEvents.push_back(event);
