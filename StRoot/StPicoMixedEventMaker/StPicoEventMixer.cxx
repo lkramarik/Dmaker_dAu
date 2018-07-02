@@ -51,7 +51,7 @@ void StPicoEventMixer::finish() {
 //-----------------------------------------------------------
 bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight)
 {
-    cout<<"adding event to mixer"<<endl;
+//    cout<<"adding event to mixer"<<endl;
 //    if( !isGoodEvent(picoDst) )
 //        return false;
     unsigned int nTracks = picoDst->numberOfTracks();
@@ -59,13 +59,12 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
     StMixerEvent* event = new StMixerEvent(pVertex, picoDst->event()->bField());
 
 //    event->addPicoEvent(*(picoDst->event()));
-    cout<<"StMixerEvent* event = new StMixerEvent(pVertex, picoDst->event()->bField());"<<endl;
 
     for(unsigned int iTrk = 0; iTrk < nTracks; ++iTrk) {
         StPicoTrack const* trk = picoDst->track(iTrk);
-        cout<<"StPicoTrack const* trk = picoDst->track(iTrk);"<<endl;
+//        cout<<"StPicoTrack const* trk = picoDst->track(iTrk);"<<endl;
         if(!mHFCuts->isGoodTrack(trk)) {
-            cout<<"not good track"<<endl;
+//            cout<<"not good track"<<endl;
             continue;
         }
         cout<<"GOOOOOOOOD TRACK"<<endl;
@@ -92,7 +91,6 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
 //            cout<<"event->addTrack(*trk);"<<endl;
 //        }
         cout<<"end of for trakcs"<<endl;
-        delete trk;
     }
      if ( event->getNoPions() > 0 ||  event->getNoKaons() > 0) {
     mEvents.push_back(event);
