@@ -59,7 +59,6 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
     for(unsigned int iTrk = 0; iTrk < nTracks; ++iTrk) {
         StPicoTrack const* trk = picoDst->track(iTrk);
         if(!trk) continue;
-        cout<<trk->gPt()<<endl;
         if(!mHFCuts->isGoodTrack(trk)) {
             continue;
         }
@@ -81,7 +80,6 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
         if(saveTrack == true){
             event->addTrack(*trk);
         }
-        cout<<"end of for trakcs"<<endl;
         trk=0x0;
     }
     if ( event->getNoPions() > 0 ||  event->getNoKaons() > 0) {
