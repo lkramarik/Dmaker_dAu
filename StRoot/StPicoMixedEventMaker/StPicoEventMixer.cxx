@@ -57,12 +57,10 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
     unsigned int nTracks = picoDst->numberOfTracks();
     StThreeVectorF pVertex = picoDst->event()->primaryVertex();
     StMixerEvent* event = new StMixerEvent(pVertex, picoDst->event()->bField());
-
-//    event->addPicoEvent(*(picoDst->event()));
+    //    event->addPicoEvent(*(picoDst->event()));
 
     for(unsigned int iTrk = 0; iTrk < nTracks; ++iTrk) {
         StPicoTrack const* trk = picoDst->track(iTrk);
-//        cout<<"StPicoTrack const* trk = picoDst->track(iTrk);"<<endl;
         if(!trk) continue;
         cout<<trk->gPt()<<endl;
 //        if(!mHFCuts->isGoodTrack(trk)) {
@@ -70,7 +68,7 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
 //            continue;
 //        }
 //        cout<<"GOOOOOOOOD TRACK"<<endl;
-        const float beta = mHFCuts->getTofBetaBase(trk);
+        const float beta = mHFCuts->getTofBetaBase(*trk);
 //        cout<<"const float beta = mHFCuts->getTofBetaBase(trk);"<<endl;
 //        bool saveTrack = false;
 //        int pidFlag = StPicoCutsBase::kPion;
@@ -95,12 +93,12 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
         cout<<"end of for trakcs"<<endl;
         trk=0x0;
     }
-     if ( event->getNoPions() > 0 ||  event->getNoKaons() > 0) {
-    mEvents.push_back(event);
-    cout<<"mEvents.push_back(event);"<<endl;
-    filledBuffer+=1;
-    cout<<"filledBuffer"<<endl;
-     }
+    if ( event->getNoPions() > 0 ||  event->getNoKaons() > 0) {
+        mEvents.push_back(event);
+        cout<<"mEvents.push_back(event);"<<endl;
+        filledBuffer+=1;
+        cout<<"filledBuffer"<<endl;
+    }
      else {
        delete event;
        return false;
