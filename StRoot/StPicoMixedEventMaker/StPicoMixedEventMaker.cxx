@@ -110,7 +110,7 @@ Int_t StPicoMixedEventMaker::Finish() {
             delete mPicoEventMixer[iVz][iCentrality];
         }
     }
-
+    cout<<"stuff saved"<<endl;
     return kStOK;
 }
 // _________________________________________________________

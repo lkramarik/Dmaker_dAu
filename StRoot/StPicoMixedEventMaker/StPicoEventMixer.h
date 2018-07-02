@@ -88,9 +88,6 @@ class StPicoEventMixer {
   TNtuple *mSETupleBack;
   TNtuple *mMETupleSig;
   TNtuple *mMETupleBack;
-  TList *mSingleParticleList;
-
-//  bool fillSinglePartHists;
 };
 
 inline void StPicoEventMixer::setEventBuffer(int buffer){ mEventsBuffer = buffer;}

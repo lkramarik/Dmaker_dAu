@@ -30,16 +30,13 @@ StPicoEventMixer::StPicoEventMixer(char* category):
         mSETupleSig(NULL),
         mSETupleBack(NULL),
         mMETupleSig(NULL),
-        mMETupleBack(NULL),
-        mSingleParticleList(NULL)
-//        fillSinglePartHists(false)
+        mMETupleBack(NULL)
 {
 //    mHists = new StMixerHists(category);
 }
 //-----------------------------------------------------------
 StPicoEventMixer::~StPicoEventMixer()
 {
-//    delete mHists;
     for(unsigned int i =0 ; i<mEvents.size() ; i++){
         delete mEvents.at(i);
     }
