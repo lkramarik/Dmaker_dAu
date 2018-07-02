@@ -96,8 +96,6 @@ void runPicoMixedEvent(
     chain->Clear();
     int iret = chain->Make(i);
     if (iret) { cout << "Bad return code!" << iret << endl; break;}
-    chain->Clear();
-
   }
   
   cout << "****************************************** " << endl;

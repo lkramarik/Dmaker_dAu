@@ -117,6 +117,7 @@ Int_t StPicoMixedEventMaker::Finish() {
 }
 // _________________________________________________________
 void StPicoMixedEventMaker::Clear(Option_t* opt) {
+    return;
 }
 // _________________________________________________________
 Int_t StPicoMixedEventMaker::Make() {
