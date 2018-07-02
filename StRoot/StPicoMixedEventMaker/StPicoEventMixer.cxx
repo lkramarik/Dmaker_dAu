@@ -56,7 +56,6 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
 //        return false;
     unsigned int nTracks = picoDst->numberOfTracks();
     StThreeVectorF pVertex = picoDst->event()->primaryVertex();
-
     StMixerEvent* event = new StMixerEvent(pVertex, picoDst->event()->bField());
 
 //    event->addPicoEvent(*(picoDst->event()));
@@ -65,35 +64,33 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
     for(unsigned int iTrk = 0; iTrk < nTracks; ++iTrk) {
         StPicoTrack const* trk = picoDst->track(iTrk);
         cout<<"StPicoTrack const* trk = picoDst->track(iTrk);"<<endl;
-        if(!mHFCuts->isGoodTrack(trk)) {
-            cout<<"not good track"<<endl;
-            continue;
-        }
-        cout<<"if(!mHFCuts->isGoodTrack(trk))"<<endl;
-        const float beta = mHFCuts->getTofBetaBase(trk);
-        cout<<"const float beta = mHFCuts->getTofBetaBase(trk);"<<endl;
-        bool saveTrack = false;
-        int pidFlag = StPicoCutsBase::kPion;
-        if( isTpcPion(trk) && mHFCuts->isHybridTOFPion(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
-            saveTrack = true;
-            event->addPion(event->getNoTracks());
-            cout<<"pions added"<<endl;
-        }
-        pidFlag = StPicoCutsBase::kKaon;
-        if(isTpcKaon(trk) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
+//        if(!mHFCuts->isGoodTrack(trk)) {
+//            cout<<"not good track"<<endl;
+//            continue;
+//        }
+//        cout<<"if(!mHFCuts->isGoodTrack(trk))"<<endl;
+//        const float beta = mHFCuts->getTofBetaBase(trk);
+//        cout<<"const float beta = mHFCuts->getTofBetaBase(trk);"<<endl;
+//        bool saveTrack = false;
+//        int pidFlag = StPicoCutsBase::kPion;
+//        if( isTpcPion(trk) && mHFCuts->isHybridTOFPion(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
+//            saveTrack = true;
+//            event->addPion(event->getNoTracks());
+//            cout<<"pions added"<<endl;
+//        }
+//        pidFlag = StPicoCutsBase::kKaon;
+//        if(isTpcKaon(trk) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
 //        if(isTpcKaon(trk) && mHFCuts->isTOFKaon(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
-            cout<<"lets add kaon"<<endl;
-            saveTrack = true;
-            event->addKaon(event->getNoTracks());
-            cout<<"kaons added"<<endl;
-        }
-
-        if(saveTrack == true){
-//            StMixerTrack mTrack(pVertex, picoDst->event()->bField(), *trk, isTpcPi, isTofPi, isTpcK, isTofK, isTpcP, isTofP);
-//            event->addTrack(mTrack);
-            event->addTrack(*trk);
-            cout<<"event->addTrack(*trk);"<<endl;
-        }
+//            cout<<"lets add kaon"<<endl;
+//            saveTrack = true;
+//            event->addKaon(event->getNoTracks());
+//            cout<<"kaons added"<<endl;
+//        }
+//
+//        if(saveTrack == true){
+//            event->addTrack(*trk);
+//            cout<<"event->addTrack(*trk);"<<endl;
+//        }
     cout<<"enf of for trakcs"<<endl;
     }
      if ( event->getNoPions() > 0 ||  event->getNoKaons() > 0) {
