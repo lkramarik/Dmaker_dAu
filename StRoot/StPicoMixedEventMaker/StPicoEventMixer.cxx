@@ -25,7 +25,7 @@ StPicoEventMixer::StPicoEventMixer(char* category):
         mEvents(),
 //        mHists(NULL),
         mHFCuts(NULL),
-        mEventsBuffer(StPicoMixedEventMaker::defaultBufferSize),
+        mEventsBuffer(5),
         filledBuffer(0),
         mSETupleSig(NULL),
         mSETupleBack(NULL),
