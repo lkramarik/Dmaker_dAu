@@ -99,8 +99,6 @@ Int_t StPicoMixedEventMaker::Finish() {
 
     mOutputFileTree->cd();
 
-
-
     for(int iVz =0 ; iVz < 10 ; ++iVz){
         for(int iCentrality = 0 ; iCentrality < 9 ; ++iCentrality){
             mPicoEventMixer[iVz][iCentrality]->finish();
@@ -112,7 +110,8 @@ Int_t StPicoMixedEventMaker::Finish() {
     mMETupleSig -> Write(mMETupleSig->GetName(), TObject::kOverwrite);
     mSETupleBack -> Write(mSETupleBack->GetName(), TObject::kOverwrite);
     mMETupleBack -> Write(mMETupleBack->GetName(), TObject::kOverwrite);
-    
+    mOutputFileTree->Close();
+
     cout<<"stuff saved"<<endl;
     return kStOK;
 }
