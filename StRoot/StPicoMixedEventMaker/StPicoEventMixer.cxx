@@ -69,11 +69,11 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
 //    Event.setNoTracks( nTracks );
     for( int iTrk = 0; iTrk < nTracks; ++iTrk) {
         StPicoTrack const* trk = picoDst->track(iTrk);
-    cout<<"StPicoTrack const* trk = picoDst->track(iTrk);"<<endl;
+//    cout<<"StPicoTrack const* trk = picoDst->track(iTrk);"<<endl;
         if(!mHFCuts->isGoodTrack(trk))
             continue;
 
-        const float beta = mHFCuts->getTofBeta(trk);
+        const float beta = mHFCuts->getTofBetaBase(trk);
 
         bool saveTrack = true;
         int pidFlag = StPicoCutsBase::kPion;
