@@ -213,7 +213,7 @@ bool StPicoCutsBase::isGoodTrigger(StPicoEvent const * const picoEvent) const {
 
 // _________________________________________________________
 bool StPicoCutsBase::isGoodTrack(StPicoTrack const * const trk) const {
-cout<<"checking good trk"<<endl;
+//cout<<"checking good trk"<<endl;
   //  int tofIndex = trk->bTofPidTraitsIndex();
 //  bool TofMatch = kFALSE;
 //  StPicoBTofPidTraits* tofPidTraits;
