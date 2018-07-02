@@ -69,7 +69,7 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
 //    Event.setNoTracks( nTracks );
     for( int iTrk = 0; iTrk < nTracks; ++iTrk) {
         StPicoTrack const* trk = picoDst->track(iTrk);
-    cout<<"StPicoTrack const* trk = picoDst->track(iTrk);"<<endl;
+        cout<<"StPicoTrack const* trk = picoDst->track(iTrk);"<<endl;
         if(!mHFCuts->isGoodTrack(trk)) {
             cout<<"not good track"<<endl;
             continue;
@@ -111,16 +111,16 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
         }
     cout<<"enf of for trakcs"<<endl;
     }
-    // if ( event->getNoPions() > 0 ||  event->getNoKaons() > 0 || event->getNoProtons() > 0) {
+     if ( event->getNoPions() > 0 ||  event->getNoKaons() > 0 || event->getNoProtons() > 0) {
     mEvents.push_back(event);
     cout<<"mEvents.push_back(event);"<<endl;
     filledBuffer+=1;
     cout<<"filledBuffer"<<endl;
-    // }
-    // else {
-    //   delete event;
-    //   return false;
-    // }
+     }
+     else {
+       delete event;
+       return false;
+     }
     //Returns true if need to do mixing, false if buffer has space still
     if ( filledBuffer == mEventsBuffer)
         return true;
