@@ -65,12 +65,12 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
 //        cout<<"StPicoTrack const* trk = picoDst->track(iTrk);"<<endl;
         if(!trk) continue;
         cout<<trk->gPt()<<endl;
-//        if(!mHFCuts->isGoodTrack(trk)) {
-//            cout<<"not good track"<<endl;
+        if(!mHFCuts->isGoodTrack(trk)) {
+            cout<<"not good track"<<endl;
 //            continue;
-//        }
+        }
         cout<<"GOOOOOOOOD TRACK"<<endl;
-        const float beta = mHFCuts->getTofBetaBase(trk);
+//        const float beta = mHFCuts->getTofBetaBase(trk);
 //        cout<<"const float beta = mHFCuts->getTofBetaBase(trk);"<<endl;
 //        bool saveTrack = false;
 //        int pidFlag = StPicoCutsBase::kPion;
