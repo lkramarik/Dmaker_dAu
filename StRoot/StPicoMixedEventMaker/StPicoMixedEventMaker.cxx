@@ -33,7 +33,7 @@ StPicoMixedEventMaker::StPicoMixedEventMaker(char const* name, StPicoDstMaker* p
         mOuputFileBaseName(outputBaseFileName),
         mInputFileName(inputHFListHFtree),
         mEventCounter(0),
-        mBufferSize(defaultBufferSize),
+        mBufferSize(5),
         mSETupleSig(NULL),
         mSETupleBack(NULL),
         mMETupleSig(NULL),
