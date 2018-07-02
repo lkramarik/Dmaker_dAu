@@ -56,12 +56,13 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
 //        return false;
     unsigned int nTracks = picoDst->numberOfTracks();
     StThreeVectorF pVertex = picoDst->event()->primaryVertex();
+
     StMixerEvent* event = new StMixerEvent(pVertex, picoDst->event()->bField());
 
-    event->addPicoEvent(*(picoDst->event()));
-    cout<<"event->addPicoEvent(*(picoDst->event()));"<<endl;
+//    event->addPicoEvent(*(picoDst->event()));
+    cout<<"StMixerEvent* event = new StMixerEvent(pVertex, picoDst->event()->bField());"<<endl;
 
-    for( int iTrk = 0; iTrk < nTracks; ++iTrk) {
+    for(unsigned int iTrk = 0; iTrk < nTracks; ++iTrk) {
         StPicoTrack const* trk = picoDst->track(iTrk);
         cout<<"StPicoTrack const* trk = picoDst->track(iTrk);"<<endl;
         if (!(*trk)) continue;
