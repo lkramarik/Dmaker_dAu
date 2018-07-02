@@ -266,7 +266,7 @@ void StPicoEventMixer::fillTracks(StMixerEvent* evt, bool isSameEvt, int pidFlag
 //    nTracksHist->Fill(nTracks);
 
     // particle loop
-    const float weight = evt->weight();
+//    const float weight = evt->weight();
     for (int i = 0; i < nTracks; ++i)
     {
         StPicoTrack trk;
