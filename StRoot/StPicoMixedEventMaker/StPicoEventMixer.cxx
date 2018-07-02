@@ -54,7 +54,7 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
     cout<<"adding event to mixer"<<endl;
 //    if( !isGoodEvent(picoDst) )
 //        return false;
-    int nTracks = picoDst->numberOfTracks();
+    unsigned int nTracks = picoDst->numberOfTracks();
     StThreeVectorF pVertex = picoDst->event()->primaryVertex();
     StMixerEvent* event = new StMixerEvent(pVertex, picoDst->event()->bField());
 
@@ -62,8 +62,6 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
     cout<<"event->addPicoEvent(*(picoDst->event()));"<<endl;
     bool isTpcPi = false;
     bool isTofPi = false;
-    bool isTpcP  = false;
-    bool isTofP  = false;
     bool isTpcK  = false;
     bool isTofK  = false;
 //    Event.setNoTracks( nTracks );
@@ -97,13 +95,7 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
             event->addKaon(event->getNoTracks());
             cout<<"kaons added"<<endl;
         }
-        pidFlag = StPicoCutsBase::kProton;
-        if(isTpcProton(trk) && mHFCuts->isTOFProton(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
-            isTpcP = true;
-            isTofP = true;
-            saveTrack = true;
-            event->addProton(event->getNoTracks());
-        }
+
         if(saveTrack == true){
 //            StMixerTrack mTrack(pVertex, picoDst->event()->bField(), *trk, isTpcPi, isTofPi, isTpcK, isTofK, isTpcP, isTofP);
 //            event->addTrack(mTrack);
@@ -112,18 +104,18 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
         }
     cout<<"enf of for trakcs"<<endl;
     }
-//     if ( event->getNoPions() > 0 ||  event->getNoKaons() > 0 || event->getNoProtons() > 0) {
+     if ( event->getNoPions() > 0 ||  event->getNoKaons() > 0) {
     mEvents.push_back(event);
     cout<<"mEvents.push_back(event);"<<endl;
     filledBuffer+=1;
     cout<<"filledBuffer"<<endl;
-//     }
-//     else {
-//       delete event;
-//       return false;
-//     }
+     }
+     else {
+       delete event;
+       return false;
+     }
     //Returns true if need to do mixing, false if buffer has space still
-    if ( filledBuffer == mEventsBuffer)
+    if ( filledBuffer == mEventsBuffer-1)
         return true;
     return false;
 }
