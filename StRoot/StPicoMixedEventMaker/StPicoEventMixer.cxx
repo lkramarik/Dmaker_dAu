@@ -66,7 +66,7 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
     bool isTofP  = false;
     bool isTpcK  = false;
     bool isTofK  = false;
-    //Event.setNoTracks( nTracks );
+//    Event.setNoTracks( nTracks );
     for( int iTrk = 0; iTrk < nTracks; ++iTrk) {
         StPicoTrack const* trk = picoDst->track(iTrk);
 
@@ -75,7 +75,7 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
 
         const float beta = mHFCuts->getTofBeta(trk);
 
-        bool saveTrack = false;
+        bool saveTrack = true;
         int pidFlag = StPicoCutsBase::kPion;
         if( isTpcPion(trk) && mHFCuts->isHybridTOFPion(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
             isTpcPi = true;
