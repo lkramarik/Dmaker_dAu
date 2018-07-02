@@ -61,41 +61,35 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
         if(!trk) continue;
         cout<<trk->gPt()<<endl;
         if(!mHFCuts->isGoodTrack(trk)) {
-//            cout<<"not good track"<<endl;
             continue;
         }
-//        cout<<"GOOOOOOOOD TRACK"<<endl;
         const float beta = mHFCuts->getTofBetaBase(trk);
-//        cout<<"const float beta = mHFCuts->getTofBetaBase(trk);"<<endl;
         bool saveTrack = false;
+
         int pidFlag = StPicoCutsBase::kPion;
         if( isTpcPion(trk) && mHFCuts->isHybridTOFPion(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
             saveTrack = true;
             event->addPion(event->getNoTracks());
-//            cout<<"pions added"<<endl;
         }
         pidFlag = StPicoCutsBase::kKaon;
 //        if(isTpcKaon(trk) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
         if(isTpcKaon(trk) && mHFCuts->isTOFKaon(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
-//            cout<<"lets add kaon"<<endl;
             saveTrack = true;
             event->addKaon(event->getNoTracks());
-//            cout<<"kaons added"<<endl;
         }
 //
         if(saveTrack == true){
             event->addTrack(*trk);
-//            cout<<"event->addTrack(*trk);"<<endl;
         }
         cout<<"end of for trakcs"<<endl;
         trk=0x0;
     }
-//    if ( event->getNoPions() > 0 ||  event->getNoKaons() > 0) {
+    if ( event->getNoPions() > 0 ||  event->getNoKaons() > 0) {
         mEvents.push_back(event);
         cout<<"mEvents.push_back(event);"<<endl;
         filledBuffer+=1;
         cout<<"filledBuffer"<<endl;
-//    }
+    }
 //     else {
 //       delete event;
 //       return false;
@@ -109,9 +103,6 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
 void StPicoEventMixer::mixEvents() {
     cout<<"mixing"<<endl;
     size_t const nEvent = mEvents.size();
-//    if(StPicoMixedEventMaker::fillSingleTrackHistos)
-//    {
-//    }
 
     int const nTracksEvt1 = mEvents.at(0)->getNoPions();
 
@@ -126,11 +117,6 @@ void StPicoEventMixer::mixEvents() {
     // Go through the event buffer
     for( size_t iEvt2 = 0; iEvt2 < nEvent; ++iEvt2) {
         int const nTracksEvt2 = mEvents.at(iEvt2)->getNoKaons();
-
-//        if( iEvt2 == 0 )
-//            mHists->fillSameEvt(mEvents.at(0)->vertex());
-//        else
-//            mHists->fillMixedEvt(mEvents.at(0)->vertex());
 
         // evts trk loops
         for(int iTrk1 = 0; iTrk1 < nTracksEvt1; ++iTrk1) {
