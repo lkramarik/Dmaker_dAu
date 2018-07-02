@@ -53,8 +53,8 @@ void runPicoMixedEvent(
   cout<<"event stuff set"<<endl;
 
   hfCuts->setBadRunListFileName(badRunListFileName);
-  hfCuts->setCutVzMax(60.);
-  hfCuts->setCutVzVpdVzMax(30.);
+  hfCuts->setCutVzMax(6.);
+  hfCuts->setCutVzVpdVzMax(6.);
   hfCuts->addTriggerId(530003); //VPD-5
 
   hfCuts->setCutNHitsFitMin(15);
