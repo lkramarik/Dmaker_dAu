@@ -107,7 +107,7 @@ void runPicoMixedEvent(
   cout << "Time needed " << duration << " s" << endl;
   cout << "****************************************** " << endl;
 
-//  delete chain;
+  delete chain;
 
 }
 
