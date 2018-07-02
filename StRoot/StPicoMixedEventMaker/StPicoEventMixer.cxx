@@ -94,13 +94,13 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
             event->addKaon(event->getNoTracks());
             cout<<"kaons added"<<endl;
         }
-//        pidFlag = StPicoCutsBase::kProton;
-//        if(isTpcProton(trk) && mHFCuts->isTOFProton(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
-//            isTpcP = true;
-//            isTofP = true;
-//            saveTrack = true;
-//            event->addProton(event->getNoTracks());
-//        }
+        pidFlag = StPicoCutsBase::kProton;
+        if(isTpcProton(trk) && mHFCuts->isTOFProton(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
+            isTpcP = true;
+            isTofP = true;
+            saveTrack = true;
+            event->addProton(event->getNoTracks());
+        }
         if(saveTrack == true){
 //            StMixerTrack mTrack(pVertex, picoDst->event()->bField(), *trk, isTpcPi, isTofPi, isTpcK, isTofK, isTpcP, isTofP);
 //            event->addTrack(mTrack);
@@ -109,7 +109,9 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
     }
     // if ( event->getNoPions() > 0 ||  event->getNoKaons() > 0 || event->getNoProtons() > 0) {
     mEvents.push_back(event);
+    cout<<"mEvents.push_back(event);"<<endl;
     filledBuffer+=1;
+    cout<<"filledBuffer"<<endl;
     // }
     // else {
     //   delete event;
