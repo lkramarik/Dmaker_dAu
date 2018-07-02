@@ -189,8 +189,8 @@ Int_t StPicoMixedEventMaker::Make() {
     cout<<"good event"<<endl;
 
     StThreeVectorF const pVtx = picoDst->event()->primaryVertex();
-    if( fabs(pVtx.z()) >=6.0 )
-        return kStOk;
+//    if( fabs(pVtx.z()) >=6.0 )
+//        return kStOk;
     int const centrality  = 1;
 
     if(centrality < 0 || centrality >8 ) return kStOk;
