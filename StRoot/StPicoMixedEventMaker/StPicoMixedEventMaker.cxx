@@ -36,8 +36,7 @@ StPicoMixedEventMaker::StPicoMixedEventMaker(char const* name, StPicoDstMaker* p
         mSETupleBack(NULL),
         mMETupleSig(NULL),
         mMETupleBack(NULL),
-        mOutputFileTree(NULL),
-
+        mOutputFileTree(NULL)
 {
 
     TH1::AddDirectory(false);
