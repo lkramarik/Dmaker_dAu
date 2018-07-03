@@ -72,6 +72,8 @@ bool StPicoMixedEventMaker::loadEventPlaneCorr(Int_t const run) {
 }
 // _________________________________________________________
 Int_t StPicoMixedEventMaker::Init() {
+    m_nmultEdge = 7;
+    m_multEdge[m_nmultEdge+1] = {0, 4, 8, 12, 16, 20, 24, 200};
     mOutputFileTree->cd();
     for(int iVz =0 ; iVz < 10 ; ++iVz){
         for(int iCentrality = 0 ; iCentrality < m_nmultEdge ; ++iCentrality){

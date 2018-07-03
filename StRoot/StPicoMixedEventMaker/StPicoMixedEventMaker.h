@@ -76,8 +76,8 @@ private:
                                         
     TFile*          mOutputFileTree;
 
-	const int m_nmultEdge = 7;
-	float const m_multEdge[m_nmultEdge+1] = {0, 4, 8, 12, 16, 20, 24, 200};
+	const int m_nmultEdge;
+	float const m_multEdge[];
 
     ClassDef(StPicoMixedEventMaker, 0)
 };
