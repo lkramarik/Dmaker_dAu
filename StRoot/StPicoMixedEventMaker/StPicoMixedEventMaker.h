@@ -53,8 +53,8 @@ class StPicoMixedEventMaker : public StMaker
 	TNtuple *mSETupleBack;
 	TNtuple *mMETupleSig;
 	TNtuple *mMETupleBack;
-	const int m_nmultEdge = 7;
-	float const m_multEdge[m_nmultEdge+1] = {0, 4, 8, 12, 16, 20, 24, 200};
+	static const int m_nmultEdge = 7;
+	static float m_multEdge[m_nmultEdge+1] = {0, 4, 8, 12, 16, 20, 24, 200};
 	int getMultIndex(float multiplicity);
 
 private:
