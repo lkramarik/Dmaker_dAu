@@ -54,7 +54,6 @@ class StPicoMixedEventMaker : public StMaker
 	TNtuple *mMETupleSig;
 	TNtuple *mMETupleBack;
 
-
 	int getMultIndex(float multiplicity);
 
 private:

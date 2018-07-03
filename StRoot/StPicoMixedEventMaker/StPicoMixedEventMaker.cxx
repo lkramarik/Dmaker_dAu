@@ -141,7 +141,9 @@ Int_t StPicoMixedEventMaker::Make() {
 
 //    int* aEventStat = NULL;
     int aEventStat[mHFCuts->eventStatMax()];
-    if (!mHFCuts->isGoodEvent(picoDst, aEventStat))
+    cout<<mHFCuts->isGoodEvent(picoDst, aEventStat)<<endl;
+    bool eventTest = mHFCuts->isGoodEvent(picoDst, aEventStat);
+    if (!eventTest)
         return kStOk;
 
     fillEventStats(aEventStat);
