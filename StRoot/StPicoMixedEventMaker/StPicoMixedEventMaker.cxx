@@ -143,12 +143,10 @@ Int_t StPicoMixedEventMaker::Make() {
     int aEventStat[mHFCuts->eventStatMax()];
     cout<mHFCuts->eventStatMax()<<endl;
     bool eventTest = mHFCuts->isGoodEvent(picoDst, aEventStat);
-    if (!eventTest)
-        return kStOk;
-
     fillEventStats(aEventStat);
 
-
+    if (!eventTest)
+        return kStOk;
 
     StThreeVectorF const pVtx = picoDst->event()->primaryVertex();
 

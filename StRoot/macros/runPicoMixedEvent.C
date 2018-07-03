@@ -90,7 +90,7 @@ void runPicoMixedEvent(
   
   cout << " Total entries = " << picoDstMaker->chain()->GetEntries() << endl;
 
-  for (Int_t i=0; i<1000; i++) {
+  for (Int_t i=0; i<2000; i++) {
 //    if(i%10==0)       cout << "Working on eventNumber " << i << endl;
 //    cout << "Working on eventNumber " << i << endl;
     chain->Clear();
