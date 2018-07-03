@@ -20,6 +20,9 @@
 
 ClassImp(StPicoMixedEventMaker)
 
+static const int m_nmultEdge = 7;
+static float constexpr m_multEdge[m_nmultEdge+1] = {0, 4, 8, 12, 16, 20, 24, 200};
+
 // _________________________________________________________
 StPicoMixedEventMaker::StPicoMixedEventMaker(char const* name, StPicoDstMaker* picoMaker, StHFCuts* hfCuts,
                                              char const* outputBaseFileName,  char const* inputHFListHFtree = "") :
