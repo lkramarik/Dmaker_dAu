@@ -48,14 +48,7 @@ void runPicoD0AnaMaker(
         exit(1);
     }
 
-    StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
-    cout<<"ok, picoDstMaker created"<<endl;
-    StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile, sInputListHF);
-    PicoD0AnaMaker->setTreeName(treeName);
-    PicoD0AnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
-
     StHFCuts* hfCuts = new StHFCuts("hfBaseCuts");
-    PicoD0AnaMaker->setHFBaseCuts(hfCuts);
 
     hfCuts->setBadRunListFileName(badRunListFileName);
     hfCuts->addTriggerId(530003); //VPD-5
@@ -91,7 +84,17 @@ void runPicoD0AnaMaker(
 //    float minMass         = 0.4;
 //    float maxMass         = 2.4;
 
-    hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass); //ok
+    hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass);
+
+    StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
+
+//    StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile, sInputListHF);
+//    PicoD0AnaMaker->setTreeName(treeName);
+//    PicoD0AnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
+//    PicoD0AnaMaker->setHFBaseCuts(hfCuts);
+
+    StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile, inputFile);
+    picoMixedEventMaker->setBufferSize(7);
     
     clock_t start = clock(); // getting starting time
     chain->Init();
