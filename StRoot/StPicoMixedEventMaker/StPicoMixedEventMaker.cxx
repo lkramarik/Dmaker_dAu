@@ -76,6 +76,7 @@ bool StPicoMixedEventMaker::loadEventPlaneCorr(Int_t const run) {
 // _________________________________________________________
 Int_t StPicoMixedEventMaker::Init() {
     mOutputFileTree->cd();
+    cout<<"init start"<<endl;
     for(int iVz =0 ; iVz < 10 ; ++iVz){
         for(int iCentrality = 0 ; iCentrality < m_nmultEdge ; ++iCentrality){
             mPicoEventMixer[iVz][iCentrality] = new StPicoEventMixer(Form("Cent_%i_Vz_%i",iCentrality,iVz));
@@ -90,9 +91,9 @@ Int_t StPicoMixedEventMaker::Init() {
 
     initializeEventStats();
     mOutList = new TList();
-    mOutList->SetName(GetName());
-    mOutList->SetOwner(true);
-
+    mOutList -> SetName(GetName());
+    mOutList -> SetOwner(true);
+cout<<"init end"<<endl;
     //resetEvent();
     return kStOK;
 }
