@@ -59,7 +59,7 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
         if(!mHFCuts->isGoodTrack(trk)) {
             continue;
         }
-        const float beta = mHFCuts->getTofBetaBase(trk);
+        float beta = mHFCuts->getTofBetaBase(trk);
         bool saveTrack = false;
 
         int pidFlag = StPicoCutsBase::kPion;
@@ -109,7 +109,6 @@ void StPicoEventMixer::mixEvents() {
                 }
 
                 StPicoTrack const pion = mEvents.at(0)->pionAt(iTrk1);
-//                StMixerTrack const* kaon = mEvents.at(iEvt2)->kaonAt(iTrk2);
                 StPicoTrack const kaon = mEvents.at(iEvt2)->kaonAt(iTrk2);
 
                 StMixerPair *pair = new StMixerPair(pion, kaon,

@@ -20,8 +20,6 @@ mkdir -p production
 mkdir -p report
 mkdir -p csh
 mkdir -p list
-mkdir -p log
-mkdir -p err
 mkdir -p jobs
 mkdir -p jobs/log
 mkdir -p jobs/err

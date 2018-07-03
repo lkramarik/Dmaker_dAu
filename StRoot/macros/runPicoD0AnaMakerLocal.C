@@ -86,7 +86,7 @@ void runPicoD0AnaMakerLocal(
 //  hfCuts->addTriggerId(530213); //BHT3
   
 
-  hfCuts->setCutNHitsFitMin(20); //default is 20
+  hfCuts->setCutNHitsFitMin(15); //default is 20
   hfCuts->setCutRequireHFT(true);
 
   //LK hfCuts->setCutDcaMin(0.009,StHFCuts::kPion); //federic 1aug2016
@@ -107,8 +107,8 @@ void runPicoD0AnaMakerLocal(
   hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass);
  
   //Single track pt
-  hfCuts->setCutPtRange(0.2,50.0,StHFCuts::kPion); //0.2 , 50.0
-  hfCuts->setCutPtRange(0.2,50.0,StHFCuts::kKaon); //0.2, 50.0
+  hfCuts->setCutPtRange(0.15,50.0,StHFCuts::kPion); //0.2 , 50.0
+  hfCuts->setCutPtRange(0.15,50.0,StHFCuts::kKaon); //0.2, 50.0
   //TPC setters
   hfCuts->setCutTPCNSigmaPion(3.0); //3
   hfCuts->setCutTPCNSigmaKaon(2.0); //3

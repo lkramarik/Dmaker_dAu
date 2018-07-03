@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<job fileListSyntax="xrootd" minFilesPerProcess="90" maxFilesPerProcess="100" simulateSubmission="false">
+<job fileListSyntax="xrootd" minFilesPerProcess="50" maxFilesPerProcess="70" simulateSubmission="false">
   <stdout URL="file:&basePath;/jobs/log/$JOBID.out"/>
   <stderr URL="file:&basePath;/jobs/err/$JOBID.err"/>
 
@@ -29,7 +29,6 @@
       <File>file:./run16dAuPrescales/</File>
       <File>file:./.sl73_gcc485/</File>
       <File>file:./picoList_bad.list</File>
-      <!--<File>file:./starSubmit/parseFileList.csh</File>-->
     </Package>
   </SandBox>
 </job>

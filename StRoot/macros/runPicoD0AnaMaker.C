@@ -19,6 +19,9 @@ using namespace std;
 #else
 class StChain;
 #endif
+class StPicoDstMaker;
+class StPicoMixedEventMaker;
+class StMaker;
 StChain *chain;
 void runPicoD0AnaMaker(
     const char*  inputFile,
