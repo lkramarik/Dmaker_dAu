@@ -106,10 +106,15 @@ Int_t StPicoMixedEventMaker::Finish() {
         }
     }
 
-    mSETupleSig -> Write(mSETupleSig->GetName(), TObject::kOverwrite);
-    mMETupleSig -> Write(mMETupleSig->GetName(), TObject::kOverwrite);
-    mSETupleBack -> Write(mSETupleBack->GetName(), TObject::kOverwrite);
-    mMETupleBack -> Write(mMETupleBack->GetName(), TObject::kOverwrite);
+//    mSETupleSig -> Write(mSETupleSig->GetName(), TObject::kOverwrite);
+//    mMETupleSig -> Write(mMETupleSig->GetName(), TObject::kOverwrite);
+//    mSETupleBack -> Write(mSETupleBack->GetName(), TObject::kOverwrite);
+//    mMETupleBack -> Write(mMETupleBack->GetName(), TObject::kOverwrite);
+
+    mSETupleSig -> Write();
+    mMETupleSig -> Write();
+    mSETupleBack -> Write();
+    mMETupleBack -> Write();
     mOutputFileTree->Close();
 
     cout<<"stuff saved"<<endl;
