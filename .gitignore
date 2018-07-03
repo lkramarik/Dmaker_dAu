@@ -12,4 +12,5 @@ notUsed_codes
 tmva/*.root
 .idea
 cmake-build-debug
-StRoot/cmake-build-debug/
+StRoot/cmake-build-debug
+StRoot/CMakeLists.txt
