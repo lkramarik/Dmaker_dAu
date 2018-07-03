@@ -89,11 +89,12 @@ Int_t StPicoMixedEventMaker::Init() {
         }
     }
 
-    initializeEventStats();
     mOutList = new TList();
     mOutList -> SetName(GetName());
     mOutList -> SetOwner(true);
-cout<<"init end"<<endl;
+    initializeEventStats();
+
+    cout<<"init end"<<endl;
     //resetEvent();
     return kStOK;
 }
