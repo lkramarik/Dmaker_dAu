@@ -38,7 +38,6 @@ StPicoMixedEventMaker::StPicoMixedEventMaker(char const* name, StPicoDstMaker* p
         mMETupleBack(NULL),
         mOutputFileTree(NULL)
 {
-
     TH1::AddDirectory(false);
     // -- create OutputTree
     mOutputFileTree = new TFile(Form("%s.picoMEtree.root", mOuputFileBaseName.Data()), "RECREATE");
