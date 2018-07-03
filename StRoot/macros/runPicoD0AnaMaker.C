@@ -8,6 +8,7 @@
 #include "StPicoHFMaker/StPicoHFEvent.h"
 #include "StPicoHFMaker/StHFCuts.h"
 #include "StPicoEvent/StPicoEvent.h"
+#include "StPicoMixedEventMaker/StPicoMixedEventMaker.h"
 #include "macros/loadSharedHFLibraries.C"
 #include <iostream>
 #include <ctime>
