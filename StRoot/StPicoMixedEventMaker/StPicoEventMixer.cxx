@@ -165,7 +165,7 @@ delete mEvents.at(0);
 mEvents.erase(mEvents.begin());
 }
 
-void StPicoEventMixer::fillNtpSameEvtPair(float ntVar[21], int charge)
+void StPicoEventMixer::fillNtpSameEvtPair(float ntVar[], int charge)
 {
     cout<<"fillNtpSameEvtPair"<<endl;
     if(charge == 0 )
@@ -176,7 +176,7 @@ void StPicoEventMixer::fillNtpSameEvtPair(float ntVar[21], int charge)
 }
 
 
-void StPicoEventMixer::fillNtpMixedEvtPair(float ntVar[21], int charge)
+void StPicoEventMixer::fillNtpMixedEvtPair(float ntVar[], int charge)
 {
     cout<<"fillNtpMixedEvtPair"<<endl;
     if(charge == 0 )
@@ -186,66 +186,66 @@ void StPicoEventMixer::fillNtpMixedEvtPair(float ntVar[21], int charge)
     return;
 }
 
-// _________________________________________________________
-void StPicoEventMixer::fillTracks(StMixerEvent* evt, bool isSameEvt, int pidFlag)
-{
-//    if (!fillSinglePartHists)
-//        return;
-
-    // get the corresponting histograms and track vectors
-    const std::string evtName = isSameEvt ? "SE" : "ME";
-    std::string particleName;
-    int nTracks;
-    switch (pidFlag)
-    {
-        case StHFCuts::kProton:
-            particleName = "p";
-            nTracks = evt->getNoProtons();
-            break;
-        case StHFCuts::kKaon:
-            particleName = "K";
-            nTracks = evt->getNoKaons();
-            break;
-        case StHFCuts::kPion:
-            particleName = "pi";
-            nTracks = evt->getNoPions();
-            break;
-        default:
-            cerr << "StPicoEventMixer::fillTracks: unknown pidFlag ... exiting" << endl;
-            throw;
-    }
-//    TH2D *etaPhiHist = static_cast<TH2D*>(mSingleParticleList->FindObject(Form("%sEtaPhi%s",particleName.data(), evtName.data())));
-//    TH2D *phiPtHist  = static_cast<TH2D*>(mSingleParticleList->FindObject(Form("%sPhiPt%s",particleName.data(), evtName.data())));
-//    TH1D *dcaHist = static_cast<TH1D*>(mSingleParticleList->FindObject(Form("%sDCA%s",particleName.data(), evtName.data())));
-//    TH1D *nTracksHist = static_cast<TH1D*>(mSingleParticleList->FindObject(Form("%stracks%s",particleName.data(), evtName.data())));
-//    nTracksHist->Fill(nTracks);
-
-    // particle loop
-//    const float weight = evt->weight();
-    for (int i = 0; i < nTracks; ++i)
-    {
-        StPicoTrack trk;
-//        StMixerTrack trk;
-        switch (pidFlag)
-        {
-            case StHFCuts::kProton: trk = evt->protonAt(i);
-                break;
-            case StHFCuts::kKaon:   trk = evt->kaonAt(i);
-                break;
-            case StHFCuts::kPion:   trk = evt->pionAt(i);
-                break;
-        }
-        const float eta = trk.gMom().pseudoRapidity();
-        const float phi = trk.gMom().phi();
-        const float pt = trk.gMom().perp();
-        const float dca  = (trk.origin() - evt->vertex()).mag();
-
-//        etaPhiHist->Fill(phi,eta,weight);
-//        phiPtHist->Fill(pt,phi, weight);
-//        dcaHist->Fill(dca, weight);
-    }
-
-}
+//// _________________________________________________________
+//void StPicoEventMixer::fillTracks(StMixerEvent* evt, bool isSameEvt, int pidFlag)
+//{
+////    if (!fillSinglePartHists)
+////        return;
+//
+//    // get the corresponting histograms and track vectors
+//    const std::string evtName = isSameEvt ? "SE" : "ME";
+//    std::string particleName;
+//    int nTracks;
+//    switch (pidFlag)
+//    {
+//        case StHFCuts::kProton:
+//            particleName = "p";
+//            nTracks = evt->getNoProtons();
+//            break;
+//        case StHFCuts::kKaon:
+//            particleName = "K";
+//            nTracks = evt->getNoKaons();
+//            break;
+//        case StHFCuts::kPion:
+//            particleName = "pi";
+//            nTracks = evt->getNoPions();
+//            break;
+//        default:
+//            cerr << "StPicoEventMixer::fillTracks: unknown pidFlag ... exiting" << endl;
+//            throw;
+//    }
+////    TH2D *etaPhiHist = static_cast<TH2D*>(mSingleParticleList->FindObject(Form("%sEtaPhi%s",particleName.data(), evtName.data())));
+////    TH2D *phiPtHist  = static_cast<TH2D*>(mSingleParticleList->FindObject(Form("%sPhiPt%s",particleName.data(), evtName.data())));
+////    TH1D *dcaHist = static_cast<TH1D*>(mSingleParticleList->FindObject(Form("%sDCA%s",particleName.data(), evtName.data())));
+////    TH1D *nTracksHist = static_cast<TH1D*>(mSingleParticleList->FindObject(Form("%stracks%s",particleName.data(), evtName.data())));
+////    nTracksHist->Fill(nTracks);
+//
+//    // particle loop
+////    const float weight = evt->weight();
+//    for (int i = 0; i < nTracks; ++i)
+//    {
+//        StPicoTrack trk;
+////        StMixerTrack trk;
+//        switch (pidFlag)
+//        {
+//            case StHFCuts::kProton: trk = evt->protonAt(i);
+//                break;
+//            case StHFCuts::kKaon:   trk = evt->kaonAt(i);
+//                break;
+//            case StHFCuts::kPion:   trk = evt->pionAt(i);
+//                break;
+//        }
+//        const float eta = trk.gMom().pseudoRapidity();
+//        const float phi = trk.gMom().phi();
+//        const float pt = trk.gMom().perp();
+//        const float dca  = (trk.origin() - evt->vertex()).mag();
+//
+////        etaPhiHist->Fill(phi,eta,weight);
+////        phiPtHist->Fill(pt,phi, weight);
+////        dcaHist->Fill(dca, weight);
+//    }
+//
+//}
 // _________________________________________________________
 bool StPicoEventMixer::isMixerPion(StMixerTrack const& track) {
     short info = track.getTrackInfo();

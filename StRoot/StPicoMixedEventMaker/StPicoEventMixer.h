@@ -72,9 +72,9 @@ class StPicoEventMixer {
   bool isTPCHadron(StPicoTrack const * const, int pidFlag);
   bool isCloseMixerPair(StMixerPair const * pair) const;
 
-  void fillTracks(StMixerEvent* evt, bool isSameEvt, int PidFlag);
-  void fillNtpSameEvtPair(float ntVar[21], int charge);
-  void fillNtpMixedEvtPair(float ntVar[21], int charge);
+//  void fillTracks(StMixerEvent* evt, bool isSameEvt, int PidFlag);
+  void fillNtpSameEvtPair(float ntVar[], int charge);
+  void fillNtpMixedEvtPair(float ntVar[], int charge);
 
   std::vector <StMixerEvent*> mEvents;
 //  StMixerHists* mHists;
