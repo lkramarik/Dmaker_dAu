@@ -259,7 +259,6 @@ int StPicoD0AnaMaker::analyzeCandidates() {
     const char *aNames[]   = {"all", "NHitFit>20", "pT>0.6", "dca<1.5","TPC pion", "TPC kaon"};
     const char *aNamesTOF[]   = {"all TOF match", "NHitFit>20 & TOF", "pT>0.6 & TOF","dca<1.5 & TOF","TPC & TOF pion", "TPC & TOF kaon"};
 
-
     for (unsigned int ii = 0; ii < 6; ii++) {
         h_tracktest->GetXaxis()->SetBinLabel(ii+1, aNames[ii]);
         h_tracktest_TOF->GetXaxis()->SetBinLabel(ii+1, aNamesTOF[ii]);

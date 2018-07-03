@@ -63,17 +63,18 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
         bool saveTrack = false;
 
         int pidFlag = StPicoCutsBase::kPion;
-        if( isTpcPion(trk) && mHFCuts->isHybridTOFPion(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
+//        if( isTpcPion(trk) && mHFCuts->isHybridTOFPion(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
+        if( isTpcPion(trk) && mHFCuts->isTOFmatched(trk) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
             saveTrack = true;
             event->addPion(event->getNoTracks());
         }
         pidFlag = StPicoCutsBase::kKaon;
 //        if(isTpcKaon(trk) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
-        if(isTpcKaon(trk) && mHFCuts->isTOFKaon(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
+        if(isTpcKaon(trk) && mHFCuts->isTOFHadronPID(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
             saveTrack = true;
             event->addKaon(event->getNoTracks());
         }
-//
+
         if(saveTrack == true){
             event->addTrack(*trk);
         }
@@ -81,14 +82,9 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
     }
     if ( event->getNoPions() > 0 ||  event->getNoKaons() > 0) {
         mEvents.push_back(event);
-        cout<<"mEvents.push_back(event);"<<endl;
         filledBuffer+=1;
-        cout<<"filledBuffer"<<endl;
     }
-//     else {
-//       delete event;
-//       return false;
-//     }
+
     //Returns true if need to do mixing, false if buffer has space still
     if ( filledBuffer == mEventsBuffer)
         return true;
@@ -96,9 +92,7 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
 }
 //-----------------------------------------------------------
 void StPicoEventMixer::mixEvents() {
-    cout<<"mixing"<<endl;
     size_t const nEvent = mEvents.size();
-
     int const nTracksEvt1 = mEvents.at(0)->getNoPions();
 
     // Go through the event buffer
@@ -165,9 +159,7 @@ delete mEvents.at(0);
 mEvents.erase(mEvents.begin());
 }
 
-void StPicoEventMixer::fillNtpSameEvtPair(float ntVar[], int charge)
-{
-    cout<<"fillNtpSameEvtPair"<<endl;
+void StPicoEventMixer::fillNtpSameEvtPair(float ntVar[], int charge) {
     if(charge == 0 )
         mSETupleSig -> Fill(ntVar);
     else
@@ -176,9 +168,7 @@ void StPicoEventMixer::fillNtpSameEvtPair(float ntVar[], int charge)
 }
 
 
-void StPicoEventMixer::fillNtpMixedEvtPair(float ntVar[], int charge)
-{
-    cout<<"fillNtpMixedEvtPair"<<endl;
+void StPicoEventMixer::fillNtpMixedEvtPair(float ntVar[], int charge) {
     if(charge == 0 )
         mMETupleSig -> Fill(ntVar);
     else

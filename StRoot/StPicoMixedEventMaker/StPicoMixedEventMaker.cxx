@@ -93,7 +93,6 @@ Int_t StPicoMixedEventMaker::Init() {
 
 // _________________________________________________________
 Int_t StPicoMixedEventMaker::Finish() {
-    cout<<"lets save stuff"<<endl;
 
     mOutputFileTree->cd();
 
@@ -110,7 +109,6 @@ Int_t StPicoMixedEventMaker::Finish() {
 
     mOutputFileTree->Close();
 
-    cout<<"stuff saved"<<endl;
     return kStOK;
 }
 // _________________________________________________________
@@ -143,13 +141,10 @@ Int_t StPicoMixedEventMaker::Make() {
 
     if(centrality < 0 || centrality > m_nmultEdge+1 ) return kStOk;
     int const vz_bin = (int)((6 +pVtx.z())/1.2) ;
-    cout<<"vz set"<<endl;
 
     if( mPicoEventMixer[vz_bin][centrality] -> addPicoEvent(picoDst, 1)) {
         mPicoEventMixer[vz_bin][centrality] -> mixEvents();
-        cout<<"mixed in Make()"<<endl;
     }
-    cout<<"end of Make()"<<endl;
     return kStOk;
 }
 // _________________________________________________________
