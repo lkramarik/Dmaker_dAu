@@ -16,10 +16,7 @@
  *  Initial Authors:
  *        **  Michael Lomnitz  (mrlomnitz@lbl.gov)
  *            Mustafa Mustafa  (mmustafa@lbl.gov)
- *
- *  ** Code Maintainer
- * 
- *
+
  * **************************************************  
  */
 
@@ -57,6 +54,7 @@ class StPicoMixedEventMaker : public StMaker
 	TNtuple *mMETupleSig;
 	TNtuple *mMETupleBack;
 
+	int getMultIndex(float multiplicity);
 
 private:
     int categorize(StPicoDst const*);
@@ -77,6 +75,9 @@ private:
     bool loadEventPlaneCorr(int const runId);
                                         
     TFile*          mOutputFileTree;
+
+	const int m_nmultEdge = 7;
+	float const m_multEdge[m_nmultEdge+1] = {0, 4, 8, 12, 16, 20, 24, 200};
 
     ClassDef(StPicoMixedEventMaker, 0)
 };

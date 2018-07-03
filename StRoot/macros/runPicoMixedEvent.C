@@ -54,7 +54,7 @@ void runPicoMixedEvent(
 
   hfCuts->setBadRunListFileName(badRunListFileName);
   hfCuts->setCutVzMax(6.);
-  hfCuts->setCutVzVpdVzMax(6.);
+  hfCuts->setCutVzVpdVzMax(3.);
   hfCuts->addTriggerId(530003); //VPD-5
 
   hfCuts->setCutNHitsFitMin(15);
@@ -70,8 +70,8 @@ void runPicoMixedEvent(
   hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass);
  
   //Single track pt
-  hfCuts->setCutPtRange(0.2,50.0,StHFCuts::kPion); //0.2 , 50.0
-  hfCuts->setCutPtRange(0.2,50.0,StHFCuts::kKaon); //0.2, 50.0
+  hfCuts->setCutPtRange(0.15,50.0,StHFCuts::kPion);
+  hfCuts->setCutPtRange(0.15,50.0,StHFCuts::kKaon);
   //TPC setters
   hfCuts->setCutTPCNSigmaPion(3.0); //3
   hfCuts->setCutTPCNSigmaKaon(2.0); //3

@@ -6,7 +6,6 @@
 #include "TH2.h"
 #include "TList.h"
 #include "TString.h" // needed for the Form(...)
-
 #include "StarClassLibrary/StThreeVectorF.hh"
 #include "StPicoDstMaker/StPicoDst.h"
 #include "StPicoDstMaker/StPicoDstMaker.h"
@@ -16,7 +15,6 @@
 #include "StPicoMixedEventMaker.h"
 #include "StPicoEventMixer.h"
 #include "StPicoHFMaker/StHFCuts.h"
-
 #include <vector>
 #include <string>
 
@@ -61,7 +59,7 @@ StPicoMixedEventMaker::StPicoMixedEventMaker(char const* name, StPicoDstMaker* p
 StPicoMixedEventMaker::~StPicoMixedEventMaker() {
 
     for(int iVz =0 ; iVz < 10 ; ++iVz){
-        for(int iCentrality = 0 ; iCentrality < 9 ; ++iCentrality){
+        for(int iCentrality = 0 ; iCentrality < m_nmultEdge ; ++iCentrality){
             delete mPicoEventMixer[iVz][iCentrality];
         }
     }
@@ -76,7 +74,7 @@ bool StPicoMixedEventMaker::loadEventPlaneCorr(Int_t const run) {
 Int_t StPicoMixedEventMaker::Init() {
     mOutputFileTree->cd();
     for(int iVz =0 ; iVz < 10 ; ++iVz){
-        for(int iCentrality = 0 ; iCentrality < 9 ; ++iCentrality){
+        for(int iCentrality = 0 ; iCentrality < m_nmultEdge ; ++iCentrality){
             mPicoEventMixer[iVz][iCentrality] = new StPicoEventMixer(Form("Cent_%i_Vz_%i",iCentrality,iVz));
             mPicoEventMixer[iVz][iCentrality]->setEventBuffer(mBufferSize);
             mPicoEventMixer[iVz][iCentrality]->setHFCuts(mHFCuts);
@@ -84,8 +82,6 @@ Int_t StPicoMixedEventMaker::Init() {
             mPicoEventMixer[iVz][iCentrality]->setSameEvtNtupleBack(mSETupleBack);
             mPicoEventMixer[iVz][iCentrality]->setMixedEvtNtupleSig(mMETupleSig);
             mPicoEventMixer[iVz][iCentrality]->setMixedEvtNtupleBack(mMETupleBack);
-//            mPicoEventMixer[iVz][iCentrality]->setSinglePartHistsList(mSingePartHists);
-//            mPicoEventMixer[iVz][iCentrality]->setFillSinglePartHists(false);
         }
     }
 
@@ -100,9 +96,8 @@ Int_t StPicoMixedEventMaker::Finish() {
     mOutputFileTree->cd();
 
     for(int iVz =0 ; iVz < 10 ; ++iVz){
-        for(int iCentrality = 0 ; iCentrality < 9 ; ++iCentrality){
+        for(int iCentrality = 0 ; iCentrality < m_nmultEdge ; ++iCentrality){
             mPicoEventMixer[iVz][iCentrality]->finish();
-//            delete mPicoEventMixer[iVz][iCentrality];
         }
     }
 
@@ -140,9 +135,11 @@ Int_t StPicoMixedEventMaker::Make() {
 
     StThreeVectorF const pVtx = picoDst->event()->primaryVertex();
 
-    int const centrality  = 1;
 
-    if(centrality < 0 || centrality >8 ) return kStOk;
+    int multiplicity = mPicoDst->event()->refMult();
+    int centrality = getMultIndex(multiplicity);
+
+    if(centrality < 0 || centrality > m_nmultEdge+1 ) return kStOk;
     int const vz_bin = (int)((6 +pVtx.z())/1.2) ;
     cout<<"vz set"<<endl;
 
@@ -163,4 +160,12 @@ int StPicoMixedEventMaker::categorize(StPicoDst const * picoDst ) {
     if( fabs(pVertex.z())>6.0 ) return -99;
     int bin = -6.0 + (pVertex.z()+6.0)/1.2;
     return bin;
+}
+// _________________________________________________________
+int StPicoMixedEventMaker::getMultIndex(float multiplicity){
+    for (int i = 0; i < m_nmultEdge; i++){
+        if ((multiplicity >= m_multEdge[i]) && (multiplicity < m_multEdge[i + 1]))
+            return i;
+    }
+    return -1;
 }

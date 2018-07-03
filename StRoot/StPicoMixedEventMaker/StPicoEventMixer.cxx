@@ -101,14 +101,6 @@ void StPicoEventMixer::mixEvents() {
 
     int const nTracksEvt1 = mEvents.at(0)->getNoPions();
 
-    // Check if there are kaons in the first evt for saving time (cannot be done if
-    // we want to save the single particle ctrl plots)
-//    if(!StPicoMixedEventMaker::fillSingleTrackHistos && nTracksEvt1 == 0)
-//    {
-//        --filledBuffer;
-//        return;
-//    }
-
     // Go through the event buffer
     for( size_t iEvt2 = 0; iEvt2 < nEvent; ++iEvt2) {
         int const nTracksEvt2 = mEvents.at(iEvt2)->getNoKaons();
@@ -132,7 +124,7 @@ void StPicoEventMixer::mixEvents() {
                                  mEvents.at(0)->vertex(), mEvents.at(iEvt2)->vertex(),
                                  mEvents.at(0)->field() );
 
-//                if (!isCloseMixerPair(pair)) continue;
+                if (!isCloseMixerPair(pair)) continue;
 
                 int ii=0;
                 float ntVar[21];
