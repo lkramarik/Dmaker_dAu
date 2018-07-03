@@ -58,7 +58,10 @@ class StPicoMixedEventMaker : public StMaker
 	int getMultIndex(float multiplicity);
 
 private:
-    int categorize(StPicoDst const*);
+	void  initializeEventStats();
+	void  fillEventStats(int *aEventStat);
+
+	int categorize(StPicoDst const*);
     void fillCentralities();
     StPicoDst*      mPicoDst;
     StPicoDstMaker* mPicoDstMaker;      
@@ -76,6 +79,7 @@ private:
     bool loadEventPlaneCorr(int const runId);
                                         
     TFile*          mOutputFileTree;
+	TList          *mOutList;
 
 
 
