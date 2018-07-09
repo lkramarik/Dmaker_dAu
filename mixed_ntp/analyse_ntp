@@ -1,0 +1,10 @@
+#!/bin/bash
+prodDir=''
+cp separate_ntp.C $prodDir
+cd $prodDir
+rm ntuples.list
+ls *.root > ntuples.list
+cat ntuples.list | while read line
+do
+root -l -q ./separate_ntp.C\(\"$line\"\)++
+done
