@@ -77,7 +77,10 @@ private:
 
     bool loadEventPlaneCorr(int const runId);
                                         
-    TFile*          mOutputFileTree;
+    TFile*          mOutputFileTreeSigSE;
+    TFile*          mOutputFileTreeSigME;
+    TFile*          mOutputFileTreeBackSE;
+    TFile*          mOutputFileTreeBackME;
 	TList          *mOutList;
 
 

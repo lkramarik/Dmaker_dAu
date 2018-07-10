@@ -11,6 +11,9 @@
 #include "TLegend.h"
 #include<iostream>
 using namespace std;
+
+void drawVar(TString var, TString ntpnames[4], Float_t min, Float_t max);
+
 void compare_mix() {
     TString vars[9] = {"D_mass", "D_pt", "k_dca", "pi1_dca", "dcaDaughters", "D_decayL", "D_theta","k_pt","pi1_pt"};
     TString titles[9] = {"pair mass", "pair p_{T}", "kaon DCA", "pion DCA", "DCA of pion and kaon", "pair decay lenght", "pair pointing angle","kaon p_{T}","pion p_{T}" };
@@ -49,11 +52,18 @@ void compare_mix() {
     float kdca[] = {        0.007,  0.01, 0.0076, 0.007};
     float pidca[] =         {0.009, 0.009, 0.0064, 0.0079}; //{0.009,0.009, 0.0079, 0.0079};
 
-    TCut* detLu = new TCut("k_dca > 0.006 && pi1_dca > 0.006 && dcaDaughters < 0.018 && D_decayL > 0.006 && k_pt > 0.15 && pi1_pt > 0.15 && cos(D_theta) > 0.5");
+    TCut* detLu = new TCut(Form("D_mass < %1.2f && D_mass > %1.2f &&"
+                                "k_dca > 0.002 && pi1_dca > 0.002 && k_dca < %1.2f && pi1_dca < %1.2f && "
+                           "dcaDaughters < 0.018 && "
+                           "D_decayL > 0.006 && D_decayL < %1.2f && "
+                           "k_pt > 0.15 && pi1_pt > 0.15 && cos(D_theta) > 0.5",
+                           limsMin[0], limsMax[0],
+                                limsMax[2], limsMax[3],
+                            limsMax[5]));
 
     TFile *fOut = new TFile("res_compare.root","recreate");
     Double_t nentr, max;
-    for (Int_t k = 0; k < 1 ; ++k) {
+    for (Int_t k = 0; k < 7 ; ++k) {
 	cout<<vars[k]<<endl;
         c[k] -> cd();
         gPad->SetLeftMargin(0.15);
@@ -65,6 +75,9 @@ void compare_mix() {
         max = 0;
         for (int i = 0; i < 4; ++i) {
             const int j = k;
+//            hVar[i][k] = new TH1F();
+//            hVar[i][k] -> SetName(vars[k]+"_"+ntpnames[i]);
+//            hVar[i][k] -> SetTitle(titles[k]);
             hVar[i][k] = new TH1F(vars[k]+"_"+ntpnames[i], titles[k], 200, limsMin[k], limsMax[k]);
             hVar[i][k] -> SetMarkerSize(0.4);
             hVar[i][k] -> SetLineColor(colors[i]);
@@ -101,6 +114,29 @@ void compare_mix() {
     fOut -> Close();
 }
 
+void drawVar(TString var, TString ntpName[4], Float_t min, Float_t max) {
+    TFile *f = new TFile("res_compare.root","read");
+    TCanvas *c = new TCanvas("c","c",900,1200);
+    gPad->SetLeftMargin(0.15);
+    TLegend *legend = new TLegend(0.6, 0.76, 0.75, 0.89);
+    legend -> SetFillStyle(0);
+    legend -> SetLineColor(0);
+    legend -> SetTextSize(0.035);
+    TH1F* hVar[4] = {new TH1F(),new TH1F(),new TH1F(),new TH1F()};
+    for (int i = 0; i < 4; ++i) {
+        hVar[i] = (TH1F*)f -> Get(var+"_"+ntpName[i]);
+        hVar[i] -> SetAxisRange(min, max,"X");
+        if (i==0) hVar[i] -> Draw();
+        else hVar[i] -> Draw("same");
+        legend -> AddEntry(hVar[i], ntpName[i], "pl");
+
+    }
+    legend->Draw();
+    c -> Modified();
+    c -> Update();
+    c -> SaveAs(var+".png");
+
+}
 
 
 

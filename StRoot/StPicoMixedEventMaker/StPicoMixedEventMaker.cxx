@@ -40,13 +40,26 @@ StPicoMixedEventMaker::StPicoMixedEventMaker(char const* name, StPicoDstMaker* p
         mSETupleBack(NULL),
         mMETupleSig(NULL),
         mMETupleBack(NULL),
-        mOutputFileTree(NULL)
+        mOutputFileTreeSigSE(NULL),
+        mOutputFileTreeSigME(NULL),
+        mOutputFileTreeBackSE(NULL),
+        mOutputFileTreeBackME(NULL)
 {
     TH1::AddDirectory(false);
     // -- create OutputTree
-    mOutputFileTree = new TFile(Form("%s.picoMEtree.root", mOuputFileBaseName.Data()), "RECREATE");
-    mOutputFileTree->SetCompressionLevel(1);
-    mOutputFileTree->cd();
+    mOutputFileTreeSigSE = new TFile(Form("%s.picoMEtree.sigSE.root", mOuputFileBaseName.Data()), "RECREATE");
+    mOutputFileTreeSigSE->SetCompressionLevel(1);
+
+    mOutputFileTreeSigME = new TFile(Form("%s.picoMEtree.sigME.root", mOuputFileBaseName.Data()), "RECREATE");
+    mOutputFileTreeSigME->SetCompressionLevel(1);
+
+    mOutputFileTreeBackSE = new TFile(Form("%s.picoMEtree.backSE.root", mOuputFileBaseName.Data()), "RECREATE");
+    mOutputFileTreeBackSE->SetCompressionLevel(1);
+
+    mOutputFileTreeBackME = new TFile(Form("%s.picoMEtree.backME.root", mOuputFileBaseName.Data()), "RECREATE");
+    mOutputFileTreeBackME->SetCompressionLevel(1);
+
+//    mOutputFileTree->cd();
 
     const string varList ="pi1_pt:pi1_dca:pi1_nSigma:pi1_nHitFit:pi1_TOFinvbeta:"
                           "k_pt:k_dca:k_nSigma:k_nHitFit:k_TOFinvbeta:"
@@ -66,7 +79,10 @@ StPicoMixedEventMaker::~StPicoMixedEventMaker() {
             delete mPicoEventMixer[iVz][iCentrality];
         }
     }
-    mOutputFileTree->Close();
+    mOutputFileTreeSigSE->Close();
+    mOutputFileTreeSigME->Close();
+    mOutputFileTreeBackSE->Close();
+    mOutputFileTreeBackME->Close();
 }
 // _________________________________________________________
 bool StPicoMixedEventMaker::loadEventPlaneCorr(Int_t const run) {
@@ -75,7 +91,7 @@ bool StPicoMixedEventMaker::loadEventPlaneCorr(Int_t const run) {
 }
 // _________________________________________________________
 Int_t StPicoMixedEventMaker::Init() {
-    mOutputFileTree->cd();
+//    mOutputFileTree->cd();
     cout<<"init start"<<endl;
     for(int iVz =0 ; iVz < 10 ; ++iVz){
         for(int iCentrality = 0 ; iCentrality < m_nmultEdge ; ++iCentrality){
@@ -102,22 +118,32 @@ Int_t StPicoMixedEventMaker::Init() {
 // _________________________________________________________
 Int_t StPicoMixedEventMaker::Finish() {
 
-    mOutputFileTree->cd();
-
     for(int iVz =0 ; iVz < 10 ; ++iVz){
         for(int iCentrality = 0 ; iCentrality < m_nmultEdge ; ++iCentrality){
             mPicoEventMixer[iVz][iCentrality]->finish();
         }
     }
 
+    mOutputFileTreeSigSE->cd();
     mSETupleSig -> Write(mSETupleSig->GetName(), TObject::kOverwrite);
-    mMETupleSig -> Write(mMETupleSig->GetName(), TObject::kOverwrite);
-    mSETupleBack -> Write(mSETupleBack->GetName(), TObject::kOverwrite);
-    mMETupleBack -> Write(mMETupleBack->GetName(), TObject::kOverwrite);
-
     mOutList->Write(mOutList->GetName(),  TObject::kSingleKey); //predtym TObject::kSingleKey
 
-    mOutputFileTree->Close();
+    mOutputFileTreeSigME->cd();
+    mMETupleSig -> Write(mMETupleSig->GetName(), TObject::kOverwrite);
+    mOutList->Write(mOutList->GetName(),  TObject::kSingleKey); //predtym TObject::kSingleKey
+
+    mOutputFileTreeBackSE->cd();
+    mSETupleBack -> Write(mSETupleBack->GetName(), TObject::kOverwrite);
+    mOutList->Write(mOutList->GetName(),  TObject::kSingleKey); //predtym TObject::kSingleKey
+
+    mOutputFileTreeBackME->cd();
+    mMETupleBack -> Write(mMETupleBack->GetName(), TObject::kOverwrite);
+    mOutList->Write(mOutList->GetName(),  TObject::kSingleKey); //predtym TObject::kSingleKey
+
+    mOutputFileTreeSigSE->Close();
+    mOutputFileTreeSigME->Close();
+    mOutputFileTreeBackSE->Close();
+    mOutputFileTreeBackME->Close();
 
     return kStOK;
 }
