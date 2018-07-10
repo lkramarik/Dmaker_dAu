@@ -79,10 +79,10 @@ StPicoMixedEventMaker::~StPicoMixedEventMaker() {
             delete mPicoEventMixer[iVz][iCentrality];
         }
     }
-    mOutputFileTreeSigSE->Close();
-    mOutputFileTreeSigME->Close();
-    mOutputFileTreeBackSE->Close();
-    mOutputFileTreeBackME->Close();
+//    mOutputFileTreeSigSE->Close();
+//    mOutputFileTreeSigME->Close();
+//    mOutputFileTreeBackSE->Close();
+//    mOutputFileTreeBackME->Close();
 }
 // _________________________________________________________
 bool StPicoMixedEventMaker::loadEventPlaneCorr(Int_t const run) {
