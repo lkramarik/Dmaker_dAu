@@ -45,6 +45,10 @@ StPicoMixedEventMaker::StPicoMixedEventMaker(char const* name, StPicoDstMaker* p
         mOutputFileTreeBackSE(NULL),
         mOutputFileTreeBackME(NULL)
 {
+    const string varList ="pi1_pt:pi1_dca:pi1_nSigma:pi1_nHitFit:pi1_TOFinvbeta:"
+                          "k_pt:k_dca:k_nSigma:k_nHitFit:k_TOFinvbeta:"
+                          "dcaDaughters:D_rapidity:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_phi:D_eta:D_cosThetaStar:D_pt:D_mass";
+
     TH1::AddDirectory(false);
     // -- create OutputTree
     mOutputFileTreeSigSE = new TFile(Form("%s.picoMEtree.sigSE.root", mOuputFileBaseName.Data()), "RECREATE");
@@ -62,13 +66,7 @@ StPicoMixedEventMaker::StPicoMixedEventMaker(char const* name, StPicoDstMaker* p
     mOutputFileTreeBackSE = new TFile(Form("%s.picoMEtree.backSE.root", mOuputFileBaseName.Data()), "RECREATE");
     mOutputFileTreeBackSE->SetCompressionLevel(1);
     mSETupleBack = new TNtuple("ntp_background_SE","ntp_background_SE", varList.data());
-
-
 //    mOutputFileTree->cd();
-
-    const string varList ="pi1_pt:pi1_dca:pi1_nSigma:pi1_nHitFit:pi1_TOFinvbeta:"
-                          "k_pt:k_dca:k_nSigma:k_nHitFit:k_TOFinvbeta:"
-                          "dcaDaughters:D_rapidity:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_phi:D_eta:D_cosThetaStar:D_pt:D_mass";
 
 }
 
