@@ -45,6 +45,8 @@ StMixerPair::StMixerPair(StPicoTrack const&  particle1, StPicoTrack const& parti
 
     StPhysicalHelixD p1Helix(particle1.gMom(), particle1.origin(),bField*kilogauss, particle1.charge());
     StPhysicalHelixD p2Helix(particle2.gMom(), particle2.origin() + dVtx, bField*kilogauss,  particle2.charge());
+//    StPhysicalHelixD p1Helix = particle1->helix(bField);
+//    StPhysicalHelixD p2Helix = particle2->helix(bField);
 
     // -- move origins of helices to the primary vertex origin
     p1Helix.moveOrigin(p1Helix.pathLength(vtx1));
