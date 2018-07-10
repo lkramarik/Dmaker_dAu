@@ -49,15 +49,19 @@ StPicoMixedEventMaker::StPicoMixedEventMaker(char const* name, StPicoDstMaker* p
     // -- create OutputTree
     mOutputFileTreeSigSE = new TFile(Form("%s.picoMEtree.sigSE.root", mOuputFileBaseName.Data()), "RECREATE");
     mOutputFileTreeSigSE->SetCompressionLevel(1);
+    mSETupleSig = new TNtuple("ntp_signal_SE","ntp_signal_SE", varList.data());
 
     mOutputFileTreeSigME = new TFile(Form("%s.picoMEtree.sigME.root", mOuputFileBaseName.Data()), "RECREATE");
     mOutputFileTreeSigME->SetCompressionLevel(1);
+    mMETupleSig = new TNtuple("ntp_signal_ME","ntp_signal_ME", varList.data());
 
     mOutputFileTreeBackME = new TFile(Form("%s.picoMEtree.backME.root", mOuputFileBaseName.Data()), "RECREATE");
     mOutputFileTreeBackME->SetCompressionLevel(1);
-    
+    mMETupleBack = new TNtuple("ntp_background_ME","ntp_background_ME", varList.data());
+
     mOutputFileTreeBackSE = new TFile(Form("%s.picoMEtree.backSE.root", mOuputFileBaseName.Data()), "RECREATE");
     mOutputFileTreeBackSE->SetCompressionLevel(1);
+    mSETupleBack = new TNtuple("ntp_background_SE","ntp_background_SE", varList.data());
 
 
 //    mOutputFileTree->cd();
@@ -66,10 +70,6 @@ StPicoMixedEventMaker::StPicoMixedEventMaker(char const* name, StPicoDstMaker* p
                           "k_pt:k_dca:k_nSigma:k_nHitFit:k_TOFinvbeta:"
                           "dcaDaughters:D_rapidity:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_phi:D_eta:D_cosThetaStar:D_pt:D_mass";
 
-    mSETupleSig = new TNtuple("ntp_signal_SE","ntp_signal_SE", varList.data());
-    mMETupleSig = new TNtuple("ntp_signal_ME","ntp_signal_ME", varList.data());
-    mSETupleBack = new TNtuple("ntp_background_SE","ntp_background_SE", varList.data());
-    mMETupleBack = new TNtuple("ntp_background_ME","ntp_background_ME", varList.data());
 }
 
 // _________________________________________________________
