@@ -53,11 +53,12 @@ StPicoMixedEventMaker::StPicoMixedEventMaker(char const* name, StPicoDstMaker* p
     mOutputFileTreeSigME = new TFile(Form("%s.picoMEtree.sigME.root", mOuputFileBaseName.Data()), "RECREATE");
     mOutputFileTreeSigME->SetCompressionLevel(1);
 
+    mOutputFileTreeBackME = new TFile(Form("%s.picoMEtree.backME.root", mOuputFileBaseName.Data()), "RECREATE");
+    mOutputFileTreeBackME->SetCompressionLevel(1);
+    
     mOutputFileTreeBackSE = new TFile(Form("%s.picoMEtree.backSE.root", mOuputFileBaseName.Data()), "RECREATE");
     mOutputFileTreeBackSE->SetCompressionLevel(1);
 
-    mOutputFileTreeBackME = new TFile(Form("%s.picoMEtree.backME.root", mOuputFileBaseName.Data()), "RECREATE");
-    mOutputFileTreeBackME->SetCompressionLevel(1);
 
 //    mOutputFileTree->cd();
 
@@ -79,10 +80,10 @@ StPicoMixedEventMaker::~StPicoMixedEventMaker() {
             delete mPicoEventMixer[iVz][iCentrality];
         }
     }
-//    mOutputFileTreeSigSE->Close();
-//    mOutputFileTreeSigME->Close();
-//    mOutputFileTreeBackSE->Close();
-//    mOutputFileTreeBackME->Close();
+    mOutputFileTreeSigSE->Close();
+    mOutputFileTreeSigME->Close();
+    mOutputFileTreeBackSE->Close();
+    mOutputFileTreeBackME->Close();
 }
 // _________________________________________________________
 bool StPicoMixedEventMaker::loadEventPlaneCorr(Int_t const run) {
