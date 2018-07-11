@@ -83,7 +83,7 @@ void runPicoMixedEvent(
 
   StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
   StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile, inputFile);
-  picoMixedEventMaker->setBufferSize(7);
+  picoMixedEventMaker->setBufferSize(3);
 
   clock_t start = clock(); // getting starting time
   chain->Init();
