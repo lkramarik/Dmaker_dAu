@@ -18,9 +18,9 @@ void compare_mix() {
     TString vars[9] = {"D_mass", "D_pt", "k_dca", "pi1_dca", "dcaDaughters", "D_decayL", "D_theta","k_pt","pi1_pt"};
     TString titles[9] = {"pair mass", "pair p_{T}", "kaon DCA", "pion DCA", "DCA of pion and kaon", "pair decay lenght", "pair pointing angle","kaon p_{T}","pion p_{T}" };
     TString units[9] = {" [GeV/c^{2}]", " [GeV/c]", " [cm]", " [cm]", " [cm]", " [cm]", " [-]", " [GeV/c]", " [GeV/c]"};
-    Float_t limsMin[9] = {0.5, 0., 0.00, 0.00, 0.0, 0.0, 0,0,0};
+    Float_t limsMin[9] = {0.5, 0., 0.004, 0.004, 0.0, 0.0, 0,0,0};
     Float_t limsMax[9] = {3.0, 10, 0.04, 0.04, 0.016, 0.06, 1.7, 3.5, 3.5};
-    TH1F* hVar[4][9] = {{new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F()},
+    TH1F* hVar[6][9] = {{new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F()},
                         {new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F()},
                         {new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F()},
                         {new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F()}};
@@ -35,11 +35,11 @@ void compare_mix() {
                      new TCanvas("c8","c8",900,1200),
                      new TCanvas("c9","c9",900,1200)};
 
-    Int_t colors[4] = {9, 46, 8, 1};
-    TString ntpnames[4] = {"signal_SE", "signal_ME", "background_SE", "background_ME"};
-    TNtuple *ntp[4];
-    TFile* file[4];
-    for (int i = 0; i < 4; ++i) {
+    Int_t colors[6] = {9, 46, 8, 1, 28, 39};
+    TString ntpnames[6] = {"signal_SE", "signal_ME", "background_SE", "background_ME", "signal", "background"};
+    TNtuple *ntp[6];
+    TFile* file[6];
+    for (int i = 0; i < 6; ++i) {
         file[i] = new TFile("ntp_"+ntpnames[i] + ".all.root","r");
         ntp[i] = (TNtuple*)file[i] -> Get("ntp_"+ntpnames[i]);
     }
@@ -52,28 +52,29 @@ void compare_mix() {
     float kdca[] = {        0.007,  0.01, 0.0076, 0.007};
     float pidca[] =         {0.009, 0.009, 0.0064, 0.0079}; //{0.009,0.009, 0.0079, 0.0079};
 
-    TCut* detLu = new TCut(Form("D_mass < %1.2f && D_mass > %1.2f &&"
+    TCut* detLu = new TCut(Form("D_mass > %1.2f && D_mass < %1.2f &&"
                                 "k_dca > 0.002 && pi1_dca > 0.002 && k_dca < %1.2f && pi1_dca < %1.2f && "
                            "dcaDaughters < 0.018 && "
                            "D_decayL > 0.006 && D_decayL < %1.2f && "
-                           "k_pt > 0.15 && pi1_pt > 0.15 && cos(D_theta) > 0.5",
+                           "k_pt > 0.2 && pi1_pt > 0.2 && cos(D_theta) > 0.5",
                            limsMin[0], limsMax[0],
                                 limsMax[2], limsMax[3],
                             limsMax[5]));
 
     TFile *fOut = new TFile("res_compare.root","recreate");
     Double_t nentr, max;
-    for (Int_t k = 0; k < 7 ; ++k) {
+    for (Int_t k = 0; k < 9 ; ++k) {
 	cout<<vars[k]<<endl;
         c[k] -> cd();
         gPad->SetLeftMargin(0.15);
-        TLegend *legend = new TLegend(0.6, 0.76, 0.75, 0.89);
+        TLegend *legend = new TLegend(0.6, 0.71, 0.75, 0.89);
+//        TLegend *legend = new TLegend(0.6, 0.76, 0.75, 0.89); //for 4 stuff in there
         legend -> SetFillStyle(0);
         legend -> SetLineColor(0);
         legend -> SetTextSize(0.035);
 
         max = 0;
-        for (int i = 0; i < 4; ++i) {
+        for (int i = 0; i < 6; ++i) {
             const int j = k;
 //            hVar[i][k] = new TH1F();
 //            hVar[i][k] -> SetName(vars[k]+"_"+ntpnames[i]);
@@ -107,7 +108,7 @@ void compare_mix() {
         c[k]->SaveAs(vars[k]+".png");
     }
 
-    for (int l = 0; l < 4; ++l) {
+    for (int l = 0; l < 6; ++l) {
         file[l] -> Close();
 
     }
