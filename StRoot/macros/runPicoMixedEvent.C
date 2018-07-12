@@ -75,7 +75,7 @@ void runPicoMixedEvent(
   hfCuts->setCutTPCNSigmaPion(3.0); //3
   hfCuts->setCutTPCNSigmaKaon(2.0); //3
   //TOF setters, need to set pt range as well
-  hfCuts->setCutTOFDeltaOneOverBeta(0.03 StHFCuts::kKaon); // v podstate 5 sigma; nastavene = f * (sigmaTOF), sigma TOF je 0.013
+  hfCuts->setCutTOFDeltaOneOverBeta(0.03, StHFCuts::kKaon); // v podstate 5 sigma; nastavene = f * (sigmaTOF), sigma TOF je 0.013
   hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kKaon);
   hfCuts->setCutTOFDeltaOneOverBeta(0.06, StHFCuts::kPion); // v podstate 6 sigma
   hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kPion); 
