@@ -50,7 +50,6 @@ void runPicoMixedEvent(
   }
 
   StHFCuts* hfCuts = new StHFCuts("hfBaseCuts");
-  cout<<"event stuff set"<<endl;
 
   hfCuts->setBadRunListFileName(badRunListFileName);
   hfCuts->setCutVzMax(6.);

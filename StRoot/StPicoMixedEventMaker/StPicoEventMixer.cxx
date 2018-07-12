@@ -73,6 +73,7 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
         if(isTpcKaon(trk) && mHFCuts->isTOFHadronPID(trk, beta, StPicoCutsBase::kKaon) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
             saveTrack = true;
             event->addKaon(event->getNoTracks());
+            cout<<mHFCuts->getOneOverBeta(&trk, mHFCuts->getTofBetaBase(&trk), StPicoCutsBase::kKaon)<<endl;
         }
 
         if(saveTrack == true){
