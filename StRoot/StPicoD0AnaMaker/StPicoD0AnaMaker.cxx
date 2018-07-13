@@ -60,8 +60,8 @@ int StPicoD0AnaMaker::InitHF() {
 
 //    ntp_kaon = new TNtuple("ntp_kaon", "kaon tree","k_pt:k_phi:k_eta:k_nSigma:k_nHitFit:k_TOFinvbeta:pi_eventId:pi_runId");
 //    ntp_pion = new TNtuple("ntp_pion", "pion tree","pi_pt:pi_phi:pi_eta:pi_nSigma:pi_nHitFit:pi_TOFinvbeta:k_eventId:k_runId");
-    ntp_DMeson_Signal = new TNtuple("ntp_signal","DMeson TreeSignal",            "grefMult:runId:eventId:pi1_pt:pi1_dca:pi1_nSigma:pi1_nHitFit:pi1_TOFinvbeta:pi1_betaBase:k_pt:k_dca:k_nSigma:k_nHitFit:k_TOFinvbeta:k_betaBase:dcaDaughters:flag:primVz:primVzVpd:primVzDiff:D_rapidity:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_cosThetaStar:D_pt:D_mass");
-    ntp_DMeson_Background = new TNtuple("ntp_background","DMeson TreeBackground","grefMult:runId:eventId:pi1_pt:pi1_dca:pi1_nSigma:pi1_nHitFit:pi1_TOFinvbeta:pi1_betaBase:k_pt:k_dca:k_nSigma:k_nHitFit:k_TOFinvbeta:k_betaBase:dcaDaughters:flag:primVz:primVzVpd:primVzDiff:D_rapidity:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_cosThetaStar:D_pt:D_mass");
+    ntp_DMeson_Signal = new TNtuple("ntp_signal","DMeson TreeSignal",            "grefMult:runId:eventId:pi1_pt:pi1_dca:pi1_nSigma:pi1_nHitFit:pi1_TOFinvbeta:pi1_betaBase:k_pt:k_dca:k_nSigma:k_nHitFit:k_TOFinvbeta:k_betaBase:dcaDaughters:flag:primVz:primVzVpd:primVzDiff:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_cosThetaStar:D_pt:D_mass");
+    ntp_DMeson_Background = new TNtuple("ntp_background","DMeson TreeBackground","grefMult:runId:eventId:pi1_pt:pi1_dca:pi1_nSigma:pi1_nHitFit:pi1_TOFinvbeta:pi1_betaBase:k_pt:k_dca:k_nSigma:k_nHitFit:k_TOFinvbeta:k_betaBase:dcaDaughters:flag:primVz:primVzVpd:primVzDiff:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_cosThetaStar:D_pt:D_mass");
 
     return kStOK;
 }
@@ -196,7 +196,7 @@ int StPicoD0AnaMaker::createCandidates() {
             if( kaon->charge()>0 && pion1->charge()>0) flag=5.; // ++
 
             int ii=0;
-            float ntVar[28];
+            float ntVar[27];
             ntVar[ii++] = mPicoDst->event()->refMult();
             ntVar[ii++] = mPicoEvent->runId();
             ntVar[ii++] = mPicoEvent->eventId();
@@ -221,7 +221,6 @@ int StPicoD0AnaMaker::createCandidates() {
             ntVar[ii++] = mPicoEvent->vzVpd();
             ntVar[ii++] = fabs(mPicoEvent->primaryVertex().z() - mPicoEvent->vzVpd());
 
-            ntVar[ii++] = pair->rapidity();
             ntVar[ii++] = pair->pointingAngle();
             ntVar[ii++] = cos(pair->pointingAngle());
             ntVar[ii++] = pair->decayLength();
