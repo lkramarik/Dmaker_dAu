@@ -185,10 +185,6 @@ int StPicoD0AnaMaker::createCandidates() {
             StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), i, j, mPrimVtx, mBField, kTRUE);
             if (!mHFCuts->isClosePair(pair)) continue;
 
-
-//            if(pair->pt() < 1) continue;
-//            if(pair->pt() > 2) continue;
-
             float flag = -99.;
 
             if( kaon->charge()<0 && pion1->charge()>0 ) flag=0.; // -+
