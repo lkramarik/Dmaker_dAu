@@ -9,6 +9,7 @@
 #include "StPicoHFMaker/StHFCuts.h"
 #include "StPicoEvent/StPicoEvent.h"
 #include "macros/loadSharedHFLibraries.C"
+#include "StPicoMixedEventMaker/StPicoMixedEventMaker.h"
 #include <iostream>
 #include <ctime>
 #include <cstdio>
@@ -19,7 +20,11 @@ using namespace std;
 #else
 class StChain;
 #endif
+class StPicoDstMaker;
+class StPicoMixedEventMaker;
+class StMaker;
 StChain *chain;
+
 void runPicoD0AnaMakerLocal(
 			const Char_t *inputFile="/gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoLists/runs_local_test.list",	
 			const Char_t *outputFile="outputBaseName",  
