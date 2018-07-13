@@ -64,13 +64,15 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
 
         int pidFlag = StPicoCutsBase::kPion;
 //        if( isTpcPion(trk) && mHFCuts->isHybridTOFPion(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
-        if( isTpcPion(trk) && mHFCuts->isTOFmatched(trk) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
+//        if( isTpcPion(trk) && mHFCuts->isTOFmatched(trk) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
+        if(mHFCuts->isGoodPion(trk)) {
             saveTrack = true;
             event->addPion(event->getNoTracks());
         }
         pidFlag = StPicoCutsBase::kKaon;
 //        if(isTpcKaon(trk) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
-        if(isTpcKaon(trk) && mHFCuts->isTOFHadronPID(trk, beta, StPicoCutsBase::kKaon) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
+//        if(isTpcKaon(trk) && mHFCuts->isTOFHadronPID(trk, beta, StPicoCutsBase::kKaon) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
+        if(mHFCuts->isGoodKaon(trk)) {
             saveTrack = true;
             event->addKaon(event->getNoTracks());
             cout<<mHFCuts->getOneOverBeta(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon)<<endl;

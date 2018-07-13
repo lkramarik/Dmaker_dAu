@@ -58,8 +58,9 @@ void runPicoMixedEvent(
 
   hfCuts->setCutNHitsFitMin(15);
   hfCuts->setCutRequireHFT(true);
+  hfCuts->setHybridTof(false);
 
-   // kaonPion pair cuts
+  // kaonPion pair cuts
   float dcaDaughtersMax = 0.2;  // maximum
   float decayLengthMin  = 0.000; // minimum
   float decayLengthMax  = 999999; //std::numeric_limits<float>::max();

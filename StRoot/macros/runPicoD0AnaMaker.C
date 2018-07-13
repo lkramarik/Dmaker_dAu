@@ -61,6 +61,7 @@ void runPicoD0AnaMaker(
     hfCuts->setCutVzVpdVzMax(3.);
     hfCuts->setCutNHitsFitMin(15);
     hfCuts->setCutRequireHFT(true);
+    hfCuts->setHybridTof(false);
 
     hfCuts->setCutTPCNSigmaPion(3.0);
     hfCuts->setCutTPCNSigmaKaon(2.0);
