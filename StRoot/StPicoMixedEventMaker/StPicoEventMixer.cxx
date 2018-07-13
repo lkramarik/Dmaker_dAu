@@ -55,10 +55,10 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
 
     for(unsigned int iTrk = 0; iTrk < nTracks; ++iTrk) {
         StPicoTrack const* trk = picoDst->track(iTrk);
+
         if(!trk) continue;
-        if(!mHFCuts->isGoodTrack(trk)) {
-            continue;
-        }
+        if(!mHFCuts->isGoodTrack(trk)) continue;
+
         float beta = mHFCuts->getTofBetaBase(trk);
         bool saveTrack = false;
 
@@ -76,10 +76,9 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
             cout<<mHFCuts->getOneOverBeta(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon)<<endl;
         }
 
-        if(saveTrack == true){
-            event->addTrack(*trk);
+        if(saveTrack){
+            event->addTrack(&trk);
         }
-//        trk=0x0;
     }
     if ( event->getNoPions() > 0 ||  event->getNoKaons() > 0) {
         mEvents.push_back(event);
