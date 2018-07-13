@@ -179,10 +179,12 @@ int StPicoD0AnaMaker::createCandidates() {
 
         for(unsigned  int j=0;j<mPicoDst->numberOfTracks();j++)  {
             StPicoTrack const* kaon = mPicoDst->track(j);
-            if (!mHFCuts -> isGoodKaon(kaon)) continue;
+            if (pion1->id() == kaon->id()) continue;
 
+            if (!mHFCuts -> isGoodKaon(kaon)) continue;
             StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), i, j, mPrimVtx, mBField, kTRUE);
             if (!mHFCuts->isClosePair(pair)) continue;
+
 
 //            if(pair->pt() < 1) continue;
 //            if(pair->pt() > 2) continue;
