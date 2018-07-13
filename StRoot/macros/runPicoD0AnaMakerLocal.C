@@ -59,7 +59,6 @@ void runPicoD0AnaMakerLocal(
   }
 
   StHFCuts* hfCuts = new StHFCuts("hfBaseCuts");
-  PicoD0AnaMaker->setHFBaseCuts(hfCuts);
   cout<<"event stuff set"<<endl;
   // ---------------------------------------------------
   // -- Set Base cuts for HF analysis
@@ -108,6 +107,7 @@ void runPicoD0AnaMakerLocal(
   StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile, sInputListHF);
   PicoD0AnaMaker->setTreeName(treeName);
   PicoD0AnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
+  PicoD0AnaMaker->setHFBaseCuts(hfCuts);
 
   StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile, inputFile);
   picoMixedEventMaker->setBufferSize(3);
