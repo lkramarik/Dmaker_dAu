@@ -27,8 +27,8 @@ public:
     bool isGoodRun(StPicoEvent const * const picoEvent) const;
     bool isGoodTrigger(StPicoEvent const * const picoEvent) const;
     bool isGoodTrack(StPicoTrack const * const trk) const;
-    bool isGoodPion(StPicoTrack const * const trk, bool hybridTof) const;
-    bool isGoodKaon(StPicoTrack const * const trk, bool hybridTof) const;
+    bool isGoodPion(StPicoTrack const * const trk) const;
+    bool isGoodKaon(StPicoTrack const * const trk) const;
 
     // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
     // -- DCA to Primary vertex
