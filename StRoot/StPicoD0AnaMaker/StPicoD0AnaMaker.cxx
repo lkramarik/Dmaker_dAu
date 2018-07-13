@@ -60,8 +60,8 @@ int StPicoD0AnaMaker::InitHF() {
 
 //    ntp_kaon = new TNtuple("ntp_kaon", "kaon tree","k_pt:k_phi:k_eta:k_nSigma:k_nHitFit:k_TOFinvbeta:pi_eventId:pi_runId");
 //    ntp_pion = new TNtuple("ntp_pion", "pion tree","pi_pt:pi_phi:pi_eta:pi_nSigma:pi_nHitFit:pi_TOFinvbeta:k_eventId:k_runId");
-    ntp_DMeson_Signal = new TNtuple("ntp_signal","DMeson TreeSignal","grefMult:runId:eventId:pi1_phi:pi1_eta:pi1_pt:pi1_dca:pi1_dedx:pi1_nSigma:pi1_nHitFit:pi1_nHitdedx:pi1_TOFinvbeta:pi1_betaBase:k_phi:k_eta:k_pt:k_dca:k_dedx:k_nSigma:k_nHitFit:k_nHitdedx:k_TOFinvbeta:k_betaBase:dcaDaughters:flag:primVz:primVzVpd:primVzDiff:D_rapidity:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_phi:D_eta:D_cosThetaStar:D_pt:D_mass");
-    ntp_DMeson_Background = new TNtuple("ntp_background","DMeson TreeBackground","grefMult:runId:eventId:pi1_phi:pi1_eta:pi1_pt:pi1_dca:pi1_dedx:pi1_nSigma:pi1_nHitFit:pi1_nHitdedx:pi1_TOFinvbeta:pi1_betaBase:k_phi:k_eta:k_pt:k_dca:k_dedx:k_nSigma:k_nHitFit:k_nHitdedx:k_TOFinvbeta:k_betaBase:dcaDaughters:flag:primVz:primVzVpd:primVzDiff:D_rapidity:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_phi:D_eta:D_cosThetaStar:D_pt:D_mass");
+    ntp_DMeson_Signal = new TNtuple("ntp_signal","DMeson TreeSignal",            "grefMult:runId:eventId:pi1_pt:pi1_dca:pi1_nSigma:pi1_nHitFit:pi1_TOFinvbeta:pi1_betaBase:k_pt:k_dca:k_nSigma:k_nHitFit:k_TOFinvbeta:k_betaBase:dcaDaughters:flag:primVz:primVzVpd:primVzDiff:D_rapidity:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_cosThetaStar:D_pt:D_mass");
+    ntp_DMeson_Background = new TNtuple("ntp_background","DMeson TreeBackground","grefMult:runId:eventId:pi1_pt:pi1_dca:pi1_nSigma:pi1_nHitFit:pi1_TOFinvbeta:pi1_betaBase:k_pt:k_dca:k_nSigma:k_nHitFit:k_TOFinvbeta:k_betaBase:dcaDaughters:flag:primVz:primVzVpd:primVzDiff:D_rapidity:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_cosThetaStar:D_pt:D_mass");
 
     return kStOK;
 }
@@ -196,30 +196,22 @@ int StPicoD0AnaMaker::createCandidates() {
             if( kaon->charge()>0 && pion1->charge()>0) flag=5.; // ++
 
             int ii=0;
-            float ntVar[38];
+            float ntVar[28];
             ntVar[ii++] = mPicoDst->event()->refMult();
             ntVar[ii++] = mPicoEvent->runId();
             ntVar[ii++] = mPicoEvent->eventId();
 
-            ntVar[ii++] = pion1->gMom(mPrimVtx,mBField).phi();
-            ntVar[ii++] = pion1->gMom(mPrimVtx,mBField).pseudoRapidity();
             ntVar[ii++] = pion1->gPt();
             ntVar[ii++] = pair->particle1Dca();
-            ntVar[ii++] = pion1->dEdx();
             ntVar[ii++] = pion1->nSigmaPion();
             ntVar[ii++] = pion1->nHitsFit();
-            ntVar[ii++] = pion1->nHitsDedx();
             ntVar[ii++] = mHFCuts->getOneOverBeta(pion1, mHFCuts->getTofBetaBase(pion1), StPicoCutsBase::kPion);
             ntVar[ii++] = mHFCuts->getTofBetaBase(pion1);
 
-            ntVar[ii++] = kaon->gMom().phi();
-            ntVar[ii++] = kaon->gMom().pseudoRapidity();
             ntVar[ii++] = kaon->gPt();
             ntVar[ii++] = pair->particle2Dca();
-            ntVar[ii++] = kaon->dEdx();
             ntVar[ii++] = kaon->nSigmaKaon();
             ntVar[ii++] = kaon->nHitsFit();
-            ntVar[ii++] = kaon->nHitsDedx();
             ntVar[ii++] = mHFCuts->getOneOverBeta(kaon, mHFCuts->getTofBetaBase(kaon), StPicoCutsBase::kKaon);
             ntVar[ii++] = mHFCuts->getTofBetaBase(kaon);
 
@@ -234,8 +226,6 @@ int StPicoD0AnaMaker::createCandidates() {
             ntVar[ii++] = cos(pair->pointingAngle());
             ntVar[ii++] = pair->decayLength();
             ntVar[ii++] = pair->DcaToPrimaryVertex(); //(pair->decayLength())*sin(pair->pointingAngle());
-            ntVar[ii++] = pair->phi();
-            ntVar[ii++] = pair->eta();
             ntVar[ii++] = pair->cosThetaStar();
 
             ntVar[ii++] = pair->pt();
