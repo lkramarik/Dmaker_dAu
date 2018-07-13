@@ -20,11 +20,11 @@
 
 ClassImp(StPicoMixedEventMaker)
 
-//static const int m_nmultEdge = 7;
-//static float constexpr m_multEdge[m_nmultEdge+1] = {0, 4, 8, 12, 16, 20, 24, 200};
+static const int m_nmultEdge = 7;
+static float constexpr m_multEdge[m_nmultEdge+1] = {0, 4, 8, 12, 16, 20, 24, 200};
 
-static const int m_nmultEdge = 1;
-static float constexpr m_multEdge[m_nmultEdge+1] = {0, 2000};
+//static const int m_nmultEdge = 1;
+//static float constexpr m_multEdge[m_nmultEdge+1] = {0, 2000};
 
 // _________________________________________________________
 StPicoMixedEventMaker::StPicoMixedEventMaker(char const* name, StPicoDstMaker* picoMaker, StHFCuts* hfCuts,
@@ -155,7 +155,6 @@ void StPicoMixedEventMaker::Clear(Option_t* opt) {
 }
 // _________________________________________________________
 Int_t StPicoMixedEventMaker::Make() {
-
     if(!mPicoDstMaker) {
         LOG_WARN << "No PicoDstMaker! Skipping! "<<endm;
         return kStWarn;
@@ -167,16 +166,13 @@ Int_t StPicoMixedEventMaker::Make() {
         return kStWarn;
     }
 
-//    int* aEventStat = NULL;
     int aEventStat[mHFCuts->eventStatMax()];
     bool eventTest = mHFCuts->isGoodEvent(picoDst, aEventStat);
     fillEventStats(aEventStat);
 
-    if (!eventTest)
-        return kStOk;
+    if (!eventTest) return kStOk;
 
     StThreeVectorF const pVtx = picoDst->event()->primaryVertex();
-
 
     int multiplicity = mPicoDst->event()->refMult();
     int centrality = getMultIndex(multiplicity);

@@ -46,8 +46,7 @@ void StPicoEventMixer::finish() {
 //    mHists->closeFile();
 }
 //-----------------------------------------------------------
-bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight)
-{
+bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight) {
     unsigned int nTracks = picoDst->numberOfTracks();
     StThreeVectorF pVertex = picoDst->event()->primaryVertex();
     StMixerEvent* event = new StMixerEvent(pVertex, picoDst->event()->bField());
@@ -55,23 +54,13 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
 
     for(unsigned int iTrk = 0; iTrk < nTracks; ++iTrk) {
         StPicoTrack const* trk = picoDst->track(iTrk);
-
-        if(!trk) continue;
-        if(!mHFCuts->isGoodTrack(trk)) continue;
-
-        float beta = mHFCuts->getTofBetaBase(trk);
         bool saveTrack = false;
 
-        int pidFlag = StPicoCutsBase::kPion;
-//        if( isTpcPion(trk) && mHFCuts->isHybridTOFPion(trk, beta) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
-//        if( isTpcPion(trk) && mHFCuts->isTOFmatched(trk) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
         if(mHFCuts->isGoodPion(trk)) {
             saveTrack = true;
             event->addPion(event->getNoTracks());
         }
-        pidFlag = StPicoCutsBase::kKaon;
-//        if(isTpcKaon(trk) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
-//        if(isTpcKaon(trk) && mHFCuts->isTOFHadronPID(trk, beta, StPicoCutsBase::kKaon) && mHFCuts->cutMinDcaToPrimVertex(trk, pidFlag)) {
+
         if(mHFCuts->isGoodKaon(trk)) {
             saveTrack = true;
             event->addKaon(event->getNoTracks());
@@ -82,6 +71,7 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
             event->addTrack(*trk);
         }
     }
+
     if ( event->getNoPions() > 0 ||  event->getNoKaons() > 0) {
         mEvents.push_back(event);
         filledBuffer+=1;
@@ -106,8 +96,10 @@ void StPicoEventMixer::mixEvents() {
             for( int iTrk2 = 0; iTrk2 < nTracksEvt2; ++iTrk2) { //kaons
                 // check if the tracks are the same
                 if(iEvt2 == 0) {
-                    if(mEvents.at(0)->pionId(iTrk1) == mEvents.at(iEvt2)->kaonId(iTrk2))
+                    if(mEvents.at(0)->pionId(iTrk1) == mEvents.at(iEvt2)->kaonId(iTrk2)){
+                        cout<<"TRACKS ARE THE SAME"<<endl;
                         continue;
+                    }
                 }
 
                 StPicoTrack const pion = mEvents.at(0)->pionAt(iTrk1);
