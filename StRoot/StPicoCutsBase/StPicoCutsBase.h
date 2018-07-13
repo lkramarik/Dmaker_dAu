@@ -27,6 +27,8 @@ public:
     bool isGoodRun(StPicoEvent const * const picoEvent) const;
     bool isGoodTrigger(StPicoEvent const * const picoEvent) const;
     bool isGoodTrack(StPicoTrack const * const trk) const;
+    bool isGoodPion(StPicoTrack const * const trk, bool hybridTof) const;
+    bool isGoodKaon(StPicoTrack const * const trk, bool hybridTof) const;
 
     // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
     // -- DCA to Primary vertex
@@ -142,6 +144,8 @@ public:
     void setCutProtonPtotRangeTOF(float min, float max);
     void setCutProtonPtotRangeHybridTOF(float min, float max);
 
+    void setHybridTof(bool t);
+
     // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
     // -- calculate beta of track -- basic calculation
@@ -191,6 +195,7 @@ private:
     // -- tracking
     int   mNHitsFitMin;
     bool  mRequireHFT;
+    bool  mHybridTof;
     float mNHitsFitnHitsMax;
 
     float mPrimaryDCAtoVtxMax;         // used for primary selection for TOF Beta recalculation
@@ -270,6 +275,8 @@ inline void StPicoCutsBase::setCutTOFNSigmaProton(float f)                      
 inline void StPicoCutsBase::setCutTOFDeltaOneOverBetaProton(float f)             { setCutTOFDeltaOneOverBeta(f, StPicoCutsBase::kProton); }
 inline void StPicoCutsBase::setCutProtonPtotRangeTOF(float min, float max)       { setCutPtotRangeTOF(min, max, StPicoCutsBase::kProton); }
 inline void StPicoCutsBase::setCutProtonPtotRangeHybridTOF(float min, float max) { setCutPtotRangeHybridTOF(min, max, StPicoCutsBase::kProton); }
+
+inline void StPicoCutsBase::setHybridTof(bool t) {mHybridTof = t;}
 
 inline const float&    StPicoCutsBase::getHypotheticalMass(int pidFlag)        const { return mHypotheticalMass[pidFlag]; }
 

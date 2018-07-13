@@ -24,7 +24,17 @@ void compare_mix() {
     TH1F* hVar[6][9] = {{new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F()},
                         {new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F()},
                         {new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F()},
+                        {new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F()},
+                        {new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F()},
                         {new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F()}};
+
+//    TRatioPlot* rp[6][9] ={
+//            {new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot()},
+//            {new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot()},
+//            {new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot()},
+//            {new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot()},
+//            {new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot()},
+//            {new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot(), new TRatioPlot()}};
 
     TCanvas *c[9] = {new TCanvas("c1","c1",900,1200),
                      new TCanvas("c2","c2",900,1200),
@@ -37,7 +47,7 @@ void compare_mix() {
                      new TCanvas("c9","c9",900,1200)};
 
     Int_t colors[6] = {9, 46, 8, 1, 28, 39};
-    TString ntpnames[6] = {"signal_SE", "signal_ME", "background_SE", "background_ME", "signal", "background"};
+    TString ntpnames[6] = {"background", "signal", "signal_SE", "signal_ME", "background_SE", "background_ME"};
     TNtuple *ntp[6];
     TFile* file[6];
     for (int i = 0; i < 6; ++i) {
@@ -96,11 +106,23 @@ void compare_mix() {
             hVar[i][k]->Scale(1/nentr);
             hVar[i][k]->SetStats(0);
 
-            max = (hVar[i][k]->GetMaximum() > max) ? hVar[i][k]->GetMaximum() : max;
-            hVar[0][k]->SetAxisRange(0., 1.12*max,"Y");
-            if (i==0) hVar[i][k] -> Draw();
-            else hVar[i][k] -> Draw("same");
+//            max = (hVar[i][k]->GetMaximum() > max) ? hVar[i][k]->GetMaximum() : max;
+//            hVar[0][k]->SetAxisRange(0., 1.12*max,"Y");
+
+//            if (i==0)   hVar[i][k] -> Draw();
+//            else   hVar[i][k]->Draw("same");
+
+            if (i==0) continue;
+            if (i==1) {
+                hVar[i][k] -> Divide(hVar[0][k]);
+                hVar[i][k] -> Draw();
+            }
+            else {
+                hVar[i][k] -> Divide(hVar[0][k]);
+                hVar[i][k] -> Draw("same");
+            }
             legend -> AddEntry(hVar[i][k], ntpnames[i], "pl");
+
             fOut -> cd();
             hVar[i][k] -> Write();
 
@@ -108,7 +130,10 @@ void compare_mix() {
         legend->Draw();
         c[k] -> Modified();
         c[k] -> Update();
-
+//                     c[k]->SetTicks(0, 1);
+//                     rp->Draw();
+//                     rp->GetLowYaxis()->SetNdivisions(505);
+//                     c[k]->Update();
         c[k]->SaveAs(vars[k]+".png");
     }
 
@@ -143,8 +168,12 @@ void drawVar(TString var, TString ntpName[4], Float_t min, Float_t max) {
 
 }
 
-
-
-
-
-
+//
+//if (i==1) {
+//rp[i][k] = new TRatioPlot(hVar[i][k], hVar[0][k]);
+//rp[i][k] -> Draw();
+//}
+//else {
+//rp[i][k] = new TRatioPlot(hVar[i][k], hVar[0][k]);
+//rp[i][k] -> Draw("same");
+//
