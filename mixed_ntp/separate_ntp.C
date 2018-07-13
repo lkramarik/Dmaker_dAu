@@ -3,7 +3,7 @@
 #include "TNtuple.h"
 #include "TList.h"
 //void separate_ntp(TString input = "2018-07-03_11-06_983.picoMEtree.root"){
-void separate_ntp(TString input = "/home/lukas/work/dmesons/Dmaker_dAu/res_analyse/ntp/ntp_lukas_1704.root"){
+void separate_ntp(TString input = "/home/lukas/work/dmesons/Dmaker_dAu/res_analyse/ntp/ntp_1307.root"){
     TFile *file=new TFile(input,"read");
     TString ntpnames[2] = {"ntp_signal", "ntp_background"};
 //    TString ntpnames[4] = {"ntp_signal_SE", "ntp_signal_ME", "ntp_background_SE", "ntp_background_ME"};
@@ -15,7 +15,7 @@ void separate_ntp(TString input = "/home/lukas/work/dmesons/Dmaker_dAu/res_analy
     for (int i = 0; i < 2; ++i) {
         TNtuple *ntp = (TNtuple*)file -> Get(ntpnames[i]);
 
-        TFile *fileOut=new TFile(ntpnames[i]+".root","recreate");
+        TFile *fileOut=new TFile(ntpnames[i]+".all.root","recreate");
 //        TFile *fileOut=new TFile(ntpnames[i]+"_"+input,"recreate");
         list -> Clone() -> Write("picoD0AnaMaker",1,0);
 //        list -> Clone() -> Write("picoMixedEventMaker",1,0);

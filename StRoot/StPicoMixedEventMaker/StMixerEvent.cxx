@@ -17,7 +17,6 @@ StMixerEvent::StMixerEvent(StThreeVectorF vtx, float b) :  mVtx(StThreeVectorF()
 {
     mVtx = vtx;
     mBField = b;
-
 }
 void StMixerEvent::addTrack(StPicoTrack t)
 //void StMixerEvent::addTrack(StMixerTrack t)

@@ -58,7 +58,7 @@ void compare_mix() {
                                 "k_dca > %1.2f && k_dca < %1.2f && pi1_dca > %1.2f &&  pi1_dca < %1.2f && "
                            "dcaDaughters > %1.2f && dcaDaughters < %1.2f &&"
                            "D_decayL > %1.2f && D_decayL < %1.2f && "
-                           "k_pt > 0.2 && pi1_pt > 0.2 && cos(D_theta) > 0.5",
+                           "k_pt > 0.15 && pi1_pt > 0.15 && cos(D_theta) > 0.5",
                            limsMin[0], limsMax[0],
                            limsMin[1], limsMax[1],
                            limsMin[2], limsMax[2], limsMin[3], limsMax[3],

@@ -77,7 +77,7 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
         }
 
         if(saveTrack){
-            event->addTrack(&trk);
+            event->addTrack(*trk);
         }
     }
     if ( event->getNoPions() > 0 ||  event->getNoKaons() > 0) {
@@ -100,11 +100,11 @@ void StPicoEventMixer::mixEvents() {
         int const nTracksEvt2 = mEvents.at(iEvt2)->getNoKaons();
 
         // evts trk loops
-        for(int iTrk1 = 0; iTrk1 < nTracksEvt1; ++iTrk1) {
-            for( int iTrk2 = 0; iTrk2 < nTracksEvt2; ++iTrk2) {
+        for(int iTrk1 = 0; iTrk1 < nTracksEvt1; ++iTrk1) { //pions
+            for( int iTrk2 = 0; iTrk2 < nTracksEvt2; ++iTrk2) { //kaons
                 // check if the tracks are the same
                 if(iEvt2 == 0) {
-                    if(mEvents.at(0)->pionId(iTrk1) == mEvents.at(iEvt2)->kaonId(iTrk2)) //?
+                    if(mEvents.at(0)->pionId(iTrk1) == mEvents.at(iEvt2)->kaonId(iTrk2))
                         continue;
                 }
 
@@ -127,7 +127,7 @@ void StPicoEventMixer::mixEvents() {
                 ntVar[ii++] = pair->particle1Dca();
                 ntVar[ii++] = pion.nSigmaPion();
                 ntVar[ii++] = pion.nHitsFit();
-                ntVar[ii++] = mHFCuts->getOneOverBeta(&pion, mHFCuts->getTofBetaBase(&pion), StPicoCutsBase::kPion);
+                ntVar[ii++] = mHFCuts->getOneOverBeta(&pion, mHFCuts->getTofBetaBase(&pion), StPicoCutsBase::kPion); //probably not working now, you are in weong event, so calc. for TOF traits is not right
                 ntVar[ii++] = kaon.gPt();
                 ntVar[ii++] = pair->particle2Dca();
                 ntVar[ii++] = kaon.nSigmaKaon();
