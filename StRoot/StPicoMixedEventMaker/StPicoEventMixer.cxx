@@ -113,8 +113,6 @@ void StPicoEventMixer::mixEvents() {
                 StPicoTrack const pion = mEvents.at(0)->pionAt(iTrk1);
                 StPicoTrack const kaon = mEvents.at(iEvt2)->kaonAt(iTrk2);
 
-                cout<<mHFCuts->getOneOverBeta(&kaon, mHFCuts->getTofBetaBase(&kaon), StPicoCutsBase::kKaon)<<endl;
-
                 StMixerPair *pair = new StMixerPair(pion, kaon,
                                  mHFCuts->getHypotheticalMass(StHFCuts::kPion),
                                  mHFCuts->getHypotheticalMass(StHFCuts::kKaon),
