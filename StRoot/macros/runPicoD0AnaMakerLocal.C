@@ -53,12 +53,6 @@ void runPicoD0AnaMakerLocal(
     exit(1);
   }
 
-  StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
-  cout<<"ok, picoDstMaker created"<<endl;
-  StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile, sInputListHF);
-  PicoD0AnaMaker->setTreeName(treeName);
-  PicoD0AnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
-
   StHFCuts* hfCuts = new StHFCuts("hfBaseCuts");
   PicoD0AnaMaker->setHFBaseCuts(hfCuts);
   cout<<"event stuff set"<<endl;
@@ -72,19 +66,7 @@ void runPicoD0AnaMakerLocal(
 
   hfCuts->setCutVzMax(6.);
   hfCuts->setCutVzVpdVzMax(3.);
-  
-//  hfCuts->addTriggerId(3); //VPD-5
-//  hfCuts->addTriggerId(6);  //highMult-VPD-5
-//  hfCuts->addTriggerId(7);  //highMult2-VPD-5
-//  hfCuts->addTriggerId(15); //BHT1-VPD-10
-//  hfCuts->addTriggerId(16); //BHT2-VPD-30
   hfCuts->addTriggerId(530003); //VPD-5
-//  hfCuts->addTriggerId(530101); //highMult-VPD-5
-//  hfCuts->addTriggerId(530102); //highMult2-VPD-5
-//  hfCuts->addTriggerId(530201); //BHT1-VPD-10
-//  hfCuts->addTriggerId(530202); //BHT2-VPD-30
-//  hfCuts->addTriggerId(530213); //BHT3
-  
 
   hfCuts->setCutNHitsFitMin(15); //default is 20
   hfCuts->setCutRequireHFT(true);
@@ -94,7 +76,6 @@ void runPicoD0AnaMakerLocal(
   //hfCuts->setCutNHitsFitnHitsMax(0.52);  kvapil
 
   // -- Channel0
-  PicoD0AnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
 
   // -- ADD USER CUTS HERE ----------------------------
    // kaonPion pair cuts
@@ -116,10 +97,15 @@ void runPicoD0AnaMakerLocal(
   hfCuts->setCutTOFDeltaOneOverBeta(0.05, StHFCuts::kKaon); // v podstate 5 sigma; nastavene = f * (sigmaTOF), sigma TOF je 0.013 
   hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kKaon);
   hfCuts->setCutTOFDeltaOneOverBeta(0.06, StHFCuts::kPion); // v podstate 6 sigma
-  hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kPion); 
-  // set refmultCorr
-  //StRefMultCorr* grefmultCorrUtil = CentralityMaker::instance()->getgRefMultCorr_P16id();
-  //PicoD0AnaMaker->setRefMutCorr(grefmultCorrUtil);
+  hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kPion);
+
+  StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
+  StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile, sInputListHF);
+  PicoD0AnaMaker->setTreeName(treeName);
+  PicoD0AnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
+
+  StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile, inputFile);
+  picoMixedEventMaker->setBufferSize(3);
 
   clock_t start = clock(); // getting starting time
   chain->Init();
