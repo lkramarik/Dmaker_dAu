@@ -93,13 +93,13 @@ void runPicoD0AnaMaker(
 
     StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
 
-    StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile, sInputListHF);
-    PicoD0AnaMaker->setTreeName(treeName);
-    PicoD0AnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
-    PicoD0AnaMaker->setHFBaseCuts(hfCuts);
+//    StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile, sInputListHF);
+//    PicoD0AnaMaker->setTreeName(treeName);
+//    PicoD0AnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
+//    PicoD0AnaMaker->setHFBaseCuts(hfCuts);
 
     StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile, inputFile);
-    picoMixedEventMaker->setBufferSize(3);
+    picoMixedEventMaker->setBufferSize(7);
     
     clock_t start = clock(); // getting starting time
     chain->Init();

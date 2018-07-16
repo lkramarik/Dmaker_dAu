@@ -3,7 +3,7 @@
 #include "TNtuple.h"
 #include "TList.h"
 //void separate_ntp(TString input = "2018-07-03_11-06_983.picoMEtree.root"){
-void separate_ntp(TString input = "/home/lukas/work/dmesons/Dmaker_dAu/res_analyse/ntp/ntp_1307.root"){
+void separate_ntp(TString input = "/home/lukas/work/dmesons/Dmaker_dAu/res_analyse/ntp/ntp_1607.root"){
     TFile *file=new TFile(input,"read");
     TString ntpnames[2] = {"ntp_signal", "ntp_background"};
 //    TString ntpnames[4] = {"ntp_signal_SE", "ntp_signal_ME", "ntp_background_SE", "ntp_background_ME"};

@@ -18,8 +18,8 @@ void compare_mix() {
     TString vars[9] = {     "D_mass",       "D_pt",         "k_dca",    "pi1_dca",  "dcaDaughters",         "D_decayL",          "D_theta",             "k_pt",         "pi1_pt"};
     TString titles[9] = {   "pair mass",    "pair p_{T}",   "kaon DCA", "pion DCA", "DCA of pion and kaon", "pair decay lenght", "pair pointing angle", "kaon p_{T}",   "pion p_{T}" };
     TString units[9] = {    " [GeV/c^{2}]", " [GeV/c]",     " [cm]",    " [cm]",    " [cm]",                " [cm]",             " [-]",                " [GeV/c]",     " [GeV/c]"};
-    Float_t limsMin[9] = {  0.5,            0.,             0.004,      0.004,      0.0,                    0.009,                 0,                     0,              0};
-    Float_t limsMax[9] = {  3.0,            10,             0.04,       0.04,       0.016,                  0.06,                1.7,                   3.5,            3.5};
+    Float_t limsMin[9] = {  0.5,            2,             0.004,      0.004,      0.0,                    0.009,                 0,                     0.2,          0.2};
+    Float_t limsMax[9] = {  3.0,            3,             0.04,       0.04,       0.016,                  0.06,                1.7,                   3.5,            3.5};
 
     TH1F* hVar[6][9] = {{new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F()},
                         {new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F(),new TH1F()},
@@ -106,21 +106,21 @@ void compare_mix() {
             hVar[i][k]->Scale(1/nentr);
             hVar[i][k]->SetStats(0);
 
-//            max = (hVar[i][k]->GetMaximum() > max) ? hVar[i][k]->GetMaximum() : max;
-//            hVar[0][k]->SetAxisRange(0., 1.12*max,"Y");
+            max = (hVar[i][k]->GetMaximum() > max) ? hVar[i][k]->GetMaximum() : max;
+            hVar[0][k]->SetAxisRange(0., 1.12*max,"Y");
 
-//            if (i==0)   hVar[i][k] -> Draw();
-//            else   hVar[i][k]->Draw("same");
+            if (i==0)   hVar[i][k] -> Draw();
+            else   hVar[i][k]->Draw("same");
 
-            if (i==0) continue;
-            if (i==1) {
-                hVar[i][k] -> Divide(hVar[0][k]);
-                hVar[i][k] -> Draw();
-            }
-            else {
-                hVar[i][k] -> Divide(hVar[0][k]);
-                hVar[i][k] -> Draw("same");
-            }
+//            if (i==0) continue;
+//            if (i==1) {
+//                hVar[i][k] -> Divide(hVar[0][k]);
+//                hVar[i][k] -> Draw();
+//            }
+//            else {
+//                hVar[i][k] -> Divide(hVar[0][k]);
+//                hVar[i][k] -> Draw("same");
+//            }
             legend -> AddEntry(hVar[i][k], ntpnames[i], "pl");
 
             fOut -> cd();
