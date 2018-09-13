@@ -64,6 +64,7 @@ int StPicoD0AnaMaker::InitHF() {
 //    ntp_DMeson_Background = new TNtuple("ntp_background","DMeson TreeBackground","grefMult:runId:eventId:pi1_pt:pi1_dca:pi1_nSigma:pi1_nHitFit:pi1_TOFinvbeta:pi1_betaBase:k_pt:k_dca:k_nSigma:k_nHitFit:k_TOFinvbeta:k_betaBase:dcaDaughters:flag:primVz:primVzVpd:primVzDiff:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_cosThetaStar:D_pt:D_mass");
 
     TString ntpVars = "grefMult:pi1_pt:pi1_dca:pi1_nSigma:pi1_nHitFit:pi1_TOFinvbeta:pi1_betaBase:pi1_E2:pi1_p:k_pt:k_dca:k_nSigma:k_nHitFit:k_TOFinvbeta:k_betaBase:k_E2:k_p:dcaDaughters:flag:primVx:primVy:primVz:primVzVpd:primVzDiff:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_cosThetaStar:D_pt:D_mass"
+                      ":D_p2"
                       ":SVx"
                       ":SVy:SVz";
 
@@ -201,7 +202,7 @@ int StPicoD0AnaMaker::createCandidates() {
             if( kaon->charge()>0 && pion1->charge()>0) flag=5.; // ++
 
             int ii=0;
-            float ntVar[35];
+            float ntVar[36];
             ntVar[ii++] = mPicoDst->event()->refMult();
 //            ntVar[ii++] = mPicoEvent->runId();
 //            ntVar[ii++] = mPicoEvent->eventId();
@@ -240,6 +241,8 @@ int StPicoD0AnaMaker::createCandidates() {
 
             ntVar[ii++] = pair->pt();
             ntVar[ii++] = pair->m();
+
+            ntVar[ii++] = pair->px()*px()+py()*py()+pz()*pz();
 
             ntVar[ii++] = pair->v0x();
             ntVar[ii++] = pair->v0y();
