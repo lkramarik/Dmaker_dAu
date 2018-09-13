@@ -210,7 +210,7 @@ int StPicoD0AnaMaker::createCandidates() {
             ntVar[ii++] = pion1->nHitsFit();
             ntVar[ii++] = mHFCuts->getOneOverBeta(pion1, mHFCuts->getTofBetaBase(pion1), StPicoCutsBase::kPion);
             ntVar[ii++] = mHFCuts->getTofBetaBase(pion1);
-            ntVar[ii++] = (pion1->gPtot)*(pion1->gPtot)+(mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion))*(mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion));
+            ntVar[ii++] = (pion1->gPtot())*(pion1->gPtot())+(mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion))*(mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion));
 
             ntVar[ii++] = kaon->gPt();
             ntVar[ii++] = pair->particle2Dca();
@@ -218,7 +218,7 @@ int StPicoD0AnaMaker::createCandidates() {
             ntVar[ii++] = kaon->nHitsFit();
             ntVar[ii++] = mHFCuts->getOneOverBeta(kaon, mHFCuts->getTofBetaBase(kaon), StPicoCutsBase::kKaon);
             ntVar[ii++] = mHFCuts->getTofBetaBase(kaon);
-            ntVar[ii++] = (kaon->gPtot)*(kaon->gPtot)+(mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon))*(mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon));
+            ntVar[ii++] = (kaon->gPtot())*(kaon->gPtot())+(mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon))*(mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon));
 
             ntVar[ii++] = pair->dcaDaughters();
             ntVar[ii++] = flag;
