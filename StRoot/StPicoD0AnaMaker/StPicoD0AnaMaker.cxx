@@ -242,7 +242,7 @@ int StPicoD0AnaMaker::createCandidates() {
             ntVar[ii++] = pair->pt();
             ntVar[ii++] = pair->m();
 
-            ntVar[ii++] = pair->px()*px()+py()*py()+pz()*pz();
+            ntVar[ii++] = pair->px()*pair->px()+pair->py()*pair->py()+pair->pz()*pair->pz();
 
             ntVar[ii++] = pair->v0x();
             ntVar[ii++] = pair->v0y();
