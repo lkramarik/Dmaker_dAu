@@ -63,7 +63,9 @@ int StPicoD0AnaMaker::InitHF() {
 //    ntp_DMeson_Signal = new TNtuple("ntp_signal","DMeson TreeSignal",            "grefMult:runId:eventId:pi1_pt:pi1_dca:pi1_nSigma:pi1_nHitFit:pi1_TOFinvbeta:pi1_betaBase:k_pt:k_dca:k_nSigma:k_nHitFit:k_TOFinvbeta:k_betaBase:dcaDaughters:flag:primVz:primVzVpd:primVzDiff:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_cosThetaStar:D_pt:D_mass");
 //    ntp_DMeson_Background = new TNtuple("ntp_background","DMeson TreeBackground","grefMult:runId:eventId:pi1_pt:pi1_dca:pi1_nSigma:pi1_nHitFit:pi1_TOFinvbeta:pi1_betaBase:k_pt:k_dca:k_nSigma:k_nHitFit:k_TOFinvbeta:k_betaBase:dcaDaughters:flag:primVz:primVzVpd:primVzDiff:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_cosThetaStar:D_pt:D_mass");
 
-    TString ntpVars = "grefMult:pi1_pt:pi1_dca:pi1_nSigma:pi1_nHitFit:pi1_TOFinvbeta:pi1_betaBase:pi1_E2:k_pt:k_dca:k_nSigma:k_nHitFit:k_TOFinvbeta:k_betaBase:k_E2:dcaDaughters:flag:primVx:primVy:primVz:primVzVpd:primVzDiff:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_cosThetaStar:D_pt:D_mass:SVx:SVy:SVz";
+    TString ntpVars = "grefMult:pi1_pt:pi1_dca:pi1_nSigma:pi1_nHitFit:pi1_TOFinvbeta:pi1_betaBase:pi1_E2:pi1_p:k_pt:k_dca:k_nSigma:k_nHitFit:k_TOFinvbeta:k_betaBase:k_E2:k_p:dcaDaughters:flag:primVx:primVy:primVz:primVzVpd:primVzDiff:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_cosThetaStar:D_pt:D_mass"
+                      ":SVx"
+                      ":SVy:SVz";
 
     ntp_DMeson_Signal = new TNtuple("ntp_signal","DMeson TreeSignal", ntpVars);
     ntp_DMeson_Background = new TNtuple("ntp_background","DMeson TreeBackground",ntpVars);
@@ -211,6 +213,7 @@ int StPicoD0AnaMaker::createCandidates() {
             ntVar[ii++] = mHFCuts->getOneOverBeta(pion1, mHFCuts->getTofBetaBase(pion1), StPicoCutsBase::kPion);
             ntVar[ii++] = mHFCuts->getTofBetaBase(pion1);
             ntVar[ii++] = (pion1->gPtot())*(pion1->gPtot())+(mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion))*(mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion));
+            ntVar[ii++] = pion1->gPtot();
 
             ntVar[ii++] = kaon->gPt();
             ntVar[ii++] = pair->particle2Dca();
@@ -219,6 +222,7 @@ int StPicoD0AnaMaker::createCandidates() {
             ntVar[ii++] = mHFCuts->getOneOverBeta(kaon, mHFCuts->getTofBetaBase(kaon), StPicoCutsBase::kKaon);
             ntVar[ii++] = mHFCuts->getTofBetaBase(kaon);
             ntVar[ii++] = (kaon->gPtot())*(kaon->gPtot())+(mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon))*(mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon));
+            ntVar[ii++] = kaon->gPtot();
 
             ntVar[ii++] = pair->dcaDaughters();
             ntVar[ii++] = flag;
