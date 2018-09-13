@@ -201,7 +201,7 @@ int StPicoD0AnaMaker::createCandidates() {
             if( kaon->charge()>0 && pion1->charge()>0) flag=5.; // ++
 
             int ii=0;
-            float ntVar[33];
+            float ntVar[35];
             ntVar[ii++] = mPicoDst->event()->refMult();
 //            ntVar[ii++] = mPicoEvent->runId();
 //            ntVar[ii++] = mPicoEvent->eventId();
