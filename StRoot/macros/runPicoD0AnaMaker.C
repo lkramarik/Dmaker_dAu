@@ -57,15 +57,15 @@ void runPicoD0AnaMaker(
     hfCuts->setBadRunListFileName(badRunListFileName);
     hfCuts->addTriggerId(530003); //VPD-5
     hfCuts->setCutPrimaryDCAtoVtxMax(10);
-    hfCuts->setCutVzMax(6);
+    hfCuts->setCutVzMax(10);
     hfCuts->setCutVzVpdVzMax(3.);
     hfCuts->setCutNHitsFitMin(15);
     hfCuts->setCutRequireHFT(true);
     hfCuts->setHybridTof(false);
 
     hfCuts->setCutTPCNSigmaPion(3.0);
-    hfCuts->setCutTPCNSigmaKaon(2.0);
-    hfCuts->setCutTOFDeltaOneOverBetaKaon(0.03);
+    hfCuts->setCutTPCNSigmaKaon(3.0);
+    hfCuts->setCutTOFDeltaOneOverBetaKaon(0.06);
     hfCuts->setCutTOFDeltaOneOverBetaPion(0.03);
     hfCuts->setCutPtMin(0.15);
 
