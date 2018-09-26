@@ -109,8 +109,8 @@ void runPicoD0AnaMakerLocal(
   PicoD0AnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
   PicoD0AnaMaker->setHFBaseCuts(hfCuts);
 
-  StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile, inputFile);
-  picoMixedEventMaker->setBufferSize(3);
+//  StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile, inputFile);
+//  picoMixedEventMaker->setBufferSize(3);
 
   clock_t start = clock(); // getting starting time
   chain->Init();
