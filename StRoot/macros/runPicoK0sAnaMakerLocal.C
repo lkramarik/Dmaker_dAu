@@ -25,7 +25,7 @@ class StPicoMixedEventMaker;
 class StMaker;
 StChain *chain;
 
-void runPicoD0AnaMakerLocal(
+void runPicoK0sAnaMakerLocal(
 			const Char_t *inputFile="/gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoLists/runs_local_test.list",	
 			const Char_t *outputFile="outputBaseName",  
             const unsigned int makerMode = 0 ,
