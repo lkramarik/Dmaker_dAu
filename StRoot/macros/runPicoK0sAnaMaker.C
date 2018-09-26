@@ -24,7 +24,7 @@ class StPicoDstMaker;
 class StPicoMixedEventMaker;
 class StMaker;
 StChain *chain;
-void runPicoD0AnaMaker(
+void runPicoK0sAnaMaker(
     const char*  inputFile,
     const Char_t *outputFile,  
     const Char_t *badRunListFileName, const Char_t *treeName,

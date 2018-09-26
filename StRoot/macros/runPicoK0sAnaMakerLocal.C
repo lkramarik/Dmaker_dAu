@@ -104,10 +104,16 @@ void runPicoD0AnaMakerLocal(
   hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kPion);
 
   StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
-  StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile, sInputListHF);
-  PicoD0AnaMaker->setTreeName(treeName);
-  PicoD0AnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
-  PicoD0AnaMaker->setHFBaseCuts(hfCuts);
+
+  StPicoPiPiMaker* PicoK0sAnaMaker = new StPicoPiPiMaker("picoK0sAnaMaker", picoDstMaker, outputFile, sInputListHF);
+  PicoK0sAnaMaker->setTreeName(treeName);
+  PicoK0sAnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
+  PicoK0sAnaMaker->setHFBaseCuts(hfCuts);
+
+//  StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile, sInputListHF);
+//  PicoD0AnaMaker->setTreeName(treeName);
+//  PicoD0AnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
+//  PicoD0AnaMaker->setHFBaseCuts(hfCuts);
 
 //  StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile, inputFile);
 //  picoMixedEventMaker->setBufferSize(3);

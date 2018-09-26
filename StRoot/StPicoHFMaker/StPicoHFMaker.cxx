@@ -102,8 +102,8 @@ Int_t StPicoHFMaker::Finish() {
 // _________________________________________________________
 void StPicoHFMaker::resetEvent() {
   // -- reset event
-  mIdxPicoPions.clear();
-  mIdxPicoKaons.clear();
+//  mIdxPicoPions.clear();
+//  mIdxPicoKaons.clear();
 //  mIdxPicoProtons.clear();
 
 //  mPicoHFEvent->clear("C");

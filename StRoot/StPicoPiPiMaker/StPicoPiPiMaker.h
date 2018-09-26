@@ -1,5 +1,5 @@
-#ifndef StPicoD0AnaMaker_h
-#define StPicoD0AnaMaker_h
+#ifndef StPicoPiPiMaker_h
+#define StPicoPiPiMaker_h
 
 #include "StPicoHFMaker/StPicoHFMaker.h"
 #include "TNtuple.h"
@@ -37,11 +37,11 @@ class StHFPair;
 class StHFTriplet;
 class StHFCuts;
 
-class StPicoD0AnaMaker : public StPicoHFMaker
+class StPicoPiPiMaker : public StPicoHFMaker
 {
 public:
-    StPicoD0AnaMaker(char const*, StPicoDstMaker*, char const*, char const*);
-    virtual ~StPicoD0AnaMaker();
+    StPicoPiPiMaker(char const*, StPicoDstMaker*, char const*, char const*);
+    virtual ~StPicoPiPiMaker();
 
     virtual Int_t InitHF();
     virtual Int_t MakeHF();
@@ -53,15 +53,13 @@ protected:
     virtual bool isPion(StPicoTrack const*) const;
     virtual bool isKaon(StPicoTrack const*) const;
     virtual bool isProton(StPicoTrack const*) const;
+    std::vector<unsigned short> mIdxPicoPions;
 
 private:
     int createCandidates();
-    int analyzeCandidates();
 
-    TNtuple *ntp_DMeson_Signal;
-    TNtuple *ntp_DMeson_Background;
-//    TNtuple *ntp_kaon;
-//    TNtuple *ntp_pion;
+    TNtuple *ntp_signal;
+    TNtuple *ntp_background;
 
 
     int mRunNumber;
@@ -69,7 +67,7 @@ private:
 
     TFile* mOutFile;
 
-    ClassDef(StPicoD0AnaMaker, 1) //set to 1
+    ClassDef(StPicoPiPiMaker, 1) //set to 1
 };
 
 #endif

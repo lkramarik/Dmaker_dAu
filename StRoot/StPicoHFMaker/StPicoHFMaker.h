@@ -82,9 +82,9 @@ class StPicoHFMaker : public StMaker
 
     TList          *mOutList;
 
-    std::vector<unsigned short> mIdxPicoPions;
-    std::vector<unsigned short> mIdxPicoKaons;
-    std::vector<unsigned short> mIdxPicoProtons;
+//    std::vector<unsigned short> mIdxPicoPions;
+//    std::vector<unsigned short> mIdxPicoKaons;
+//    std::vector<unsigned short> mIdxPicoProtons;
 
   private:
     void  resetEvent();
