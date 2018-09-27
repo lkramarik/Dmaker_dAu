@@ -20,8 +20,8 @@ class StHFCuts;
 class StPicoHFMaker : public StMaker 
 {
   public:
-    StPicoHFMaker(char const* name, StPicoDstMaker* picoMaker, char const* outputBaseFileName,  
-		       char const* inputHFListHFtree);
+    StPicoHFMaker(char const* , StPicoDstMaker* , char const* ,
+		       char const* );
     virtual ~StPicoHFMaker();
     
     // -- TO BE IMPLEMENTED BY DAUGHTER CLASS
