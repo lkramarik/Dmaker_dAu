@@ -68,7 +68,7 @@ int StPicoPiPiMaker::createCandidates() {
         for(unsigned int i = j; i < mIdxPicoPions.size(); ++i)  {
             StPicoTrack const* pion2 = mPicoDst->track(mIdxPicoPions[i]);
 
-            if (pion1->id() == pion2->id()) continue;
+//            if (pion1->id() == pion2->id()) continue;
 
             StHFPair *pair = new StHFPair(pion1, pion2, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion), i, j, mPrimVtx, mBField, kTRUE);
             if (!mHFCuts->isClosePair(pair)) continue;
