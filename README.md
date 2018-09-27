@@ -11,7 +11,10 @@ root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runPicoMixedEv
 ```
 ```sh
 starver SL17d
-root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runPicoK0sAnaMakerLocal.C
+root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runPicoK0sAnaMakerLocal.C++
 ```
-
+```sh
+starver SL17d
+root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runPicoPhiAnaMakerLocal.C++
+```
 
