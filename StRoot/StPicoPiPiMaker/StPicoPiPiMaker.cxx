@@ -42,14 +42,12 @@ void StPicoPiPiMaker::ClearHF(Option_t *opt="") {
 
 // _________________________________________________________
 int StPicoPiPiMaker::FinishHF() {
-    cout<<"FinishHF beg"<<endl;
     ntp_signal -> Write(ntp_signal->GetName(), TObject::kOverwrite);
     ntp_background -> Write(ntp_background->GetName(), TObject::kOverwrite);
     return kStOK;
 }
 // _________________________________________________________
 int StPicoPiPiMaker::MakeHF() {
-
     createCandidates();
     return kStOK;
 }
@@ -59,10 +57,9 @@ int StPicoPiPiMaker::createCandidates() {
     //making array of good pions
     for(unsigned int k = 0; k < mPicoDst->numberOfTracks(); ++k) {
         StPicoTrack const *trkTest = mPicoDst->track(k);
-//        if (mHFCuts->isGoodPion(trkTest) && mHFCuts->isTOFPion(trkTest)) mIdxPicoPions.push_back(k);
-        if (mHFCuts->isGoodPion(trkTest)) mIdxPicoPions.push_back(k);
+        if (mHFCuts->isGoodPion(trkTest) && mHFCuts->isTOFPion(trkTest)) mIdxPicoPions.push_back(k);
+//        if (mHFCuts->isGoodPion(trkTest)) mIdxPicoPions.push_back(k);
     }
-    cout<<"Size array pions: "<<mIdxPicoPions.size()<<endl;
     for (unsigned short j = 0; j < mIdxPicoPions.size(); ++j) {
         StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[j]);
 

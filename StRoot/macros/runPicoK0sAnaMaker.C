@@ -14,6 +14,7 @@
 #include <ctime>
 #include <cstdio>
 #include "StPicoD0AnaMaker/StPicoD0AnaMaker.h"
+#include "StPicoPiPiMaker/StPicoPiPiMaker.h"
 
 using namespace std;
 
@@ -21,8 +22,9 @@ using namespace std;
 class StChain;
 #endif
 class StPicoDstMaker;
-class StPicoMixedEventMaker;
 class StMaker;
+class StPicoPiPiMaker;
+
 StChain *chain;
 void runPicoK0sAnaMaker(
     const char*  inputFile,
@@ -57,50 +59,34 @@ void runPicoK0sAnaMaker(
     hfCuts->setBadRunListFileName(badRunListFileName);
     hfCuts->addTriggerId(530003); //VPD-5
     hfCuts->setCutPrimaryDCAtoVtxMax(10);
-    hfCuts->setCutVzMax(10);
+    hfCuts->setCutVzMax(6);
     hfCuts->setCutVzVpdVzMax(3.);
     hfCuts->setCutNHitsFitMin(15);
     hfCuts->setCutRequireHFT(true);
     hfCuts->setHybridTof(false);
 
-    hfCuts->setCutTPCNSigmaPion(3.0);
-    hfCuts->setCutTPCNSigmaKaon(3.0);
-    hfCuts->setCutTOFDeltaOneOverBetaKaon(0.06);
-    hfCuts->setCutTOFDeltaOneOverBetaPion(0.03);
+    hfCuts->setCutTPCNSigmaPion(5.0);
+    hfCuts->setCutTOFDeltaOneOverBetaPion(0.065); //0.013*5
     hfCuts->setCutPtMin(0.15);
 
-    hfCuts->setCutDcaMin(0.001,StHFCuts::kPion);
-    hfCuts->setCutDcaMin(0.001,StHFCuts::kKaon);
+    hfCuts->setCutDcaMin(0.08,StHFCuts::kPion);
 
-    float dcaDaughtersMax = 0.04;  // maximum toto ide
-    float decayLengthMin  = 0.001; // minimum
+    float dcaDaughtersMax = 0.6;  // maximum toto ide
+    float decayLengthMin  = 0.4; // minimum
     float decayLengthMax  = 999;  //std::numeric_limits<float>::max(); toto ide (cutuje)
-    float cosThetaMin     = 0.5;   // minimum
+    float cosThetaMin     = 0.7;   // minimum
     float minMass         = 0.4;
-    float maxMass         = 2.4;
-
-//    hfCuts->setCutDcaMin(0.004,StHFCuts::kPion);
-//    hfCuts->setCutDcaMin(0.004,StHFCuts::kKaon);
-//
-//    float dcaDaughtersMax = 0.04;  // maximum toto ide
-//    float decayLengthMin  = 0.009; // minimum
-//    float decayLengthMax  = 999;  //std::numeric_limits<float>::max(); toto ide (cutuje)
-//    float cosThetaMin     = 0.5;   // minimum
-//    float minMass         = 0.4;
-//    float maxMass         = 2.4;
+    float maxMass         = 0.6;
 
     hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass);
 
     StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
 
-    StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile, sInputListHF);
-    PicoD0AnaMaker->setTreeName(treeName);
-    PicoD0AnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
-    PicoD0AnaMaker->setHFBaseCuts(hfCuts);
+    StPicoPiPiMaker* PicoK0sAnaMaker = new StPicoPiPiMaker("picoK0sAnaMaker", picoDstMaker, outputFile, sInputListHF);
+    PicoK0sAnaMaker->setTreeName(treeName);
+    PicoK0sAnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
+    PicoK0sAnaMaker->setHFBaseCuts(hfCuts);
 
-//    StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile, inputFile);
-//    picoMixedEventMaker->setBufferSize(7);
-    
     clock_t start = clock(); // getting starting time
     chain->Init();
     Int_t nEvents = picoDstMaker->chain()->GetEntries();

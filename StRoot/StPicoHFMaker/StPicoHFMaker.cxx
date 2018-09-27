@@ -87,7 +87,6 @@ Int_t StPicoHFMaker::Init() {
 
 // _________________________________________________________
 Int_t StPicoHFMaker::Finish() {
-  cout<<"finishHF"<<endl;
   mOutputFileList->cd();
   mOutList->Write(mOutList->GetName(),  TObject::kSingleKey); //predtym TObject::kSingleKey
 
@@ -157,7 +156,6 @@ Int_t StPicoHFMaker::Make() {
 
   // -- reset event to be in a defined state
 //  resetEvent();
-  cout<<"Make() end"<<endl;
   return (kStOK && iReturn);
 }
 

@@ -22,7 +22,6 @@ using namespace std;
 class StChain;
 #endif
 class StPicoDstMaker;
-class StPicoMixedEventMaker;
 class StPicoPiPiMaker;
 class StMaker;
 StChain *chain;
@@ -68,8 +67,6 @@ void runPicoK0sAnaMakerLocal(
   // -- File name of bad run list
    hfCuts->setBadRunListFileName(badRunListFileName); 
 
-  // -- ADD USER CUTS HERE ----------------------------
-
   hfCuts->setCutVzMax(6.);
   hfCuts->setCutVzVpdVzMax(3.);
   hfCuts->addTriggerId(530003); //VPD-5
@@ -77,13 +74,10 @@ void runPicoK0sAnaMakerLocal(
   hfCuts->setCutNHitsFitMin(15); //default is 20
   hfCuts->setCutRequireHFT(true);
   hfCuts->setHybridTof(false);
-  //LK hfCuts->setCutDcaMin(0.009,StHFCuts::kPion); //federic 1aug2016
-  //LK  hfCuts->setCutDcaMin(0.007,StHFCuts::kKaon); //federic 3aug2016
-  //hfCuts->setCutNHitsFitnHitsMax(0.52);  kvapil
+  //LK hfCuts->setCutDcaMin(0.009,StHFCuts::kPion);
+  //LK  hfCuts->setCutDcaMin(0.007,StHFCuts::kKaon);
+  //hfCuts->setCutNHitsFitnHitsMax(0.52);
 
-  // -- Channel0
-
-  // -- ADD USER CUTS HERE ----------------------------
    // kaonPion pair cuts
   float dcaDaughtersMax = 0.5;  // maximum
   float decayLengthMin  = 0.5; // minimum
@@ -101,9 +95,9 @@ void runPicoK0sAnaMakerLocal(
   hfCuts->setCutTPCNSigmaKaon(2.0); //3
   //TOF setters, need to set pt range as well
   hfCuts->setCutTOFDeltaOneOverBeta(0.05, StHFCuts::kKaon); // v podstate 5 sigma; nastavene = f * (sigmaTOF), sigma TOF je 0.013 
-  hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kKaon);
+  hfCuts->setCutPtotRangeHybridTOF(0.15,50.0,StHFCuts::kKaon);
   hfCuts->setCutTOFDeltaOneOverBeta(0.06, StHFCuts::kPion); // v podstate 6 sigma
-  hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kPion);
+  hfCuts->setCutPtotRangeHybridTOF(0.15,50.0,StHFCuts::kPion);
 
   StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
 
