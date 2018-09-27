@@ -76,33 +76,24 @@ void runPicoPhiAnaMakerLocal(
   hfCuts->setCutNHitsFitMin(15); //default is 20
   hfCuts->setCutRequireHFT(true);
   hfCuts->setHybridTof(false);
-  //LK hfCuts->setCutDcaMin(0.009,StHFCuts::kPion); //federic 1aug2016
-  //LK  hfCuts->setCutDcaMin(0.007,StHFCuts::kKaon); //federic 3aug2016
-  //hfCuts->setCutNHitsFitnHitsMax(0.52);  kvapil
+  hfCuts->setCutDcaMin(0.00,StHFCuts::kKaon);
 
-  // -- Channel0
-
-  // -- ADD USER CUTS HERE ----------------------------
    // kaonPion pair cuts
-  float dcaDaughtersMax = 0.2;  // maximum
+  float dcaDaughtersMax = 0.5;  // maximum
   float decayLengthMin  = 0.000; // minimum
   float decayLengthMax  = 999999; //std::numeric_limits<float>::max();
-  float cosThetaMin     = 0.5;   // minimum
-  float minMass         = 1.;
+  float cosThetaMin     = -0.2;   // minimum
+  float minMass         = 0.8;
   float maxMass         = 1.1;
   hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass);
  
   //Single track pt
-  hfCuts->setCutPtRange(0.15,50.0,StHFCuts::kPion); //0.2 , 50.0
   hfCuts->setCutPtRange(0.15,50.0,StHFCuts::kKaon); //0.2, 50.0
   //TPC setters
-  hfCuts->setCutTPCNSigmaPion(3.0); //3
-  hfCuts->setCutTPCNSigmaKaon(2.0); //3
+  hfCuts->setCutTPCNSigmaKaon(5.0); //3
   //TOF setters, need to set pt range as well
-  hfCuts->setCutTOFDeltaOneOverBeta(0.05, StHFCuts::kKaon); // v podstate 5 sigma; nastavene = f * (sigmaTOF), sigma TOF je 0.013 
-  hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kKaon);
-  hfCuts->setCutTOFDeltaOneOverBeta(0.06, StHFCuts::kPion); // v podstate 6 sigma
-  hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kPion);
+  hfCuts->setCutTOFDeltaOneOverBeta(0.065, StHFCuts::kKaon); // v podstate 5 sigma; nastavene = f * (sigmaTOF), sigma TOF je 0.013
+  hfCuts->setCutPtotRangeHybridTOF(0.15,50.0,StHFCuts::kKaon);
 
   StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
 
