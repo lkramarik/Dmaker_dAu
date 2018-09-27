@@ -42,14 +42,12 @@ void StPicoKKMaker::ClearHF(Option_t *opt="") {
 
 // _________________________________________________________
 int StPicoKKMaker::FinishHF() {
-    cout<<"FinishHF beg"<<endl;
     ntp_signal -> Write(ntp_signal->GetName(), TObject::kOverwrite);
     ntp_background -> Write(ntp_background->GetName(), TObject::kOverwrite);
     return kStOK;
 }
 // _________________________________________________________
 int StPicoKKMaker::MakeHF() {
-
     createCandidates();
     return kStOK;
 }
@@ -61,7 +59,6 @@ int StPicoKKMaker::createCandidates() {
         StPicoTrack const *trkTest = mPicoDst->track(k);
         if (mHFCuts->isGoodKaon(trkTest)) mIdxPicoKaons.push_back(k);
     }
-    cout<<mIdxPicoKaons.size()<<endl;
     for (unsigned short j = 0; j < mIdxPicoKaons.size(); ++j) {
         StPicoTrack const *kaon1 = mPicoDst->track(mIdxPicoKaons[j]);
 
