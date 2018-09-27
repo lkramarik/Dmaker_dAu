@@ -75,8 +75,8 @@ int StPicoPiPiMaker::createCandidates() {
             if (pion1->charge()+pion2->charge() == 0) isKs = true;
 
             int ii=0;
-            float ntVar[20];
-
+            float ntVar[19];
+            cout<<"saving pion"<<endl;
             ntVar[ii++] = pion1->gPt();
             ntVar[ii++] = pair->particle1Dca();
             ntVar[ii++] = pion1->nSigmaPion();
