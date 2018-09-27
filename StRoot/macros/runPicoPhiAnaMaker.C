@@ -14,6 +14,7 @@
 #include <ctime>
 #include <cstdio>
 #include "StPicoD0AnaMaker/StPicoD0AnaMaker.h"
+#include "StPicoKKMaker/StPicoKKMaker.h"
 
 using namespace std;
 
@@ -21,7 +22,7 @@ using namespace std;
 class StChain;
 #endif
 class StPicoDstMaker;
-class StPicoMixedEventMaker;
+class StPicoKKMaker;
 class StMaker;
 StChain *chain;
 void runPicoK0sAnaMaker(
