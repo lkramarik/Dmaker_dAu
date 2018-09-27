@@ -42,13 +42,14 @@ void StPicoPiPiMaker::ClearHF(Option_t *opt="") {
 
 // _________________________________________________________
 int StPicoPiPiMaker::FinishHF() {
-    cout<<"saving"<<endl;
+    cout<<"FinishHF beg"<<endl;
     ntp_signal -> Write(ntp_signal->GetName(), TObject::kOverwrite);
     ntp_background -> Write(ntp_background->GetName(), TObject::kOverwrite);
     return kStOK;
 }
 // _________________________________________________________
 int StPicoPiPiMaker::MakeHF() {
+
     createCandidates();
     return kStOK;
 }
@@ -102,11 +103,8 @@ int StPicoPiPiMaker::createCandidates() {
 
             if (isKs) {
                 ntp_signal->Fill(ntVar);
-                cout<<"filling"<<endl;
             } else {
                 ntp_background->Fill(ntVar);
-                cout<<"fillingB"<<endl;
-
             }
         }  // for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon)
     } // for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1)
