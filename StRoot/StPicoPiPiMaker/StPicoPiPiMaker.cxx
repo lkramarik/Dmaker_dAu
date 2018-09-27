@@ -108,7 +108,7 @@ int StPicoPiPiMaker::createCandidates() {
             }
         }  // for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon)
     } // for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1)
-
+    mIdxPicoPions.clear();
     return kStOK;
 }
 
