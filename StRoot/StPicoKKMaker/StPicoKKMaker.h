@@ -53,7 +53,7 @@ protected:
     virtual bool isPion(StPicoTrack const*) const;
     virtual bool isKaon(StPicoTrack const*) const;
     virtual bool isProton(StPicoTrack const*) const;
-    std::vector<unsigned short> mIdxPicoPions;
+    std::vector<unsigned short> mIdxPicoKaons;
 
 private:
     int createCandidates();

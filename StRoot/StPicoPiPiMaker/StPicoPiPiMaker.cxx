@@ -61,7 +61,7 @@ int StPicoPiPiMaker::createCandidates() {
         StPicoTrack const *trkTest = mPicoDst->track(k);
         if (!mHFCuts->isGoodPion(trkTest)) mIdxPicoPions.push_back(k);
     }
-
+    cout<<"Size array pions: "<<mIdxPicoPions.size()<<endl;
     for (unsigned short j = 0; j < mIdxPicoPions.size(); ++j) {
         StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[j]);
 
