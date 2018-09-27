@@ -85,10 +85,10 @@ void runPicoK0sAnaMakerLocal(
 
   // -- ADD USER CUTS HERE ----------------------------
    // kaonPion pair cuts
-  float dcaDaughtersMax = 0.2;  // maximum
-  float decayLengthMin  = 0.000; // minimum
+  float dcaDaughtersMax = 0.5;  // maximum
+  float decayLengthMin  = 0.5; // minimum
   float decayLengthMax  = 999999; //std::numeric_limits<float>::max();
-  float cosThetaMin     = -20.;   // minimum
+  float cosThetaMin     = 0.85;   // minimum
   float minMass         = 0.4;
   float maxMass         = 0.6;
   hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass);
