@@ -14,7 +14,7 @@
 #include <ctime>
 #include <cstdio>
 #include "StPicoD0AnaMaker/StPicoD0AnaMaker.h"
-#include "StPicoPiPiMaker/StPicoPiPiMaker.h"
+#include "StPicoPiPiMaker/StPicoKKMaker.h"
 
 using namespace std;
 
@@ -23,11 +23,11 @@ class StChain;
 #endif
 class StPicoDstMaker;
 class StPicoMixedEventMaker;
-class StPicoPiPiMaker;
+class StPicoKKMaker;
 class StMaker;
 StChain *chain;
 
-void runPicoK0sAnaMakerLocal(
+void runPicoPhiAnaMakerLocal(
 			const Char_t *inputFile="/gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoLists/runs_local_test.list",	
 			const Char_t *outputFile="outputBaseName",  
             const unsigned int makerMode = 0 ,
@@ -89,8 +89,8 @@ void runPicoK0sAnaMakerLocal(
   float decayLengthMin  = 0.000; // minimum
   float decayLengthMax  = 999999; //std::numeric_limits<float>::max();
   float cosThetaMin     = -20.;   // minimum
-  float minMass         = 0.4;
-  float maxMass         = 0.6;
+  float minMass         = 0.6;
+  float maxMass         = 2.6;
   hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass);
  
   //Single track pt
@@ -107,10 +107,10 @@ void runPicoK0sAnaMakerLocal(
 
   StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
 
-  StPicoPiPiMaker* PicoK0sAnaMaker = new StPicoPiPiMaker("picoK0sAnaMaker", picoDstMaker, outputFile, sInputListHF);
-  PicoK0sAnaMaker->setTreeName(treeName);
-  PicoK0sAnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
-  PicoK0sAnaMaker->setHFBaseCuts(hfCuts);
+  StPicoKKMaker* PicoPhiAnaMaker = new StPicoKKMaker("picoPhiAnaMaker", picoDstMaker, outputFile, sInputListHF);
+  PicoPhiAnaMaker->setTreeName(treeName);
+  PicoPhiAnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
+  PicoPhiAnaMaker->setHFBaseCuts(hfCuts);
 
 //  StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile, sInputListHF);
 //  PicoD0AnaMaker->setTreeName(treeName);

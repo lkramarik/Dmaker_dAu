@@ -5,23 +5,23 @@
 #include "StPicoHFMaker/StHFCuts.h"
 #include "phys_constants.h"
 #include "StBTofUtil/tofPathLength.hh"
-#include "StPicoPiPiMaker.h"
-ClassImp(StPicoPiPiMaker)
+#include "StPicoKKMaker.h"
+ClassImp(StPicoKKMaker)
 
 // _________________________________________________________
-StPicoPiPiMaker::StPicoPiPiMaker(char const* name, StPicoDstMaker* picoMaker, char const* outputBaseFileName, char const* inputHFListHFtree = "") :
+StPicoKKMaker::StPicoKKMaker(char const* name, StPicoDstMaker* picoMaker, char const* outputBaseFileName, char const* inputHFListHFtree = "") :
         StPicoHFMaker(name, picoMaker, outputBaseFileName, inputHFListHFtree),
         mOutFileBaseName(outputBaseFileName){
     // constructor
 }
 
 // _________________________________________________________
-StPicoPiPiMaker::~StPicoPiPiMaker() {
+StPicoKKMaker::~StPicoKKMaker() {
     // destructor
 }
 
 // _________________________________________________________
-int StPicoPiPiMaker::InitHF() {
+int StPicoKKMaker::InitHF() {
     // EXAMPLE //  mOutList->Add(new TH1F(...));
     // EXAMPLE //  TH1F* hist = static_cast<TH1F*>(mOutList->Last());
 
@@ -36,26 +36,26 @@ int StPicoPiPiMaker::InitHF() {
 }
 
 // _________________________________________________________
-void StPicoPiPiMaker::ClearHF(Option_t *opt="") {
+void StPicoKKMaker::ClearHF(Option_t *opt="") {
     return;
 }
 
 // _________________________________________________________
-int StPicoPiPiMaker::FinishHF() {
+int StPicoKKMaker::FinishHF() {
     cout<<"FinishHF beg"<<endl;
     ntp_signal -> Write(ntp_signal->GetName(), TObject::kOverwrite);
     ntp_background -> Write(ntp_background->GetName(), TObject::kOverwrite);
     return kStOK;
 }
 // _________________________________________________________
-int StPicoPiPiMaker::MakeHF() {
+int StPicoKKMaker::MakeHF() {
 
     createCandidates();
     return kStOK;
 }
 
 // _________________________________________________________
-int StPicoPiPiMaker::createCandidates() {
+int StPicoKKMaker::createCandidates() {
     //making array of good pions
     for(unsigned int k = 0; k < mPicoDst->numberOfTracks(); ++k) {
         StPicoTrack const *trkTest = mPicoDst->track(k);
@@ -112,11 +112,11 @@ int StPicoPiPiMaker::createCandidates() {
     return kStOK;
 }
 
-bool StPicoPiPiMaker::isHadron(StPicoTrack const * const trk, int pidFlag) const {
+bool StPicoKKMaker::isHadron(StPicoTrack const * const trk, int pidFlag) const {
     return (mHFCuts->isGoodTrack(trk) && mHFCuts->isTPCHadron(trk, pidFlag));
 }
 
-bool StPicoPiPiMaker::isPion(StPicoTrack const * const trk) const {
+bool StPicoKKMaker::isPion(StPicoTrack const * const trk) const {
     if (!mHFCuts->cutMinDcaToPrimVertex(trk, StPicoCutsBase::kPion)) return false;
     if (!mHFCuts->isGoodTrack(trk)) return false; //HFT, NhitsFit, pt range
     if (!mHFCuts->isTPCHadron(trk, StPicoCutsBase::kPion)) return false;
@@ -138,7 +138,7 @@ bool StPicoPiPiMaker::isPion(StPicoTrack const * const trk) const {
 //    if (!mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kPion) ) return false;
 }
 
-bool StPicoPiPiMaker::isKaon(StPicoTrack const * const trk) const {
+bool StPicoKKMaker::isKaon(StPicoTrack const * const trk) const {
     if (!mHFCuts->cutMinDcaToPrimVertex(trk, StPicoCutsBase::kKaon)) return false;
     if (!mHFCuts->isGoodTrack(trk)) return false;
     if (!mHFCuts->isTPCHadron(trk, StPicoCutsBase::kKaon)) return false;
@@ -157,7 +157,7 @@ bool StPicoPiPiMaker::isKaon(StPicoTrack const * const trk) const {
     return true;
 }
 
-bool StPicoPiPiMaker::isProton(StPicoTrack const * const trk) const {
+bool StPicoKKMaker::isProton(StPicoTrack const * const trk) const {
     return (mHFCuts->isGoodTrack(trk) && mHFCuts->isTPCHadron(trk, StPicoCutsBase::kProton));
 }
 
