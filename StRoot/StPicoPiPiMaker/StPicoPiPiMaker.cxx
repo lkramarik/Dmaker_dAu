@@ -102,8 +102,11 @@ int StPicoPiPiMaker::createCandidates() {
 
             if (isKs) {
                 ntp_signal->Fill(ntVar);
+                cout<<"filling"<<endl;
             } else {
                 ntp_background->Fill(ntVar);
+                cout<<"fillingB"<<endl;
+
             }
         }  // for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon)
     } // for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1)

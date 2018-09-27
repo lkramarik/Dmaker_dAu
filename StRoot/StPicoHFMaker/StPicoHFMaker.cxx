@@ -116,7 +116,7 @@ void StPicoHFMaker::Clear(Option_t *opt) {
   //    daughter class should implement ClearHF()
   // -- call method of daughter class
   ClearHF();
-  resetEvent();
+//  resetEvent();
 }
 
 // _________________________________________________________
@@ -156,7 +156,7 @@ Int_t StPicoHFMaker::Make() {
   }
 
   // -- reset event to be in a defined state
-  resetEvent();
+//  resetEvent();
 
   return (kStOK && iReturn);
 }
