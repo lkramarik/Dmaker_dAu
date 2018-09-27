@@ -42,6 +42,7 @@ void StPicoPiPiMaker::ClearHF(Option_t *opt="") {
 
 // _________________________________________________________
 int StPicoPiPiMaker::FinishHF() {
+    cout<<"saving"<<endl;
     ntp_signal -> Write(ntp_signal->GetName(), TObject::kOverwrite);
     ntp_background -> Write(ntp_background->GetName(), TObject::kOverwrite);
     return kStOK;
@@ -76,7 +77,6 @@ int StPicoPiPiMaker::createCandidates() {
 
             int ii=0;
             float ntVar[19];
-            cout<<"saving pion"<<endl;
             ntVar[ii++] = pion1->gPt();
             ntVar[ii++] = pair->particle1Dca();
             ntVar[ii++] = pion1->nSigmaPion();
@@ -95,7 +95,7 @@ int StPicoPiPiMaker::createCandidates() {
             ntVar[ii++] = cos(pair->pointingAngle());
             ntVar[ii++] = pair->decayLength();
 
-            ntVar[ii++] = pair->DcaToPrimaryVertex(); //(pair->decayLength())*sin(pair->pointingAngle());
+            ntVar[ii++] = pair->DcaToPrimaryVertex();
             ntVar[ii++] = pair->cosThetaStar();
             ntVar[ii++] = pair->pt();
             ntVar[ii++] = pair->m();
