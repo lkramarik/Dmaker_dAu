@@ -56,12 +56,12 @@ int StPicoKKMaker::MakeHF() {
 
 // _________________________________________________________
 int StPicoKKMaker::createCandidates() {
-    //making array of good pions
+    //making array of good kaons
     for(unsigned int k = 0; k < mPicoDst->numberOfTracks(); ++k) {
         StPicoTrack const *trkTest = mPicoDst->track(k);
         if (!mHFCuts->isGoodKaon(trkTest)) mIdxPicoKaons.push_back(k);
     }
-
+    cout<<mIdxPicoKaons.size()<<endl;
     for (unsigned short j = 0; j < mIdxPicoKaons.size(); ++j) {
         StPicoTrack const *kaon1 = mPicoDst->track(mIdxPicoKaons[j]);
 
