@@ -19,7 +19,7 @@
 using namespace std;
 using namespace TMath;
 TH1F* subtractBckg(TString, Int_t, Float_t, Float_t, Float_t, Float_t, TString, TString, TString, TString);
-void peakFit(TH1F*, Float_t, Float_t, Float_t, TString, Float_t, Float_t);
+void peakFit(TH1F*, Float_t, Float_t, Float_t, TString, Float_t, Float_t, TString);
 TH1F* hSig = new TH1F();
 Float_t mSigma;
 Float_t mMean;
@@ -35,7 +35,9 @@ void pidEff() {
 //    TString input = "outputBaseName.picoK0sAnaMaker.root";
 
     Float_t ptBins[] = {0.2, 0.25, 0.3, 0.35, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.2, 2.5, 3, 4};
-    int nBins = sizeof(ptBins);
+    const int nBins = sizeof(ptBins);
+    Float_t means[nBins], binWidth[nBins], xPt[nBins];
+    Float_t sigmas[nBins];
 
     Float_t massMin, massMax, mean;
     TString pair;
@@ -55,11 +57,29 @@ void pidEff() {
 
     int i = 0;
 //    for (int i = 0; i < 2; ++i) {
-//    for (int i = 0; i < nBins-1; ++i) {
-        TH1F* signal = (TH1F*) subtractBckg(input, 500, massMin, massMax, ptBins[i], ptBins[i+1], pair, "", "pair_mass", "Mass_{%s} (GeV/c^{2})");
-        peakFit(signal, mean, massMin, massMax, pair, ptBins[i], ptBins[i+1]);
-        TH1F* nSigmaSignal = (TH1F*) subtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, Form("pair_mass>%f && pair_mass<%f && ", mMean-mSigma, mMean+mSigma), "pi1_nSigma", "pi1_nSigma");
-//        peakFit(hSigmaSignal, 0, )
+    for (int i = 0; i < nBins-1; ++i) {
+        TH1F *signal = (TH1F *) subtractBckg(input, 500, massMin, massMax, ptBins[i], ptBins[i + 1], pair, "", "pair_mass", "Mass_{%s} (GeV/c^{2})");
+        peakFit(signal, mean, massMin, massMax, pair, ptBins[i], ptBins[i + 1], "mass");
+        TH1F *hSigmaSignal = (TH1F *) subtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i + 1], pair, Form("pair_mass>%f && pair_mass<%f && ", mMean - mSigma, mMean + mSigma), "pi1_nSigma", "pi1_nSigma");
+        peakFit(hSigmaSignal, 0, -5, 5, pair, ptBins[i], ptBins[i + 1], "pi_nSigma");
+        binWidth[i] = ptBins[i + 1] - ptBins[i];
+        xPt[i] = (ptBins[i + 1] + ptBins[i]) / 2;
+        means[i] = mMean;
+        sigmas[i] = mSigma;
+    }
+    TGraphErrors *gMean = new TGraphErrors(nBins,xPt,means,binWidth, 0);
+    TGraphErrors *gSigmas = new TGraphErrors(nBins,xPt,sigmas,binWidth, 0);
+
+    gMean->SetMarkerStyle(20);
+    gMean->SetMarkerSize(0.9);
+    gMean->SetMarkerColor(kBlack);
+    gMean->SetLineColor(kBlack);
+    gMean->GetYaxis()->SetTitle("nSigma TPC mean");
+    gMean->GetYaxis()->SetTitleOffset(1.1);
+    gMean->GetXaxis()->SetTitle("p_{T} (GeV/c)");
+    gMean->SetTitle("");
+    gMean->Draw();
+
 
 }
 
@@ -117,23 +137,28 @@ TH1F* subtractBckg(TString input, Int_t nBins, Float_t massMin, Float_t massMax,
     hB->Draw("same");
     legend->Draw("same");
     pair.ReplaceAll("#","");
-    c->SaveAs(Form("./img/%s/%.3f_%.3f.png", pair.Data(), ptmin, ptmax));
+    c->SaveAs(Form("./img/%s/%s_%.3f_%.3f.png", pair.Data(), varName.Data(), ptmin, ptmax));
     c->Close();
     data->Close();
     dataRes->Close();
     return hSig;
 }
 
-void peakFit(TH1F* hToFit, Float_t mean, Float_t massMin, Float_t massMax, TString pair, Float_t ptmin, Float_t ptmax){
+void peakFit(TH1F* hToFit, Float_t mean, Float_t massMin, Float_t massMax, TString pair, Float_t ptmin, Float_t ptmax, TString varName){
     TF1 *funLS = new TF1("funLS","pol1(0)+gaus(2)", massMin, massMax);
-    funLS->SetParameters(1.,1.,1.,mean,0.01);
+    funLS->SetParameters(1.,1.,1.,mean,0.1);
     funLS->SetLineColor(2);
     funLS->SetLineStyle(7);
     funLS->SetLineStyle(1);
     funLS->SetParName(2,"height");
     funLS->SetParName(3,"mean");
     funLS->SetParName(4,"sigma");
-    funLS->SetParLimits(3,mean-0.4*mean,mean+0.4*mean);
+    if (mean!=0)   {
+        funLS->SetParLimits(3,mean-0.4*mean,mean+0.4*mean);
+    } else {
+        funLS->SetParLimits(3,-0.5,0.5);
+    }
+    funLS->SetParLimits(4,0,4);
     funLS->SetLineColor(9);
 
     TCanvas *c = new TCanvas("c","%.3f_%.3f",1000,900);
@@ -143,7 +168,7 @@ void peakFit(TH1F* hToFit, Float_t mean, Float_t massMin, Float_t massMax, TStri
     mSigma = funLS->GetParameter(4);
     mMean = funLS->GetParameter(3);
     pair.ReplaceAll("#","");
-    c->SaveAs(Form("./img/%s/fit/%.3f_%.3f.png", pair.Data(), ptmin, ptmax));
+    c->SaveAs(Form("./img/%s/fit/%s_%.3f_%.3f.png", pair.Data(), varName.Data(), ptmin, ptmax));
     c->Close();
 }
 
