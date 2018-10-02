@@ -69,9 +69,9 @@ void runPicoPhiAnaMaker(
     // kaonPion pair cuts
     float dcaDaughtersMax = 0.5;  // maximum
     float decayLengthMin  = 0.000; // minimum
-    float decayLengthMax  = 999999; //std::numeric_limits<float>::max();
-    float cosThetaMin     = -0.2;   // minimum
-    float minMass         = 0.9;
+    float decayLengthMax  = 25; //std::numeric_limits<float>::max();
+    float cosThetaMin     = 0.5;   // minimum
+    float minMass         = 0.92;
     float maxMass         = 1.1;
 
     hfCuts->setCutPtRange(0.15,50.0,StHFCuts::kKaon);
