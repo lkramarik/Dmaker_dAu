@@ -77,13 +77,13 @@ int StPicoKKMaker::createCandidates() {
             float ntVar[19];
             ntVar[ii++] = kaon1->gPt();
             ntVar[ii++] = pair->particle1Dca();
-            ntVar[ii++] = kaon1->nSigmaPion();
+            ntVar[ii++] = kaon1->nSigmaKaon();
             ntVar[ii++] = kaon1->nHitsFit();
             ntVar[ii++] = mHFCuts->getOneOverBeta(kaon1, mHFCuts->getTofBetaBase(kaon1), StPicoCutsBase::kKaon);
 
             ntVar[ii++] = kaon2->gPt();
             ntVar[ii++] = pair->particle2Dca();
-            ntVar[ii++] = kaon2->nSigmaPion();
+            ntVar[ii++] = kaon2->nSigmaKaon();
             ntVar[ii++] = kaon2->nHitsFit();
             ntVar[ii++] = mHFCuts->getOneOverBeta(kaon2, mHFCuts->getTofBetaBase(kaon2), StPicoCutsBase::kKaon);
 
