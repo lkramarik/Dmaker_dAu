@@ -49,10 +49,6 @@ public:
     virtual Int_t FinishHF();
 
 protected:
-    virtual bool isHadron(StPicoTrack const*, int pidFlag) const;
-    virtual bool isPion(StPicoTrack const*) const;
-    virtual bool isKaon(StPicoTrack const*) const;
-    virtual bool isProton(StPicoTrack const*) const;
     std::vector<unsigned short> mIdxPicoKaons;
 
 private:
