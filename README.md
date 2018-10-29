@@ -1,5 +1,11 @@
 # Dmaker_dAu
 
+Compile on STAR's RCAF:
+```sh
+starver SL17d
+cons
+```
+
 Run analysis locally on one picoDst with:
 ```sh
 starver SL17d
