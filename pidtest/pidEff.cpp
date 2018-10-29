@@ -39,12 +39,12 @@ void pidEff() {
 
 //    TString input = "ntp.picoPhiAnaMaker.root";
 //    TString input = "ntp.picoK0sAnaMaker.root";
-    TString input = "/media/lukas/7B05A81B2CD8DF32/ntp1.picoPhiAnaMaker.root";
+    TString input = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/Phi_large/production/ntp.picoPhiAnaMaker.root";
 //    TString input = "outputBaseName.picoK0sAnaMaker.root";
 
-    Float_t ptBins[] = {2.2, 2.5, 3};
+//    Float_t ptBins[] = {2.2, 2.5, 3};
 //    Float_t ptBins[] = {0.2, 0.25, 0.3, 0.35, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.2, 2.5, 3, 4}; //pion
-//    Float_t ptBins[] = {0.2, 0.35, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.2, 2.5, 3, 4}; //kaon
+    Float_t ptBins[] = {0.2, 0.35, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.2, 2.5, 3, 4}; //kaon
     const int nBins = sizeof(ptBins)/sizeof(Float_t);
     cout<<nBins<<endl;
     Float_t means[nBins], binWidth[nBins], xPt[nBins], massMean, massSigma, eff[nBins], effError[nBins], meansE[nBins], sigmasE[nBins];

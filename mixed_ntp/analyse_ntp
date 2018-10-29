@@ -1,5 +1,5 @@
 #!/bin/bash
-prodDir=''
+prodDir='/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/2018-07-03_11-06/production/'
 cp separate_ntp.C $prodDir
 cd $prodDir
 rm ntuples.list

@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+comm <(sort runs_filename_local_P17id_full_xrootd.txt) <(sort runs_filename_local_P17id_full_hpss_new_3110.txt)
