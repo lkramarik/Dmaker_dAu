@@ -21,7 +21,7 @@ Actual file list is loaded from:
 ```sh
 picoLists/runs_path_all.list
 ```
-Actual file list for *local tests* is loaded from:
+Actual file list for **local tests** is loaded from:
 ```sh
 picoLists/runs_path_all.list
 ```
