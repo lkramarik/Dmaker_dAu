@@ -14,3 +14,4 @@ tmva/*.root
 cmake-build-debug
 StRoot/cmake-build-debug
 StRoot/CMakeLists.txt
+cmake-build-debug
