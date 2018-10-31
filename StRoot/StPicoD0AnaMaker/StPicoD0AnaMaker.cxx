@@ -311,7 +311,7 @@ void StPicoD0AnaMaker::DeclareHistograms() {
   float xbin[6] = {0,1,2,3,5,10};
   float binMass[2001];
   float binPhi[2001];
-  candPt = new TProfile("candPt","",xbinSize,xbin);
+  //candPt = new TProfile("candPt","",xbinSize,xbin);
   for(int i=0;i<2001;i++)
     binPhi[i] = 0.005*i-5;
   for(int i=0;i<2001;i++)
@@ -351,6 +351,7 @@ void StPicoD0AnaMaker::DeclareHistograms() {
       hadronV2[i][k]->Sumw2();
       hadronV2_sum[i][k] = new TH1D(Form("hadronsum_%s_%i",flatten[i].Data(),k),"",5,xWeight);
       hadronV2_sum[i][k]->Sumw2();
+      /*
       for(int j=0;j<9;j++)
       {
         hadronV2_excl[i][j][k] = new TH1D(Form("hadron_%s_cent%i_%i",flatten[i].Data(),j,k),"",10,ptbin2);
@@ -358,6 +359,7 @@ void StPicoD0AnaMaker::DeclareHistograms() {
         hadronV2_excl_sum[i][j][k] = new TH1D(Form("hadronsum_%s_cent%i_%i",flatten[i].Data(),j,k),"",10,ptbin2);
         hadronV2_excl_sum[i][j][k]->Sumw2();
       }
+      */
     }
 }
 
@@ -406,7 +408,7 @@ void StPicoD0AnaMaker::WriteHistograms() {
     }
   }
   massLike->Write();
-  candPt->Write();
+  //candPt->Write();
   massUnlike->Write();
   for(int k=0;k<3;k++)
   {
