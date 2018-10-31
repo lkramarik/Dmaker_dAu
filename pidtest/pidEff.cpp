@@ -166,7 +166,7 @@ TH1F* projectSubtractBckg(TString input, Int_t nBins, Float_t massMin, Float_t m
 
     TFile* dataRes = new TFile();
     TString output = variable+pairShort+".root";
-    dataRes = new TFile(output,"RECREATE");
+    dataRes = new TFile(output,"UPDATE");
 
     TCut setCuts = "";
     for(unsigned int k = 0; k < mCuts.size(); ++k) {
