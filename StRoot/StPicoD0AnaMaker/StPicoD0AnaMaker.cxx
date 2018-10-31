@@ -317,6 +317,7 @@ void StPicoD0AnaMaker::DeclareHistograms() {
   for(int i=0;i<2001;i++)
     binMass[i] = 0.01*i;
   float xWeight[6] = {0,7,12,16,22,100};
+  /*
   for(int i=0;i!=8;i++)
   {
     for(int k=0;k!=3;k++)
@@ -339,6 +340,7 @@ void StPicoD0AnaMaker::DeclareHistograms() {
       // hPhiHadron[i][k]->Sumw2();
     }
   }
+  */
   float ptbin1[12] = {0.225,0.375,0.525,0.675,0.825,0.975,1.12,1.27,1.42,1.58,1.73,1.88};
   float ptbin2[11];
   for(int i=0;i<11;i++)
@@ -388,6 +390,7 @@ void StPicoD0AnaMaker::DeclareHistograms() {
 
 void StPicoD0AnaMaker::WriteHistograms() {
    //Saving for v2 calculation
+	/*
   for(int i=0;i!=8;i++)
   {
     for(int k=0;k!=3;k++)
@@ -399,6 +402,7 @@ void StPicoD0AnaMaker::WriteHistograms() {
       v2Weight[i][k]->Write();
     }
   }
+  */
   for(int i=0;i<6;i++)
   {
     for(int j=0;j<5;j++)
