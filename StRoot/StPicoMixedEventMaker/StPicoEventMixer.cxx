@@ -64,7 +64,7 @@ bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight
         if(mHFCuts->isGoodKaon(trk)) {
             saveTrack = true;
             event->addKaon(event->getNoTracks());
-            cout<<mHFCuts->getOneOverBeta(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon)<<endl;
+//            cout<<mHFCuts->getOneOverBeta(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon)<<endl;
         }
 
         if(saveTrack){
@@ -97,7 +97,7 @@ void StPicoEventMixer::mixEvents() {
                 // check if the tracks are the same
                 if(iEvt2 == 0) {
                     if(mEvents.at(0)->pionId(iTrk1) == mEvents.at(iEvt2)->kaonId(iTrk2)){
-                        cout<<"TRACKS ARE THE SAME"<<endl;
+//                        cout<<"TRACKS ARE THE SAME"<<endl;
                         continue;
                     }
                 }
