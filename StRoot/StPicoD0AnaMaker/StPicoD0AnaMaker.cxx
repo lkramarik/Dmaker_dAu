@@ -487,7 +487,7 @@ bool StPicoD0AnaMaker::getHadronCorV2(int idxGap)
   return true;
 }
 
-bool StMyAnalysisMaker::isGoodHadron(StPicoTrack const * const trk) const
+bool StPicoD0AnaMaker::isGoodHadron(StPicoTrack const * const trk) const
 {
   //return trk->pMom().perp() > mycuts::hadronPtMin &&trk->pMom().perp() < mycuts::hadronPtMax && trk->nHitsFit() >= mycuts::nHitsFit &&fabs(trk->pMom().pseudoRapidity())<1.&&fabs(trk->nSigmaElectron())>3 && (1.0*trk->nHitsFit()/trk->nHitsMax())>0.52;
   int tofIndex = trk->bTofPidTraitsIndex();
@@ -495,5 +495,5 @@ bool StMyAnalysisMaker::isGoodHadron(StPicoTrack const * const trk) const
   StPicoBTofPidTraits* tofPidTraits;
   if (tofIndex >= 0)  tofPidTraits = mPicoDst->btofPidTraits(tofIndex); //GNX
   if (tofIndex >= 0 && tofPidTraits && tofPidTraits->btofMatchFlag() > 0)  TofMatch = kTRUE;
-  return TofMatch && trk->pMom().perp() > mycuts::hadronPtMin &&trk->pMom().perp() < mycuts::hadronPtMax && trk->nHitsFit() >= 15 &&fabs(trk->pMom().pseudoRapidity())<1. && (1.0*trk->nHitsFit()/trk->nHitsMax())>0.52;
+  return TofMatch && trk->pMom().perp() > mHFCuts::hadronPtMin &&trk->pMom().perp() < mHFCuts::hadronPtMax && trk->nHitsFit() >= 15 &&fabs(trk->pMom().pseudoRapidity())<1. && (1.0*trk->nHitsFit()/trk->nHitsMax())>0.52;
 }
