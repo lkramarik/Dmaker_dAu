@@ -53,6 +53,8 @@ int StPicoD0AnaMaker::InitHF() {
 //
 //    mOutList->Add(new TH2F("h_dedx","h_dedx", 1000, 0, 10, 1000, 0, 10));
 //h_tracktest
+	DeclareHistograms();
+
     mOutList->Add(new TH1D("h_tracktest","h_tracktest", 6, 0.5, 6.5));
     mOutList->Add(new TH1D("h_tracktest_TOF","h_tracktest_TOF", 6, 0.5, 6.5));
 
@@ -75,12 +77,14 @@ void StPicoD0AnaMaker::ClearHF(Option_t *opt="") {
 int StPicoD0AnaMaker::FinishHF() {
     ntp_DMeson_Signal -> Write(ntp_DMeson_Signal->GetName(), TObject::kOverwrite);
     ntp_DMeson_Background -> Write(ntp_DMeson_Background->GetName(), TObject::kOverwrite);
+    WriteHistograms();
 //    ntp_pion -> Write(ntp_pion->GetName(), TObject::kOverwrite);
 //    ntp_kaon -> Write(ntp_kaon->GetName(), TObject::kOverwrite);
     return kStOK;
 }
 // _________________________________________________________
 int StPicoD0AnaMaker::MakeHF() {
+	getHadronCorV2(0);
     createCandidates();
 //    analyzeCandidates();
 
@@ -280,6 +284,64 @@ int StPicoD0AnaMaker::analyzeCandidates() {
             }
         }
 
+bool StMyAnalysisMaker::getHadronCorV2(int idxGap)
+{
+  double etaGap[3] = {0,0.15,0.05};
+  double mEtaGap = etaGap[idxGap];
+  float hadronFill[7] = {0};
+  const double reweight = 1;//mGRefMultCorrUtil->getWeight();
+  // int centrality  = mGRefMultCorrUtil->getCentralityBin9();
+  StPicoEvent *event = (StPicoEvent *)mPicoDst->event();
+  int mult = event->grefMult();
+  for(unsigned int i=0;i<mPicoDst->numberOfTracks();++i)
+  {
+    StPicoTrack const* hadron = mPicoDst->track(i);
+    if(hadron->pMom().perp()<0.2) continue;
+    if(!isGoodHadron(hadron)) continue;
+    float etaHadron = hadron->pMom().pseudoRapidity();
+    float phiHadron = hadron->pMom().phi();
+    if(etaHadron<-0.5*mEtaGap)//backward sample 
+    {
+      hadronFill[0]++;
+      hadronFill[1] += sin(2 * phiHadron);
+      hadronFill[2] += cos(2 * phiHadron);
+    }			
+    if(etaHadron>0.5*mEtaGap)//forward sample
+    {
+      hadronFill[3]++;
+      hadronFill[4] += sin(2 * phiHadron);
+      hadronFill[5] += cos(2 * phiHadron);
+    }			
+  }
+  hadronFill[6] = mult;
+  hadronFill[7] = reweight;
+  //mHadronTuple->Fill(hadronFill);
+  if(hadronFill[0]==0 || hadronFill[3]==0)
+    return false; 
+  double temp = (hadronFill[1]*hadronFill[4]+hadronFill[2]*hadronFill[5]);
+  hadronV2[0][idxGap]->Fill(mult,temp*reweight);
+  hadronV2[1][idxGap]->Fill(mult,hadronFill[2]*reweight);
+  hadronV2[2][idxGap]->Fill(mult,hadronFill[1]*reweight);
+  hadronV2[3][idxGap]->Fill(mult,hadronFill[5]*reweight);
+  hadronV2[4][idxGap]->Fill(mult,hadronFill[4]*reweight);
+  hadronV2_sum[0][idxGap]->Fill(mult,hadronFill[0]*hadronFill[3]*reweight);
+  hadronV2_sum[1][idxGap]->Fill(mult,hadronFill[0]*reweight);
+  hadronV2_sum[2][idxGap]->Fill(mult,hadronFill[0]*reweight);
+  hadronV2_sum[3][idxGap]->Fill(mult,hadronFill[3]*reweight);
+  hadronV2_sum[4][idxGap]->Fill(mult,hadronFill[3]*reweight);
+  //    StPicoTrack const* hadron = picoDst->track(i);
+  //  hadronV2_excl[0][centrality]->Fill(hadron->pMom().perp(),temp*reweight);
+  //  hadronV2_excl[1][centrality]->Fill(hadron->pMom().perp(),hadronFill[2]*reweight);
+  //  hadronV2_excl[2][centrality]->Fill(hadron->pMom().perp(),hadronFill[1]*reweight);
+  //  hadronV2_excl[3][centrality]->Fill(hadron->pMom().perp(),hadronFill[5]*reweight);
+  //  hadronV2_excl[4][centrality]->Fill(hadron->pMom().perp(),hadronFill[4]*reweight);
+  //  hadronV2_excl_sum[0][centrality]->Fill(hadron->pMom().perp(),hadronFill[0]*hadronFill[3]*reweight);
+  //  hadronV2_excl_sum[1][centrality]->Fill(hadron->pMom().perp(),hadronFill[0]*reweight);
+  //  hadronV2_excl_sum[2][centrality]->Fill(hadron->pMom().perp(),hadronFill[0]*reweight);
+  //  hadronV2_excl_sum[3][centrality]->Fill(hadron->pMom().perp(),hadronFill[3]*reweight);
+  //  hadronV2_excl_sum[4][centrality]->Fill(hadron->pMom().perp(),hadronFill[3]*reweight);
+  return true;
+}
 
     }
 //    for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
@@ -294,3 +356,184 @@ int StPicoD0AnaMaker::analyzeCandidates() {
     return kStOK;
 }
 
+
+void StMyAnalysisMaker::DeclareHistograms() {
+    // for v2 calcualtion
+  TString flatten[5];
+  flatten[0] = "v2";
+  flatten[1] = "cosD";
+  flatten[2] = "sinD";
+  flatten[3] = "cosHadron";
+  flatten[4] = "sinHadron";
+  TString sb[8] = {"s1like","s3like","hSBlike","lSBlike","s1unlike","s3unlike","hSBunlike","lSBunlike"};
+  // float xbin[7] = {0,1,2,3,4,5,10};
+  const int xbinSize=5;
+  float xbin[6] = {0,1,2,3,5,10};
+  float binMass[2001];
+  float binPhi[2001];
+  candPt = new TProfile("candPt","",xbinSize,xbin);
+  for(int i=0;i<2001;i++)
+    binPhi[i] = 0.005*i-5;
+  for(int i=0;i<2001;i++)
+    binMass[i] = 0.01*i;
+  float xWeight[6] = {0,7,12,16,22,100};
+  for(int i=0;i!=8;i++)
+  {
+    for(int k=0;k!=3;k++)
+    {
+      for(int j=0;j!=5;j++)
+      {
+        TString name = sb[i]+flatten[j]+Form("_%i",k);
+        profV2[i][j][k] = new TProfile(name.Data(),"",xbinSize,xbin);
+        profV2[i][j][k]->Sumw2();
+      }
+      TString weightName = sb[i]+Form("_%i_weigth",k);
+      v2Weight[i][k] = new TH2D(weightName.Data(),"",5,xWeight,xbinSize,xbin);
+      v2Weight[i][k]->Sumw2();
+
+      TString namehPhi = "hadronPhi_"+sb[i]+Form("_%i",k);
+      TString nameDPhi = "DPhi_"+sb[i]+Form("_%i",k);
+      // hPhiHadron[i][k] = new TH2F(namehPhi.Data(),"",2000,binPhi,xbinSize,xbin);
+      // hPhiD[i][k]= new TH2F(nameDPhi.Data(),"",2000,binPhi,xbinSize,xbin);
+      // hPhiD[i][k]->Sumw2();
+      // hPhiHadron[i][k]->Sumw2();
+    }
+  }
+  float ptbin1[12] = {0.225,0.375,0.525,0.675,0.825,0.975,1.12,1.27,1.42,1.58,1.73,1.88};
+  float ptbin2[11];
+  for(int i=0;i<11;i++)
+    ptbin2[i] = 0.5*(ptbin1[i]+ptbin1[i+1]);
+  for(int k=0;k<3;k++)
+  {
+    for(int i=0;i<5;i++)
+    {
+      hadronV2[i][k] = new TH1D(Form("hadron_%s_%i",flatten[i].Data(),k),"",5,xWeight);
+      hadronV2[i][k]->Sumw2();
+      hadronV2_sum[i][k] = new TH1D(Form("hadronsum_%s_%i",flatten[i].Data(),k),"",5,xWeight);
+      hadronV2_sum[i][k]->Sumw2();
+      for(int j=0;j<9;j++)
+      {
+        hadronV2_excl[i][j][k] = new TH1D(Form("hadron_%s_cent%i_%i",flatten[i].Data(),j,k),"",10,ptbin2);
+        hadronV2_excl[i][j][k]->Sumw2();
+        hadronV2_excl_sum[i][j][k] = new TH1D(Form("hadronsum_%s_cent%i_%i",flatten[i].Data(),j,k),"",10,ptbin2);
+        hadronV2_excl_sum[i][j][k]->Sumw2();
+      }
+    }
+}
+
+  double fitmean[6] = {1.85921,1.8633,1.86403,1.86475,1.86252,1.86534};
+  double fitsigma[6] = {0.018139,0.0139476,0.0158346,0.0169282,0.0199567,0.0189131};
+  // ifstream ifs("efficiency.txt");
+  // for(int i=0; i<6; i++)
+  //   for(int j=0; j<4; j++)
+  //     ifs>>efficiency[j][i];
+  for(int i=0;i<6;i++)//pt bin
+  {
+    for(int j=0;j<5;j++)//flatten
+    {
+      TString massName[2];
+      massName[0] = Form("likeMass%i",i)+flatten[j];
+      massName[1] = Form("unlikeMass%i",i)+flatten[j];
+      for(int k=0;k<2;k++)
+      {
+        V2Mass[k][i][j] = new TProfile(massName[k].Data(),"",18,fitmean[i]-9*fitsigma[i],fitmean[i]+9*fitsigma[i]);
+        V2Mass[k][i][j]->Sumw2();
+      }
+    }
+  }
+
+}
+
+void StMyAnalysisMaker::WriteHistograms() {
+   //Saving for v2 calculation
+  for(int i=0;i!=8;i++)
+  {
+    for(int k=0;k!=3;k++)
+    {
+      for(int j=0;j!=5;j++)
+      {
+        profV2[i][j][k]->Write();
+      }
+      v2Weight[i][k]->Write();
+    }
+  }
+  for(int i=0;i<6;i++)
+  {
+    for(int j=0;j<5;j++)
+    {
+      for(int k=0;k<2;k++)
+        V2Mass[k][i][j]->Write();
+    }
+  }
+  massLike->Write();
+  candPt->Write();
+  massUnlike->Write();
+  for(int k=0;k<3;k++)
+  {
+    for(int i=0;i<5;i++)
+    {
+      hadronV2[i][k]->Write();
+      hadronV2_sum[i][k]->Write();
+    }
+  }
+
+}
+
+bool StMyAnalysisMaker::getHadronCorV2(int idxGap)
+{
+  double etaGap[3] = {0,0.15,0.05};
+  double mEtaGap = etaGap[idxGap];
+  float hadronFill[7] = {0};
+  const double reweight = 1;//mGRefMultCorrUtil->getWeight();
+  // int centrality  = mGRefMultCorrUtil->getCentralityBin9();
+  StPicoEvent *event = (StPicoEvent *)mPicoDst->event();
+  int mult = event->grefMult();
+  for(unsigned int i=0;i<mPicoDst->numberOfTracks();++i)
+  {
+    StPicoTrack const* hadron = mPicoDst->track(i);
+    if(hadron->pMom().perp()<0.2) continue;
+    if(!isGoodHadron(hadron)) continue;
+    float etaHadron = hadron->pMom().pseudoRapidity();
+    float phiHadron = hadron->pMom().phi();
+    if(etaHadron<-0.5*mEtaGap)//backward sample 
+    {
+      hadronFill[0]++;
+      hadronFill[1] += sin(2 * phiHadron);
+      hadronFill[2] += cos(2 * phiHadron);
+    }			
+    if(etaHadron>0.5*mEtaGap)//forward sample
+    {
+      hadronFill[3]++;
+      hadronFill[4] += sin(2 * phiHadron);
+      hadronFill[5] += cos(2 * phiHadron);
+    }			
+  }
+  hadronFill[6] = mult;
+  hadronFill[7] = reweight;
+  //mHadronTuple->Fill(hadronFill);
+  if(hadronFill[0]==0 || hadronFill[3]==0)
+    return false; 
+  double temp = (hadronFill[1]*hadronFill[4]+hadronFill[2]*hadronFill[5]);
+  hadronV2[0][idxGap]->Fill(mult,temp*reweight);
+  hadronV2[1][idxGap]->Fill(mult,hadronFill[2]*reweight);
+  hadronV2[2][idxGap]->Fill(mult,hadronFill[1]*reweight);
+  hadronV2[3][idxGap]->Fill(mult,hadronFill[5]*reweight);
+  hadronV2[4][idxGap]->Fill(mult,hadronFill[4]*reweight);
+  hadronV2_sum[0][idxGap]->Fill(mult,hadronFill[0]*hadronFill[3]*reweight);
+  hadronV2_sum[1][idxGap]->Fill(mult,hadronFill[0]*reweight);
+  hadronV2_sum[2][idxGap]->Fill(mult,hadronFill[0]*reweight);
+  hadronV2_sum[3][idxGap]->Fill(mult,hadronFill[3]*reweight);
+  hadronV2_sum[4][idxGap]->Fill(mult,hadronFill[3]*reweight);
+  //    StPicoTrack const* hadron = picoDst->track(i);
+  //  hadronV2_excl[0][centrality]->Fill(hadron->pMom().perp(),temp*reweight);
+  //  hadronV2_excl[1][centrality]->Fill(hadron->pMom().perp(),hadronFill[2]*reweight);
+  //  hadronV2_excl[2][centrality]->Fill(hadron->pMom().perp(),hadronFill[1]*reweight);
+  //  hadronV2_excl[3][centrality]->Fill(hadron->pMom().perp(),hadronFill[5]*reweight);
+  //  hadronV2_excl[4][centrality]->Fill(hadron->pMom().perp(),hadronFill[4]*reweight);
+  //  hadronV2_excl_sum[0][centrality]->Fill(hadron->pMom().perp(),hadronFill[0]*hadronFill[3]*reweight);
+  //  hadronV2_excl_sum[1][centrality]->Fill(hadron->pMom().perp(),hadronFill[0]*reweight);
+  //  hadronV2_excl_sum[2][centrality]->Fill(hadron->pMom().perp(),hadronFill[0]*reweight);
+  //  hadronV2_excl_sum[3][centrality]->Fill(hadron->pMom().perp(),hadronFill[3]*reweight);
+  //  hadronV2_excl_sum[4][centrality]->Fill(hadron->pMom().perp(),hadronFill[3]*reweight);
+  return true;
+}
