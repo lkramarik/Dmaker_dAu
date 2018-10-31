@@ -37,6 +37,8 @@ class StHFPair;
 class StHFTriplet;
 class StHFCuts;
 
+class TProfile;
+
 class StPicoD0AnaMaker : public StPicoHFMaker
 {
 public:
