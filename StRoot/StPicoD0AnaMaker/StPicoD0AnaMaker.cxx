@@ -85,7 +85,7 @@ int StPicoD0AnaMaker::FinishHF() {
 // _________________________________________________________
 int StPicoD0AnaMaker::MakeHF() {
 	getHadronCorV2(0);
-    createCandidates();
+    //createCandidates();
 //    analyzeCandidates();
 
 //    TH2F *h_piTOF = static_cast<TH2F*>(mOutList->FindObject("h_piTOF"));
