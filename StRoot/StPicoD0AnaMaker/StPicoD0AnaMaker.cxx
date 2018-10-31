@@ -495,5 +495,5 @@ bool StPicoD0AnaMaker::isGoodHadron(StPicoTrack const * const trk) const
   StPicoBTofPidTraits* tofPidTraits;
   if (tofIndex >= 0)  tofPidTraits = mPicoDst->btofPidTraits(tofIndex); //GNX
   if (tofIndex >= 0 && tofPidTraits && tofPidTraits->btofMatchFlag() > 0)  TofMatch = kTRUE;
-  return TofMatch && trk->pMom().perp() > mHFCuts::hadronPtMin &&trk->pMom().perp() < mHFCuts::hadronPtMax && trk->nHitsFit() >= 15 &&fabs(trk->pMom().pseudoRapidity())<1. && (1.0*trk->nHitsFit()/trk->nHitsMax())>0.52;
+  return TofMatch && trk->pMom().perp() > 0.2 &&trk->pMom().perp() < 2.0 && trk->nHitsFit() >= 15 &&fabs(trk->pMom().pseudoRapidity())<1. && (1.0*trk->nHitsFit()/trk->nHitsMax())>0.52;
 }
