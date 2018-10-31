@@ -283,66 +283,6 @@ int StPicoD0AnaMaker::analyzeCandidates() {
                 if (tpcKaon && mHFCuts->isTOFHadronPID(t, mHFCuts->getTofBetaBase(t), StPicoCutsBase::kKaon))  h_tracktest_TOF->Fill(6);
             }
         }
-
-bool StMyAnalysisMaker::getHadronCorV2(int idxGap)
-{
-  double etaGap[3] = {0,0.15,0.05};
-  double mEtaGap = etaGap[idxGap];
-  float hadronFill[7] = {0};
-  const double reweight = 1;//mGRefMultCorrUtil->getWeight();
-  // int centrality  = mGRefMultCorrUtil->getCentralityBin9();
-  StPicoEvent *event = (StPicoEvent *)mPicoDst->event();
-  int mult = event->grefMult();
-  for(unsigned int i=0;i<mPicoDst->numberOfTracks();++i)
-  {
-    StPicoTrack const* hadron = mPicoDst->track(i);
-    if(hadron->pMom().perp()<0.2) continue;
-    if(!isGoodHadron(hadron)) continue;
-    float etaHadron = hadron->pMom().pseudoRapidity();
-    float phiHadron = hadron->pMom().phi();
-    if(etaHadron<-0.5*mEtaGap)//backward sample 
-    {
-      hadronFill[0]++;
-      hadronFill[1] += sin(2 * phiHadron);
-      hadronFill[2] += cos(2 * phiHadron);
-    }			
-    if(etaHadron>0.5*mEtaGap)//forward sample
-    {
-      hadronFill[3]++;
-      hadronFill[4] += sin(2 * phiHadron);
-      hadronFill[5] += cos(2 * phiHadron);
-    }			
-  }
-  hadronFill[6] = mult;
-  hadronFill[7] = reweight;
-  //mHadronTuple->Fill(hadronFill);
-  if(hadronFill[0]==0 || hadronFill[3]==0)
-    return false; 
-  double temp = (hadronFill[1]*hadronFill[4]+hadronFill[2]*hadronFill[5]);
-  hadronV2[0][idxGap]->Fill(mult,temp*reweight);
-  hadronV2[1][idxGap]->Fill(mult,hadronFill[2]*reweight);
-  hadronV2[2][idxGap]->Fill(mult,hadronFill[1]*reweight);
-  hadronV2[3][idxGap]->Fill(mult,hadronFill[5]*reweight);
-  hadronV2[4][idxGap]->Fill(mult,hadronFill[4]*reweight);
-  hadronV2_sum[0][idxGap]->Fill(mult,hadronFill[0]*hadronFill[3]*reweight);
-  hadronV2_sum[1][idxGap]->Fill(mult,hadronFill[0]*reweight);
-  hadronV2_sum[2][idxGap]->Fill(mult,hadronFill[0]*reweight);
-  hadronV2_sum[3][idxGap]->Fill(mult,hadronFill[3]*reweight);
-  hadronV2_sum[4][idxGap]->Fill(mult,hadronFill[3]*reweight);
-  //    StPicoTrack const* hadron = picoDst->track(i);
-  //  hadronV2_excl[0][centrality]->Fill(hadron->pMom().perp(),temp*reweight);
-  //  hadronV2_excl[1][centrality]->Fill(hadron->pMom().perp(),hadronFill[2]*reweight);
-  //  hadronV2_excl[2][centrality]->Fill(hadron->pMom().perp(),hadronFill[1]*reweight);
-  //  hadronV2_excl[3][centrality]->Fill(hadron->pMom().perp(),hadronFill[5]*reweight);
-  //  hadronV2_excl[4][centrality]->Fill(hadron->pMom().perp(),hadronFill[4]*reweight);
-  //  hadronV2_excl_sum[0][centrality]->Fill(hadron->pMom().perp(),hadronFill[0]*hadronFill[3]*reweight);
-  //  hadronV2_excl_sum[1][centrality]->Fill(hadron->pMom().perp(),hadronFill[0]*reweight);
-  //  hadronV2_excl_sum[2][centrality]->Fill(hadron->pMom().perp(),hadronFill[0]*reweight);
-  //  hadronV2_excl_sum[3][centrality]->Fill(hadron->pMom().perp(),hadronFill[3]*reweight);
-  //  hadronV2_excl_sum[4][centrality]->Fill(hadron->pMom().perp(),hadronFill[3]*reweight);
-  return true;
-}
-
     }
 //    for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
 //        StPicoTrack const *t = mPicoDst->track(mIdxPicoPions[idxPion1]);
@@ -357,7 +297,7 @@ bool StMyAnalysisMaker::getHadronCorV2(int idxGap)
 }
 
 
-void StMyAnalysisMaker::DeclareHistograms() {
+void StPicoD0AnaMaker::DeclareHistograms() {
     // for v2 calcualtion
   TString flatten[5];
   flatten[0] = "v2";
@@ -444,7 +384,7 @@ void StMyAnalysisMaker::DeclareHistograms() {
 
 }
 
-void StMyAnalysisMaker::WriteHistograms() {
+void StPicoD0AnaMaker::WriteHistograms() {
    //Saving for v2 calculation
   for(int i=0;i!=8;i++)
   {
@@ -479,7 +419,7 @@ void StMyAnalysisMaker::WriteHistograms() {
 
 }
 
-bool StMyAnalysisMaker::getHadronCorV2(int idxGap)
+bool StPicoD0AnaMaker::getHadronCorV2(int idxGap)
 {
   double etaGap[3] = {0,0.15,0.05};
   double mEtaGap = etaGap[idxGap];
