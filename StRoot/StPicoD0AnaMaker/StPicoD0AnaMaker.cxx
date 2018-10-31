@@ -378,11 +378,13 @@ void StPicoD0AnaMaker::DeclareHistograms() {
       TString massName[2];
       massName[0] = Form("likeMass%i",i)+flatten[j];
       massName[1] = Form("unlikeMass%i",i)+flatten[j];
+      /*
       for(int k=0;k<2;k++)
       {
         V2Mass[k][i][j] = new TProfile(massName[k].Data(),"",18,fitmean[i]-9*fitsigma[i],fitmean[i]+9*fitsigma[i]);
         V2Mass[k][i][j]->Sumw2();
       }
+      */
     }
   }
 
@@ -402,7 +404,7 @@ void StPicoD0AnaMaker::WriteHistograms() {
       v2Weight[i][k]->Write();
     }
   }
-  */
+  
   for(int i=0;i<6;i++)
   {
     for(int j=0;j<5;j++)
@@ -411,6 +413,7 @@ void StPicoD0AnaMaker::WriteHistograms() {
         V2Mass[k][i][j]->Write();
     }
   }
+  */
   massLike->Write();
   //candPt->Write();
   massUnlike->Write();
