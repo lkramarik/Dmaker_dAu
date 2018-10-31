@@ -50,6 +50,7 @@ public:
 
     void    DeclareHistograms();
     void WriteHistograms();
+    bool isGoodHadron(StPicoTrack const*) const;
 
 protected:
 
@@ -61,6 +62,22 @@ private:
     TNtuple *ntp_DMeson_Background;
 //    TNtuple *ntp_kaon;
 //    TNtuple *ntp_pion;
+
+    TProfile *profV2[8][5][3];//i.S or B; j.flatten; k. differetn etaGap
+    TH1D *hadronV2[5][3];
+    TH1D *hadronV2_sum[5][3];
+    TH2D *fitPhi[6];
+    TH2D *massPt;
+    TH2D *massPtLike;
+    TH2D *massLike;
+    TH2D *massLike2;
+    TH2D *massUnlike;
+    TH2D *v2Weight[8][3];
+    TH2D *likeV2Mass[6][5];
+    TH2D *likeV2Mass2[6][5];
+    TH2D *unlikeV2Mass[6][5];
+    TProfile *V2Mass[2][6][5];
+    TProfile *candPt;
 
     bool getHadronCorV2(int );
     int mRunNumber;
