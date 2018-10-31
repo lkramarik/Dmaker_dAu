@@ -48,6 +48,9 @@ public:
     virtual void  ClearHF(Option_t *opt);
     virtual Int_t FinishHF();
 
+    void    DeclareHistograms();
+    void WriteHistograms();
+
 protected:
 
 private:
@@ -59,7 +62,7 @@ private:
 //    TNtuple *ntp_kaon;
 //    TNtuple *ntp_pion;
 
-
+    bool getHadronCorV2(int );
     int mRunNumber;
     TString mOutFileBaseName;
 
