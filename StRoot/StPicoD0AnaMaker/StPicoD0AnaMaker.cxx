@@ -77,7 +77,7 @@ void StPicoD0AnaMaker::ClearHF(Option_t *opt="") {
 int StPicoD0AnaMaker::FinishHF() {
     ntp_DMeson_Signal -> Write(ntp_DMeson_Signal->GetName(), TObject::kOverwrite);
     ntp_DMeson_Background -> Write(ntp_DMeson_Background->GetName(), TObject::kOverwrite);
-    //WriteHistograms();
+    WriteHistograms();
 //    ntp_pion -> Write(ntp_pion->GetName(), TObject::kOverwrite);
 //    ntp_kaon -> Write(ntp_kaon->GetName(), TObject::kOverwrite);
     return kStOK;
@@ -415,9 +415,9 @@ void StPicoD0AnaMaker::WriteHistograms() {
     }
   }
   */
-  massLike->Write();
+  //massLike->Write();
   //candPt->Write();
-  massUnlike->Write();
+  //massUnlike->Write();
   for(int k=0;k<3;k++)
   {
     for(int i=0;i<5;i++)
