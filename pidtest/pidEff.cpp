@@ -30,6 +30,10 @@ Float_t mSigma = 999;
 Float_t mSigmaE = 999;
 Float_t mMean = 999;
 Float_t mMeanE = 999;
+TString mOutputFileName = "defaultName.root";
+
+inline void setOutputFileName(TString name){mOutputFileName=name;}
+
 
 void pidEff() {
     bool kaons = true;
@@ -37,9 +41,9 @@ void pidEff() {
 //    bool kaons = false;
 //    bool pions = true;
 
-//    TString input = "ntp.picoPhiAnaMaker.root";
+    TString input = "ntp.picoPhiAnaMaker.root";
 //    TString input = "ntp.picoK0sAnaMaker.root";
-    TString input = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/Phi_large/production/ntp.picoPhiAnaMaker.root";
+//    TString input = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/Phi_large/production/ntp.picoPhiAnaMaker.root";
 //    TString input = "outputBaseName.picoK0sAnaMaker.root";
 
 //    Float_t ptBins[] = {2.2, 2.5, 3};
@@ -52,9 +56,11 @@ void pidEff() {
     Float_t sigmas[nBins];
 
     Float_t massMin, massMax, mean, sigma;
-    TString pair;
+    TString pair, pairName;
+    TCut cut;
     if (kaons) {
         pair = "KK";
+        pairName = "KK";
         massMin = 1.0;// Phi to KK
         massMax = 1.04;// Phi to KK
         mean = 1.1;
@@ -62,6 +68,8 @@ void pidEff() {
     }
     if (pions) {
         pair = "#pi#pi";
+        pairName = "pipi";
+
         massMin = 0.4;// K to pipi
         massMax = 0.6;// K to pipi
         mean = 0.5;
@@ -70,20 +78,28 @@ void pidEff() {
 
     int analysedBins=0;
 
-//    for (int i = 6; i < 8; ++i) {
-    for (int i = 0; i < nBins-1; ++i) {
-        TH1F *signal = (TH1F *) projectSubtractBckg(input,50, massMin, massMax, ptBins[i], ptBins[i + 1], pair, Form("pair_mass > %.3f && pair_mass < %.3f", massMin, massMax), "pair_mass", "Mass_{%s} (GeV/c^{2})");
-        peakFit(signal, mean, sigma, massMin, massMax, pair, ptBins[i], ptBins[i + 1], "mass");
-        massMean = mMean;
-        massSigma = mSigma;
+    setOutputFileName("mass_"+pairName+".root");
+    TH1F *signal = (TH1F*) projectSubtractBckg(input,50, massMin, massMax, 0, 10, pair, Form("pair_mass>%.3f && pair_mass<%.3f && pair_pt>%.3f && pair_pt<%.3f", massMin, massMax, 0., 10.), "pair_mass", "Mass_{%s} (GeV/c^{2})");
+    peakFit(signal, mean, sigma, massMin, massMax, pair, 0., 10., "mass");
+    massMean = mMean;
+    massSigma = mSigma;
+
+    for (int i = 6; i < 8; ++i) {
+//    for (int i = 0; i < nBins-1; ++i) {
         //clean pions:
-        TH1F *hSigmaSignal1 = (TH1F *) projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i + 1], pair, Form("pair_mass>%f && pair_mass<%f", mMean - 2*mSigma, mMean + 2*mSigma), "pi1_nSigma", "pi1_nSigma");
-        TH1F *hSigmaSignal2 = (TH1F *) projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i + 1], pair, Form("pair_mass>%f && pair_mass<%f", mMean - 2*mSigma, mMean + 2*mSigma), "pi2_nSigma", "pi2_nSigma");
+        setOutputFileName("nSigma_"+pairName+"_1.root");
+        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%.3f && pi1_pt<%.3f", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
+        TH1F *hSigmaSignal1 = (TH1F*) projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut, "pi1_nSigma", "pi1_nSigma");
+
+        setOutputFileName("nSigma_"+pairName+"_2.root");
+        cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%.3f && pi2_pt<%.3f", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
+        TH1F *hSigmaSignal2 = (TH1F*) projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut, "pi2_nSigma", "pi2_nSigma");
 
         hSigmaSignal1->Add(hSigmaSignal2);
         peakFit(hSigmaSignal1, 0, 1,-5, 5, pair, ptBins[i], ptBins[i + 1], "pi_nSigma");
-        binWidth[i] = (ptBins[i + 1] - ptBins[i])/2;
-        xPt[i] = (ptBins[i + 1] + ptBins[i]) / 2;
+
+        binWidth[i] = (ptBins[i+1]-ptBins[i])/2;
+        xPt[i] = (ptBins[i+1]+ptBins[i]) / 2;
         means[i] = mMean;
         meansE[i] = mMeanE;
         sigmas[i] = mSigma;
@@ -91,12 +107,18 @@ void pidEff() {
         Double_t integralClean = hSigmaSignal1->IntegralAndError(hSigmaSignal1->FindBin(mMean-2*mSigma),hSigmaSignal1->FindBin(mMean+2*mSigma),errorClean,""); //number of it without PID cut
         cout<<integralClean<<endl;
 
-        //tof pions:
-        TH1F *hSigmaSignalAna1 = (TH1F *) projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i + 1], pair, Form("pair_mass>%f && pair_mass<%f && pi1_TOFinvbeta<0.03 && pi1_TOFinvbeta>0", massMean - 2*massSigma, massMean + 2*massSigma), "pi1_nSigma", "pi1_nSigma_ana");
-        TH1F *hSigmaSignalAna2 = (TH1F *) projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i + 1], pair, Form("pair_mass>%f && pair_mass<%f && pi2_TOFinvbeta<0.03 && pi2_TOFinvbeta>0", massMean - 2*massSigma, massMean + 2*massSigma), "pi2_nSigma", "pi2_nSigma_ana");
+        //tof pions after my PID cut:
+        setOutputFileName("nSigma_"+pairName+"_ana_1.root");
+        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta<0.03 && pi1_TOFinvbeta>0", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
+        TH1F *hSigmaSignalAna1 = (TH1F*) projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut, "pi1_nSigma", "pi1_nSigma_ana");
+
+        setOutputFileName("nSigma_"+pairName+"_ana_2.root");
+        cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%f && pi2_pt<%f && pi2_TOFinvbeta<0.03 && pi2_TOFinvbeta>0", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
+        TH1F *hSigmaSignalAna2 = (TH1F*) projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut, "pi2_nSigma", "pi2_nSigma_ana");
 
         hSigmaSignalAna1->Add(hSigmaSignalAna2);
-        peakFit(hSigmaSignalAna1, 0, 1,-5, 5, pair, ptBins[i], ptBins[i + 1], "pi_nSigma_ana");
+        peakFit(hSigmaSignalAna1, 0, 1,-5, 5, pair, ptBins[i], ptBins[i+1], "pi_nSigma_ana");
+
         Double_t integralAna = hSigmaSignalAna1->IntegralAndError(hSigmaSignalAna1->FindBin(mMean-2*mSigma),hSigmaSignalAna1->FindBin(mMean+2*mSigma),errorAna,""); //number of it without PID cut
         cout<<integralAna<<endl;
         eff[i]=(float)integralAna/(float)integralClean;
@@ -104,6 +126,7 @@ void pidEff() {
         cout<<eff[i]<<" pm "<<effError[i]<<endl;
         ++analysedBins;
     }
+
     TGraphErrors *gMean = new TGraphErrors(analysedBins,xPt,means,binWidth, meansE);
     TGraphErrors *gSigmas = new TGraphErrors(analysedBins,xPt,sigmas,binWidth, sigmasE);
     TGraphErrors *gEff = new TGraphErrors(analysedBins,xPt,eff,binWidth, effError);
@@ -146,15 +169,11 @@ void pidEff() {
     gEff->Draw("ap");
     c3->SaveAs("effTOF.pdf");
     c3->Close();
-
-
-
 }
 
 TH1F* projectSubtractBckg(TString input, Int_t nBins, Float_t massMin, Float_t massMax, Float_t ptmin, Float_t ptmax, TString pair, TCut setCut, TString variable, TString varName){
     std::vector<TCut> mCuts;
     mCuts.push_back(setCut);
-    mCuts.push_back(Form("pair_pt > %.3f && pair_pt < %.3f", ptmin, ptmax));
     TFile* data = new TFile(input ,"r");
     TNtuple* ntpS = (TNtuple*)data -> Get("ntp_signal");
     TNtuple* ntpB = (TNtuple*)data -> Get("ntp_background");
@@ -165,8 +184,8 @@ TH1F* projectSubtractBckg(TString input, Int_t nBins, Float_t massMin, Float_t m
     TString nameSubtr = Form("hSsubtr_%.3f_%.3f", ptmin, ptmax);
 
     TFile* dataRes = new TFile();
-    TString output = variable+pairShort+".root";
-    dataRes = new TFile(output,"UPDATE");
+    cout<<mOutputFileName<<endl;
+    dataRes = new TFile(mOutputFileName,"UPDATE");
 
     TCut setCuts = "";
     for(unsigned int k = 0; k < mCuts.size(); ++k) {
@@ -232,7 +251,7 @@ TH1F* subtractBckg(TH1F* hS, TH1F* hB, TString nameSubtr, TFile* outputF, TStrin
 
 void peakFit(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin, Float_t massMax, TString pair, Float_t ptmin, Float_t ptmax, TString varName){
     TF1 *funLS = new TF1("funLS","pol1(0)+gaus(2)", massMin, massMax);
-    funLS->SetParameters(1.,1.,1000.,mean,sigma);
+    funLS->SetParameters(1.,1.,10000.,mean,sigma);
     funLS->SetLineColor(2);
     funLS->SetLineStyle(7);
     funLS->SetLineStyle(1);
