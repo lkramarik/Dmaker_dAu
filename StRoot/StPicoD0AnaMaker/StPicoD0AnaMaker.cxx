@@ -427,7 +427,7 @@ void StPicoD0AnaMaker::WriteHistograms() {
     }
   }
 
-      printf("Histograms declared! \n");
+      printf("Histograms written! \n");
 }
 
 bool StPicoD0AnaMaker::getHadronCorV2(int idxGap)
