@@ -41,9 +41,9 @@ void pidEff() {
 //    bool kaons = false;
 //    bool pions = true;
 
-    TString input = "ntp.picoPhiAnaMaker.root";
+//    TString input = "ntp.picoPhiAnaMaker.root";
 //    TString input = "ntp.picoK0sAnaMaker.root";
-//    TString input = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/Phi_large/production/ntp.picoPhiAnaMaker.root";
+    TString input = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/Phi_large/production/ntp.picoPhiAnaMaker.root";
 //    TString input = "outputBaseName.picoK0sAnaMaker.root";
 
 //    Float_t ptBins[] = {2.2, 2.5, 3};
