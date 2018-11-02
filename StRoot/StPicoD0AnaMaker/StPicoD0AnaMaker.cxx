@@ -362,6 +362,7 @@ void StPicoD0AnaMaker::DeclareHistograms() {
         hadronV2_excl_sum[i][j][k]->Sumw2();
       }
       */
+      printf("Histograms declared! \n");
     }
 }
 
@@ -426,6 +427,7 @@ void StPicoD0AnaMaker::WriteHistograms() {
     }
   }
 
+      printf("Histograms declared! \n");
 }
 
 bool StPicoD0AnaMaker::getHadronCorV2(int idxGap)
@@ -484,6 +486,9 @@ bool StPicoD0AnaMaker::getHadronCorV2(int idxGap)
   //  hadronV2_excl_sum[2][centrality]->Fill(hadron->pMom().perp(),hadronFill[0]*reweight);
   //  hadronV2_excl_sum[3][centrality]->Fill(hadron->pMom().perp(),hadronFill[3]*reweight);
   //  hadronV2_excl_sum[4][centrality]->Fill(hadron->pMom().perp(),hadronFill[3]*reweight);
+
+
+      printf("GetCor done! \n");
   return true;
 }
 
