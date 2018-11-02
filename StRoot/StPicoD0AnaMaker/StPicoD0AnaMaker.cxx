@@ -84,7 +84,7 @@ int StPicoD0AnaMaker::FinishHF() {
 }
 // _________________________________________________________
 int StPicoD0AnaMaker::MakeHF() {
-	//getHadronCorV2(0);
+	getHadronCorV2(0);
     //createCandidates();
 //    analyzeCandidates();
 
