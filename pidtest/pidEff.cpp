@@ -36,14 +36,14 @@ inline void setOutputFileName(TString name){mOutputFileName=name;}
 
 
 void pidEff() {
-    bool kaons = true;
-    bool pions = false;
-//    bool kaons = false;
-//    bool pions = true;
+//    bool kaons = true;
+//    bool pions = false;
+    bool kaons = false;
+    bool pions = true;
 
 //    TString input = "ntp.picoPhiAnaMaker.root";
-//    TString input = "ntp.picoK0sAnaMaker.root";
-    TString input = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/Phi_large/production/ntp.picoPhiAnaMaker.root";
+    TString input = "ntp.picoK0sAnaMaker.root";
+//    TString input = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/Phi_large/production/ntp.picoPhiAnaMaker.root";
 //    TString input = "outputBaseName.picoK0sAnaMaker.root";
 
 //    Float_t ptBins[] = {2.2, 2.5, 3};
@@ -55,7 +55,7 @@ void pidEff() {
     Double_t errorClean, errorAna;
     Float_t sigmas[nBins];
 
-    Float_t massMin, massMax, mean, sigma;
+    Float_t massMin, massMax, mean, sigma, ptPairMin, ptPairMax;
     TString pair, pairName;
     TCut cut;
     if (kaons) {
@@ -65,6 +65,8 @@ void pidEff() {
         massMax = 1.04;// Phi to KK
         mean = 1.1;
         sigma = 0.04;
+        ptPairMin = 0;
+        ptPairMax = 10;
     }
     if (pions) {
         pair = "#pi#pi";
@@ -74,6 +76,8 @@ void pidEff() {
         massMax = 0.6;// K to pipi
         mean = 0.5;
         sigma = 0.004;
+        ptPairMin = 0.5;
+        ptPairMax = 10;
     }
 
     int analysedBins=0;
@@ -84,8 +88,8 @@ void pidEff() {
     massMean = mMean;
     massSigma = mSigma;
 
-    for (int i = 6; i < 8; ++i) {
-//    for (int i = 0; i < nBins-1; ++i) {
+//    for (int i = 6; i < 8; ++i) {
+    for (int i = 0; i < nBins-1; ++i) {
         //clean pions:
         setOutputFileName("nSigma_"+pairName+"_1.root");
         cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%.3f && pi1_pt<%.3f", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);

@@ -136,13 +136,14 @@ class StHFCuts : public StPicoCutsBase
 };
 
 inline void StHFCuts::setCutSecondaryPair(float dcaDaughtersMax, float decayLengthMin, float decayLengthMax, 
-					  float cosThetaMin, float massMin, float massMax)  {
+					  float cosThetaMin, float massMin, float massMax, float pairDcaMax)  {
   mSecondaryPairDcaDaughtersMax = dcaDaughtersMax;
   mSecondaryPairDecayLengthMin = decayLengthMin;
   mSecondaryPairDecayLengthMax = decayLengthMax;
   mSecondaryPairCosThetaMin = cosThetaMin;
   mSecondaryPairMassMin = massMin;
   mSecondaryPairMassMax = massMax;
+  mSecondaryPairDcaToPvMax = pairDcaMax;
 }
 
 inline void StHFCuts::setCutTertiaryPair(float dcaDaughtersMax, float decayLengthMin, float decayLengthMax, 

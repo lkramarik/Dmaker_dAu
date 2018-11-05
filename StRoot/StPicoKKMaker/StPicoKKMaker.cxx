@@ -68,7 +68,8 @@ int StPicoKKMaker::createCandidates() {
 //            if (kaon1->id() == kaon2->id()) continue;
 
             StHFPair *pair = new StHFPair(kaon1, kaon2, mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoKaons[i], mIdxPicoKaons[j], mPrimVtx, mBField, kTRUE);
-            if (!mHFCuts->isClosePair(pair)) continue;
+//            if (!mHFCuts->isClosePair(pair)) continue;
+            if (!mHFCuts->isGoodSecondaryVertexPair(pair)) continue;
 
             bool isPhi = false;
             if (kaon1->charge()+kaon2->charge() == 0) isPhi = true;
