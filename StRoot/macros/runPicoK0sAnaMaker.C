@@ -77,8 +77,9 @@ void runPicoK0sAnaMaker(
     float cosThetaMin     = 0.7;   // minimum
     float minMass         = 0.42;
     float maxMass         = 0.58;
+    float pairDcaMax      = 0.9;
 
-    hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass);
+    hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass, pairDcaMax);
 
     StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
 

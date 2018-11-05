@@ -85,7 +85,9 @@ void runPicoPhiAnaMakerLocal(
   float cosThetaMin     = -0.2;   // minimum
   float minMass         = 0.8;
   float maxMass         = 1.1;
-  hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass);
+  float pairDcaMax      = 99.9;
+
+  hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass, pairDcaMax);
  
   //Single track pt
   hfCuts->setCutPtRange(0.15,50.0,StHFCuts::kKaon); //0.2, 50.0

@@ -51,7 +51,7 @@ class StHFCuts : public StPicoCutsBase
   // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
   
   void setCutSecondaryPair(float dcaDaughtersMax, float decayLengthMin, float decayLengthMax, 
-			   float cosThetaMin, float massMin, float massMax); 
+			   float cosThetaMin, float massMin, float massMax, float pairDcaMax);
   
   void setCutTertiaryPair(float dcaDaughtersMax, float decayLengthMin, float decayLengthMax, 
 			  float cosThetaMin, float massMin, float massMax); 
