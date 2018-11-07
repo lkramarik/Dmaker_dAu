@@ -457,7 +457,8 @@ bool StPicoD0AnaMaker::getHadronCorV2(int idxGap)
       hadronFill[3]++;
       hadronFill[4] += sin(2 * phiHadron);
       hadronFill[5] += cos(2 * phiHadron);
-    }			
+    }		
+    printf("eta hadron %f \n", etaHadron);	
   }
   hadronFill[6] = mult;
   hadronFill[7] = reweight;
