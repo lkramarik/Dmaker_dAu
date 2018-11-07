@@ -84,7 +84,7 @@ int StPicoD0AnaMaker::FinishHF() {
 }
 // _________________________________________________________
 int StPicoD0AnaMaker::MakeHF() {
-	getHadronCorV2(0);
+	getHadronCorV2(1);
     //createCandidates();
 //    analyzeCandidates();
 
@@ -475,6 +475,9 @@ bool StPicoD0AnaMaker::getHadronCorV2(int idxGap)
   hadronV2_sum[2][idxGap]->Fill(mult,hadronFill[0]*reweight);
   hadronV2_sum[3][idxGap]->Fill(mult,hadronFill[3]*reweight);
   hadronV2_sum[4][idxGap]->Fill(mult,hadronFill[3]*reweight);
+  printf("mult %f \n", mult);
+  printf("hadron fill 0 %f       1 %f        2 %f         3 %f          4 %f \n", hadronFill[0], hadronFill[1], hadronFill[2], hadronFill[3], hadronFill[4]);
+  printf("reweight %f \n \n \n ", reweight);
   //    StPicoTrack const* hadron = picoDst->track(i);
   //  hadronV2_excl[0][centrality]->Fill(hadron->pMom().perp(),temp*reweight);
   //  hadronV2_excl[1][centrality]->Fill(hadron->pMom().perp(),hadronFill[2]*reweight);
