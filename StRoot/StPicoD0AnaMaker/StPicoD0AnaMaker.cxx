@@ -491,8 +491,6 @@ bool StPicoD0AnaMaker::getHadronCorV2(int idxGap)
   //  hadronV2_excl_sum[2][centrality]->Fill(hadron->pMom().perp(),hadronFill[0]*reweight);
   //  hadronV2_excl_sum[3][centrality]->Fill(hadron->pMom().perp(),hadronFill[3]*reweight);
   //  hadronV2_excl_sum[4][centrality]->Fill(hadron->pMom().perp(),hadronFill[3]*reweight);
-
-
       printf("GetCor done! \n");
   return true;
 }
