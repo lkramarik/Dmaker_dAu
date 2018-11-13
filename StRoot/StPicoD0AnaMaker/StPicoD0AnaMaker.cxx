@@ -237,6 +237,7 @@ int StPicoD0AnaMaker::createCandidates() {
                 if(!getCorV2(pair, 1)) continue;
             } else {
                 ntp_DMeson_Background->Fill(ntVar);
+                if(!getCorV2(pair, 1)) continue;
             }
         }  // for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon)
     } // for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1)
@@ -573,7 +574,8 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
       {
         if(fillSB[j])
         {
-          profV2[j][3][k]->Fill(kp->pt(),sin(2*phiHadron),weight);
+          printf("som tutok! \n");
+          profV2[j][3][k]->Fill(kp->pt(),sin(2*phiHadron),weight);s
           profV2[j][4][k]->Fill(kp->pt(),cos(2*phiHadron),weight);
           profV2[j][0][k]->Fill(kp->pt(),cos(2*(phiHadron-kp->phi())),weight);
           //v2Weight[j][k]->Fill(mult,kp->pt(),weight);
