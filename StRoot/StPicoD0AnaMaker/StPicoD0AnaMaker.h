@@ -83,7 +83,7 @@ private:
     TProfile *candPt;
 
     bool getHadronCorV2(int );
-    bool getCorV2(TNtuple *, double);
+    bool getCorV2(StHFPair *, double);
     bool isEtaGap(double, double ,double);
     int mRunNumber;
     TString mOutFileBaseName;

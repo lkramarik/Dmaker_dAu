@@ -505,7 +505,7 @@ bool StPicoD0AnaMaker::isGoodHadron(StPicoTrack const * const trk) const
 
 
 
-bool StMyAnalysisMaker::getCorV2(StHFPair *kp,double weight)
+bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
 {
   // int centrality  = mGRefMultCorrUtil->getCentralityBin9();
   StPicoEvent *event = (StPicoEvent *)mPicoDst->event();
@@ -575,7 +575,7 @@ bool StMyAnalysisMaker::getCorV2(StHFPair *kp,double weight)
           profV2[j][3][k]->Fill(kp->pt(),sin(2*phiHadron),weight);
           profV2[j][4][k]->Fill(kp->pt(),cos(2*phiHadron),weight);
           profV2[j][0][k]->Fill(kp->pt(),cos(2*(phiHadron-kp->phi())),weight);
-          v2Weight[j][k]->Fill(mult,kp->pt(),weight);
+          //v2Weight[j][k]->Fill(mult,kp->pt(),weight);
         }
       }
     }// Loop over charged tracks
