@@ -505,7 +505,7 @@ bool StPicoD0AnaMaker::isGoodHadron(StPicoTrack const * const trk) const
 }
 
 
-
+/*
 bool StMyAnalysisMaker::getCorV2(TNtuple *kp,double weight)
 {
   // int centrality  = mGRefMultCorrUtil->getCentralityBin9();
@@ -594,3 +594,4 @@ bool StMyAnalysisMaker::getCorV2(TNtuple *kp,double weight)
   }//Loop over different eta gap (k)
   return true;
 }
+*/
