@@ -234,7 +234,7 @@ int StPicoD0AnaMaker::createCandidates() {
 
             if ((flag == 0) || (flag == 1)) {
                 ntp_DMeson_Signal->Fill(ntVar);
-                if(!getCorV2(pair)) continue;
+                if(!getCorV2(pair, 1)) continue;
             } else {
                 ntp_DMeson_Background->Fill(ntVar);
             }
@@ -512,7 +512,7 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
   // TClonesArray const * aKaonPion = mPicoD0Event->kaonPionArray();
   // StKaonPion const* kp = (StKaonPion*)aKaonPion->At(idxCand);
   StPicoTrack const* kaon = mPicoDst->track(kp->particle1Idx());
-  StPicoTrack const* pion = mPicoDst->track(kp->particle1Idx());
+  StPicoTrack const* pion = mPicoDst->track(kp->particle2Idx());
   int charge = kaon->charge() * pion->charge();
   double dMass = kp->m();
 
@@ -560,7 +560,7 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
       StPicoTrack const* hadron = mPicoDst->track(i);
       if(hadron->pMom().perp()<0.2) continue;
       if(!isGoodHadron(hadron)) continue;
-      if(i==kp->kaonIdx() || i==kp->pionIdx()) continue;
+      if(i==kp->particle1Idx() || i==kp->particle2Idx()) continue;
       float etaHadron = hadron->pMom().pseudoRapidity();
       float phiHadron = hadron->pMom().phi();
       if(!isEtaGap(kp->eta(),etaGap[k],etaHadron))  continue;
