@@ -63,7 +63,7 @@ void runPicoPhiAnaMaker(
 
     hfCuts->setCutNHitsFitMin(15); //default is 20
     hfCuts->setCutRequireHFT(true);
-    hfCuts->setHybridTof(false);
+    hfCuts->setHybridTof(true);
     hfCuts->setCutDcaMin(0.00,StHFCuts::kKaon);
 
     // kaonPion pair cuts
