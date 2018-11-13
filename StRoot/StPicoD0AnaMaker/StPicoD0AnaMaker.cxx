@@ -234,7 +234,7 @@ int StPicoD0AnaMaker::createCandidates() {
 
             if ((flag == 0) || (flag == 1)) {
                 ntp_DMeson_Signal->Fill(ntVar);
-                getCorV2(pair);
+                if(!getCorV2(pair)) continue;
             } else {
                 ntp_DMeson_Background->Fill(ntVar);
             }
@@ -464,7 +464,6 @@ bool StPicoD0AnaMaker::getHadronCorV2(int idxGap)
   printf("hadron fill 0 %f       1 %f        2 %f         3 %f          4 %f        5 %f \n", hadronFill[0], hadronFill[1], hadronFill[2], hadronFill[3], hadronFill[4], hadronFill[5]);
   if(hadronFill[0]==0 || hadronFill[3]==0)
     return false; 
-  printf("mult po podmienke ??? %i \n \n \n \n ", mult);
   double temp = (hadronFill[1]*hadronFill[4]+hadronFill[2]*hadronFill[5]);
   hadronV2[0][idxGap]->Fill(mult,temp*reweight);
   hadronV2[1][idxGap]->Fill(mult,hadronFill[2]*reweight);
