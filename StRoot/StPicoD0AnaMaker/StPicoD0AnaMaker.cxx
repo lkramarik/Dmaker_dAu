@@ -575,7 +575,7 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
         if(fillSB[j])
         {
           printf("som tutok! \n");
-          profV2[j][3][k]->Fill(kp->pt(),sin(2*phiHadron),weight);s
+          profV2[j][3][k]->Fill(kp->pt(),sin(2*phiHadron),weight);
           profV2[j][4][k]->Fill(kp->pt(),cos(2*phiHadron),weight);
           profV2[j][0][k]->Fill(kp->pt(),cos(2*(phiHadron-kp->phi())),weight);
           //v2Weight[j][k]->Fill(mult,kp->pt(),weight);
@@ -601,7 +601,7 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
 bool StPicoD0AnaMaker::isEtaGap(double dEta,double mGap,double hEta)
 {
   if(mGap == 0) return true;
-  double range =  2. - mGap*2;
+  //double range =  2. - mGap*2;
   // if(dEta> (1.-2*mGap))
   //   return hEta<(dEta-mGap) && hEta>(dEta-mGap-range);
   // else if(dEta<(-1.+2*mGap))
