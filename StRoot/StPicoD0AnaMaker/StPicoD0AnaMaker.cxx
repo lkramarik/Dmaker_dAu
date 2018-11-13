@@ -592,3 +592,20 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
   }//Loop over different eta gap (k)
   return true;
 }
+
+
+bool StPicoD0AnaMaker::isEtaGap(double dEta,double mGap,double hEta)
+{
+  if(mGap == 0) return true;
+  double range =  2. - mGap*2;
+  // if(dEta> (1.-2*mGap))
+  //   return hEta<(dEta-mGap) && hEta>(dEta-mGap-range);
+  // else if(dEta<(-1.+2*mGap))
+  //   return hEta>(dEta+mGap) && hEta<(dEta+mGap+range);
+  // else 
+  //   return (hEta>(dEta+mGap) || hEta<(dEta-mGap));
+  if(dEta>0)
+    return hEta<-mGap;
+  else
+    return hEta>mGap;
+}
