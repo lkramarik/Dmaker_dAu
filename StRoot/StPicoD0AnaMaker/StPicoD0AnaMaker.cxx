@@ -528,6 +528,8 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
   double mean = fitmean[ptIdx];
   double sigma = fitsigma[ptIdx];
   bool fillSB[8];
+  printf("charge %i \n", charge);
+  printf("mass %d \n", dMass);
   fillSB[0] =  (charge>0)&& (dMass>(mean-1*sigma)) &&  (dMass<(mean+1*sigma));
   fillSB[1] =  (charge>0)&& (dMass>(mean-3*sigma)) &&  (dMass<(mean+3*sigma));
   fillSB[2] =  (charge>0) && (((dMass>(mean+4*sigma)) &&  (dMass<(mean+9*sigma))) ||((dMass>(mean-9*sigma)) &&  (dMass<(mean-4*sigma))));
