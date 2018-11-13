@@ -575,6 +575,7 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
         if(fillSB[j])
         {
           printf("som tutok! \n");
+          printf("jjjjjj   %i \n", j);
           profV2[j][3][k]->Fill(kp->pt(),sin(2*phiHadron),weight);
           profV2[j][4][k]->Fill(kp->pt(),cos(2*phiHadron),weight);
           profV2[j][0][k]->Fill(kp->pt(),cos(2*(phiHadron-kp->phi())),weight);
