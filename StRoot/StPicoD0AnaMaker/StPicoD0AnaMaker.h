@@ -3,6 +3,7 @@
 
 #include "StPicoHFMaker/StPicoHFMaker.h"
 #include "TNtuple.h"
+#include "TProfile.h"
 //#include "StRefMultCorr/StRefMultCorr.h"
 #include "TH2F.h"
 //#include "StPicoD0AnaHists.h"

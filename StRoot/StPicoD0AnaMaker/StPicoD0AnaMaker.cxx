@@ -462,7 +462,6 @@ bool StPicoD0AnaMaker::getHadronCorV2(int idxGap)
   //mHadronTuple->Fill(hadronFill);
   printf("mult %i \n", mult);
   printf("hadron fill 0 %f       1 %f        2 %f         3 %f          4 %f        5 %f \n", hadronFill[0], hadronFill[1], hadronFill[2], hadronFill[3], hadronFill[4], hadronFill[5]);
-  printf("reweight %i \n \n \n ", reweight);
   if(hadronFill[0]==0 || hadronFill[3]==0)
     return false; 
   printf("mult po podmienke ??? %i \n \n \n \n ", mult);
