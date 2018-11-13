@@ -30,19 +30,20 @@ Float_t mSigma = 999;
 Float_t mSigmaE = 999;
 Float_t mMean = 999;
 Float_t mMeanE = 999;
+Float_t mHeight = 10000;
 TString mOutputFileName = "defaultName.root";
 
 inline void setOutputFileName(TString name){mOutputFileName=name;}
 
 
 void pidEff() {
-//    bool kaons = true;
-//    bool pions = false;
-    bool kaons = false;
-    bool pions = true;
+    bool kaons = true;
+    bool pions = false;
+//    bool kaons = false;
+//    bool pions = true;
 
-//    TString input = "ntp.picoPhiAnaMaker.root";
-    TString input = "ntp.picoK0sAnaMaker.root";
+    TString input = "ntp.picoPhiAnaMaker.small.root";
+//    TString input = "ntp.picoK0sAnaMaker.root";
 //    TString input = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/Phi_large/production/ntp.picoPhiAnaMaker.root";
 //    TString input = "outputBaseName.picoK0sAnaMaker.root";
 
@@ -57,16 +58,25 @@ void pidEff() {
 
     Float_t massMin, massMax, mean, sigma, ptPairMin, ptPairMax;
     TString pair, pairName;
-    TCut cut;
+    TCut cut, cutPair;
     if (kaons) {
         pair = "KK";
         pairName = "KK";
         massMin = 1.0;// Phi to KK
         massMax = 1.04;// Phi to KK
-        mean = 1.1;
+        mean = 1.02;
         sigma = 0.04;
-        ptPairMin = 0;
+        ptPairMin = 0.9;
         ptPairMax = 10;
+
+        setOutputFileName("mass_"+pairName+".root");
+        cut=Form("pair_mass>%.3f && pair_mass<%.3f", massMin, massMax);
+//    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && pair_cosTheta>0.6 && dcaDaughters<0.3 && pair_dcaToPv<0.3", ptPairMin, ptPairMax);
+        cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && pi1_pt>0.5 && pi1_nSigma<2", ptPairMin, ptPairMax);
+        TH1F *signal = (TH1F*) projectSubtractBckg(input,50, massMin, massMax, ptPairMin, ptPairMax, pair, cut+cutPair, "pair_mass", "Mass_{%s} (GeV/c^{2})");
+        peakFit(signal, mean, sigma, massMin, massMax, pair, ptPairMin, ptPairMax, "mass");
+        massMean = mMean;
+        massSigma = mSigma;
     }
     if (pions) {
         pair = "#pi#pi";
@@ -78,26 +88,28 @@ void pidEff() {
         sigma = 0.004;
         ptPairMin = 0.5;
         ptPairMax = 10;
+
+        setOutputFileName("mass_"+pairName+".root");
+        TH1F *signal = (TH1F*) projectSubtractBckg(input,50, massMin, massMax, ptPairMin, ptPairMax, pair, Form("pair_mass>%.3f && pair_mass<%.3f && pair_pt>%.3f && pair_pt<%.3f", massMin, massMax, ptPairMin, ptPairMax), "pair_mass", "Mass_{%s} (GeV/c^{2})");
+        peakFit(signal, mean, sigma, massMin, massMax, pair, ptPairMin, ptPairMax, "mass");
+        massMean = mMean;
+        massSigma = mSigma;
     }
 
     int analysedBins=0;
 
-    setOutputFileName("mass_"+pairName+".root");
-    TH1F *signal = (TH1F*) projectSubtractBckg(input,50, massMin, massMax, 0, 10, pair, Form("pair_mass>%.3f && pair_mass<%.3f && pair_pt>%.3f && pair_pt<%.3f", massMin, massMax, 0., 10.), "pair_mass", "Mass_{%s} (GeV/c^{2})");
-    peakFit(signal, mean, sigma, massMin, massMax, pair, 0., 10., "mass");
-    massMean = mMean;
-    massSigma = mSigma;
+
 
 //    for (int i = 6; i < 8; ++i) {
     for (int i = 0; i < nBins-1; ++i) {
         //clean pions:
         setOutputFileName("nSigma_"+pairName+"_1.root");
         cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%.3f && pi1_pt<%.3f", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
-        TH1F *hSigmaSignal1 = (TH1F*) projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut, "pi1_nSigma", "pi1_nSigma");
+        TH1F *hSigmaSignal1 = (TH1F*) projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair, "pi1_nSigma", "pi1_nSigma");
 
         setOutputFileName("nSigma_"+pairName+"_2.root");
         cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%.3f && pi2_pt<%.3f", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
-        TH1F *hSigmaSignal2 = (TH1F*) projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut, "pi2_nSigma", "pi2_nSigma");
+        TH1F *hSigmaSignal2 = (TH1F*) projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair, "pi2_nSigma", "pi2_nSigma");
 
         hSigmaSignal1->Add(hSigmaSignal2);
         peakFit(hSigmaSignal1, 0, 1,-5, 5, pair, ptBins[i], ptBins[i + 1], "pi_nSigma");
@@ -114,11 +126,11 @@ void pidEff() {
         //tof pions after my PID cut:
         setOutputFileName("nSigma_"+pairName+"_ana_1.root");
         cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta<0.03 && pi1_TOFinvbeta>0", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
-        TH1F *hSigmaSignalAna1 = (TH1F*) projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut, "pi1_nSigma", "pi1_nSigma_ana");
+        TH1F *hSigmaSignalAna1 = (TH1F*) projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair, "pi1_nSigma", "pi1_nSigma_ana");
 
         setOutputFileName("nSigma_"+pairName+"_ana_2.root");
         cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%f && pi2_pt<%f && pi2_TOFinvbeta<0.03 && pi2_TOFinvbeta>0", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
-        TH1F *hSigmaSignalAna2 = (TH1F*) projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut, "pi2_nSigma", "pi2_nSigma_ana");
+        TH1F *hSigmaSignalAna2 = (TH1F*) projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair, "pi2_nSigma", "pi2_nSigma_ana");
 
         hSigmaSignalAna1->Add(hSigmaSignalAna2);
         peakFit(hSigmaSignalAna1, 0, 1,-5, 5, pair, ptBins[i], ptBins[i+1], "pi_nSigma_ana");
@@ -255,7 +267,7 @@ TH1F* subtractBckg(TH1F* hS, TH1F* hB, TString nameSubtr, TFile* outputF, TStrin
 
 void peakFit(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin, Float_t massMax, TString pair, Float_t ptmin, Float_t ptmax, TString varName){
     TF1 *funLS = new TF1("funLS","pol1(0)+gaus(2)", massMin, massMax);
-    funLS->SetParameters(1.,1.,10000.,mean,sigma);
+    funLS->SetParameters(1.,1.,mHeight,mean,sigma);
     funLS->SetLineColor(2);
     funLS->SetLineStyle(7);
     funLS->SetLineStyle(1);
@@ -274,6 +286,7 @@ void peakFit(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin, Float_t
     gStyle->SetOptFit(1);
     hToFit->Fit(funLS, "LRM");
     hToFit->Draw();
+    mHeight = funLS->GetParameter(2);
     mSigma = funLS->GetParameter(4);
     mSigmaE = funLS->GetParError(4);
     mMean = funLS->GetParameter(3);
