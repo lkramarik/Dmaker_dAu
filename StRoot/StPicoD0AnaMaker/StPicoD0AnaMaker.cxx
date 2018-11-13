@@ -187,7 +187,7 @@ int StPicoD0AnaMaker::createCandidates() {
 
             if (!mHFCuts -> isGoodKaon(kaon)) continue;
             StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), i, j, mPrimVtx, mBField, kTRUE);
-            if (!mHFCuts->isClosePair(pair)) continue;
+            if (!mHFCuts->isGoodSecondaryVertexPair(pair)) continue;
 
             float flag = -99.;
 
@@ -234,6 +234,7 @@ int StPicoD0AnaMaker::createCandidates() {
 
             if ((flag == 0) || (flag == 1)) {
                 ntp_DMeson_Signal->Fill(ntVar);
+                getCorV2(pair);
             } else {
                 ntp_DMeson_Background->Fill(ntVar);
             }
@@ -503,16 +504,16 @@ bool StPicoD0AnaMaker::isGoodHadron(StPicoTrack const * const trk) const
 }
 
 
-/*
-bool StMyAnalysisMaker::getCorV2(TNtuple *kp,double weight)
+
+bool StMyAnalysisMaker::getCorV2(StHFPair *kp,double weight)
 {
   // int centrality  = mGRefMultCorrUtil->getCentralityBin9();
   StPicoEvent *event = (StPicoEvent *)mPicoDst->event();
   int mult = event->grefMult();
   // TClonesArray const * aKaonPion = mPicoD0Event->kaonPionArray();
   // StKaonPion const* kp = (StKaonPion*)aKaonPion->At(idxCand);
-  StPicoTrack const* kaon = mPicoDst->track(kp->kaonIdx());
-  StPicoTrack const* pion = mPicoDst->track(kp->pionIdx());
+  StPicoTrack const* kaon = mPicoDst->track(kp->particle1Idx());
+  StPicoTrack const* pion = mPicoDst->track(kp->particle1Idx());
   int charge = kaon->charge() * pion->charge();
   double dMass = kp->m();
 
@@ -592,4 +593,3 @@ bool StMyAnalysisMaker::getCorV2(TNtuple *kp,double weight)
   }//Loop over different eta gap (k)
   return true;
 }
-*/
