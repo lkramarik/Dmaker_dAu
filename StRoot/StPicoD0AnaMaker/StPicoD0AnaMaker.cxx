@@ -227,7 +227,7 @@ int StPicoD0AnaMaker::createCandidates() {
             ntVar[ii++] = cos(pair->pointingAngle());
             ntVar[ii++] = pair->decayLength();
             ntVar[ii++] = pair->DcaToPrimaryVertex(); //(pair->decayLength())*sin(pair->pointingAngle());
-            ntVar[ii++] = pair->cosThetaStar();
+            ntVar[ii++] = pair->cosThetaStar();ntp_DMeson_Signal
 
             ntVar[ii++] = pair->pt();
             ntVar[ii++] = pair->m();
@@ -505,8 +505,8 @@ bool StPicoD0AnaMaker::isGoodHadron(StPicoTrack const * const trk) const
 }
 
 
-/*
-bool StMyAnalysisMaker::getCorV2(StKaonPion *kp,double weight)
+
+bool StMyAnalysisMaker::getCorV2(TNtuple *kp,double weight)
 {
   // int centrality  = mGRefMultCorrUtil->getCentralityBin9();
   StPicoEvent *event = (StPicoEvent *)mPicoDst->event();
@@ -594,4 +594,3 @@ bool StMyAnalysisMaker::getCorV2(StKaonPion *kp,double weight)
   }//Loop over different eta gap (k)
   return true;
 }
-*/
