@@ -227,7 +227,7 @@ int StPicoD0AnaMaker::createCandidates() {
             ntVar[ii++] = cos(pair->pointingAngle());
             ntVar[ii++] = pair->decayLength();
             ntVar[ii++] = pair->DcaToPrimaryVertex(); //(pair->decayLength())*sin(pair->pointingAngle());
-            ntVar[ii++] = pair->cosThetaStar();ntp_DMeson_Signal
+            ntVar[ii++] = pair->cosThetaStar();
 
             ntVar[ii++] = pair->pt();
             ntVar[ii++] = pair->m();
