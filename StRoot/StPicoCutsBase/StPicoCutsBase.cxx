@@ -300,9 +300,9 @@ bool StPicoCutsBase::isTOFHadron(StPicoTrack const *trk, float const & tofBeta, 
   // -- only apply, if in ptot range
 
 
-  float ptot = trk->gPtot();  
-  if (ptot < mPtotRangeTOF[pidFlag][0] || ptot >= mPtotRangeTOF[pidFlag][1])
-    return true;
+//  float ptot = trk->gPtot();
+//  if (ptot < mPtotRangeTOF[pidFlag][0] || ptot >= mPtotRangeTOF[pidFlag][1])
+//    return true;
 
   return isTOFHadronPID(trk, tofBeta, pidFlag);
 }
@@ -327,7 +327,7 @@ bool StPicoCutsBase::isHybridTOFHadron(StPicoTrack const *trk, float const & tof
   //      no TOF info       : true
 
   // -- only apply, if in ptot range
-  float ptot = trk->gPtot();  
+//  float ptot = trk->gPtot();
 //  if (ptot < mPtotRangeHybridTOF[pidFlag][0] || ptot >= mPtotRangeHybridTOF[pidFlag][1])
 //    return true;
 

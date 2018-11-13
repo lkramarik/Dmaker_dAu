@@ -57,7 +57,7 @@ int StPicoPiPiMaker::createCandidates() {
     //making array of good pions
     for(unsigned int k = 0; k < mPicoDst->numberOfTracks(); ++k) {
         StPicoTrack const *trkTest = mPicoDst->track(k);
-        if (mHFCuts->isGoodPion(trkTest) && mHFCuts->isTOFPion(trkTest)) mIdxPicoPions.push_back(k);
+        if (mHFCuts->isGoodPion(trkTest)) mIdxPicoPions.push_back(k);
 //        if (mHFCuts->isGoodPion(trkTest)) mIdxPicoPions.push_back(k);
     }
     for (unsigned short j = 0; j < mIdxPicoPions.size(); ++j) {
