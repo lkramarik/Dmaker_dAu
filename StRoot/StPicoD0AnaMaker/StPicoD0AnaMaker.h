@@ -50,7 +50,7 @@ public:
     virtual void  ClearHF(Option_t *opt);
     virtual Int_t FinishHF();
 
-    void    DeclareHistograms();
+    void DeclareHistograms();
     void WriteHistograms();
     bool isGoodHadron(StPicoTrack const*) const;
 
@@ -82,6 +82,8 @@ private:
     TProfile *candPt;
 
     bool getHadronCorV2(int );
+    bool getCorV2(StKaonPion *, double);
+    bool isEtaGap(double, double ,double);
     int mRunNumber;
     TString mOutFileBaseName;
 
