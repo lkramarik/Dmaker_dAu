@@ -85,7 +85,7 @@ int StPicoD0AnaMaker::FinishHF() {
 // _________________________________________________________
 int StPicoD0AnaMaker::MakeHF() {
 	getHadronCorV2(1);
-    //createCandidates();
+    createCandidates();
 //    analyzeCandidates();
 
 //    TH2F *h_piTOF = static_cast<TH2F*>(mOutList->FindObject("h_piTOF"));
@@ -503,7 +503,7 @@ bool StPicoD0AnaMaker::isGoodHadron(StPicoTrack const * const trk) const
 }
 
 
-
+/*
 bool StMyAnalysisMaker::getCorV2(TNtuple *kp,double weight)
 {
   // int centrality  = mGRefMultCorrUtil->getCentralityBin9();
@@ -511,7 +511,6 @@ bool StMyAnalysisMaker::getCorV2(TNtuple *kp,double weight)
   int mult = event->grefMult();
   // TClonesArray const * aKaonPion = mPicoD0Event->kaonPionArray();
   // StKaonPion const* kp = (StKaonPion*)aKaonPion->At(idxCand);
-  kp = ntp_DMeson_Signal;
   StPicoTrack const* kaon = mPicoDst->track(kp->kaonIdx());
   StPicoTrack const* pion = mPicoDst->track(kp->pionIdx());
   int charge = kaon->charge() * pion->charge();
@@ -593,3 +592,4 @@ bool StMyAnalysisMaker::getCorV2(TNtuple *kp,double weight)
   }//Loop over different eta gap (k)
   return true;
 }
+*/
