@@ -388,7 +388,7 @@ void StPicoD0AnaMaker::DeclareHistograms() {
     }
   }
 
-      printf("Histograms declared! \n");//
+      //printf("Histograms declared! \n");//
 }
 
 void StPicoD0AnaMaker::WriteHistograms() {
@@ -426,7 +426,7 @@ void StPicoD0AnaMaker::WriteHistograms() {
     }
   }
 
-      printf("Histograms written! \n");
+      //printf("Histograms written! \n");
 }
 
 bool StPicoD0AnaMaker::getHadronCorV2(int idxGap)
@@ -461,8 +461,6 @@ bool StPicoD0AnaMaker::getHadronCorV2(int idxGap)
   hadronFill[6] = mult;
   hadronFill[7] = reweight;
   //mHadronTuple->Fill(hadronFill);
-  printf("mult %i \n", mult);
-  printf("hadron fill 0 %f       1 %f        2 %f         3 %f          4 %f        5 %f \n", hadronFill[0], hadronFill[1], hadronFill[2], hadronFill[3], hadronFill[4], hadronFill[5]);
   if(hadronFill[0]==0 || hadronFill[3]==0)
     return false; 
   double temp = (hadronFill[1]*hadronFill[4]+hadronFill[2]*hadronFill[5]);
@@ -488,7 +486,7 @@ bool StPicoD0AnaMaker::getHadronCorV2(int idxGap)
   //  hadronV2_excl_sum[2][centrality]->Fill(hadron->pMom().perp(),hadronFill[0]*reweight);
   //  hadronV2_excl_sum[3][centrality]->Fill(hadron->pMom().perp(),hadronFill[3]*reweight);
   //  hadronV2_excl_sum[4][centrality]->Fill(hadron->pMom().perp(),hadronFill[3]*reweight);
-      printf("GetCor done! \n");
+      //printf("GetCor done! \n");
   return true;
 }
 
@@ -529,8 +527,6 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
   double mean = fitmean[ptIdx];
   double sigma = fitsigma[ptIdx];
   bool fillSB[8];
-  printf("charge %i \n", charge);
-  printf("mass %f \n", dMass);
   fillSB[0] =  (charge>0)&& (dMass>(mean-1*sigma)) &&  (dMass<(mean+1*sigma));
   fillSB[1] =  (charge>0)&& (dMass>(mean-3*sigma)) &&  (dMass<(mean+3*sigma));
   fillSB[2] =  (charge>0) && (((dMass>(mean+4*sigma)) &&  (dMass<(mean+9*sigma))) ||((dMass>(mean-9*sigma)) &&  (dMass<(mean-4*sigma))));
@@ -554,9 +550,7 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
     {
       if(fillSB[j])
       {	
-      	printf("som tutok! \n");
-        printf("jjjjjj   %i \n", j);
-        profV2[j][1][k]->Fill(kp->pt(),corFill[1],weight);
+      	profV2[j][1][k]->Fill(kp->pt(),corFill[1],weight);
         profV2[j][2][k]->Fill(kp->pt(),corFill[2],weight);
       }
     }
@@ -576,8 +570,6 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
       {
         if(fillSB[j])
         {
-          printf("som tutok! \n");
-          printf("jjjjjj   %i \n", j);
           profV2[j][3][k]->Fill(kp->pt(),sin(2*phiHadron),weight);
           profV2[j][4][k]->Fill(kp->pt(),cos(2*phiHadron),weight);
           profV2[j][0][k]->Fill(kp->pt(),cos(2*(phiHadron-kp->phi())),weight);
