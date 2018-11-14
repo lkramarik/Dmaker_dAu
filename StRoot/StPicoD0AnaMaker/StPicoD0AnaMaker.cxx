@@ -553,7 +553,9 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
     for(int j=0;j<8;j++)
     {
       if(fillSB[j])
-      {
+      {	
+      	printf("som tutok! \n");
+        printf("jjjjjj   %i \n", j);
         profV2[j][1][k]->Fill(kp->pt(),corFill[1],weight);
         profV2[j][2][k]->Fill(kp->pt(),corFill[2],weight);
       }
@@ -579,7 +581,7 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
           profV2[j][3][k]->Fill(kp->pt(),sin(2*phiHadron),weight);
           profV2[j][4][k]->Fill(kp->pt(),cos(2*phiHadron),weight);
           profV2[j][0][k]->Fill(kp->pt(),cos(2*(phiHadron-kp->phi())),weight);
-          //v2Weight[j][k]->Fill(mult,kp->pt(),weight);
+          v2Weight[j][k]->Fill(mult,kp->pt(),weight);
         }
       }
     }// Loop over charged tracks
