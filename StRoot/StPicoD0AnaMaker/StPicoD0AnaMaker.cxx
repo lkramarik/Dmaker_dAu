@@ -596,7 +596,7 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
       if(fillSB[j])
       {
         profV2[j][0][k]->Fill(kp->pt(),cumulant, corFill[3]*weight);
-        v2Weight[j][k]->Fill(centrality,kp->pt(),corFill[3]*weight);
+        //v2Weight[j][k]->Fill(centrality,kp->pt(),corFill[3]*weight);
       }
     }
   }
