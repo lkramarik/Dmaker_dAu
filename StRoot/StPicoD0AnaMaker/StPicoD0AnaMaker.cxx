@@ -335,10 +335,10 @@ void StPicoD0AnaMaker::DeclareHistograms() {
 
       TString namehPhi = "hadronPhi_"+sb[i]+Form("_%i",k);
       TString nameDPhi = "DPhi_"+sb[i]+Form("_%i",k);
-      // hPhiHadron[i][k] = new TH2F(namehPhi.Data(),"",2000,binPhi,xbinSize,xbin);
-      // hPhiD[i][k]= new TH2F(nameDPhi.Data(),"",2000,binPhi,xbinSize,xbin);
-      // hPhiD[i][k]->Sumw2();
-      // hPhiHadron[i][k]->Sumw2();
+      hPhiHadron[i][k] = new TH2F(namehPhi.Data(),"",2000,binPhi,xbinSize,xbin);
+      hPhiD[i][k]= new TH2F(nameDPhi.Data(),"",2000,binPhi,xbinSize,xbin);
+      hPhiD[i][k]->Sumw2();
+      hPhiHadron[i][k]->Sumw2();
     }
   }
   float ptbin1[12] = {0.225,0.375,0.525,0.675,0.825,0.975,1.12,1.27,1.42,1.58,1.73,1.88};
@@ -378,13 +378,11 @@ void StPicoD0AnaMaker::DeclareHistograms() {
       TString massName[2];
       massName[0] = Form("likeMass%i",i)+flatten[j];
       massName[1] = Form("unlikeMass%i",i)+flatten[j];
-      /*
       for(int k=0;k<2;k++)
       {
         V2Mass[k][i][j] = new TProfile(massName[k].Data(),"",18,fitmean[i]-9*fitsigma[i],fitmean[i]+9*fitsigma[i]);
         V2Mass[k][i][j]->Sumw2();
       }
-      */
     }
   }
 
@@ -402,9 +400,10 @@ void StPicoD0AnaMaker::WriteHistograms() {
         profV2[i][j][k]->Write();
       }
       v2Weight[i][k]->Write();
+      hPhiD[i][k]->Write();
+      hPhiHadron[i][k]->Write();
     }
   }
-  /*
   for(int i=0;i<6;i++)
   {
     for(int j=0;j<5;j++)
@@ -413,7 +412,6 @@ void StPicoD0AnaMaker::WriteHistograms() {
         V2Mass[k][i][j]->Write();
     }
   }
-  */
   //massLike->Write();
   //candPt->Write();
   //massUnlike->Write();
@@ -514,7 +512,7 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
   StPicoTrack const* pion = mPicoDst->track(kp->particle2Idx());
   int charge = kaon->charge() * pion->charge();
   double dMass = kp->m();
-
+  double hadronv2=1;
 
   if(kp->pt()>10) return false;
   int ptIdx = 5;
@@ -522,36 +520,40 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
     ptIdx = static_cast<int>(kp->pt());
   double fitmean[6] = {1.85921,1.8633,1.86403,1.86475,1.86252,1.86534};
   double fitsigma[6] = {0.018139,0.0139476,0.0158346,0.0169282,0.0199567,0.0189131};
-  // double fitmean[6] = {1.8620,1.8647,1.8617,1.86475,1.8608,1.8626};
-  // double fitsigma[6] = {0.0190,0.0143,0.0143,0.0169282,0.0199567,0.0189131};
   double mean = fitmean[ptIdx];
   double sigma = fitsigma[ptIdx];
   bool fillSB[8];
   fillSB[0] =  (charge>0)&& (dMass>(mean-1*sigma)) &&  (dMass<(mean+1*sigma));
   fillSB[1] =  (charge>0)&& (dMass>(mean-3*sigma)) &&  (dMass<(mean+3*sigma));
   fillSB[2] =  (charge>0) && (((dMass>(mean+4*sigma)) &&  (dMass<(mean+9*sigma))) ||((dMass>(mean-9*sigma)) &&  (dMass<(mean-4*sigma))));
-  fillSB[4] = (charge==-1)&& (((dMass>(mean+5.5*sigma)) &&  (dMass<(mean+7.5*sigma))) ||((dMass>(mean-7.5*sigma)) &&  (dMass<(mean-5.5*sigma))));
+  fillSB[4] = (charge==-1)&& (dMass>(mean-1*sigma)) &&  (dMass<(mean+1*sigma));
   fillSB[5] = (charge==-1)&& (dMass>(mean-3*sigma)) &&  (dMass<(mean+3*sigma));
   fillSB[6] = (charge==-1)&& (((dMass>(mean+4*sigma)) &&  (dMass<(mean+9*sigma))) ||((dMass>(mean-9*sigma)) &&  (dMass<(mean-4*sigma))));
   fillSB[3] = fillSB[1] || fillSB[2];
-  fillSB[7] = fillSB[1] || fillSB[2] || fillSB[6];
+  fillSB[7] = fillSB[5] || fillSB[6];
   double etaGap[3] = {0,0.15,0.05};
 
   for(int k=0;k<3;k++)
   {
     double corFill[7] = {0};
     corFill[0] = 1 ;
-    // corFill[1] = sin(2* kp->phi())/sqrt(hadronv2[centBin]);
-    // corFill[2] = cos(2* kp->phi())/sqrt(hadronv2[centBin]);
-    corFill[1] = sin(2* kp->phi());
-    corFill[2] = cos(2* kp->phi());
+    corFill[1] = sin(2* kp->phi())/sqrt(hadronv2);
+    corFill[2] = cos(2* kp->phi())/sqrt(hadronv2);
+    //corFill[1] = sin(2* kp->phi());
+    //corFill[2] = cos(2* kp->phi());
     int chargeIdx = charge>0 ? 0:1;
+    if(k==0)
+    {
+      V2Mass[chargeIdx][ptIdx][1]->Fill(kp->m(),corFill[1],weight);
+      V2Mass[chargeIdx][ptIdx][2]->Fill(kp->m(),corFill[2],weight);
+    }
     for(int j=0;j<8;j++)
     {
       if(fillSB[j])
       {	
       	profV2[j][1][k]->Fill(kp->pt(),corFill[1],weight);
         profV2[j][2][k]->Fill(kp->pt(),corFill[2],weight);
+        hPhiD[j][k]->Fill(kp->phi(),kp->pt(),weight);
       }
     }
     for(unsigned int i=0; i<mPicoDst->numberOfTracks();i++)
@@ -561,34 +563,43 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
       if(!isGoodHadron(hadron)) continue;
       if(i==kp->particle1Idx() || i==kp->particle2Idx()) continue;
       float etaHadron = hadron->pMom().pseudoRapidity();
-      float phiHadron = hadron->pMom().phi();
+      float phiHadron = hadron->pMom().phi(); 
       if(!isEtaGap(kp->eta(),etaGap[k],etaHadron))  continue;
       corFill[3]++;
-      corFill[4] += sin(2 * phiHadron);
-      corFill[5] += cos(2 * phiHadron);
+      corFill[4] += sin(2 * phiHadron)/sqrt(hadronv2);
+      corFill[5] += cos(2 * phiHadron)/sqrt(hadronv2);
+      if(k==0)
+      {
+        V2Mass[chargeIdx][ptIdx][3]->Fill(kp->m(),sin(2*phiHadron)/sqrt(hadronv2),weight);
+        V2Mass[chargeIdx][ptIdx][4]->Fill(kp->m(),cos(2*phiHadron)/sqrt(hadronv2),weight);
+      }
       for(int j=0;j<8;j++)
       {
         if(fillSB[j])
         {
           profV2[j][3][k]->Fill(kp->pt(),sin(2*phiHadron),weight);
           profV2[j][4][k]->Fill(kp->pt(),cos(2*phiHadron),weight);
-          profV2[j][0][k]->Fill(kp->pt(),cos(2*(phiHadron-kp->phi())),weight);
-          v2Weight[j][k]->Fill(mult,kp->pt(),weight);
+          hPhiHadron[j][k]->Fill(phiHadron,kp->pt(),weight);
         }
       }
-    }// Loop over charged tracks
-    // if(corFill[3]<=0) return false;
-    // double cumulant = (corFill[1]*corFill[4]+corFill[2]*corFill[5])/(corFill[3]); 
-    // cout<<"kp phi = "<<kp->phi()<<"\tcumulant = "<<cumulant<<endl;
-    // cout<<"number of correlated hadrons = "<<corFill[3]<<endl;
-    // for(int j=0;j<8;j++)
-    // {
-    //   if(fillSB[j])
-    //   {
-    //     // testV2->Fill(kp->pt(),cumulant);
-    //   }
-    // }
-  }//Loop over different eta gap (k)
+    }
+    if(corFill[3]<=0) return false;
+    double cumulant = (corFill[1]*corFill[4]+corFill[2]*corFill[5])/(corFill[3]); 
+    if(k==0)
+    {
+      if(charge<0)  massUnlike->Fill(kp->m(),kp->pt(),weight);
+      if(charge>0)  massLike->Fill(kp->m(),kp->pt(),weight);
+      V2Mass[chargeIdx][ptIdx][0]->Fill(kp->m(),cumulant, corFill[3]*weight);
+    }
+    for(int j=0;j<8;j++)
+    {
+      if(fillSB[j])
+      {
+        profV2[j][0][k]->Fill(kp->pt(),cumulant, corFill[3]*weight);
+        v2Weight[j][k]->Fill(centrality,kp->pt(),corFill[3]*weight);
+      }
+    }
+  }
   return true;
 }
 

@@ -76,6 +76,8 @@ private:
     TH2D *massLike2;
     TH2D *massUnlike;
     TH2D *v2Weight[8][3];
+    TH2F *hPhiD[8][3];
+    TH2F *hPhiHadron[8][3];
     TH2D *likeV2Mass[6][5];
     TH2D *likeV2Mass2[6][5];
     TH2D *unlikeV2Mass[6][5];
