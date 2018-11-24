@@ -313,11 +313,17 @@ void StPicoD0AnaMaker::DeclareHistograms() {
   float xbin[6] = {0,1,2,3,5,10};
   float binMass[2001];
   float binPhi[2001];
-  //candPt = new TProfile("candPt","",xbinSize,xbin);
+  candPt = new TProfile("candPt","",xbinSize,xbin);
   for(int i=0;i<2001;i++)
     binPhi[i] = 0.005*i-5;
   for(int i=0;i<2001;i++)
     binMass[i] = 0.01*i;
+  massPt = new TH2D("massPt","",2000,binMass,xbinSize,xbin);
+  massPtLike = new TH2D("massPtLike","",2000,binMass,xbinSize,xbin);
+  massLike = new TH2D("massLike","",2000,binMass,xbinSize,xbin);
+  massLike->Sumw2();
+  massUnlike = new TH2D("massUnlike","",2000,binMass,xbinSize,xbin);
+  massUnlike->Sumw2();
   float xWeight[6] = {0,7,12,16,22,100};
   for(int i=0;i!=8;i++)
   {
@@ -412,9 +418,9 @@ void StPicoD0AnaMaker::WriteHistograms() {
         V2Mass[k][i][j]->Write();
     }
   }
-  //massLike->Write();
-  //candPt->Write();
-  //massUnlike->Write();
+  massLike->Write();
+  candPt->Write();
+  massUnlike->Write();
   for(int k=0;k<3;k++)
   {
     for(int i=0;i<5;i++)
