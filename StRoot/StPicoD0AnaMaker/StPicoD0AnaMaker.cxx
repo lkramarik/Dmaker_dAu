@@ -84,7 +84,7 @@ int StPicoD0AnaMaker::FinishHF() {
 }
 // _________________________________________________________
 int StPicoD0AnaMaker::MakeHF() {
-	getHadronCorV2(1);
+	//getHadronCorV2(1);
     createCandidates();
 //    analyzeCandidates();
 
@@ -232,13 +232,21 @@ int StPicoD0AnaMaker::createCandidates() {
             ntVar[ii++] = pair->pt();
             ntVar[ii++] = pair->m();
 
+            double reweight = mGRefMultCorrUtil->getWeight();
+            float d0Pt = pair->pt();
+            double dMass = pair->m();
             if ((flag == 0) || (flag == 1)) {
                 ntp_DMeson_Signal->Fill(ntVar);
-                if(!getCorV2(pair, 1)) continue;
+                if(dMass>1.81&&dMass<1.91)
+            		candPt->Fill(d0Pt,d0Pt,reweight);
+        		massPt->Fill(dMass,d0Pt,reweight);
             } else {
                 ntp_DMeson_Background->Fill(ntVar);
-                if(!getCorV2(pair, 1)) continue;
+                massPtLike->Fill(dMass,d0Pt,reweight);
             }
+            for(int ii = 0; ii<3; ii++)
+            	getHadronCorV2(ii);
+            getCorV2(pair, reweight);
         }  // for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon)
     } // for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1)
 
@@ -309,8 +317,8 @@ void StPicoD0AnaMaker::DeclareHistograms() {
   flatten[4] = "sinHadron";
   TString sb[8] = {"s1like","s3like","hSBlike","lSBlike","s1unlike","s3unlike","hSBunlike","lSBunlike"};
   // float xbin[7] = {0,1,2,3,4,5,10};
-  const int xbinSize=5;
-  float xbin[6] = {0,1,2,3,5,10};
+  const int xbinSize=10;
+  float xbin[11] = {0,0.5,1,1.5,2,2.5,3,3.5,4,5,10};
   float binMass[2001];
   float binPhi[2001];
   candPt = new TProfile("candPt","",xbinSize,xbin);
@@ -324,7 +332,9 @@ void StPicoD0AnaMaker::DeclareHistograms() {
   massLike->Sumw2();
   massUnlike = new TH2D("massUnlike","",2000,binMass,xbinSize,xbin);
   massUnlike->Sumw2();
-  float xWeight[6] = {0,7,12,16,22,100};
+  float xWeight[10];
+  for(int ii=0;ii<10;ii++)
+  	xWeight[ii] = ii;
   for(int i=0;i!=8;i++)
   {
     for(int k=0;k!=3;k++)
@@ -355,9 +365,9 @@ void StPicoD0AnaMaker::DeclareHistograms() {
   {
     for(int i=0;i<5;i++)
     {
-      hadronV2[i][k] = new TH1D(Form("hadron_%s_%i",flatten[i].Data(),k),"",5,xWeight);
+      hadronV2[i][k] = new TH1D(Form("hadron_%s_%i",flatten[i].Data(),k),"",9,0,9);
       hadronV2[i][k]->Sumw2();
-      hadronV2_sum[i][k] = new TH1D(Form("hadronsum_%s_%i",flatten[i].Data(),k),"",5,xWeight);
+      hadronV2_sum[i][k] = new TH1D(Form("hadronsum_%s_%i",flatten[i].Data(),k),"",9,0,9);
       hadronV2_sum[i][k]->Sumw2();
       /*
       for(int j=0;j<9;j++)
