@@ -37,7 +37,6 @@ class StPicoHFEvent;
 class StHFPair;
 class StHFTriplet;
 class StHFCuts;
-class StRefMultCorr;
 
 class TProfile;
 
@@ -85,7 +84,6 @@ private:
     TProfile *V2Mass[2][6][5];
     TProfile *candPt;
 
-    StRefMultCorr* mGRefMultCorrUtil;
 
     bool getHadronCorV2(int );
     bool getCorV2(StHFPair *, double);
