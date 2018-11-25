@@ -6,6 +6,7 @@
 #include "phys_constants.h"
 #include "StBTofUtil/tofPathLength.hh"
 #include "StPicoD0AnaMaker.h"
+#include "StRoot/StRefMultCorr/StRefMultCorr.h"
 ClassImp(StPicoD0AnaMaker)
 
 // _________________________________________________________
