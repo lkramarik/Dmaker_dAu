@@ -656,9 +656,9 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
       	{
       		if(mult >= multBin[m] && mult < multBin[m+1])
       		{
-      			corrD[0][m]->Fill(kp->pt(),corFill[2],reweight);
-      			corrD[1][m]->Fill(kp->pt(),corFill[1],reweight);
-      			dirFlow[m]->Fill(kp->pt(),corFill[2]*corFill[5]/corFill[3],reweight);
+      			corrD[0][m]->Fill(kp->pt(),corFill[2],weight);
+      			corrD[1][m]->Fill(kp->pt(),corFill[1],weight);
+      			dirFlow[m]->Fill(kp->pt(),corFill[2]*corFill[5]/corFill[3],weight);
       		} 
       	}
       }
