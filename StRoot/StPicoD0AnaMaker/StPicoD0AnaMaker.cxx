@@ -325,7 +325,10 @@ void StPicoD0AnaMaker::DeclareHistograms() {
   {
   	TString aa = names[m];
   	qVec[m] = new TProfile(aa.Data(),"Q vector", 5, multBin);
+  	aa += "Pow2";
+  	qVecPow2[m] = new TProfile(aa.Data(),"Q vector", 5, multBin);
   	qVec[m]->Sumw2();
+  	qVecPow2[m]->Sumw2();
   }
   refFlow = new TProfile("refFlow", "", 5, multBin);
   // float xbin[7] = {0,1,2,3,4,5,10};
@@ -454,6 +457,7 @@ void StPicoD0AnaMaker::WriteHistograms() {
   for(int m = 0; m < 4; m++)
   {
   	qVec[m]->Write();
+  	qVecPow2[m]->Write();
   }
   refFlow->Write();
       //printf("Histograms written! \n");
@@ -511,6 +515,10 @@ bool StPicoD0AnaMaker::getHadronCorV2(int idxGap)
   	qVec[1]->Fill(mult,hadronFill[5]/hadronFill[3],reweight);
   	qVec[2]->Fill(mult,hadronFill[1]/hadronFill[0],reweight);
   	qVec[3]->Fill(mult,hadronFill[4]/hadronFill[3],reweight);
+  	qVecPow2[0]->Fill(mult,(hadronFill[2]*hadronFill[2])/(hadronFill[0]*hadronFill[0]),reweight);
+  	qVecPow2[1]->Fill(mult,(hadronFill[5]*hadronFill[5])/(hadronFill[3]*hadronFill[3]),reweight);
+  	qVecPow2[2]->Fill(mult,(hadronFill[1]*hadronFill[1])/(hadronFill[0]*hadronFill[0]),reweight);
+  	qVecPow2[3]->Fill(mult,(hadronFill[4]*hadronFill[4])/(hadronFill[3]*hadronFill[3]),reweight);
   	refFlow->Fill(mult,((hadronFill[2]*hadronFill[5])/(hadronFill[0]*hadronFill[3])),reweight);
   }
   //    StPicoTrack const* hadron = picoDst->track(i);
