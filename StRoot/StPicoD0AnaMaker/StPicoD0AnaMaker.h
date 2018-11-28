@@ -87,7 +87,7 @@ private:
     TProfile *qVec[4];
     TProfile *qVecPow2[4];
     TProfile *refFlow;
-    TProfile *dirFlow;
+    TProfile *dirFlow[5];
     TProfile *corrD[2][5];
 
 

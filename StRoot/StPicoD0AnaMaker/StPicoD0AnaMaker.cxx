@@ -338,9 +338,11 @@ void StPicoD0AnaMaker::DeclareHistograms() {
   	corrD[0][m] = new TProfile(aa.Data(),"",6,momBins);
   	aa = "sinD_" + multBinNames[m] + "_" + multBinNames[m+1];
   	corrD[1][m] = new TProfile(aa.Data(),"",6,momBins);
+  	aa = "dirFlow_" + multBinNames[m] + "_" + multBinNames[m+1];
+  	dirFlow[m] = new TProfile(aa.Data(), "", 6 , momBins);
   }
   refFlow = new TProfile("refFlow", "", 5, multBin);
-  dirFlow = new TProfile("dirFlow", "", 6 , momBins);
+  
   // float xbin[7] = {0,1,2,3,4,5,10};
   const int xbinSize=10;
   float xbin[11] = {0,0.5,1,1.5,2,2.5,3,3.5,4,5,10};
@@ -470,11 +472,12 @@ void StPicoD0AnaMaker::WriteHistograms() {
   	qVecPow2[m]->Write();
   }
   refFlow->Write();
-  dirFlow->Write();
+  
   for(int m = 0; m < 5; m++)
   {
   	corrD[0][m]->Write();
   	corrD[1][m]->Write();
+  	dirFlow[m]->Write();
   }
       //printf("Histograms written! \n");
 }
@@ -577,6 +580,7 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
   int charge = kaon->charge() * pion->charge();
   double dMass = kp->m();
   double hadronv2=1;
+  float multBin[6] = {0,7,12,16,22,100};
 
   if(kp->pt()>10) return false;
   int ptIdx = 5;
@@ -645,6 +649,18 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
           profV2[j][4][k]->Fill(kp->pt(),cos(2*phiHadron),weight);
           hPhiHadron[j][k]->Fill(phiHadron,kp->pt(),weight);
         }
+      }
+      if(k==1)
+      {
+      	for(int m = 0; m < 5, m++)
+      	{
+      		if(mult >= multBin[m] && mult < multBin[m+1])
+      		{
+      			corrD[0][m]->Fill(kp->pt(),corFill[2],reweight);
+      			corrD[1][m]->Fill(kp->pt(),corFill[1],reweight);
+      			dirFlow[m]->Fill(kp->pt(),corFill[2]*corFill[5]/corFill[3],reweight);
+      		} 
+      	}
       }
     }
     if(corFill[3]<=0) return false;
