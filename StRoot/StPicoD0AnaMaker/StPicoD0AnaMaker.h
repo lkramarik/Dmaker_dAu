@@ -85,6 +85,7 @@ private:
     TProfile *candPt;
 
     TProfile *qVec[4];
+    TProfile *qVecPow2[4];
     TProfile *refFlow;
 
 
