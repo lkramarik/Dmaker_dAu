@@ -245,9 +245,10 @@ int StPicoD0AnaMaker::createCandidates() {
                 ntp_DMeson_Background->Fill(ntVar);
                 massPtLike->Fill(dMass,d0Pt,reweight);
             }
-            for(int ii = 0; ii<3; ii++)
-            	getHadronCorV2(ii);
-            getCorV2(pair, reweight);
+            //for(int ii = 0; ii<3; ii++)
+            //	getHadronCorV2(ii);
+            getHadronCorV2(1);
+            //getCorV2(pair, reweight);
         }  // for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon)
     } // for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1)
 
@@ -317,6 +318,15 @@ void StPicoD0AnaMaker::DeclareHistograms() {
   flatten[3] = "cosHadron";
   flatten[4] = "sinHadron";
   TString sb[8] = {"s1like","s3like","hSBlike","lSBlike","s1unlike","s3unlike","hSBunlike","lSBunlike"};
+
+  TString names[4] = {"cos_B", "cos_F", "sin_B", "sin_F"}; //backward and forward samples
+  float multBin[6] = {0,7,12,16,22,100};
+  for(int m = 0; m < 4; m++)
+  {
+  	qVec[m] = new TProfile(names.Data(),"Q vector", 5, multBin);
+  	qVec[m]->Sumw2();
+  }
+  refFlow = new TProfile("refFlow", "", 5, multBin);
   // float xbin[7] = {0,1,2,3,4,5,10};
   const int xbinSize=10;
   float xbin[11] = {0,0.5,1,1.5,2,2.5,3,3.5,4,5,10};
@@ -440,7 +450,13 @@ void StPicoD0AnaMaker::WriteHistograms() {
       hadronV2_sum[i][k]->Write();
     }
   }
-
+  if(!outputBaseFileName->Get("qVec")) resolutions->mkdir("qVec");
+  for(int m = 0; m < 4; m++)
+  {
+  	outputBaseFileName->cd("qVec");
+  	qVec[m]->Write();
+  }
+  refFlow->Write();
       //printf("Histograms written! \n");
 }
 
@@ -490,6 +506,14 @@ bool StPicoD0AnaMaker::getHadronCorV2(int idxGap)
   hadronV2_sum[3][idxGap]->Fill(mult,hadronFill[3]*reweight);
   hadronV2_sum[4][idxGap]->Fill(mult,hadronFill[3]*reweight);
 
+  if(idxGap==1)
+  {
+ 	qVec[0]->Fill(mult,hadronFill[2]/hadronFill[0],reweight);
+  	qVec[1]->Fill(mult,hadronFill[5]/hadronFill[3],reweight);
+  	qVec[2]->Fill(mult,hadronFill[1]/hadronFill[0],reweight);
+  	qVec[3]->Fill(mult,hadronFill[4]/hadronFill[3],reweight);
+  	refFlow->Fill(mult,((hadronFill[2]*hadronFill[5])/(hadronFill[0]*hadronFill[3])),reweight);
+  }
   //    StPicoTrack const* hadron = picoDst->track(i);
   //  hadronV2_excl[0][centrality]->Fill(hadron->pMom().perp(),temp*reweight);
   //  hadronV2_excl[1][centrality]->Fill(hadron->pMom().perp(),hadronFill[2]*reweight);

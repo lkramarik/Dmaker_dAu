@@ -84,6 +84,9 @@ private:
     TProfile *V2Mass[2][6][5];
     TProfile *candPt;
 
+    TProfile *qVec[4];
+    TProfile *refFlow;
+
 
     bool getHadronCorV2(int );
     bool getCorV2(StHFPair *, double);
