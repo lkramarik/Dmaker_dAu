@@ -320,7 +320,7 @@ void StPicoD0AnaMaker::DeclareHistograms() {
   TString sb[8] = {"s1like","s3like","hSBlike","lSBlike","s1unlike","s3unlike","hSBunlike","lSBunlike"};
 
   TString names[4] = {"cos_B", "cos_F", "sin_B", "sin_F"}; //backward and forward samples
-  float multBin[6] = {0,7,12,16,22,100};
+  int multBin[6] = {0,7,12,16,22,100};
   for(int m = 0; m < 4; m++)
   {
   	TString aa = names[m];
@@ -330,7 +330,16 @@ void StPicoD0AnaMaker::DeclareHistograms() {
   	qVec[m]->Sumw2();
   	qVecPow2[m]->Sumw2();
   }
+  float momBins[7] = {0,1,2,3,4,5,10};
+  for(int m = 0; m < 5; m++)
+  {
+  	TString aa = "cosD_" + Form("_%i",multBin[m]);
+  	corrD[0][m] = new TProfile(aa.Data(),"",6,momBins);
+  	aa = "sinD_" + Form("_%i",multBin[m]);
+  	corrD[1][m] = new TProfile(aa.Data(),"",6,momBins);
+  }
   refFlow = new TProfile("refFlow", "", 5, multBin);
+  dirFlow = new TProfile("dirFlow", "", 6 , momBins);
   // float xbin[7] = {0,1,2,3,4,5,10};
   const int xbinSize=10;
   float xbin[11] = {0,0.5,1,1.5,2,2.5,3,3.5,4,5,10};
@@ -454,12 +463,20 @@ void StPicoD0AnaMaker::WriteHistograms() {
       hadronV2_sum[i][k]->Write();
     }
   }
+  if(!mOutFile->Get("qVec")) mOutFile->mkdir("qVec");
   for(int m = 0; m < 4; m++)
   {
+  	mOutFile->cd("qVec");
   	qVec[m]->Write();
   	qVecPow2[m]->Write();
   }
   refFlow->Write();
+  dirFlow->Write();
+  for(int m = 0; m < 5; m++)
+  {
+  	corrD[0][m]->Write();
+  	corrD[1][m]->Write();
+  }
       //printf("Histograms written! \n");
 }
 
