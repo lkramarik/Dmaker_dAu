@@ -320,7 +320,7 @@ void StPicoD0AnaMaker::DeclareHistograms() {
   TString sb[8] = {"s1like","s3like","hSBlike","lSBlike","s1unlike","s3unlike","hSBunlike","lSBunlike"};
 
   TString names[4] = {"cos_B", "cos_F", "sin_B", "sin_F"}; //backward and forward samples
-  int multBin[6] = {0,7,12,16,22,100};
+  float multBin[6] = {0,7,12,16,22,100};
   for(int m = 0; m < 4; m++)
   {
   	TString aa = names[m];
@@ -331,11 +331,12 @@ void StPicoD0AnaMaker::DeclareHistograms() {
   	qVecPow2[m]->Sumw2();
   }
   float momBins[7] = {0,1,2,3,4,5,10};
+  TString multBinNames[6] = {"0","7","12","16","22","100"};
   for(int m = 0; m < 5; m++)
   {
-  	TString aa = "cosD_" + Form("_%i",multBin[m]);
+  	TString aa = "cosD_" + multBinNames[m] + "_" + multBinNames[m+1];
   	corrD[0][m] = new TProfile(aa.Data(),"",6,momBins);
-  	aa = "sinD_" + Form("_%i",multBin[m]);
+  	aa = "sinD_" + multBinNames[m] + "_" + multBinNames[m+1];
   	corrD[1][m] = new TProfile(aa.Data(),"",6,momBins);
   }
   refFlow = new TProfile("refFlow", "", 5, multBin);
