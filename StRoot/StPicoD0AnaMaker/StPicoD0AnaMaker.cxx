@@ -323,7 +323,7 @@ void StPicoD0AnaMaker::DeclareHistograms() {
   float multBin[6] = {0,7,12,16,22,100};
   for(int m = 0; m < 4; m++)
   {
-  	TString aa = names[i];
+  	TString aa = names[m];
   	qVec[m] = new TProfile(aa.Data(),"Q vector", 5, multBin);
   	qVec[m]->Sumw2();
   }
