@@ -248,7 +248,7 @@ int StPicoD0AnaMaker::createCandidates() {
             //for(int ii = 0; ii<3; ii++)
             //	getHadronCorV2(ii);
             getHadronCorV2(1);
-            //getCorV2(pair, reweight);
+            getCorV2(pair, reweight);
         }  // for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon)
     } // for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1)
 
