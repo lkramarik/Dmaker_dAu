@@ -450,10 +450,10 @@ void StPicoD0AnaMaker::WriteHistograms() {
       hadronV2_sum[i][k]->Write();
     }
   }
-  if(!outputBaseFileName->Get("qVec")) resolutions->mkdir("qVec");
+  if(!mOutFileBaseName->Get("qVec")) mOutFileBaseName->mkdir("qVec");
   for(int m = 0; m < 4; m++)
   {
-  	outputBaseFileName->cd("qVec");
+  	mOutFileBaseName->cd("qVec");
   	qVec[m]->Write();
   }
   refFlow->Write();
