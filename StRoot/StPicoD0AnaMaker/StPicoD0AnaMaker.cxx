@@ -323,7 +323,8 @@ void StPicoD0AnaMaker::DeclareHistograms() {
   float multBin[6] = {0,7,12,16,22,100};
   for(int m = 0; m < 4; m++)
   {
-  	qVec[m] = new TProfile(names.Data(),"Q vector", 5, multBin);
+  	TString aa = names[i];
+  	qVec[m] = new TProfile(aa.Data(),"Q vector", 5, multBin);
   	qVec[m]->Sumw2();
   }
   refFlow = new TProfile("refFlow", "", 5, multBin);
@@ -450,10 +451,8 @@ void StPicoD0AnaMaker::WriteHistograms() {
       hadronV2_sum[i][k]->Write();
     }
   }
-  if(!mOutFileBaseName.Get("qVec")) mOutFileBaseName.mkdir("qVec");
   for(int m = 0; m < 4; m++)
   {
-  	mOutFileBaseName.cd("qVec");
   	qVec[m]->Write();
   }
   refFlow->Write();
