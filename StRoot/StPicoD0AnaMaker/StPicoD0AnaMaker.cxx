@@ -652,7 +652,7 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
       }
       if(k==1)
       {
-      	for(int m = 0; m < 5, m++)
+      	for(int m = 0; m < 5; m++)
       	{
       		if(mult >= multBin[m] && mult < multBin[m+1])
       		{
