@@ -32,12 +32,7 @@ void pidEffKaon() {
 //    gSystem->Load("FitPID");
     gROOT->ProcessLine(".L FitPID.c++");
 
-    bool kaons = true;
-    bool pions = false;
-//    bool kaons = false;
-//    bool pions = true;
-
-    TString input = "ntp.picoPhiAnaMaker.small.root";
+     TString input = "ntp.picoPhiAnaMaker.small.root";
 //    TString input = "ntp.picoK0sAnaMaker.root";
 //    TString input = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/Phi_large/production/ntp.picoPhiAnaMaker.root";
 //    TString input = "outputBaseName.picoK0sAnaMaker.root";
@@ -56,8 +51,7 @@ void pidEffKaon() {
     TCut cut, cutPair;
     FitPID *fitmass = new FitPID();
 
-    if (kaons) {
-        pair = "KK";
+    pair = "KK";
         pairName = "KK";
         massMin = 1.0;// Phi to KK
         massMax = 1.04;// Phi to KK
@@ -73,9 +67,7 @@ void pidEffKaon() {
         TH1F *signal = (TH1F*) fitmass->projectSubtractBckg(input, 50, massMin, massMax, ptPairMin, ptPairMax, pair, cut + cutPair, "pair_mass", "Mass_{%s} (GeV/c^{2})");
         fitmass->peakFit(signal, mean, sigma, massMin, massMax, pair, ptPairMin, ptPairMax, "mass");
         massMean = fitmass->getMean();
-        massSigma = fitmass->getSigma();
-    }
-
+    massSigma = fitmass->getSigma();
 
     int analysedBins = 0;
 
@@ -86,7 +78,7 @@ void pidEffKaon() {
         cout<<"ok"<<endl;
 
         pid1->setOutputFileName("nSigma_" + pairName + "_1.root");
-        cut = Form("pair_mass>%f && pair_mass<%f && pi1_pt>%.3f && pi1_pt<%.3f", massMean - 2 * massSigma, massMean + 2 * massSigma, ptBins[i], ptBins[i + 1]);
+        cut = Form("pair_mass>%f && pair_mass<%f && pi1_pt>%.3f && pi1_pt<%.3f", massMean - 2*massSigma, massMean + 2*massSigma, ptBins[i], ptBins[i + 1]);
         TH1F *hSigmaSignal1 = (TH1F *) pid1->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i + 1], pair, cut + cutPair, "pi1_nSigma", "pi1_nSigma");
 
 //            FitPID *pid2 = new FitPID();
@@ -98,27 +90,27 @@ void pidEffKaon() {
         pid1->setHeight(pid1->getHeight());
         pid1->peakFit(hSigmaSignal1, 0, 1, -5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma");
 
-//        binWidth[i] = (ptBins[i + 1] - ptBins[i]) / 2;
-//        xPt[i] = (ptBins[i + 1] + ptBins[i]) / 2;
-//        means[i] = pid1->getMean();
-//        meansE[i] = pid1->getMeanError();
-//        sigmas[i] = pid1->getSigma();
-//        sigmasE[i] = pid1->getSigmaError();
-//        Double_t integralClean = hSigmaSignal1->IntegralAndError(hSigmaSignal1->FindBin(pid1->getMean() - 2 * pid1->getSigma()), hSigmaSignal1->FindBin(pid1->getMean() + 2 * pid1->getSigma()), errorClean, ""); //number of it without PID cut
+        binWidth[i] = (ptBins[i + 1] - ptBins[i]) / 2;
+        xPt[i] = (ptBins[i + 1] + ptBins[i]) / 2;
+        means[i] = pid1->getMean();
+        meansE[i] = pid1->getMeanError();
+        sigmas[i] = pid1->getSigma();
+        sigmasE[i] = pid1->getSigmaError();
+        Double_t integralClean = hSigmaSignal1->IntegralAndError(hSigmaSignal1->FindBin(pid1->getMean() - 2 * pid1->getSigma()), hSigmaSignal1->FindBin(pid1->getMean() + 2 * pid1->getSigma()), errorClean, ""); //number of it without PID cut
 //        cout << integralClean << endl;
 
         //tof pions after my PID cut:
-//        setOutputFileName("nSigma_"+pairName+"_ana_1.root");
-//        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta<0.03 && pi1_TOFinvbeta>0", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
-//        TH1F *hSigmaSignalAna1 = (TH1F*) projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair, "pi1_nSigma", "pi1_nSigma_ana");
+        setOutputFileName("nSigma_"+pairName+"_ana_1.root");
+        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta<0.03 && pi1_TOFinvbeta>0", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
+        TH1F *hSigmaSignalAna1 = (TH1F*) projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair, "pi1_nSigma", "pi1_nSigma_ana");
 //
 //        setOutputFileName("nSigma_"+pairName+"_ana_2.root");
 //        cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%f && pi2_pt<%f && pi2_TOFinvbeta<0.03 && pi2_TOFinvbeta>0", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
 //        TH1F *hSigmaSignalAna2 = (TH1F*) projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair, "pi2_nSigma", "pi2_nSigma_ana");
 //
 //        hSigmaSignalAna1->Add(hSigmaSignalAna2);
-//        peakFit(hSigmaSignalAna1, 0, 1,-5, 5, pair, ptBins[i], ptBins[i+1], "pi_nSigma_ana");
-//
+        peakFit(hSigmaSignalAna1, 0, 1,-5, 5, pair, ptBins[i], ptBins[i+1], "pi_nSigma_ana");
+
 //        Double_t integralAna = hSigmaSignalAna1->IntegralAndError(hSigmaSignalAna1->FindBin(mMean-2*mSigma),hSigmaSignalAna1->FindBin(mMean+2*mSigma),errorAna,""); //number of it without PID cut
 //        cout<<integralAna<<endl;
 //        eff[i]=(float)integralAna/(float)integralClean;
@@ -127,46 +119,46 @@ void pidEffKaon() {
 //        ++analysedBins;
     }
 
-//    TGraphErrors *gMean = new TGraphErrors(analysedBins,xPt,means,binWidth, meansE);
-//    TGraphErrors *gSigmas = new TGraphErrors(analysedBins,xPt,sigmas,binWidth, sigmasE);
-//    TGraphErrors *gEff = new TGraphErrors(analysedBins,xPt,eff,binWidth, effError);
-//
-//    TCanvas *c1 = new TCanvas("c1","%.3f_%.3f",1000,900);
-//    gMean->SetMarkerStyle(20);
-//    gMean->SetMarkerSize(0.9);
-//    gMean->SetMarkerColor(kBlack);
-//    gMean->SetLineColor(kBlack);
-//    gMean->GetYaxis()->SetTitle("nSigma TPC mean");
-//    gMean->GetYaxis()->SetTitleOffset(1.1);
-//    gMean->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-//    gMean->SetTitle("");
-//    gMean->Draw("ap");
-//    c1->SaveAs("mean.pdf");
-//    c1->Close();
-//
-//    TCanvas *c2 = new TCanvas("c2","%.3f_%.3f",1000,900);
-//    gSigmas->SetMarkerStyle(20);
-//    gSigmas->SetMarkerSize(0.9);
-//    gSigmas->SetMarkerColor(kBlack);
-//    gSigmas->SetLineColor(kBlack);
-//    gSigmas->GetYaxis()->SetTitle("nSigma TPC sigma");
-//    gSigmas->GetYaxis()->SetTitleOffset(1.1);
-//    gSigmas->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-//    gSigmas->SetTitle("");
-//    gSigmas->Draw("ap");
-//    c2->SaveAs("sigma.pdf");
-//    c2->Close();
-//
-//    TCanvas *c3 = new TCanvas("c3","%.3f_%.3f",1000,900);
-//    gEff->SetMarkerStyle(20);
-//    gEff->SetMarkerSize(0.9);
-//    gEff->SetMarkerColor(kBlack);
-//    gEff->SetLineColor(kBlack);
-//    gEff->GetYaxis()->SetTitle("nSigma TOF eff");
-//    gEff->GetYaxis()->SetTitleOffset(1.1);
-//    gEff->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-//    gEff->SetTitle("");
-//    gEff->Draw("ap");
-//    c3->SaveAs("effTOF.pdf");
-//    c3->Close();
+    TGraphErrors *gMean = new TGraphErrors(analysedBins,xPt,means,binWidth, meansE);
+    TGraphErrors *gSigmas = new TGraphErrors(analysedBins,xPt,sigmas,binWidth, sigmasE);
+    TGraphErrors *gEff = new TGraphErrors(analysedBins,xPt,eff,binWidth, effError);
+
+    TCanvas *c1 = new TCanvas("c1","%.3f_%.3f",1000,900);
+    gMean->SetMarkerStyle(20);
+    gMean->SetMarkerSize(0.9);
+    gMean->SetMarkerColor(kBlack);
+    gMean->SetLineColor(kBlack);
+    gMean->GetYaxis()->SetTitle("nSigma TPC mean");
+    gMean->GetYaxis()->SetTitleOffset(1.1);
+    gMean->GetXaxis()->SetTitle("p_{T} (GeV/c)");
+    gMean->SetTitle("");
+    gMean->Draw("ap");
+    c1->SaveAs("mean.pdf");
+    c1->Close();
+
+    TCanvas *c2 = new TCanvas("c2","%.3f_%.3f",1000,900);
+    gSigmas->SetMarkerStyle(20);
+    gSigmas->SetMarkerSize(0.9);
+    gSigmas->SetMarkerColor(kBlack);
+    gSigmas->SetLineColor(kBlack);
+    gSigmas->GetYaxis()->SetTitle("nSigma TPC sigma");
+    gSigmas->GetYaxis()->SetTitleOffset(1.1);
+    gSigmas->GetXaxis()->SetTitle("p_{T} (GeV/c)");
+    gSigmas->SetTitle("");
+    gSigmas->Draw("ap");
+    c2->SaveAs("sigma.pdf");
+    c2->Close();
+
+    TCanvas *c3 = new TCanvas("c3","%.3f_%.3f",1000,900);
+    gEff->SetMarkerStyle(20);
+    gEff->SetMarkerSize(0.9);
+    gEff->SetMarkerColor(kBlack);
+    gEff->SetLineColor(kBlack);
+    gEff->GetYaxis()->SetTitle("nSigma TOF eff");
+    gEff->GetYaxis()->SetTitleOffset(1.1);
+    gEff->GetXaxis()->SetTitle("p_{T} (GeV/c)");
+    gEff->SetTitle("");
+    gEff->Draw("ap");
+    c3->SaveAs("effTOF.pdf");
+    c3->Close();
 }

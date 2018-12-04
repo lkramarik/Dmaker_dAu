@@ -32,7 +32,8 @@ void pidEffPion() {
 //    gSystem->Load("FitPID");
     gROOT->ProcessLine(".L FitPID.c++");
 
-    TString input = "ntp.picoK0sAnaMaker.root";
+//    TString input = "ntp.picoK0sAnaMaker.root";
+    TString input = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/K0s_last/production/ntp.picoK0sAnaMaker.root";
 //    TString input = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/Phi_large/production/ntp.picoPhiAnaMaker.root";
 //    TString input = "outputBaseName.picoK0sAnaMaker.root";
 
