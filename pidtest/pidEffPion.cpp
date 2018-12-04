@@ -25,12 +25,12 @@
 #include <math.h>
 #include "TSystem.h"
 #include "TROOT.h"
-//class FitPID;
+class FitPID;
 
 
 void pidEffPion() {
 //    gSystem->Load("FitPID");
-    gROOT->ProcessLine(".L FitPID.c++");
+//    gROOT->ProcessLine(".L FitPID.c++");
 
 //    TString input = "ntp.picoK0sAnaMaker.root";
     TString input = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/K0s_last/production/ntp.picoK0sAnaMaker.root";
