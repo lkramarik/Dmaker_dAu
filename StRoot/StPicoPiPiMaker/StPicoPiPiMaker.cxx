@@ -69,7 +69,7 @@ int StPicoPiPiMaker::createCandidates() {
 //            if (pion1->id() == pion2->id()) continue;
 
             StHFPair *pair = new StHFPair(pion1, pion2, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion), i, j, mPrimVtx, mBField, kTRUE);
-            if (!mHFCuts->isClosePair(pair)) continue;
+            if (!mHFCuts->isGoodSecondaryVertexPair(pair)) continue;
 
             bool isKs = false;
             if (pion1->charge()+pion2->charge() == 0) isKs = true;

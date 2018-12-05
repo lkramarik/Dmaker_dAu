@@ -125,11 +125,11 @@ void FitPID::peakFit(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin,
     funLS->SetParName(3,"mean");
     funLS->SetParName(4,"sigma");
     if (mean!=0)   {
-        funLS->SetParLimits(3,0.1*mean,mean+1.1*mean);
+        funLS->SetParLimits(3,0.1*mean,mean+0.9*mean);
     } else {
         funLS->SetParLimits(3,-1.5,1.5);
     }
-    funLS->SetParLimits(4,0,4);
+    funLS->SetParLimits(4,-4,4);
     funLS->SetLineColor(9);
 
     TCanvas *c = new TCanvas("c","%.3f_%.3f",1000,900);

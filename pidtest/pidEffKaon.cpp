@@ -32,14 +32,13 @@ void pidEffKaon() {
 //    gSystem->Load("FitPID");
     gROOT->ProcessLine(".L FitPID.c++");
 
-     TString input = "ntp.picoPhiAnaMaker.small.root";
+    TString input = "ntp.picoPhiAnaMaker.root";
 //    TString input = "ntp.picoK0sAnaMaker.root";
 //    TString input = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/Phi_large/production/ntp.picoPhiAnaMaker.root";
 //    TString input = "outputBaseName.picoK0sAnaMaker.root";
 
 //    Float_t ptBins[] = {2.2, 2.5, 3};
-//    Float_t ptBins[] = {0.2, 0.25, 0.3, 0.35, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.2, 2.5, 3, 4}; //pion
-    Float_t ptBins[] = {0.2, 0.35, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.2, 2.5, 3, 4}; //kaon
+    Float_t ptBins[] = {0.2, 0.35, 0.4, 0.5, 0.6, 0.7, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2, 2.2, 2.5, 3, 4}; //kaon
     const int nBins = sizeof(ptBins) / sizeof(Float_t);
     cout << nBins << endl;
     Float_t means[nBins], binWidth[nBins], xPt[nBins], massMean, massSigma, eff[nBins], effError[nBins], meansE[nBins], sigmasE[nBins];
@@ -52,21 +51,25 @@ void pidEffKaon() {
     FitPID *fitmass = new FitPID();
 
     pair = "KK";
-        pairName = "KK";
-        massMin = 1.0;// Phi to KK
-        massMax = 1.04;// Phi to KK
-        mean = 1.02;
-        sigma = 0.04;
-        ptPairMin = 0.9;
-        ptPairMax = 10;
+    pairName = "KK";
+    massMin = 1.0;// Phi to KK
+    massMax = 1.04;// Phi to KK
+    mean = 1.02;
+    sigma = 0.002;
+    ptPairMin = 0.3;
+    ptPairMax = 10;
 
-        fitmass->setOutputFileName("mass_" + pairName + ".root");
-        cut = Form("pair_mass>%.3f && pair_mass<%.3f", massMin, massMax);
+    fitmass->setOutputFileName("mass_" + pairName + ".root");
+    fitmass->setHeight(20000);
+
+    cut = Form("pair_mass>%.3f && pair_mass<%.3f", massMin, massMax);
+    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && pair_cosTheta>0.95 && pi2_pt>0.5", ptPairMin, ptPairMax);
 //    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && pair_cosTheta>0.6 && dcaDaughters<0.3 && pair_dcaToPv<0.3", ptPairMin, ptPairMax);
-        cutPair = Form("pair_pt>%.3f && pair_pt<%.3f && pi2_pt>0.4 && pi2_nSigma<2.", ptPairMin, ptPairMax);
-        TH1F *signal = (TH1F*) fitmass->projectSubtractBckg(input, 50, massMin, massMax, ptPairMin, ptPairMax, pair, cut + cutPair, "pair_mass", "Mass_{%s} (GeV/c^{2})");
-        fitmass->peakFit(signal, mean, sigma, massMin, massMax, pair, ptPairMin, ptPairMax, "mass");
-        massMean = fitmass->getMean();
+//    cutPair = Form("pair_pt>%.3f && pair_pt<%.3f && pi2_pt>1 && fabs(pi2_nSigma)<2.", ptPairMin, ptPairMax);
+//    cutPair = Form("pair_pt>%.3f && pair_pt<%.3f", ptPairMin, ptPairMax);
+    TH1F *signal = (TH1F*) fitmass->projectSubtractBckg(input, 50, massMin, massMax, ptPairMin, ptPairMax, pair, cut + cutPair, "pair_mass", "Mass_{%s} (GeV/c^{2})");
+    fitmass->peakFit(signal, mean, sigma, massMin, massMax, pair, ptPairMin, ptPairMax, "mass");
+    massMean = fitmass->getMean();
     massSigma = fitmass->getSigma();
 
     int analysedBins = 0;
@@ -100,23 +103,24 @@ void pidEffKaon() {
 //        cout << integralClean << endl;
 
         //tof pions after my PID cut:
-        setOutputFileName("nSigma_"+pairName+"_ana_1.root");
+        FitPID *pidAna1 = new FitPID();
+        pidAna1->setOutputFileName("nSigma_"+pairName+"_ana_1.root");
         cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta<0.03 && pi1_TOFinvbeta>0", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
-        TH1F *hSigmaSignalAna1 = (TH1F*) projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair, "pi1_nSigma", "pi1_nSigma_ana");
+        TH1F *hSigmaSignalAna1 = (TH1F*) pidAna1->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair, "pi1_nSigma", "pi1_nSigma_ana");
 //
 //        setOutputFileName("nSigma_"+pairName+"_ana_2.root");
 //        cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%f && pi2_pt<%f && pi2_TOFinvbeta<0.03 && pi2_TOFinvbeta>0", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
 //        TH1F *hSigmaSignalAna2 = (TH1F*) projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair, "pi2_nSigma", "pi2_nSigma_ana");
 //
 //        hSigmaSignalAna1->Add(hSigmaSignalAna2);
-        peakFit(hSigmaSignalAna1, 0, 1,-5, 5, pair, ptBins[i], ptBins[i+1], "pi_nSigma_ana");
+        pidAna1->peakFit(hSigmaSignalAna1, 0, 1,-5, 5, pair, ptBins[i], ptBins[i+1], "pi_nSigma_ana");
 
-//        Double_t integralAna = hSigmaSignalAna1->IntegralAndError(hSigmaSignalAna1->FindBin(mMean-2*mSigma),hSigmaSignalAna1->FindBin(mMean+2*mSigma),errorAna,""); //number of it without PID cut
-//        cout<<integralAna<<endl;
-//        eff[i]=(float)integralAna/(float)integralClean;
-//        effError[i]=sqrt(errorAna*errorAna/(pow(integralClean,2)) + errorClean*errorClean*integralAna*integralAna/(pow(integralClean,4)));
-//        cout<<eff[i]<<" pm "<<effError[i]<<endl;
-//        ++analysedBins;
+        Double_t integralAna = hSigmaSignalAna1->IntegralAndError(hSigmaSignalAna1->FindBin(pidAna1->getMean()-2*pidAna1->getSigma()),hSigmaSignalAna1->FindBin(pidAna1->getMean()+2*pidAna1->getSigma()),errorAna,""); //number of it without PID cut
+        cout<<integralAna<<endl;
+        eff[i]=(float)integralAna/(float)integralClean;
+        effError[i]=sqrt(errorAna*errorAna/(pow(integralClean,2)) + errorClean*errorClean*integralAna*integralAna/(pow(integralClean,4)));
+        cout<<eff[i]<<" pm "<<effError[i]<<endl;
+        ++analysedBins;
     }
 
     TGraphErrors *gMean = new TGraphErrors(analysedBins,xPt,means,binWidth, meansE);
@@ -133,7 +137,7 @@ void pidEffKaon() {
     gMean->GetXaxis()->SetTitle("p_{T} (GeV/c)");
     gMean->SetTitle("");
     gMean->Draw("ap");
-    c1->SaveAs("mean.pdf");
+    c1->SaveAs("meanKaon.pdf");
     c1->Close();
 
     TCanvas *c2 = new TCanvas("c2","%.3f_%.3f",1000,900);
@@ -146,7 +150,7 @@ void pidEffKaon() {
     gSigmas->GetXaxis()->SetTitle("p_{T} (GeV/c)");
     gSigmas->SetTitle("");
     gSigmas->Draw("ap");
-    c2->SaveAs("sigma.pdf");
+    c2->SaveAs("sigmaKaon.pdf");
     c2->Close();
 
     TCanvas *c3 = new TCanvas("c3","%.3f_%.3f",1000,900);
@@ -159,6 +163,12 @@ void pidEffKaon() {
     gEff->GetXaxis()->SetTitle("p_{T} (GeV/c)");
     gEff->SetTitle("");
     gEff->Draw("ap");
-    c3->SaveAs("effTOF.pdf");
+    c3->SaveAs("effTOFKaon.pdf");
     c3->Close();
+
+    TFile* resOut = new TFile("results_KK.root" ,"r");
+    gEff->Write("eff");
+    gMean->Write("mean");
+    gSigmas->Write("sigma");
+    resOut->Close();
 }
