@@ -247,8 +247,32 @@ int StPicoD0AnaMaker::createCandidates() {
             }
             //for(int ii = 0; ii<3; ii++)
             //	getHadronCorV2(ii);
-            getHadronCorV2(1);
-            getCorV2(pair, reweight);
+
+            //this is messy!! I will rewrite it to a isD0pair function ASAP! 
+            if(pair->pt() > 1 && pair->pt() < 2)
+            {
+            	if(pair->decayLength() > 0.012 && pair->dcaDaughters() < 0.007 && pair->DcaToPrimaryVertex() < 0.005 && cos(pair->pointingAngle()) > 0.5 && pair->particle2Dca() > 0.007 && pair->particle1Dca() > 0.009);
+            	{
+            		getHadronCorV2(1);
+            		getCorV2(pair, reweight);
+            	}
+            }
+            if(pair->pt() > 2 && pair->pt() < 3)
+            {
+				if(pair->decayLength() > 0.003 && pair->dcaDaughters() < 0.016 && pair->DcaToPrimaryVertex() < 0.0065 && cos(pair->pointingAngle()) > 0.5 && pair->particle2Dca() > 0.01 && pair->particle1Dca() > 0.009);
+            	{
+            		getHadronCorV2(1);
+            		getCorV2(pair, reweight);
+            	}
+            }
+        	if(pair->pt() > 3 && pair->pt() < 5)
+            {
+            	if(pair->decayLength() > 0.009 && pair->dcaDaughters() < 0.015 && pair->DcaToPrimaryVertex() < 0.0064 && cos(pair->pointingAngle()) > 0.6 && pair->particle2Dca() > 0.0076 && pair->particle1Dca() > 0.0064);
+            	{
+            		getHadronCorV2(1);
+            		getCorV2(pair, reweight);
+            	}
+            }
         }  // for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon)
     } // for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1)
 
@@ -329,6 +353,9 @@ void StPicoD0AnaMaker::DeclareHistograms() {
   	qVecPow2[m] = new TProfile(aa.Data(),"Q vector", 5, multBin);
   	qVec[m]->Sumw2();
   	qVecPow2[m]->Sumw2();
+  	aa = names[m];
+  	aa += "_no_mult";
+  	qVec2[m] = new TProfile(aa.Data(),"Q vector", 1, 0, 100);
   }
   float momBins[7] = {0,1,2,3,4,5,10};
   TString multBinNames[6] = {"0","7","12","16","22","100"};
@@ -341,7 +368,11 @@ void StPicoD0AnaMaker::DeclareHistograms() {
   	aa = "dirFlow_" + multBinNames[m] + "_" + multBinNames[m+1];
   	dirFlow[m] = new TProfile(aa.Data(), "", 6 , momBins);
   }
+  corrD2[0] = new TProfile("cosD_no_mult","cos D",6,momBins);	
+  corrD2[1] = new TProfile("sinD_no_mult","sin D",6,momBins);
+  dirFlow2 = new TProfile("dirFlow_no_mult","dir flow",6,momBins);
   refFlow = new TProfile("refFlow", "", 5, multBin);
+  refFlow2 = new TProfile("refFlow_no_mult", "", 1, 0, 100);
   
   // float xbin[7] = {0,1,2,3,4,5,10};
   const int xbinSize=10;
@@ -479,6 +510,11 @@ void StPicoD0AnaMaker::WriteHistograms() {
   	corrD[1][m]->Write();
   	dirFlow[m]->Write();
   }
+  corrD2[0]->Write();
+  corrD2[1]->Write();
+  dirFlow2->Write();
+  refFlow2->Write();
+
       //printf("Histograms written! \n");
 }
 
@@ -539,6 +575,12 @@ bool StPicoD0AnaMaker::getHadronCorV2(int idxGap)
   	qVecPow2[2]->Fill(mult,(hadronFill[1]*hadronFill[1])/(hadronFill[0]*hadronFill[0]),reweight);
   	qVecPow2[3]->Fill(mult,(hadronFill[4]*hadronFill[4])/(hadronFill[3]*hadronFill[3]),reweight);
   	refFlow->Fill(mult,((hadronFill[2]*hadronFill[5])/(hadronFill[0]*hadronFill[3])),reweight);
+  	//no mult
+  	qVec2[0]->Fill(mult,hadronFill[2]/hadronFill[0],reweight);
+  	qVec2[1]->Fill(mult,hadronFill[5]/hadronFill[3],reweight);
+  	qVec2[2]->Fill(mult,hadronFill[1]/hadronFill[0],reweight);
+  	qVec2[3]->Fill(mult,hadronFill[4]/hadronFill[3],reweight);
+  	refFlow2->Fill(mult,((hadronFill[2]*hadronFill[5])/(hadronFill[0]*hadronFill[3])),reweight);
   }
   //    StPicoTrack const* hadron = picoDst->track(i);
   //  hadronV2_excl[0][centrality]->Fill(hadron->pMom().perp(),temp*reweight);
@@ -661,6 +703,9 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
       			dirFlow[m]->Fill(kp->pt(),corFill[2]*corFill[5]/corFill[3],weight);
       		} 
       	}
+      	corrD2[0]->Fill(kp->pt(),corFill[2],weight);
+      	corrD2[1]->Fill(kp->pt(),corFill[1],weight);
+      	dirFlow2->Fill(kp->pt(),corFill[2]*corFill[5]/corFill[3],weight);
       }
     }
     if(corFill[3]<=0) return false;
