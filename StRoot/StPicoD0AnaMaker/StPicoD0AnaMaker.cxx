@@ -501,6 +501,7 @@ void StPicoD0AnaMaker::WriteHistograms() {
   {
   	qVec[m]->Write();
   	qVecPow2[m]->Write();
+  	qVec2->Write();
   }
   refFlow->Write();
   
