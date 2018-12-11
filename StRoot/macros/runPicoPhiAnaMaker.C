@@ -70,7 +70,7 @@ void runPicoPhiAnaMaker(
     float dcaDaughtersMax = 1;  // maximum
     float decayLengthMin  = 0.000; // minimum
     float decayLengthMax  = 25; //std::numeric_limits<float>::max();
-    float cosThetaMin     = 0.;   // minimum
+    float cosThetaMin     = 0.9;   // minimum
     float minMass         = 1;
     float maxMass         = 1.05;
     float pairDcaMax      = 1;

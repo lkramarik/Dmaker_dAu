@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #get_file_list.pl -cond trgsetupname=dAu200_production_2016,filename~st_physics,storage!=hpss -keys 'path,filename' -delim / -limit 0 > runs_path_test.txt
 #get_file_list.pl -cond trgsetupname=dAu200_production_2016,production=P17ib,filename~st_physics,filetype~picoDst,storage=nfs -keys 'path,filename' -delim / -limit 0 > runs_filename_nfs.txt
-get_file_list.pl -cond trgsetupname=dAu200_production_2016,production=P17id,filename~st_physics,filetype~picoDst,storage!=hpss -keys 'node,path,filename' -delim / -limit 0 > runs_filename_local_P17id_full_hpss_new_3110.txt
+get_file_list.pl -cond trgsetupname=dAu200_production_2016,production=P17id,library=SL18f,filename~st_physics,filetype~picoDst,storage=nfs -keys 'node,path,filename' -delim / -limit 0 > runs_filename_local_P17id_full_hpss_new_3110.txt
 
 

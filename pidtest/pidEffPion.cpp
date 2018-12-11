@@ -57,11 +57,11 @@ void pidEffPion() {
     sigma = 0.004;
     ptPairMin = 0.5;
     ptPairMax = 10;
-
+    Float_t height = 40000;
     fitmass->setOutputFileName("mass_" + pairName + ".root");
     fitmass->setHeight(10000);
     cut = Form("pair_mass>%.3f && pair_mass<%.3f", massMin, massMax);
-    cutPair = Form("pair_pt>%.3f && pair_pt<%.3f", ptPairMin, ptPairMax);
+    cutPair = Form("pair_pt>%.3f && pair_pt<%.3f && pair_decayL<5", ptPairMin, ptPairMax);
     TH1F *signal = (TH1F*) fitmass->projectSubtractBckg(input, 50, massMin, massMax, ptPairMin, ptPairMax, pair, cut + cutPair, "pair_mass", "Mass_{%s} (GeV/c^{2})");
 
     fitmass->peakFit(signal, mean, sigma, massMin, massMax, pair, ptPairMin, ptPairMax, "mass");
@@ -75,15 +75,15 @@ void pidEffPion() {
         FitPID *pid1 = new FitPID();
         pid1->setOutputFileName("nSigma_" + pairName + "_1.root");
         cut = Form("pair_mass>%f && pair_mass<%f && pi1_pt>%.3f && pi1_pt<%.3f", massMean - 2 * massSigma, massMean + 2 * massSigma, ptBins[i], ptBins[i + 1]);
-        TH1F *hSigmaSignal1 = (TH1F *) pid1->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i + 1], pair, cut + cutPair, "pi1_nSigma", "pi1_nSigma");
+        TH1F *hSigmaSignal1 = (TH1F *) pid1->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i + 1], pair, cut + cutPair, "pi1_nSigma", "Pion n#sigma^{TPC}");
 
         FitPID *pid2 = new FitPID();
         pid2->setOutputFileName("nSigma_" + pairName + "_2.root");
         cut = Form("pair_mass>%f && pair_mass<%f && pi2_pt>%.3f && pi2_pt<%.3f", massMean - 2 * massSigma, massMean + 2 * massSigma, ptBins[i], ptBins[i + 1]);
-        TH1F *hSigmaSignal2 = (TH1F *) pid2->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i + 1], pair, cut + cutPair, "pi2_nSigma", "pi2_nSigma");
+        TH1F *hSigmaSignal2 = (TH1F *) pid2->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i + 1], pair, cut + cutPair, "pi2_nSigma", "Pion n#sigma^{TPC}");
 
         hSigmaSignal1->Add(hSigmaSignal2);
-        pid1->setHeight(pid1->getHeight());
+        pid1->setHeight(height);
         pid1->peakFit(hSigmaSignal1, 0, 1, -5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma TPC");
 
         binWidth[i] = (ptBins[i + 1] - ptBins[i]) / 2;
@@ -98,15 +98,15 @@ void pidEffPion() {
         //tof pions after my PID cut:
         FitPID *pidAna1 = new FitPID();
         pidAna1->setOutputFileName("nSigma_"+pairName+"_ana_1.root");
-//        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta>0", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]); //tof match
-        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta<0.03", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]); //tof match
-        TH1F *hSigmaSignalAna1 = (TH1F*) pidAna1->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair, "pi1_nSigma", "pi1_nSigma_ana");
+        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta>0", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]); //tof match
+//        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta<0.03", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]); //tof match
+        TH1F *hSigmaSignalAna1 = (TH1F*) pidAna1->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair, "pi1_nSigma", "Pion n#sigma^{TPC}");
 
         FitPID *pidAna2 = new FitPID();
         pidAna2->setOutputFileName("nSigma_"+pairName+"_ana_2.root");
-//        cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%f && pi2_pt<%f && pi2_TOFinvbeta>0", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
-        cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%f && pi2_pt<%f && pi2_TOFinvbeta<0.03", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
-        TH1F *hSigmaSignalAna2 = (TH1F*) pidAna2->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair, "pi2_nSigma", "pi2_nSigma_ana"); //tof match
+        cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%f && pi2_pt<%f && pi2_TOFinvbeta>0", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
+//        cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%f && pi2_pt<%f && pi2_TOFinvbeta<0.03", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
+        TH1F *hSigmaSignalAna2 = (TH1F*) pidAna2->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair, "pi2_nSigma", "Pion n#sigma^{TPC}"); //tof match
 
         hSigmaSignalAna1->Add(hSigmaSignalAna2);
         pidAna2->peakFit(hSigmaSignalAna1, 0, 1,-5, 5, pair, ptBins[i], ptBins[i+1], "pi_nSigma_ana");
@@ -117,6 +117,8 @@ void pidEffPion() {
         effError[i]=sqrt(errorAna*errorAna/(pow(integralClean,2)) + errorClean*errorClean*integralAna*integralAna/(pow(integralClean,4)));
         cout<<eff[i]<<" pm "<<effError[i]<<endl;
         ++analysedBins;
+        height=pid1->getHeight();
+
     }
 
     TGraphErrors *gMean = new TGraphErrors(analysedBins,xPt,means,binWidth, meansE);
@@ -128,12 +130,12 @@ void pidEffPion() {
     gMean->SetMarkerSize(0.9);
     gMean->SetMarkerColor(kBlack);
     gMean->SetLineColor(kBlack);
-    gMean->GetYaxis()->SetTitle("nSigma TPC mean");
+    gMean->GetYaxis()->SetTitle("n#sigma_#pi mean");
     gMean->GetYaxis()->SetTitleOffset(1.1);
     gMean->GetXaxis()->SetTitle("p_{T} (GeV/c)");
     gMean->SetTitle("");
     gMean->Draw("ap");
-    c1->SaveAs("mean.pdf");
+    c1->SaveAs("mean.root");
     c1->Close();
 
     TCanvas *c2 = new TCanvas("c2","%.3f_%.3f",1000,900);
@@ -141,12 +143,12 @@ void pidEffPion() {
     gSigmas->SetMarkerSize(0.9);
     gSigmas->SetMarkerColor(kBlack);
     gSigmas->SetLineColor(kBlack);
-    gSigmas->GetYaxis()->SetTitle("nSigma TPC sigma");
+    gSigmas->GetYaxis()->SetTitle("n#sigma_#pi sigma");
     gSigmas->GetYaxis()->SetTitleOffset(1.1);
     gSigmas->GetXaxis()->SetTitle("p_{T} (GeV/c)");
     gSigmas->SetTitle("");
     gSigmas->Draw("ap");
-    c2->SaveAs("sigma.pdf");
+    c2->SaveAs("sigma.root");
     c2->Close();
 
     TCanvas *c3 = new TCanvas("c3","%.3f_%.3f",1000,900);
@@ -154,12 +156,12 @@ void pidEffPion() {
     gEff->SetMarkerSize(0.9);
     gEff->SetMarkerColor(kBlack);
     gEff->SetLineColor(kBlack);
-    gEff->GetYaxis()->SetTitle("nSigma TOF eff");
+    gEff->GetYaxis()->SetTitle("Efficiency");
     gEff->GetYaxis()->SetTitleOffset(1.1);
     gEff->GetXaxis()->SetTitle("p_{T} (GeV/c)");
     gEff->SetTitle("");
     gEff->Draw("ap");
-    c3->SaveAs("effTOF.pdf");
+    c3->SaveAs("effTOF.root");
     c3->Close();
 
     TFile* resOut = new TFile("results_pipi.root" ,"RECREATE");

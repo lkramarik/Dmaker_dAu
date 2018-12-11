@@ -65,14 +65,14 @@ TH1F* FitPID::projectSubtractBckg(TString input, Int_t nBins, Float_t massMin, F
     hS->Sumw2();
     hS->GetYaxis()->SetTitle("Counts");
     hS->GetXaxis()->SetTitle(Form(varName, pair.Data()));
-    hS->SetMarkerStyle(2);
+    hS->SetMarkerStyle(20);
     hS->SetMarkerColor(1);
     hS->SetLineColor(1);
     hS->SetStats(0);
     hS->SetTitle(Form("p_{T}: %.3f-%.3f GeV/c", ptmin, ptmax));
     hS->GetXaxis()->SetTitleSize(0.045);
     hS->GetYaxis()->SetTitleSize(0.045);
-    hS->GetYaxis()->SetTitleOffset(1.1);
+    hS->GetYaxis()->SetTitleOffset(1.25);
 
     TH1F* hB = (TH1F*)hS->Clone(nameBack);
     hB->SetMarkerColor(46);
@@ -80,7 +80,7 @@ TH1F* FitPID::projectSubtractBckg(TString input, Int_t nBins, Float_t massMin, F
 
     ntpS -> Project(nameSig, variable, setCuts);
     ntpB -> Project(nameBack, variable, setCuts);
-    TString imgSave = Form("./img/%s/%s_%.3f_%.3f.png", pairShort.Data(), varName.Data(), ptmin, ptmax);
+    TString imgSave = Form("./img/%s/%s_%.3f_%.3f.png", pairShort.Data(), variable.Data(), ptmin, ptmax);
 
     TH1F* hSig = subtractBckg(hS,hB,nameSubtr,dataRes,imgSave);
 
@@ -88,7 +88,7 @@ TH1F* FitPID::projectSubtractBckg(TString input, Int_t nBins, Float_t massMin, F
     listOut->Add(hS);
     listOut->Add(hB);
     listOut->Add(hSig);
-    listOut->Write(Form("%s_%s_%.3f_%.3f", pair.Data(), variable.Data(), ptmin, ptmax), 1, 0);
+    listOut->Write(Form("%s_%.3f_%.3f", pair.Data(), ptmin, ptmax), 1, 0);
 
     data->Close();
     dataRes->Close();
@@ -97,14 +97,23 @@ TH1F* FitPID::projectSubtractBckg(TString input, Int_t nBins, Float_t massMin, F
 
 TH1F* FitPID::subtractBckg(TH1F* hS, TH1F* hB, TString nameSubtr, TFile* outputF, TString imgSave) {
     outputF->cd();
-    hSig = (TH1F*)hS->Clone(nameSubtr);
+    TH1F* hSig = (TH1F*)hS->Clone(nameSubtr);
     hSig->SetDirectory(0);
     hSig->SetMarkerColor(9);
+    hSig->SetMarkerStyle(20);
     hSig->SetLineColor(9);
+//    Double_t integralSig = hSig->Integral(hSig->FindBin(1.03), hSig->FindBin(1.035),"");
+//    Double_t integralBkg = hB->Integral(hB->FindBin(1.03), hB->FindBin(1.035),"");
+
+//    Double_t integralSig = hSig->Integral(hSig->FindBin(1.005), hSig->FindBin(1.015),"");
+//    Double_t integralBkg = hB->Integral(hB->FindBin(1.005), hB->FindBin(1.015),"");
+
+//    hSig->Add(hB,-integralSig/integralBkg);
     hSig->Add(hB,-1);
 
     TCanvas *c = new TCanvas("c","c",1000,900);
-    TLegend *legend = new TLegend(0.125,0.789, 0.407, 0.884,"","brNDC");
+    gPad->SetLeftMargin(0.15);
+    TLegend *legend = new TLegend(0.155,0.789, 0.427, 0.884,"","brNDC");
     legend->AddEntry(hB, "LS background", "pl");
     legend->AddEntry(hS, "US signal", "pl");
     hS->Draw();
@@ -129,11 +138,13 @@ void FitPID::peakFit(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin,
     } else {
         funLS->SetParLimits(3,-1.5,1.5);
     }
-    funLS->SetParLimits(4,-4,4);
+    funLS->SetParLimits(4,0,4);
     funLS->SetLineColor(9);
 
     TCanvas *c = new TCanvas("c","%.3f_%.3f",1000,900);
+    gPad->SetLeftMargin(0.15);
     gStyle->SetOptFit(1);
+    hToFit->GetYaxis()->SetTitleOffset(1.25);
     hToFit->Fit(funLS, "LRM");
     hToFit->Draw();
     mHeight = funLS->GetParameter(2);

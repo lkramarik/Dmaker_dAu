@@ -13,7 +13,7 @@
 #include "SystemOfUnits.h"
 #include "StBTofUtil/tofPathLength.hh"
 
-#include "StPicoDstMaker/StPicoDst.h"
+#include "StPicoDst.h"
 #include "StPicoEvent/StPicoTrack.h"
 #include "StPicoEvent/StPicoEvent.h"
 #include "StPicoEvent/StPicoBTofPidTraits.h"
@@ -378,11 +378,11 @@ float StPicoCutsBase::getTofBetaBase(StPicoTrack const * const trk) const {
 
 float StPicoCutsBase::getOneOverBeta(StPicoTrack const * const trk,  float const & tofBeta, int pidFlag) const {
   if ((tofBeta <= 0) || (tofBeta!=tofBeta))
-    return -5;
+    return std::numeric_limits<float>::max();
   float m2 = mHypotheticalMass[pidFlag]*mHypotheticalMass[pidFlag];
   float ptot = trk->gPtot();
   float betaInv = ptot / sqrt(ptot*ptot + m2);
-  return fabs(1/tofBeta - 1/betaInv);
+  return 1/tofBeta - 1/betaInv;
 }
 
 // _________________________________________________________
