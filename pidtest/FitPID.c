@@ -136,12 +136,110 @@ void FitPID::peakFit(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin,
     if (mean!=0)   {
         funLS->SetParLimits(3,0.1*mean,mean+0.9*mean);
     } else {
-        funLS->SetParLimits(3,-1.5,1.5);
+        funLS->SetParLimits(3,-0.9,3);
     }
     funLS->SetParLimits(4,0,4);
     funLS->SetLineColor(9);
 
     TCanvas *c = new TCanvas("c","%.3f_%.3f",1000,900);
+    gPad->SetLeftMargin(0.15);
+    gStyle->SetOptFit(1);
+    hToFit->GetYaxis()->SetTitleOffset(1.25);
+    hToFit->Fit(funLS, "LRM");
+
+    mHeight = funLS->GetParameter(2);
+    mSigma = funLS->GetParameter(4);
+    mSigmaE = funLS->GetParError(4);
+    mMean = funLS->GetParameter(3);
+    mMeanE = funLS->GetParError(3);
+
+    TLine *left = new TLine(mMean - 1*mSigma, hToFit->GetMaximum(), mMean - 1*mSigma, hToFit->GetMinimum());
+    left->SetLineColor(46);
+    TLine *right = new TLine(mMean + 1*mSigma, hToFit->GetMaximum(), mMean + 1*mSigma, hToFit->GetMinimum());
+    right->SetLineColor(46);
+
+    hToFit->Draw();
+    left->Draw("same");
+    right->Draw("same");
+
+    mHeight = funLS->GetParameter(2);
+    mSigma = funLS->GetParameter(4);
+    mSigmaE = funLS->GetParError(4);
+    mMean = funLS->GetParameter(3);
+    mMeanE = funLS->GetParError(3);
+    pair.ReplaceAll("#","");
+    c->SaveAs(Form("./img/%s/fit/%s_%.3f_%.3f.png", pair.Data(), varName.Data(), ptmin, ptmax));
+    c->Close();
+}
+
+
+TH1F* FitPID::peakFitResSub(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin, Float_t massMax, TString pair, Float_t ptmin, Float_t ptmax, TString varName){
+    TF1 *funLS = new TF1("funLS","pol1(0)+gaus(2)", massMin, massMax);
+    funLS->SetParameters(1.,1.,mHeight,mean,sigma);
+    funLS->SetLineColor(2);
+    funLS->SetLineStyle(7);
+    funLS->SetLineStyle(1);
+    funLS->SetParName(2,"height");
+    funLS->SetParName(3,"mean");
+    funLS->SetParName(4,"sigma");
+    if (mean!=0)   {
+        funLS->SetParLimits(3,0.1*mean,mean+0.9*mean);
+    } else {
+        funLS->SetParLimits(3,-0.9,3);
+    }
+    funLS->SetParLimits(4,0,4);
+    funLS->SetLineColor(9);
+
+    TCanvas *c = new TCanvas("c","%.3f_%.3f",1000,900);
+    gPad->SetLeftMargin(0.15);
+    gStyle->SetOptFit(1);
+    hToFit->GetYaxis()->SetTitleOffset(1.25);
+    hToFit->Fit(funLS, "LRM");
+
+    TF1 *funLin = new TF1("funLin","pol1(0)", massMin, massMax);
+    funLin->SetParameters(funLS->GetParameter(0),funLS->GetParameter(1));
+    TH1F* hResSubtr = (TH1F*)hToFit->Clone();
+
+    for (int i = 0; i < hToFit->GetNbinsX(); ++i) {
+        hToFit -> SetBinContent(i, hResSubtr->GetBinContent(i) - funLin->Eval(hResSubtr->GetBinCenter(i)));
+    }
+
+    hToFit->Sumw2();
+    hToFit->Fit(funLS, "LRM");
+
+    hToFit->Draw();
+    mHeight = funLS->GetParameter(2);
+    mSigma = funLS->GetParameter(4);
+    mSigmaE = funLS->GetParError(4);
+    mMean = funLS->GetParameter(3);
+    mMeanE = funLS->GetParError(3);
+    pair.ReplaceAll("#","");
+    c->SaveAs(Form("./img/%s/fit/%s_%.3f_%.3f.png", pair.Data(), varName.Data(), ptmin, ptmax));
+    c->Close();
+    return hToFit;
+}
+
+
+
+
+void FitPID::peakMassFit(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin, Float_t massMax, TString pair, Float_t ptmin, Float_t ptmax, TString varName){
+    TF1 *funLS = new TF1("funLS","pol1(0)+gaus(2)", massMin, massMax);
+    funLS->SetParameters(1.,1.,mHeight,mean,sigma);
+    funLS->SetLineColor(2);
+    funLS->SetLineStyle(7);
+    funLS->SetLineStyle(1);
+    funLS->SetParName(2,"height");
+    funLS->SetParName(3,"mean");
+    funLS->SetParName(4,"sigma");
+    if (mean!=0)   {
+        funLS->SetParLimits(3,0.1*mean,mean+0.9*mean);
+    } else {
+        funLS->SetParLimits(3,-0.9,3);
+    }
+    funLS->SetParLimits(4,0,0.0035);
+    funLS->SetLineColor(9);
+
+    TCanvas *c = new TCanvas("c","%.3_%.3f",1000,900);
     gPad->SetLeftMargin(0.15);
     gStyle->SetOptFit(1);
     hToFit->GetYaxis()->SetTitleOffset(1.25);
@@ -156,4 +254,3 @@ void FitPID::peakFit(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin,
     c->SaveAs(Form("./img/%s/fit/%s_%.3f_%.3f.png", pair.Data(), varName.Data(), ptmin, ptmax));
     c->Close();
 }
-

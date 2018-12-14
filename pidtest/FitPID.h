@@ -42,6 +42,8 @@ public:
     TH1F* projectSubtractBckg(TString, Int_t, Float_t, Float_t, Float_t, Float_t, TString, TCut, TString, TString);
     TH1F* subtractBckg(TH1F*, TH1F*, TString, TFile*, TString);
     void peakFit(TH1F*, Float_t, Float_t, Float_t, Float_t, TString, Float_t, Float_t, TString);
+    TH1F* peakFitResSub(TH1F*, Float_t, Float_t, Float_t, Float_t, TString, Float_t, Float_t, TString);
+    void peakMassFit(TH1F*, Float_t, Float_t, Float_t, Float_t, TString, Float_t, Float_t, TString);
     void setOutputFileName(TString);
     float getMeanError();
     float getMean();

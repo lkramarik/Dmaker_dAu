@@ -92,7 +92,7 @@ void pidEffPion() {
         meansE[i] = pid1->getMeanError();
         sigmas[i] = pid1->getSigma();
         sigmasE[i] = pid1->getSigmaError();
-        Double_t integralClean = hSigmaSignal1->IntegralAndError(hSigmaSignal1->FindBin(pid1->getMean() - 2 * pid1->getSigma()), hSigmaSignal1->FindBin(pid1->getMean() + 2 * pid1->getSigma()), errorClean, ""); //number of it without PID cut
+        Double_t integralClean = hSigmaSignal1->IntegralAndError(hSigmaSignal1->FindBin(pid1->getMean() - 1*pid1->getSigma()), hSigmaSignal1->FindBin(pid1->getMean() + 1*pid1->getSigma()), errorClean, ""); //number of it without PID cut
         cout << integralClean << endl;
 
         //tof pions after my PID cut:
@@ -109,9 +109,8 @@ void pidEffPion() {
         TH1F *hSigmaSignalAna2 = (TH1F*) pidAna2->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair, "pi2_nSigma", "Pion n#sigma^{TPC}"); //tof match
 
         hSigmaSignalAna1->Add(hSigmaSignalAna2);
-        pidAna2->peakFit(hSigmaSignalAna1, 0, 1,-5, 5, pair, ptBins[i], ptBins[i+1], "pi_nSigma_ana");
 
-        Double_t integralAna = hSigmaSignalAna1->IntegralAndError(hSigmaSignalAna1->FindBin(pidAna2->getMean()-2*pidAna2->getSigma()),hSigmaSignalAna1->FindBin(pidAna2->getMean()+2*pidAna2->getSigma()),errorAna,""); //number of it without PID cut
+        Double_t integralAna = hSigmaSignalAna1->IntegralAndError(hSigmaSignalAna1->FindBin(pid1->getMean()-1*pid1->getSigma()),hSigmaSignalAna1->FindBin(pid1->getMean()+1*pid1->getSigma()),errorAna,""); //number of it without PID cut
         cout<<integralAna<<endl;
         eff[i]=(float)integralAna/(float)integralClean;
         effError[i]=sqrt(errorAna*errorAna/(pow(integralClean,2)) + errorClean*errorClean*integralAna*integralAna/(pow(integralClean,4)));
@@ -130,7 +129,7 @@ void pidEffPion() {
     gMean->SetMarkerSize(0.9);
     gMean->SetMarkerColor(kBlack);
     gMean->SetLineColor(kBlack);
-    gMean->GetYaxis()->SetTitle("n#sigma_#pi mean");
+    gMean->GetYaxis()->SetTitle("#pi n#sigma mean [n#sigma]");
     gMean->GetYaxis()->SetTitleOffset(1.1);
     gMean->GetXaxis()->SetTitle("p_{T} (GeV/c)");
     gMean->SetTitle("");
@@ -143,7 +142,7 @@ void pidEffPion() {
     gSigmas->SetMarkerSize(0.9);
     gSigmas->SetMarkerColor(kBlack);
     gSigmas->SetLineColor(kBlack);
-    gSigmas->GetYaxis()->SetTitle("n#sigma_#pi sigma");
+    gSigmas->GetYaxis()->SetTitle("#pi n#sigma sigma [n#sigma]");
     gSigmas->GetYaxis()->SetTitleOffset(1.1);
     gSigmas->GetXaxis()->SetTitle("p_{T} (GeV/c)");
     gSigmas->SetTitle("");

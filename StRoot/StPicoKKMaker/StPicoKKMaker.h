@@ -10,7 +10,7 @@
 #include "TClonesArray.h"
 #include "StThreeVectorF.hh"
 #include "StLorentzVectorF.hh"
-#include "StPicoDst.h"
+#include "StPicoDstMaker/StPicoDst.h"
 #include "StPicoDstMaker/StPicoDstMaker.h"
 #include "StPicoEvent/StPicoEvent.h"
 #include "StPicoEvent/StPicoTrack.h"
