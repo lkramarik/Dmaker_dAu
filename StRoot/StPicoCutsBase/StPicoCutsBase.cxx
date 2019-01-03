@@ -382,7 +382,7 @@ float StPicoCutsBase::getOneOverBeta(StPicoTrack const * const trk,  float const
   float m2 = mHypotheticalMass[pidFlag]*mHypotheticalMass[pidFlag];
   float ptot = trk->gPtot();
   float betaInv = ptot / sqrt(ptot*ptot + m2);
-  return 1/tofBeta - 1/betaInv;
+  return (1/tofBeta - 1/betaInv);
 }
 
 // _________________________________________________________

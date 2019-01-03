@@ -68,7 +68,7 @@ int StPicoPiPiMaker::createCandidates() {
 
 //            if (pion1->id() == pion2->id()) continue;
 
-            StHFPair *pair = new StHFPair(pion1, pion2, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion), i, j, mPrimVtx, mBField, kTRUE);
+            StHFPair *pair = new StHFPair(pion1, pion2, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion), mIdxPicoPions[j], mIdxPicoPions[i], mPrimVtx, mBField, kTRUE);
             if (!mHFCuts->isGoodSecondaryVertexPair(pair)) continue;
 
             bool isKs = false;

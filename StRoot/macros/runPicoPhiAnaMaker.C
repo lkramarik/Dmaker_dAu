@@ -62,7 +62,7 @@ void runPicoPhiAnaMaker(
     hfCuts->addTriggerId(530003); //VPD-5
 
     hfCuts->setCutNHitsFitMin(15); //default is 20
-    hfCuts->setCutRequireHFT(true);
+    hfCuts->setCutRequireHFT(false);
     hfCuts->setHybridTof(true);
     hfCuts->setCutDcaMin(0.00,StHFCuts::kKaon);
 

@@ -29,7 +29,7 @@
 //class FitPID;
 
 
-void pidEffKaon() {
+void pidEffKaonTOF() {
 //    gSystem->Load("FitPID");
     gROOT->ProcessLine(".L FitPID.c++");
 
@@ -84,20 +84,20 @@ void pidEffKaon() {
         FitPID *pid1 = new FitPID();
         cout<<"ok"<<endl;
 
-        pid1->setOutputFileName("nSigma_" + pairName + "_1.root");
-        cut = Form("pair_mass>%f && pair_mass<%f && pi1_pt>%.3f && pi1_pt<%.3f", massMean - 2*massSigma, massMean + 2*massSigma, ptBins[i], ptBins[i+1]);
-        TH1F *hSigmaSignal1 = (TH1F *) pid1->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i + 1], pair, cut + cutPair, "pi1_nSigma", "Kaon n#sigma^{TPC}");
+        pid1->setOutputFileName("nSigma_TOF_" + pairName + "_1.root");
+        cut = Form("pair_mass>%f && pair_mass<%f && pi1_pt>%.3f && pi1_pt<%.3f && pi1_TOFinvbeta>0", massMean - 2*massSigma, massMean + 2*massSigma, ptBins[i], ptBins[i+1]);
+        TH1F *hSigmaSignal1 = (TH1F *) pid1->projectSubtractBckg(input, 50, 0, 0.1, ptBins[i], ptBins[i + 1], pair, cut + cutPair, "pi1_TOFinvbeta", "Kaon #delta1/#beta{TOF}");
 
         FitPID *pid2 = new FitPID();
-        pid2->setOutputFileName("nSigma_" + pairName + "_2.root");
-        cut = Form("pair_mass>%f && pair_mass<%f && pi2_pt>%.3f && pi2_pt<%.3f", massMean - 2*massSigma, massMean + 2*massSigma, ptBins[i], ptBins[i+1]);
-        TH1F *hSigmaSignal2 = (TH1F *) pid2->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i + 1], pair, cut + cutPair, "pi2_nSigma", "Kaon n#sigma^{TPC}");
+        pid2->setOutputFileName("nSigma_TOF_" + pairName + "_2.root");
+        cut = Form("pair_mass>%f && pair_mass<%f && pi2_pt>%.3f && pi2_pt<%.3f && pi2_TOFinvbeta>0", massMean - 2*massSigma, massMean + 2*massSigma, ptBins[i], ptBins[i+1]);
+        TH1F *hSigmaSignal2 = (TH1F *) pid2->projectSubtractBckg(input, 50, 0, 0.1, ptBins[i], ptBins[i + 1], pair, cut + cutPair, "pi2_TOFinvbeta", "Kaon #delta1/#beta{TOF}");
 
         hSigmaSignal1->Add(hSigmaSignal2);
-        pid1->setHeight(height);
+//        pid1->setHeight(height);
 //        TH1F *hSigmaSignalRes = (TH1F*) pid1->peakFit(hSigmaSignal1, 0, 1, -5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma");
-        if (i==1) pid1->peakFit(hSigmaSignal1, 0, 1, -1.5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma");
-        else         pid1->peakFit(hSigmaSignal1, 0, 1, -5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma");
+//        if (i==1) pid1->peakFit(hSigmaSignal1, 0, 1, -1.5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma");
+//        else         pid1->peakFit(hSigmaSignal1, 0, 1, -5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma");
 
 
 
@@ -113,22 +113,22 @@ void pidEffKaon() {
 //        cout << integralClean << endl;
 
         //tof pions after my PID cut:
-        FitPID *pidAna1 = new FitPID();
-        pidAna1->setOutputFileName("nSigma_"+pairName+"_ana_1.root");
-        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta>0 && pi1_TOFinvbeta<0.03", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
-//        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta>0", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
-//        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta<0.03 && pi1_TOFinvbeta>0", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
-        TH1F *hSigmaSignalAna1 = (TH1F*) pidAna1->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair, "pi1_nSigma", "Kaon n#sigma^{TPC}");
-//
-        FitPID *pidAna2 = new FitPID();
-        pidAna2->setOutputFileName("nSigma_"+pairName+"_ana_2.root");
-        cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%f && pi2_pt<%f && pi2_TOFinvbeta>0 && pi2_TOFinvbeta<0.03", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
-//        cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%f && pi2_pt<%f && pi2_TOFinvbeta>0", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
-        TH1F *hSigmaSignalAna2 = (TH1F*) pidAna2->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair, "pi2_nSigma", "Kaon n#sigma^{TPC}");
-//
-        hSigmaSignalAna1->Add(hSigmaSignalAna2);
-        pidAna1->setHeight(height);
-
+//        FitPID *pidAna1 = new FitPID();
+//        pidAna1->setOutputFileName("nSigma_"+pairName+"_ana_1.root");
+//        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi2_TOFinvbeta>0 && pi2_TOFinvbeta<0.03", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
+////        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta>0", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
+////        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta<0.03 && pi1_TOFinvbeta>0", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
+//        TH1F *hSigmaSignalAna1 = (TH1F*) pidAna1->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair, "pi1_nSigma", "Kaon n#sigma^{TPC}");
+////
+//        FitPID *pidAna2 = new FitPID();
+//        pidAna2->setOutputFileName("nSigma_"+pairName+"_ana_2.root");
+//        cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%f && pi2_pt<%f && pi2_TOFinvbeta>0 && pi2_TOFinvbeta<0.03", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
+////        cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%f && pi2_pt<%f && pi2_TOFinvbeta>0", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
+//        TH1F *hSigmaSignalAna2 = (TH1F*) pidAna2->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair, "pi2_nSigma", "Kaon n#sigma^{TPC}");
+////
+//        hSigmaSignalAna1->Add(hSigmaSignalAna2);
+//        pidAna1->setHeight(height);
+/*
         Double_t integralAna = hSigmaSignalAna1->IntegralAndError(hSigmaSignalAna1->FindBin(pid1->getMean() - 1*pid1->getSigma()), hSigmaSignalAna1->FindBin(pid1->getMean() + 1*pid1->getSigma()), errorAna, ""); //number of it without PID cut
         TLine *left = new TLine(pid1->getMean() - 1*pid1->getSigma(), hSigmaSignalAna1->GetMaximum(), pid1->getMean() - 1*pid1->getSigma(), hSigmaSignalAna1->GetMinimum());
         left->SetLineColor(46);
@@ -142,20 +142,23 @@ void pidEffKaon() {
         c->Close();
         left=0x0;
         right=0x0;
-
+*/
 //        TH1F *hSigmaSignalAnaRes = (TH1F*) pidAna1->peakFit(hSigmaSignalAna1, 0, 1,-5, 5, pair, ptBins[i], ptBins[i+1], "pi_nSigma_ana");
 //        Double_t integralAna = hSigmaSignalAnaRes->IntegralAndError(hSigmaSignalRes->FindBin(pid1->getMean() - 2*pid1->getSigma()), hSigmaSignalRes->FindBin(pid1->getMean() + 2*pid1->getSigma()), errorClean, ""); //number of it without PID cut
 
 //        Double_t integralAna = hSigmaSignalAnaRes->IntegralAndError(hSigmaSignalAnaRes->FindBin(pidAna1->getMean()-3*pidAna1->getSigma()),hSigmaSignalAnaRes->FindBin(pidAna1->getMean()+3*pidAna1->getSigma()),errorAna,""); //number of it without PID cut
 //        Double_t integralAna = hSigmaSignalAna1->IntegralAndError(hSigmaSignalAna1->FindBin(pidAna1->getMean()-1*pidAna1->getSigma()),hSigmaSignalAna1->FindBin(pidAna1->getMean()+1*pidAna1->getSigma()),errorAna,""); //number of it without PID cut
+
+/*
         cout<<integralAna<<endl;
         eff[i]=(float)integralAna/(float)integralClean;
         effError[i]=sqrt(errorAna*errorAna/(pow(integralClean,2)) + errorClean*errorClean*integralAna*integralAna/(pow(integralClean,4)));
         cout<<eff[i]<<" pm "<<effError[i]<<endl;
         ++analysedBins;
         height=pid1->getHeight();
+        */
     }
-
+/*
     TGraphErrors *gMean = new TGraphErrors(analysedBins,xPt,means,binWidth, meansE);
     TGraphErrors *gSigmas = new TGraphErrors(analysedBins,xPt,sigmas,binWidth, sigmasE);
     TGraphErrors *gEff = new TGraphErrors(analysedBins,xPt,eff,binWidth, effError);
@@ -204,4 +207,5 @@ void pidEffKaon() {
     gMean->Write("mean");
     gSigmas->Write("sigma");
     resOut->Close();
+    */
 }
