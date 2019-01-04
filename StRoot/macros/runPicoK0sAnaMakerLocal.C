@@ -72,7 +72,7 @@ void runPicoK0sAnaMakerLocal(
   hfCuts->addTriggerId(530003); //VPD-5
 
   hfCuts->setCutNHitsFitMin(15); //default is 20
-  hfCuts->setCutRequireHFT(true);
+  hfCuts->setCutRequireHFT(false);
   hfCuts->setHybridTof(true);
   //LK hfCuts->setCutDcaMin(0.009,StHFCuts::kPion);
   //LK  hfCuts->setCutDcaMin(0.007,StHFCuts::kKaon);
