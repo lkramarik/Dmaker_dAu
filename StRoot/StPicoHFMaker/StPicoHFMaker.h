@@ -1,6 +1,8 @@
 #ifndef StPicoHFMaker_h
 #define StPicoHFMaker_h
 
+#include "TVector3.h"
+
 #include "StChain/StMaker.h"
 #include "StarClassLibrary/StLorentzVectorF.hh"
 
