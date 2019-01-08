@@ -80,9 +80,6 @@ int StPicoPiPiMaker::createCandidates() {
             int ii=0;
             float ntVar[23];
 
-            StThreeVectorF momentumP = pion1->gMom();
-            etaP = momentumP.pseudoRapidity();
-
             ntVar[ii++] = pion1->gPt();
             ntVar[ii++] = pair->particle1Dca();
             ntVar[ii++] = pion1->nSigmaPion();
