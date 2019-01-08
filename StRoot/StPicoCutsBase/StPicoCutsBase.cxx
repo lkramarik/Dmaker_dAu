@@ -7,7 +7,7 @@
 #include "StPicoCutsBase.h"
 
 #include "StLorentzVectorF.hh"
-#include "StThreeVectorF.hh"
+#include "StarClassLibrary/StThreeVectorF.hh"
 #include "StPicoEvent/StPicoPhysicalHelix.h"
 #include "phys_constants.h"
 #include "SystemOfUnits.h"
