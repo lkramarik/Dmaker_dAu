@@ -1,7 +1,7 @@
 #include <limits>
 #include <cmath>
 
-#include "StarClassLibrary/StPhysicalHelixD.hh"
+#include "StPicoEvent/StPicoPhysicalHelix.hh"
 #include "StarClassLibrary/SystemOfUnits.h"
 
 #include "StMixerPair.h"
@@ -43,8 +43,8 @@ StMixerPair::StMixerPair(StPicoTrack const&  particle1, StPicoTrack const& parti
 
     StThreeVectorF dVtx = vtx1 -vtx2;
 
-    StPhysicalHelixD p1Helix(particle1.gMom(), particle1.origin(),bField*kilogauss, particle1.charge());
-    StPhysicalHelixD p2Helix(particle2.gMom(), particle2.origin() + dVtx, bField*kilogauss,  particle2.charge());
+    StPicoPhysicalHelix p1Helix(particle1.gMom(), particle1.origin(),bField*kilogauss, particle1.charge());
+    StPicoPhysicalHelix p2Helix(particle2.gMom(), particle2.origin() + dVtx, bField*kilogauss,  particle2.charge());
 //    StPhysicalHelixD p1Helix = particle1->helix(bField);
 //    StPhysicalHelixD p2Helix = particle2->helix(bField);
 
@@ -56,8 +56,8 @@ StMixerPair::StMixerPair(StPicoTrack const&  particle1, StPicoTrack const& parti
     StThreeVectorF const p1Mom = p1Helix.momentum(bField * kilogauss);
     StThreeVectorF const p2Mom = p2Helix.momentum(bField * kilogauss);
 
-    StPhysicalHelixD const p1StraightLine(p1Mom, p1Helix.origin(), 0, particle1.charge());
-    StPhysicalHelixD const p2StraightLine(p2Mom, p2Helix.origin(), 0, particle2.charge());
+    StPicoPhysicalHelix const p1StraightLine(p1Mom, p1Helix.origin(), 0, particle1.charge());
+    StPicoPhysicalHelix const p2StraightLine(p2Mom, p2Helix.origin(), 0, particle2.charge());
 
     pair<double, double> const ss = p1StraightLine.pathLengths(p2StraightLine);
     StThreeVectorF const p1AtDcaToP2 = p1StraightLine.at(ss.first);

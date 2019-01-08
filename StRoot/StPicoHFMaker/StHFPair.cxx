@@ -1,7 +1,7 @@
 #include <limits>
 #include <cmath>
 #include "StHFPair.h"
-#include "StarClassLibrary/StPhysicalHelixD.hh"
+#include "StPicoEvent/StPicoPhysicalHelix.h"
 #include "StarClassLibrary/SystemOfUnits.h"
 #include "StPicoEvent/StPicoTrack.h"
 
@@ -39,8 +39,8 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
     return;
   }
 
-  StPhysicalHelixD p1Helix = particle1->helix(bField);
-  StPhysicalHelixD p2Helix = particle2->helix(bField);
+  StPicoPhysicalHelix p1Helix = particle1->helix(bField);
+  StPicoPhysicalHelix p2Helix = particle2->helix(bField);
 
   // move origins of helices to the primary vertex origin - same as Liang.
   p1Helix.moveOrigin(p1Helix.pathLength(vtx));
@@ -50,8 +50,8 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
   StThreeVectorF const p1Mom = p1Helix.momentum(bField * kilogauss);
   StThreeVectorF const p2Mom = p2Helix.momentum(bField * kilogauss);
 
-  StPhysicalHelixD const p1StraightLine(p1Mom, p1Helix.origin(), 0, particle1->charge());
-  StPhysicalHelixD const p2StraightLine(p2Mom, p2Helix.origin(), 0, particle2->charge());
+  StPicoPhysicalHelix const p1StraightLine(p1Mom, p1Helix.origin(), 0, particle1->charge());
+  StPicoPhysicalHelix const p2StraightLine(p2Mom, p2Helix.origin(), 0, particle2->charge());
 
 //  pair<double, double> const ss = (useStraightLine) ? p1StraightLine.pathLengths(p2StraightLine) : p1Helix.pathLengths(p2Helix);
   pair<double, double> const ss = p1StraightLine.pathLengths(p2StraightLine);
@@ -106,7 +106,7 @@ float StHFPair::decayLength(StThreeVectorF const & vtx2) const{
 // _________________________________________________________
 float StHFPair::particle1Dca(StPicoTrack const * p1track, StThreeVectorF const & vtx2, float const bField) const{
   // -- Overloaded function recalculates daughter dca 2 updated vertex
-  StPhysicalHelixD p1Helix = p1track->helix(bField);
+  StPicoPhysicalHelix p1Helix = p1track->helix(bField);
   // -- move origins of helices to the primary vertex origin
   p1Helix.moveOrigin(p1Helix.pathLength(vtx2));
   float const nParticle1Dca = (p1Helix.origin() - vtx2).mag();
@@ -115,7 +115,7 @@ float StHFPair::particle1Dca(StPicoTrack const * p1track, StThreeVectorF const &
 // _________________________________________________________
 float StHFPair::particle2Dca(StPicoTrack const * p2track, StThreeVectorF const & vtx2, float const bField) const{
   // -- Overloaded function recalculates daughter dca 2 updated vertex
-  StPhysicalHelixD p2Helix = p2track->helix(bField);
+  StPicoPhysicalHelix p2Helix = p2track->helix(bField);
   // -- move origins of helices to the primary vertex origin
   p2Helix.moveOrigin(p2Helix.pathLength(vtx2));
   float const nParticle2Dca = (p2Helix.origin() - vtx2).mag();

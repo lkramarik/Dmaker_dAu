@@ -8,7 +8,7 @@
 
 #include "StLorentzVectorF.hh"
 #include "StThreeVectorF.hh"
-#include "StPhysicalHelixD.hh"
+#include "StPicoEvent/StPicoPhysicalHelix.h"
 #include "phys_constants.h"
 #include "SystemOfUnits.h"
 #include "StBTofUtil/tofPathLength.hh"
@@ -258,7 +258,7 @@ bool StPicoCutsBase::cutMaxDcaToPrimVertex(StPicoTrack const * const trk) const 
 bool StPicoCutsBase::cutMinDcaToPrimVertexTertiary(StPicoTrack const * const trk, int pidFlag) const {
   // -- check on min dca for identified particle - used for tertiary particles only
 
-  StPhysicalHelixD helix = trk->helix(mPicoDst->event()->bField());
+  StPicoPhysicalHelix helix = trk->helix(mPicoDst->event()->bField());
   helix.moveOrigin(helix.pathLength(mPrimVtx));
   float dca = (mPrimVtx - helix.origin()).mag();
 
@@ -362,7 +362,7 @@ float StPicoCutsBase::getTofBetaBase(StPicoTrack const * const trk) const {
       if (beta < 1e-4) {
         StThreeVectorF const btofHitPos = tofPid->btofHitPos();
         // StPhysicalHelixD helix = trk->helix();
-        StPhysicalHelixD helix = trk->helix(mPicoDst->event()->bField());
+        StPicoPhysicalHelix helix = trk->helix(mPicoDst->event()->bField());
 
         float L = tofPathLength(&mPrimVtx, &btofHitPos, helix.curvature());
         float tof = tofPid->btof();
@@ -412,7 +412,7 @@ float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk,
   mTOFCorr->setMotherTracks(secondaryMother);
   
   float tof = tofPid->btof();
-StPhysicalHelixD helix = trk->helix(mPicoDst->event()->bField()); 
+  StPicoPhysicalHelix helix = trk->helix(mPicoDst->event()->bField());
   
   // -- correct beta
   mTOFCorr->correctBeta(helix, tof, beta);
@@ -446,7 +446,7 @@ float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk,
   mTOFCorr->setMotherTracks(secondaryMother)(tertiaryMother);
   
   float tof = tofPid->btof();
-  StPhysicalHelixD helix = trk->helix(mPicoDst->event()->bField());
+  StPicoPhysicalHelix helix = trk->helix(mPicoDst->event()->bField());
     
   // -- correct beta
   mTOFCorr->correctBeta(helix, tof, beta);

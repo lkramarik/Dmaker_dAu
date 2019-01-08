@@ -6,7 +6,7 @@
 
 #include "StLorentzVectorF.hh"
 #include "StThreeVectorF.hh"
-#include "StPhysicalHelixD.hh"
+#include "StPicoPhysicalHelix.hh"
 #include "phys_constants.h"
 #include "SystemOfUnits.h"
 #include "StPicoEvent/StPicoTrack.h"
@@ -53,8 +53,8 @@ StKaonPion::StKaonPion(StPicoTrack const * const kaon, StPicoTrack const * const
 
 
    // to be used for testing with preview II pico production
-   StPhysicalHelixD kHelix = kaon->helix(bField);
-   StPhysicalHelixD pHelix = pion->helix(bField);
+   StPicoPhysicalHelix kHelix = kaon->helix(bField);
+   StPicoPhysicalHelix pHelix = pion->helix(bField);
 
    // move origins of helices to the primary vertex origin
    kHelix.moveOrigin(kHelix.pathLength(vtx));
@@ -63,8 +63,8 @@ StKaonPion::StKaonPion(StPicoTrack const * const kaon, StPicoTrack const * const
    // use straight lines approximation to get point of DCA of kaon-pion pair
    StThreeVectorF const kMom = kHelix.momentum(bField * kilogauss);
    StThreeVectorF const pMom = pHelix.momentum(bField * kilogauss);
-   StPhysicalHelixD const kStraightLine(kMom, kHelix.origin(), 0, kaon->charge());
-   StPhysicalHelixD const pStraightLine(pMom, pHelix.origin(), 0, pion->charge());
+   StPicoPhysicalHelix const kStraightLine(kMom, kHelix.origin(), 0, kaon->charge());
+   StPicoPhysicalHelix const pStraightLine(pMom, pHelix.origin(), 0, pion->charge());
 
    pair<double, double> const ss = kStraightLine.pathLengths(pStraightLine);
    StThreeVectorF const kAtDcaToPion = kStraightLine.at(ss.first);
