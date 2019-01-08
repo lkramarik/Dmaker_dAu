@@ -159,12 +159,12 @@ public:
 
     // -- calculate corrected beta of track -- for secondary particles
     float getTofBeta(StPicoTrack const * const trk,
-                     StLorentzVectorF const & secondaryMother, TVector3 const & secondaryVtx) const;
+                     TVector3 const & secondaryMother, TVector3 const & secondaryVtx) const;
 
     // -- calculate corrected beta of track -- for tertiary particles
     float getTofBeta(StPicoTrack const * const trk,
-                     StLorentzVectorF const & secondaryMother, TVector3 const & secondaryVtx,
-                     StLorentzVectorF const & tertiaryMother,  TVector3 const & tertiaryVtx) const;
+                     TVector3 const & secondaryMother, TVector3 const & secondaryVtx,
+                     TVector3 const & tertiaryMother,  TVector3 const & tertiaryVtx) const;
 
     const float& getHypotheticalMass(int pidFlag)           const;
 

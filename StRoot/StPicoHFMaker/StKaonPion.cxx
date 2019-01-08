@@ -71,7 +71,7 @@ StKaonPion::StKaonPion(StPicoTrack const * const kaon, StPicoTrack const * const
    TVector3 const pAtDcaToKaon = pStraightLine.at(ss.second);
 
    // calculate DCA of pion to kaon at their DCA
-   mDcaDaughters = (kAtDcaToPion - pAtDcaToKaon).mag();
+   mDcaDaughters = (kAtDcaToPion - pAtDcaToKaon).Mag();
 
    // calculate Lorentz vector of kaon-pion pair
    TVector3 const kMomAtDca = kHelix.momentumAt(ss.first, bField * kilogauss);
@@ -90,10 +90,10 @@ StKaonPion::StKaonPion(StPicoTrack const * const kaon, StPicoTrack const * const
    // calculate pointing angle and decay length
    TVector3 const vtxToV0 = (kAtDcaToPion + pAtDcaToKaon) * 0.5 - vtx;
    mPointingAngle = vtxToV0.angle(mLorentzVector.vect());
-   mDecayLength = vtxToV0.mag();
+   mDecayLength = vtxToV0.Mag();
 
    // calculate DCA of tracks to primary vertex
-   mKaonDca = (kHelix.origin() - vtx).mag();
-   mPionDca = (pHelix.origin() - vtx).mag();
+   mKaonDca = (kHelix.origin() - vtx).Mag();
+   mPionDca = (pHelix.origin() - vtx).Mag();
 }
 #endif // __ROOT__

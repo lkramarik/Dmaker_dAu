@@ -64,7 +64,7 @@ StMixerPair::StMixerPair(StPicoTrack const&  particle1, StPicoTrack const& parti
     TVector3 const p2AtDcaToP1 = p2StraightLine.at(ss.second);
 
     // -- calculate DCA of particle1 to particle2 at their DCA
-    mDcaDaughters = (p1AtDcaToP2 - p2AtDcaToP1).mag();
+    mDcaDaughters = (p1AtDcaToP2 - p2AtDcaToP1).Mag();
 
     // -- calculate Lorentz vector of particle1-particle2 pair
     TVector3 const p1MomAtDca = p1Helix.momentumAt(ss.first,  bField * kilogauss);
@@ -86,9 +86,9 @@ StMixerPair::StMixerPair(StPicoTrack const&  particle1, StPicoTrack const& parti
     // -- calculate pointing angle and decay length with respect to primary vertex
     TVector3 const vtxToV0 = mDecayVertex - vtx1;
     mPointingAngle = vtxToV0.angle(mLorentzVector.vect());
-    mDecayLength = vtxToV0.mag();
+    mDecayLength = vtxToV0.Mag();
 
     // -- calculate DCA of tracks to primary vertex
-    mParticle1Dca = (p1Helix.origin() - vtx1).mag();
-    mParticle2Dca = (p2Helix.origin() - vtx1).mag();
+    mParticle1Dca = (p1Helix.origin() - vtx1).Mag();
+    mParticle2Dca = (p2Helix.origin() - vtx1).Mag();
 }

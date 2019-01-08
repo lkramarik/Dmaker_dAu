@@ -221,7 +221,7 @@ void StPicoEventMixer::fillNtpMixedEvtPair(float ntVar[], int charge) {
 //        const float eta = trk.gMom().pseudoRapidity();
 //        const float phi = trk.gMom().phi();
 //        const float pt = trk.gMom().perp();
-//        const float dca  = (trk.origin() - evt->vertex()).mag();
+//        const float dca  = (trk.origin() - evt->vertex()).Mag();
 //
 ////        etaPhiHist->Fill(phi,eta,weight);
 ////        phiPtHist->Fill(pt,phi, weight);

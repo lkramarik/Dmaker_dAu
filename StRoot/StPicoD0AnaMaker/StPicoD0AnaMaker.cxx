@@ -155,10 +155,10 @@ int StPicoD0AnaMaker::MakeHF() {
 //            }
 //        }
 //
-//        h_pinsigma->Fill(momentum.mag(),trk->nSigmaPion());
-//        h_knsigma->Fill(momentum.mag(),trk->nSigmaKaon());
-//        h_pnsigma->Fill(momentum.mag(),trk->nSigmaProton());
-//        h_dedx->Fill(momentum.mag(),trk->dEdx());
+//        h_pinsigma->Fill(momentum.Mag(),trk->nSigmaPion());
+//        h_knsigma->Fill(momentum.Mag(),trk->nSigmaKaon());
+//        h_pnsigma->Fill(momentum.Mag(),trk->nSigmaProton());
+//        h_dedx->Fill(momentum.Mag(),trk->dEdx());
 //
 //    } // .. end tracks loop
 
@@ -260,7 +260,7 @@ int StPicoD0AnaMaker::analyzeCandidates() {
 
         float pt=t->gPt();
         if ((pt>0.6) && mHFCuts->isGoodTrack(t)) h_tracktest->Fill(3);
-        float dca = (mPrimVtx - t->dcaPoint()).mag();
+        float dca = (mPrimVtx - t->origin()).Mag();
         if (dca<1.5 && (pt>0.6) && mHFCuts->isGoodTrack(t)) h_tracktest->Fill(4);
         bool tpcPion = mHFCuts->isTPCHadron(t, StPicoCutsBase::kPion);
         bool tpcKaon = mHFCuts->isTPCHadron(t, StPicoCutsBase::kKaon);

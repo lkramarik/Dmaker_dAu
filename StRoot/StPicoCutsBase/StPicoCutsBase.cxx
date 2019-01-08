@@ -245,13 +245,13 @@ bool StPicoCutsBase::isGoodKaon(StPicoTrack const *const trk) const {
 
 bool StPicoCutsBase::cutMinDcaToPrimVertex(StPicoTrack const * const trk, int pidFlag) const {
   // -- check on min dca for identified particle
-  float dca = (mPrimVtx - trk->dcaPoint()).mag();
+  float dca = (mPrimVtx - trk->origin()).Mag();
   return (dca >= mDcaMin[pidFlag]);
 }
 
 bool StPicoCutsBase::cutMaxDcaToPrimVertex(StPicoTrack const * const trk) const {
   // -- check on max dca for all particles
-  float dca = (mPrimVtx - trk->dcaPoint()).mag();
+  float dca = (mPrimVtx - trk->origin()).Mag();
   return (dca <= mPrimaryDCAtoVtxMax);
 }
 
@@ -260,7 +260,7 @@ bool StPicoCutsBase::cutMinDcaToPrimVertexTertiary(StPicoTrack const * const trk
 
   StPicoPhysicalHelix helix = trk->helix(mPicoDst->event()->bField());
   helix.moveOrigin(helix.pathLength(mPrimVtx));
-  float dca = (mPrimVtx - helix.origin()).mag();
+  float dca = (mPrimVtx - helix.origin()).Mag();
 
   return (dca >= mDcaMinTertiary[pidFlag]);
 }
@@ -391,8 +391,8 @@ float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk) const {
 }
 
 // _________________________________________________________
-float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk, 
-				 StLorentzVectorF const & secondaryMother, TVector3 const & secondaryVtx) const {
+float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk,
+                                 TVector3 const & secondaryMother, TVector3 const & secondaryVtx) const {
   // -- provide correced beta of TOF for pico track
   //    use for 
   //      - secondaries 
@@ -424,9 +424,9 @@ float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk,
 }
 
 // _________________________________________________________
-float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk, 
-				 StLorentzVectorF const & secondaryMother, TVector3 const & secondaryVtx,
-				 StLorentzVectorF const & tertiaryMother,  TVector3 const & tertiaryVtx) const {
+float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk,
+                                 TVector3 const & secondaryMother, TVector3 const & secondaryVtx,
+                                 TVector3 const & tertiaryMother,  TVector3 const & tertiaryVtx) const {
   // -- provide correced beta of TOF for pico track
   //    use for 
   //      - tertiaries 

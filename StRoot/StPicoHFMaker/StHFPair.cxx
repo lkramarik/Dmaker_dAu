@@ -59,7 +59,7 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
   TVector3 const p2AtDcaToP1 = p2StraightLine.at(ss.second);
 
   // -- calculate DCA of particle1 to particle2 at their DCA
-  mDcaDaughters = (p1AtDcaToP2 - p2AtDcaToP1).mag();
+  mDcaDaughters = (p1AtDcaToP2 - p2AtDcaToP1).Mag();
 
   // -- calculate decay vertex (secondary or tertiary)
   mDecayVertex = (p1AtDcaToP2 + p2AtDcaToP1) * 0.5 ;
@@ -80,13 +80,13 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
 
   TVector3 const vtxToV0 = mDecayVertex - vtx;
   mPointingAngle = vtxToV0.angle(mLorentzVector.vect());
-  mDecayLength = vtxToV0.mag();
+  mDecayLength = vtxToV0.Mag();
 
-  mParticle1Dca = (p1Helix.origin() - vtx).mag();
-  mParticle2Dca = (p2Helix.origin() - vtx).mag();
+  mParticle1Dca = (p1Helix.origin() - vtx).Mag();
+  mParticle2Dca = (p2Helix.origin() - vtx).Mag();
 
-//  mParticle1Dca = (vtx - particle1->dcaPoint()).mag();
-//  mParticle2Dca = (vtx - particle2->dcaPoint()).mag();
+//  mParticle1Dca = (vtx - particle1->origin()).Mag();
+//  mParticle2Dca = (vtx - particle2->origin()).Mag();
 }
 
 // _________________________________________________________
@@ -100,7 +100,7 @@ float StHFPair::pointingAngle(TVector3 const & vtx2) const{
 float StHFPair::decayLength(TVector3 const & vtx2) const{
   // -- Overloaded function recalculates decayLength given secondary vertex
   TVector3 const vtx2ToTertiary(mDecayVertex - vtx2);
-  float const nDecayLength = vtx2ToTertiary.mag();  
+  float const nDecayLength = vtx2ToTertiary.Mag();
   return nDecayLength;
 }
 // _________________________________________________________
@@ -109,7 +109,7 @@ float StHFPair::particle1Dca(StPicoTrack const * p1track, TVector3 const & vtx2,
   StPicoPhysicalHelix p1Helix = p1track->helix(bField);
   // -- move origins of helices to the primary vertex origin
   p1Helix.moveOrigin(p1Helix.pathLength(vtx2));
-  float const nParticle1Dca = (p1Helix.origin() - vtx2).mag();
+  float const nParticle1Dca = (p1Helix.origin() - vtx2).Mag();
   return nParticle1Dca;
 }
 // _________________________________________________________
@@ -118,7 +118,7 @@ float StHFPair::particle2Dca(StPicoTrack const * p2track, TVector3 const & vtx2,
   StPicoPhysicalHelix p2Helix = p2track->helix(bField);
   // -- move origins of helices to the primary vertex origin
   p2Helix.moveOrigin(p2Helix.pathLength(vtx2));
-  float const nParticle2Dca = (p2Helix.origin() - vtx2).mag();
+  float const nParticle2Dca = (p2Helix.origin() - vtx2).Mag();
   return nParticle2Dca;
 }
 
