@@ -10,7 +10,7 @@
 #include "StPicoEventMixer.h"
 #include "StPicoEvent/StPicoEvent.h"
 #include "StPicoEvent/StPicoTrack.h"
-#include "StPicoDstMaker/StPicoDst.h"
+#include "StPicoEvent/StPicoDst.h"
 
 #include "StPicoMixedEventMaker.h"
 #include "StMixerEvent.h"
