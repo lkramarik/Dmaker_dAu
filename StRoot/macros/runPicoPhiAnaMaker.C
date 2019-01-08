@@ -76,7 +76,7 @@ void runPicoPhiAnaMaker(
     float pairDcaMax      = 1;
 
     hfCuts->setCutPtRange(0.15,50.0,StHFCuts::kKaon);
-    hfCuts->setCutTPCNSigmaKaon(999);
+    hfCuts->setCutTPCNSigmaKaon(6);
     hfCuts->setCutTOFDeltaOneOverBeta(999, StHFCuts::kKaon);
     hfCuts->setCutPtotRangeHybridTOF(0.15,50.0,StHFCuts::kKaon);
 

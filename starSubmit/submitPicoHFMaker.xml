@@ -14,19 +14,15 @@
   <command>
     starver SL17d
     root -q -b -l StRoot/macros/loadSharedHFLibraries.C StRoot/macros/&rootMacro;++\(\"$FILELIST\",\"&prodId;_$JOBINDEX\",\"picoList_bad.list\",\"&treeName;\",\"&productionBasePath;\"\) &gt;&amp; ${JOBID}.log
-    tar -zcvf ${JOBID}.log.tgz ${JOBID}.log
-
   </command>
 
   <output fromScratch="*.root"    toURL="&basePath;/production/" />
-  <output fromScratch="*.log.tgz" toURL="&basePath;/jobs/log/" />
   <output fromScratch="*.log"     toURL="&basePath;/jobs/log/" />
 
 
   <SandBox installer="ZIP">
     <Package name="LocalLibraries">
       <File>file:./StRoot/</File>
-      <File>file:./run16dAuPrescales/</File>
       <File>file:./.sl73_gcc485/</File>
       <File>file:./picoList_bad.list</File>
     </Package>
