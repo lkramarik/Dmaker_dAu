@@ -12,7 +12,7 @@
   </Generator>
 
   <command>
-    starver SL17d
+    starver SL18f
     root -q -b -l StRoot/macros/loadSharedHFLibraries.C StRoot/macros/&rootMacro;++\(\"$FILELIST\",\"&prodId;_$JOBINDEX\",\"picoList_bad.list\",\"&treeName;\",\"&productionBasePath;\"\) &gt;&amp; ${JOBID}.log
   </command>
 
