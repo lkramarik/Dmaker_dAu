@@ -3,6 +3,8 @@
 #include <vector>
 #include "TNamed.h"
 #include "TString.h"
+#include "TVector3.h"
+
 #include "StarClassLibrary/StLorentzVectorF.hh"
 #include "StBTofUtil/StV0TofCorrection.h"
 

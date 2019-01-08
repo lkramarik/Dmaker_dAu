@@ -2,6 +2,8 @@
 #define StMixerEvent_hh
 
 #include <vector>
+#include "TVector3.h"
+
 #include "StarClassLibrary/StThreeVectorF.hh"
 #include "StPicoEvent/StPicoTrack.h"
 

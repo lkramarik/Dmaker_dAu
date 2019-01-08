@@ -22,7 +22,6 @@
 
 #include "StPicoCutsBase/StPicoCutsBase.h"
 
-
 class StHFPair;
 class StHFTriplet;
 
