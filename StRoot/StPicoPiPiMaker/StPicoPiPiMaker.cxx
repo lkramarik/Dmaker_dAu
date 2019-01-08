@@ -63,7 +63,6 @@ int StPicoPiPiMaker::createCandidates() {
         if (mHFCuts->isGoodPion(trkTest)) mIdxPicoPions.push_back(k);
     }
 
-    float etaP
     for (unsigned short j = 0; j < mIdxPicoPions.size(); ++j) {
         StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[j]);
 
