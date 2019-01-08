@@ -78,7 +78,7 @@ class StPicoHFMaker : public StMaker
     StPicoEvent*    mPicoEvent;          // ptr to picoDstEvent
 
     float           mBField;
-    StThreeVectorF  mPrimVtx;
+    TVector3  mPrimVtx;
 
     TList          *mOutList;
 

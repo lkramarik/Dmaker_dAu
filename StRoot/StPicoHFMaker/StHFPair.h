@@ -43,25 +43,25 @@ public:
 	StHFPair(StPicoTrack const * particle1, StPicoTrack const * particle2,
 			 float p1MassHypo, float p2MassHypo,
 			 unsigned short p1Idx, unsigned short p2Idx,
-			 StThreeVectorF const & vtx, float bField, bool useStraightLine = true);
+			 TVector3 const & vtx, float bField, bool useStraightLine = true);
 
 	~StHFPair() {;}
 
 	StLorentzVectorF const & lorentzVector() const;
-	StThreeVectorF const & decayVertex() const;
+	TVector3 const & decayVertex() const;
 	float rapidity()    const;
 	float m()    const;
 	float pt()   const;
 	float eta()  const;
 	float phi()  const;
 	float pointingAngle() const;
-	float pointingAngle(StThreeVectorF const & vtx2) const;
+	float pointingAngle(TVector3 const & vtx2) const;
 	float decayLength() const;
-	float decayLength(StThreeVectorF const & vtx2) const;
+	float decayLength(TVector3 const & vtx2) const;
 	float particle1Dca() const;
-	float particle1Dca(StPicoTrack const * p1track, StThreeVectorF const & vtx2, float bField) const;
+	float particle1Dca(StPicoTrack const * p1track, TVector3 const & vtx2, float bField) const;
 	float particle2Dca() const;
-	float particle2Dca(StPicoTrack const * p1track, StThreeVectorF const & vtx2, float bField) const;
+	float particle2Dca(StPicoTrack const * p1track, TVector3 const & vtx2, float bField) const;
 	unsigned short particle1Idx() const;
 	unsigned short particle2Idx() const;
 	float dcaDaughters() const;
@@ -78,7 +78,7 @@ private:
 	StHFPair(StHFPair const &);
 	StHFPair& operator=(StHFPair const &);
 	StLorentzVectorF mLorentzVector;
-	StThreeVectorF   mDecayVertex;
+	TVector3   mDecayVertex;
 
 	float mPointingAngle;
 	float mDecayLength;
@@ -110,7 +110,7 @@ inline unsigned short StHFPair::particle1Idx() const { return mParticle1Idx;}
 inline unsigned short StHFPair::particle2Idx() const { return mParticle2Idx;}
 inline float StHFPair::dcaDaughters() const { return mDcaDaughters;}
 inline float StHFPair::cosThetaStar() const { return mCosThetaStar;}
-inline StThreeVectorF const & StHFPair::decayVertex() const { return mDecayVertex;}
+inline TVector3 const & StHFPair::decayVertex() const { return mDecayVertex;}
 inline float StHFPair::v0x() const { return mDecayVertex.x();}
 inline float StHFPair::v0y() const { return mDecayVertex.y();}
 inline float StHFPair::v0z() const { return mDecayVertex.z();}

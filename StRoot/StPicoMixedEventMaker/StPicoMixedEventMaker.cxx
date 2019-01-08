@@ -172,7 +172,7 @@ Int_t StPicoMixedEventMaker::Make() {
 
     if (!eventTest) return kStOk;
 
-    StThreeVectorF const pVtx = picoDst->event()->primaryVertex();
+    TVector3 const pVtx = picoDst->event()->primaryVertex();
 
     int multiplicity = mPicoDst->event()->refMult();
     int centrality = getMultIndex(multiplicity);
@@ -191,7 +191,7 @@ Int_t StPicoMixedEventMaker::SetCategories() {
 }
 // _________________________________________________________
 int StPicoMixedEventMaker::categorize(StPicoDst const * picoDst ) {
-    StThreeVectorF pVertex = (picoDst->event())->primaryVertex();
+    TVector3 pVertex = (picoDst->event())->primaryVertex();
     if( fabs(pVertex.z())>6.0 ) return -99;
     int bin = -6.0 + (pVertex.z()+6.0)/1.2;
     return bin;

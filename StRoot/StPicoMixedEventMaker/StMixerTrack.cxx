@@ -10,7 +10,7 @@ StMixerTrack::StMixerTrack() :
 //  StPicoTrack()
 {
 }
-StMixerTrack::StMixerTrack(StThreeVectorF const & pVtx, float B, StPicoTrack const& picoTrack, bool isTpcPi, bool isTofPi, bool isTpcK, bool isTofK, bool isTpcP, bool isTofP) :
+StMixerTrack::StMixerTrack(TVector3 const & pVtx, float B, StPicoTrack const& picoTrack, bool isTpcPi, bool isTofPi, bool isTpcK, bool isTofK, bool isTpcP, bool isTofP) :
     mOrigin(), 
     mMom(picoTrack.gMom(pVtx,B)), 
     mTrackInfo(0)

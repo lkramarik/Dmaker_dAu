@@ -360,7 +360,7 @@ float StPicoCutsBase::getTofBetaBase(StPicoTrack const * const trk) const {
       beta = tofPid->btofBeta();
 
       if (beta < 1e-4) {
-        StThreeVectorF const btofHitPos = tofPid->btofHitPos();
+        TVector3 const btofHitPos = tofPid->btofHitPos();
         // StPhysicalHelixD helix = trk->helix();
         StPicoPhysicalHelix helix = trk->helix(mPicoDst->event()->bField());
 
@@ -392,7 +392,7 @@ float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk) const {
 
 // _________________________________________________________
 float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk, 
-				 StLorentzVectorF const & secondaryMother, StThreeVectorF const & secondaryVtx) const {
+				 StLorentzVectorF const & secondaryMother, TVector3 const & secondaryVtx) const {
   // -- provide correced beta of TOF for pico track
   //    use for 
   //      - secondaries 
@@ -425,8 +425,8 @@ float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk,
 
 // _________________________________________________________
 float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk, 
-				 StLorentzVectorF const & secondaryMother, StThreeVectorF const & secondaryVtx, 
-				 StLorentzVectorF const & tertiaryMother,  StThreeVectorF const & tertiaryVtx) const {
+				 StLorentzVectorF const & secondaryMother, TVector3 const & secondaryVtx,
+				 StLorentzVectorF const & tertiaryMother,  TVector3 const & tertiaryVtx) const {
   // -- provide correced beta of TOF for pico track
   //    use for 
   //      - tertiaries 

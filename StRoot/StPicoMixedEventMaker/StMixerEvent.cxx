@@ -12,7 +12,7 @@ StMixerEvent::StMixerEvent(StMixerEvent *t) : mVtx(t->mVtx), mBField(t->mBField)
 					      mEventKaons(t->mEventKaons), mEventPions(t->mEventPions), mEventProtons(t->mEventProtons)
 {
 }
-StMixerEvent::StMixerEvent(StThreeVectorF vtx, float b) :  mVtx(StThreeVectorF()),
+StMixerEvent::StMixerEvent(TVector3 vtx, float b) :  mVtx(StThreeVectorF()),
     mBField(std::numeric_limits<float>::quiet_NaN())
 {
     mVtx = vtx;

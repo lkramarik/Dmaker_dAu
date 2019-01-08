@@ -48,7 +48,7 @@ void StPicoEventMixer::finish() {
 //-----------------------------------------------------------
 bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight) {
     unsigned int nTracks = picoDst->numberOfTracks();
-    StThreeVectorF pVertex = picoDst->event()->primaryVertex();
+    TVector3 pVertex = picoDst->event()->primaryVertex();
     StMixerEvent* event = new StMixerEvent(pVertex, picoDst->event()->bField());
     event->addPicoEvent(*(picoDst->event()));
 

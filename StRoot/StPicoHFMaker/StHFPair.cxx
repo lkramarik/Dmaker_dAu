@@ -26,7 +26,7 @@ StHFPair::StHFPair(StHFPair const * t) : mLorentzVector(t->mLorentzVector), mDec
 // _________________________________________________________
 StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * const particle2,
 		   float p1MassHypo, float p2MassHypo, unsigned short const p1Idx, unsigned short const p2Idx,
-		   StThreeVectorF const & vtx, float const bField, bool const useStraightLine) : 
+		   TVector3 const & vtx, float const bField, bool const useStraightLine) :
   mLorentzVector(StLorentzVectorF()), mDecayVertex(StThreeVectorF()),
   mPointingAngle(std::numeric_limits<float>::quiet_NaN()), mDecayLength(std::numeric_limits<float>::quiet_NaN()),
   mParticle1Dca(std::numeric_limits<float>::quiet_NaN()), mParticle2Dca(std::numeric_limits<float>::quiet_NaN()),
@@ -47,16 +47,16 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
   p2Helix.moveOrigin(p2Helix.pathLength(vtx));
 
   // use straight lines approximation to get point of DCA of kaon-pion pair
-  StThreeVectorF const p1Mom = p1Helix.momentum(bField * kilogauss);
-  StThreeVectorF const p2Mom = p2Helix.momentum(bField * kilogauss);
+  TVector3 const p1Mom = p1Helix.momentum(bField * kilogauss);
+  TVector3 const p2Mom = p2Helix.momentum(bField * kilogauss);
 
   StPicoPhysicalHelix const p1StraightLine(p1Mom, p1Helix.origin(), 0, particle1->charge());
   StPicoPhysicalHelix const p2StraightLine(p2Mom, p2Helix.origin(), 0, particle2->charge());
 
 //  pair<double, double> const ss = (useStraightLine) ? p1StraightLine.pathLengths(p2StraightLine) : p1Helix.pathLengths(p2Helix);
   pair<double, double> const ss = p1StraightLine.pathLengths(p2StraightLine);
-  StThreeVectorF const p1AtDcaToP2 = p1StraightLine.at(ss.first);
-  StThreeVectorF const p2AtDcaToP1 = p2StraightLine.at(ss.second);
+  TVector3 const p1AtDcaToP2 = p1StraightLine.at(ss.first);
+  TVector3 const p2AtDcaToP1 = p2StraightLine.at(ss.second);
 
   // -- calculate DCA of particle1 to particle2 at their DCA
   mDcaDaughters = (p1AtDcaToP2 - p2AtDcaToP1).mag();
@@ -65,8 +65,8 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
   mDecayVertex = (p1AtDcaToP2 + p2AtDcaToP1) * 0.5 ;
 
   // -- calculate Lorentz vector of particle1-particle2 pair, straight line commented 09.01.2018
-  StThreeVectorF const p1MomAtDca = p1Helix.momentumAt(ss.first,  bField * kilogauss);
-  StThreeVectorF const p2MomAtDca = p2Helix.momentumAt(ss.second, bField * kilogauss);
+  TVector3 const p1MomAtDca = p1Helix.momentumAt(ss.first,  bField * kilogauss);
+  TVector3 const p2MomAtDca = p2Helix.momentumAt(ss.second, bField * kilogauss);
 
   StLorentzVectorF const p1FourMom(p1MomAtDca, p1MomAtDca.massHypothesis(p1MassHypo));
   StLorentzVectorF const p2FourMom(p2MomAtDca, p2MomAtDca.massHypothesis(p2MassHypo));
@@ -78,7 +78,7 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
   StLorentzVectorF const p1FourMomStar = p1FourMom.boost(pairFourMomReverse);
   mCosThetaStar = std::cos(p1FourMomStar.vect().angle(mLorentzVector.vect()));
 
-  StThreeVectorF const vtxToV0 = mDecayVertex - vtx;
+  TVector3 const vtxToV0 = mDecayVertex - vtx;
   mPointingAngle = vtxToV0.angle(mLorentzVector.vect());
   mDecayLength = vtxToV0.mag();
 
@@ -90,21 +90,21 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
 }
 
 // _________________________________________________________
-float StHFPair::pointingAngle(StThreeVectorF const & vtx2) const{
+float StHFPair::pointingAngle(TVector3 const & vtx2) const{
   // -- Overloaded function recalculates pointing angle given secondary vertex
-  StThreeVectorF const vtx2ToTertiary(mDecayVertex - vtx2);
+  TVector3 const vtx2ToTertiary(mDecayVertex - vtx2);
   float const nPointingAngle = vtx2ToTertiary.angle(mLorentzVector.vect());
   return nPointingAngle;
 }
 // _________________________________________________________
-float StHFPair::decayLength(StThreeVectorF const & vtx2) const{
+float StHFPair::decayLength(TVector3 const & vtx2) const{
   // -- Overloaded function recalculates decayLength given secondary vertex
-  StThreeVectorF const vtx2ToTertiary(mDecayVertex - vtx2); 
+  TVector3 const vtx2ToTertiary(mDecayVertex - vtx2);
   float const nDecayLength = vtx2ToTertiary.mag();  
   return nDecayLength;
 }
 // _________________________________________________________
-float StHFPair::particle1Dca(StPicoTrack const * p1track, StThreeVectorF const & vtx2, float const bField) const{
+float StHFPair::particle1Dca(StPicoTrack const * p1track, TVector3 const & vtx2, float const bField) const{
   // -- Overloaded function recalculates daughter dca 2 updated vertex
   StPicoPhysicalHelix p1Helix = p1track->helix(bField);
   // -- move origins of helices to the primary vertex origin
@@ -113,7 +113,7 @@ float StHFPair::particle1Dca(StPicoTrack const * p1track, StThreeVectorF const &
   return nParticle1Dca;
 }
 // _________________________________________________________
-float StHFPair::particle2Dca(StPicoTrack const * p2track, StThreeVectorF const & vtx2, float const bField) const{
+float StHFPair::particle2Dca(StPicoTrack const * p2track, TVector3 const & vtx2, float const bField) const{
   // -- Overloaded function recalculates daughter dca 2 updated vertex
   StPicoPhysicalHelix p2Helix = p2track->helix(bField);
   // -- move origins of helices to the primary vertex origin

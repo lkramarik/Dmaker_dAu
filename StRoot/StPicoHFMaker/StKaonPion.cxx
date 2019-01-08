@@ -33,7 +33,7 @@ StKaonPion::StKaonPion(StKaonPion const * t) : mLorentzVector(t->mLorentzVector)
 //------------------------------------
 StKaonPion::StKaonPion(StPicoTrack const * const kaon, StPicoTrack const * const pion,
                        unsigned short const kIdx, unsigned short const pIdx,
-                       StThreeVectorF const & vtx, float const bField) : mLorentzVector(),
+                       TVector3 const & vtx, float const bField) : mLorentzVector(),
    mPointingAngle(std::numeric_limits<float>::quiet_NaN()), mDecayLength(std::numeric_limits<float>::quiet_NaN()),
    mKaonDca(std::numeric_limits<float>::quiet_NaN()), mPionDca(std::numeric_limits<float>::quiet_NaN()),
    mKaonIdx(kIdx), mPionIdx(pIdx),
@@ -61,21 +61,21 @@ StKaonPion::StKaonPion(StPicoTrack const * const kaon, StPicoTrack const * const
    pHelix.moveOrigin(pHelix.pathLength(vtx));
 
    // use straight lines approximation to get point of DCA of kaon-pion pair
-   StThreeVectorF const kMom = kHelix.momentum(bField * kilogauss);
-   StThreeVectorF const pMom = pHelix.momentum(bField * kilogauss);
+   TVector3 const kMom = kHelix.momentum(bField * kilogauss);
+   TVector3 const pMom = pHelix.momentum(bField * kilogauss);
    StPicoPhysicalHelix const kStraightLine(kMom, kHelix.origin(), 0, kaon->charge());
    StPicoPhysicalHelix const pStraightLine(pMom, pHelix.origin(), 0, pion->charge());
 
    pair<double, double> const ss = kStraightLine.pathLengths(pStraightLine);
-   StThreeVectorF const kAtDcaToPion = kStraightLine.at(ss.first);
-   StThreeVectorF const pAtDcaToKaon = pStraightLine.at(ss.second);
+   TVector3 const kAtDcaToPion = kStraightLine.at(ss.first);
+   TVector3 const pAtDcaToKaon = pStraightLine.at(ss.second);
 
    // calculate DCA of pion to kaon at their DCA
    mDcaDaughters = (kAtDcaToPion - pAtDcaToKaon).mag();
 
    // calculate Lorentz vector of kaon-pion pair
-   StThreeVectorF const kMomAtDca = kHelix.momentumAt(ss.first, bField * kilogauss);
-   StThreeVectorF const pMomAtDca = pHelix.momentumAt(ss.second, bField * kilogauss);
+   TVector3 const kMomAtDca = kHelix.momentumAt(ss.first, bField * kilogauss);
+   TVector3 const pMomAtDca = pHelix.momentumAt(ss.second, bField * kilogauss);
 
    StLorentzVectorF const kFourMom(kMomAtDca, kMomAtDca.massHypothesis(M_KAON_PLUS));
    StLorentzVectorF const pFourMom(pMomAtDca, pMomAtDca.massHypothesis(M_PION_PLUS));
@@ -88,7 +88,7 @@ StKaonPion::StKaonPion(StPicoTrack const * const kaon, StPicoTrack const * const
    mCosThetaStar = std::cos(kFourMomStar.vect().angle(mLorentzVector.vect()));
 
    // calculate pointing angle and decay length
-   StThreeVectorF const vtxToV0 = (kAtDcaToPion + pAtDcaToKaon) * 0.5 - vtx;
+   TVector3 const vtxToV0 = (kAtDcaToPion + pAtDcaToKaon) * 0.5 - vtx;
    mPointingAngle = vtxToV0.angle(mLorentzVector.vect());
    mDecayLength = vtxToV0.mag();
 

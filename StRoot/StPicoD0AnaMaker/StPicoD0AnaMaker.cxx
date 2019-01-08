@@ -110,14 +110,14 @@ int StPicoD0AnaMaker::MakeHF() {
 //
 //    TH2F *h_dedx = static_cast<TH2F*>(mOutList->FindObject("h_dedx"));
 //
-//    StThreeVectorF pVtx = mPicoDst->event()->primaryVertex();
+//    TVector3 pVtx = mPicoDst->event()->primaryVertex();
 //
 //    UInt_t nTracks = mPicoDst->numberOfTracks();
 //    for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack){
 //        StPicoTrack const* trk = mPicoDst->track(iTrack);
 //        if (!trk) continue;
 //        StPhysicalHelixD helix = trk->helix(mBField);
-//        StThreeVectorF momentum = trk->gMom(pVtx, mPicoDst->event()->bField());
+//        TVector3 momentum = trk->gMom(pVtx, mPicoDst->event()->bField());
 //
 //        if (!(trk->nHitsFit()>=15)) continue;
 //        if (!(fabs(momentum.pseudoRapidity()) <= 1.0)) continue;

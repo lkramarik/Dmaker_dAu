@@ -29,7 +29,7 @@ class StKaonPion : public TObject
   StKaonPion();
   StKaonPion(StKaonPion const *);
   StKaonPion(StPicoTrack const * kaon, StPicoTrack const * pion,unsigned short kIdx,unsigned short pIdx,
-             StThreeVectorF const & vtx, float bField);
+             TVector3 const & vtx, float bField);
   ~StKaonPion() {}// please keep this non-virtual and NEVER inherit from this class 
 
   StLorentzVectorF const & lorentzVector() const;

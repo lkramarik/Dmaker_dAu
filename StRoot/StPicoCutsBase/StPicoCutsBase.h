@@ -157,12 +157,12 @@ public:
 
     // -- calculate corrected beta of track -- for secondary particles
     float getTofBeta(StPicoTrack const * const trk,
-                     StLorentzVectorF const & secondaryMother, StThreeVectorF const & secondaryVtx) const;
+                     StLorentzVectorF const & secondaryMother, TVector3 const & secondaryVtx) const;
 
     // -- calculate corrected beta of track -- for tertiary particles
     float getTofBeta(StPicoTrack const * const trk,
-                     StLorentzVectorF const & secondaryMother, StThreeVectorF const & secondaryVtx,
-                     StLorentzVectorF const & tertiaryMother,  StThreeVectorF const & tertiaryVtx) const;
+                     StLorentzVectorF const & secondaryMother, TVector3 const & secondaryVtx,
+                     StLorentzVectorF const & tertiaryMother,  TVector3 const & tertiaryVtx) const;
 
     const float& getHypotheticalMass(int pidFlag)           const;
 
@@ -173,7 +173,7 @@ private:
 
     StV0TofCorrection* mTOFCorr;  // TOF correction
 
-    StThreeVectorF    mPrimVtx;   // primary vertex of current event
+    TVector3    mPrimVtx;   // primary vertex of current event
     const StPicoDst*  mPicoDst;   //! ptr to picoDst
 
     unsigned int mEventStatMax;   // number of event cuts
