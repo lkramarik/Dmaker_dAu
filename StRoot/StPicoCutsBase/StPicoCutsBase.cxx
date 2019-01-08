@@ -402,24 +402,24 @@ float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk,
   StPicoBTofPidTraits *tofPid = hasTofPid(trk);
   if (!tofPid) 
     return beta;
-
-  StThreeVectorD tofHit = tofPid->btofHitPos();
-
-  // -- set waypoints
-  mTOFCorr->setVectors3D(mPrimVtx)(secondaryVtx)(tofHit);
-
-  // -- set mother track
-  mTOFCorr->setMotherTracks(secondaryMother);
-  
-  float tof = tofPid->btof();
-  StPicoPhysicalHelix helix = trk->helix(mPicoDst->event()->bField());
-  
-  // -- correct beta
-  mTOFCorr->correctBeta(helix, tof, beta);
-
-  // -- clean up
-  mTOFCorr->clearContainers();
-  
+//
+//  StThreeVectorD tofHit = tofPid->btofHitPos();
+//
+//  // -- set waypoints
+//  mTOFCorr->setVectors3D(mPrimVtx)(secondaryVtx)(tofHit);
+//
+//  // -- set mother track
+//  mTOFCorr->setMotherTracks(secondaryMother);
+//
+//  float tof = tofPid->btof();
+//  StPicoPhysicalHelix helix = trk->helix(mPicoDst->event()->bField());
+//
+//  // -- correct beta
+//  mTOFCorr->correctBeta(helix, tof, beta);
+//
+//  // -- clean up
+//  mTOFCorr->clearContainers();
+//
   return beta;
 }
 
@@ -433,26 +433,26 @@ float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk,
 
   float beta = std::numeric_limits<float>::quiet_NaN();
 
-  StPicoBTofPidTraits *tofPid = hasTofPid(trk);
-  if (!tofPid) 
-    return beta;
-
-  StThreeVectorD tofHit = tofPid->btofHitPos();
-
-  // -- set waypoints
-  mTOFCorr->setVectors3D(mPrimVtx)(secondaryVtx)(tertiaryVtx)(tofHit);
-
-  // -- set mother track
-  mTOFCorr->setMotherTracks(secondaryMother)(tertiaryMother);
-  
-  float tof = tofPid->btof();
-  StPicoPhysicalHelix helix = trk->helix(mPicoDst->event()->bField());
-    
-  // -- correct beta
-  mTOFCorr->correctBeta(helix, tof, beta);
-
-  // -- clean up
-  mTOFCorr->clearContainers();
+//  StPicoBTofPidTraits *tofPid = hasTofPid(trk);
+//  if (!tofPid)
+//    return beta;
+//
+//  StThreeVectorD tofHit = tofPid->btofHitPos();
+//
+//  // -- set waypoints
+//  mTOFCorr->setVectors3D(mPrimVtx)(secondaryVtx)(tertiaryVtx)(tofHit);
+//
+//  // -- set mother track
+//  mTOFCorr->setMotherTracks(secondaryMother)(tertiaryMother);
+//
+//  float tof = tofPid->btof();
+//  StPicoPhysicalHelix helix = trk->helix(mPicoDst->event()->bField());
+//
+//  // -- correct beta
+////  mTOFCorr->correctBeta(helix, tof, beta);
+//
+//  // -- clean up
+//  mTOFCorr->clearContainers();
   
   return beta;
 }
