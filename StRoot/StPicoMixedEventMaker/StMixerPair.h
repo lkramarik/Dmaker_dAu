@@ -35,7 +35,7 @@ public:
 
 //  StMixerPair(StMixerTrack const&  particle1, StMixerTrack const& particle2,
 //	   float p1MassHypo, float p2MassHypo,
-//	   StThreeVectorF const& vtx1, StThreeVectorF const& vtx2,
+//	   TVector3 const& vtx1, StThreeVectorF const& vtx2,
 //	   float bField);
 
     StMixerPair(StPicoTrack const&  particle1, StPicoTrack const& particle2,
