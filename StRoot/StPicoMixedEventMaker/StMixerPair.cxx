@@ -1,7 +1,7 @@
 #include <limits>
 #include <cmath>
 
-#include "StPicoEvent/StPicoPhysicalHelix.hh"
+#include "StPicoEvent/StPicoPhysicalHelix.h"
 #include "StarClassLibrary/SystemOfUnits.h"
 
 #include "StMixerPair.h"
