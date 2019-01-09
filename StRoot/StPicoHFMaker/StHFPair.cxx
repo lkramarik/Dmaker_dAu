@@ -68,15 +68,18 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
   TVector3 const p1MomAtDca = p1Helix.momentumAt(ss.first,  bField * kilogauss);
   TVector3 const p2MomAtDca = p2Helix.momentumAt(ss.second, bField * kilogauss);
 
-  StLorentzVectorF const p1FourMom(p1MomAtDca, p1MomAtDca.massHypothesis(p1MassHypo));
-  StLorentzVectorF const p2FourMom(p2MomAtDca, p2MomAtDca.massHypothesis(p2MassHypo));
+//  StLorentzVectorF const p1FourMom(p1MomAtDca, p1MomAtDca.massHypothesis(p1MassHypo));
+//  StLorentzVectorF const p2FourMom(p2MomAtDca, p2MomAtDca.massHypothesis(p2MassHypo));
+
+  TLorentzVector const p1FourMom(p1MomAtDca, sqrt(p1MomAtDca*p1MomAtDca+p1MassHypo*p1MassHypo));
+  TLorentzVector const p2FourMom(p2MomAtDca, sqrt(p2MomAtDca*p2MomAtDca+p2MassHypo*p2MassHypo));
 
   mLorentzVector = p1FourMom + p2FourMom;
 
   // -- calculate cosThetaStar
-  StLorentzVectorF const pairFourMomReverse(-mLorentzVector.px(), -mLorentzVector.py(), -mLorentzVector.pz(), mLorentzVector.e());
-  StLorentzVectorF const p1FourMomStar = p1FourMom.boost(pairFourMomReverse);
-  mCosThetaStar = std::cos(p1FourMomStar.vect().Angle(mLorentzVector.vect()));
+  TLorentzVector const pairFourMomReverse(-mLorentzVector.px(), -mLorentzVector.py(), -mLorentzVector.pz(), mLorentzVector.e());
+  TLorentzVector const p1FourMomStar = p1FourMom.boost(pairFourMomReverse);
+  mCosThetaStar = std::cos(p1FourMomStar.Vect().Angle(mLorentzVector.vect()));
 
   TVector3 const vtxToV0 = mDecayVertex - vtx;
   mPointingAngle = vtxToV0.Angle(mLorentzVector.vect());
