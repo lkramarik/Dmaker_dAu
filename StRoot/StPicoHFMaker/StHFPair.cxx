@@ -27,7 +27,7 @@ StHFPair::StHFPair(StHFPair const * t) : mLorentzVector(t->mLorentzVector), mDec
 StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * const particle2,
 		   float p1MassHypo, float p2MassHypo, unsigned short const p1Idx, unsigned short const p2Idx,
 		   TVector3 const & vtx, float const bField, bool const useStraightLine) :
-  mLorentzVector(StLorentzVectorF()), mDecayVertex(TVector3()),
+  mLorentzVector(TLorentzVector()), mDecayVertex(TVector3()),
   mPointingAngle(std::numeric_limits<float>::quiet_NaN()), mDecayLength(std::numeric_limits<float>::quiet_NaN()),
   mParticle1Dca(std::numeric_limits<float>::quiet_NaN()), mParticle2Dca(std::numeric_limits<float>::quiet_NaN()),
   mParticle1Idx(p1Idx), mParticle2Idx(p2Idx),
