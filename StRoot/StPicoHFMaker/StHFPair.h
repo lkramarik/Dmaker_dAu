@@ -97,8 +97,8 @@ private:
 
 	ClassDef(StHFPair,1)
 };
-inline StLorentzVectorF const & StHFPair::lorentzVector() const { return mLorentzVector;}
-inline float StHFPair::rapidity()    const { return mLorentzVector.rapidity();}
+inline TLorentzVector const & StHFPair::lorentzVector() const { return mLorentzVector;}
+inline float StHFPair::rapidity()    const { return mLorentzVector.Rapidity();}
 inline float StHFPair::m()    const { return mLorentzVector.M();}
 inline float StHFPair::pt()   const { return mLorentzVector.Pt();}
 inline float StHFPair::eta()  const { return mLorentzVector.Eta();}
