@@ -356,19 +356,7 @@ float StPicoCutsBase::getTofBetaBase(StPicoTrack const * const trk) const {
   if(index2tof >= 0) { //toto je trocha ine ako predtym, inak je to rovnake... 25.01.
     StPicoBTofPidTraits *tofPid = mPicoDst->btofPidTraits(index2tof);
 
-    if(tofPid)   {
-      beta = tofPid->btofBeta();
-
-//      if (beta < 1e-4) {
-//        TVector3 const btofHitPos = tofPid->btofHitPos();
-//        StPicoPhysicalHelix helix = trk->helix(mPicoDst->event()->bField());
-//
-//        float L = tofPathLength(&mPrimVtx, &btofHitPos, helix.curvature());
-//        float tof = tofPid->btof();
-//        if (tof > 0) beta = L / (tof * (C_C_LIGHT / 1.e9));
-//        else beta = std::numeric_limits<float>::quiet_NaN();
-//      }
-    }
+    if(tofPid)  beta = tofPid->btofBeta();
   }
 
   return beta;
