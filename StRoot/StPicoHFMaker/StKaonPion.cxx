@@ -84,8 +84,8 @@ StKaonPion::StKaonPion(StPicoTrack const * const kaon, StPicoTrack const * const
    mLorentzVector = kFourMom + pFourMom;
 
    // calculate cosThetaStar
-   TVector3 const kpFourMomReverse(-mLorentzVector.Px(), -mLorentzVector.Py(), -mLorentzVector.Pz());
-   TLorentzVector const kFourMomStar = kFourMom;
+   TVector3 kpFourMomReverse(-mLorentzVector.Px(), -mLorentzVector.Py(), -mLorentzVector.Pz());
+   TLorentzVector kFourMomStar = kFourMom;
    kFourMomStar.Boost(kpFourMomReverse);
    mCosThetaStar = std::cos(kFourMomStar.Vect().Angle(mLorentzVector.Vect()));
 
