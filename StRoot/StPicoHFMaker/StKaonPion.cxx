@@ -78,8 +78,8 @@ StKaonPion::StKaonPion(StPicoTrack const * const kaon, StPicoTrack const * const
    TVector3 const kMomAtDca = kHelix.momentumAt(ss.first, bField * kilogauss);
    TVector3 const pMomAtDca = pHelix.momentumAt(ss.second, bField * kilogauss);
 
-   TLorentzVector const kFourMom(kMomAtDca, kMomAtDca.massHypothesis(M_KAON_PLUS));
-   TLorentzVector const pFourMom(pMomAtDca, pMomAtDca.massHypothesis(M_PION_PLUS));
+   TLorentzVector const kFourMom(kMomAtDca, sqrt(kMomAtDca*kMomAtDca+M_KAON_PLUS*M_KAON_PLUS));
+   TLorentzVector const pFourMom(pMomAtDca, sqrt(pMomAtDca*pMomAtDca+M_PION_PLUS*M_PION_PLUS));
 
    mLorentzVector = kFourMom + pFourMom;
 

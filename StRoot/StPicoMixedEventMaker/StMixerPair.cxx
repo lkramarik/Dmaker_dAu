@@ -70,8 +70,8 @@ StMixerPair::StMixerPair(StPicoTrack const&  particle1, StPicoTrack const& parti
     TVector3 const p1MomAtDca = p1Helix.momentumAt(ss.first,  bField * kilogauss);
     TVector3 const p2MomAtDca = p2Helix.momentumAt(ss.second, bField * kilogauss);
 
-    TLorentzVector const p1FourMom(p1MomAtDca, p1MomAtDca.massHypothesis(p1MassHypo));
-    TLorentzVector const p2FourMom(p2MomAtDca, p2MomAtDca.massHypothesis(p2MassHypo));
+    TLorentzVector const p1FourMom(p1MomAtDca, sqrt(p1MomAtDca*p1MomAtDca+p1MassHypo*p1MassHypo));
+    TLorentzVector const p2FourMom(p2MomAtDca, sqrt(p2MomAtDca*p2MomAtDca+p2MassHypo*p2MassHypo));
 
     mLorentzVector = p1FourMom + p2FourMom;
 
