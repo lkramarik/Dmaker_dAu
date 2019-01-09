@@ -20,6 +20,8 @@
 
 #include "StarClassLibrary/StThreeVectorF.hh"
 #include "TH2F.h"
+#include "TVector3.h"
+#include "TLorentzVector.h"
 
 #include <iostream>
 using namespace std;

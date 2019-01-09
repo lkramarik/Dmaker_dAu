@@ -19,10 +19,10 @@
  */
 
 #include "TObject.h"
-#include "StarClassLibrary/StLorentzVectorF.hh"
-#include "StarClassLibrary/StThreeVectorF.hh"
 #include "TClonesArray.h"
 #include "StPicoEvent/StPicoEvent.h"
+#include "TVector3.h"
+#include "TLorentzVector.h"
 
 class StPicoTrack;
 //class StMixerTrack;
