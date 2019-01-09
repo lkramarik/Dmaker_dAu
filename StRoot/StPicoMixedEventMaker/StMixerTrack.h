@@ -21,7 +21,8 @@
  * **************************************************
  */
 
-#include "StarClassLibrary/StThreeVectorF.hh"
+#include "TVector3.h"
+#include "TLorentzVector.h"
 
 class StPicoTrack;
 
