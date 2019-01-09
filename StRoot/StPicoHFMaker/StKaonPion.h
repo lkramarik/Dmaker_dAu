@@ -15,7 +15,8 @@
  * **************************************************
  */
 #include <cmath>
-
+#include "TVector3.h"
+#include "TLorentzVector.h"
 #include "TObject.h"
 #include "TClonesArray.h"
 #include "StLorentzVectorF.hh"
@@ -32,7 +33,7 @@ class StKaonPion : public TObject
              TVector3 const & vtx, float bField);
   ~StKaonPion() {}// please keep this non-virtual and NEVER inherit from this class 
 
-  StLorentzVectorF const & lorentzVector() const;
+  TLorentzVector const & lorentzVector() const;
   float m()    const;
   float pt()   const;
   float eta()  const;
@@ -51,7 +52,7 @@ class StKaonPion : public TObject
   // disable copy constructor and assignment operator by making them private (once C++11 is available in STAR you can use delete specifier instead)
   StKaonPion(StKaonPion const &);
   StKaonPion& operator=(StKaonPion const &);
-  StLorentzVectorF mLorentzVector; // this owns four float only
+  TLorentzVector mLorentzVector; // this owns four float only
 
   float mPointingAngle;
   float mDecayLength;
@@ -66,11 +67,11 @@ class StKaonPion : public TObject
 
   ClassDef(StKaonPion,1)
 };
-inline StLorentzVectorF const & StKaonPion::lorentzVector() const { return mLorentzVector;}
-inline float StKaonPion::m()    const { return mLorentzVector.m();}
-inline float StKaonPion::pt()   const { return mLorentzVector.perp();}
-inline float StKaonPion::eta()  const { return mLorentzVector.pseudoRapidity();}
-inline float StKaonPion::phi()  const { return mLorentzVector.phi();}
+inline TLorentzVector const & StKaonPion::lorentzVector() const { return mLorentzVector;}
+inline float StKaonPion::m()    const { return mLorentzVector.M();}
+inline float StKaonPion::pt()   const { return mLorentzVector.Perp();}
+inline float StKaonPion::eta()  const { return mLorentzVector.PseudoRapidity();}
+inline float StKaonPion::phi()  const { return mLorentzVector.Phi();}
 inline float StKaonPion::pointingAngle() const { return mPointingAngle;}
 inline float StKaonPion::decayLength() const { return mDecayLength;}
 inline float StKaonPion::kaonDca() const { return mKaonDca;}

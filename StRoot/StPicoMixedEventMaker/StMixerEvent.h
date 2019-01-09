@@ -37,7 +37,7 @@ class StMixerEvent{
  public:
   StMixerEvent();
   StMixerEvent(StMixerEvent *);
-  StMixerEvent(StThreeVectorF, float);
+  StMixerEvent(TVector3, float);
   ~StMixerEvent(){;};
   void addPion(int);
   void addKaon(int);
@@ -82,7 +82,7 @@ class StMixerEvent{
   int mRunId;
 };
 inline void StMixerEvent::setPos( float const vx, float const vy, float const vz){
-  mVtx = StThreeVectorF(vx, vy, vz);
+  mVtx = TVector3(vx, vy, vz);
 }
 inline void StMixerEvent::setField( float const field ){ mBField = field; }
 inline int StMixerEvent::getNoPions(){ return mEventPions.size(); }

@@ -4,8 +4,8 @@
 #include "StPicoEvent/StPicoTrack.h"
 
 StMixerTrack::StMixerTrack() : 
-  mOrigin(StThreeVectorF()), 
-  mMom(StThreeVectorF()), 
+  mOrigin(TVector3()),
+  mMom(TVector3()),
   mTrackInfo(std::numeric_limits<short>::min())
 //  StPicoTrack()
 {

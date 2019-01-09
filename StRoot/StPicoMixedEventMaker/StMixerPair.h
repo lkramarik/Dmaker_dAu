@@ -46,7 +46,7 @@ public:
     ~StMixerPair() {;}
 
 
-    StLorentzVectorF const & lorentzVector() const;
+    TLorentzVector const & lorentzVector() const;
     TVector3 const & decayVertex() const;
     float rapidity()    const;
     float m()    const;
@@ -73,7 +73,7 @@ public:
 private:
     StMixerPair(StMixerPair const &);
     StMixerPair& operator=(StMixerPair const &);
-    StLorentzVectorF mLorentzVector;
+    TLorentzVector mLorentzVector;
     TVector3   mDecayVertex;
 
     float mPointingAngle;
@@ -89,15 +89,15 @@ private:
 
     ClassDef(StMixerPair,1)
 };
-inline StLorentzVectorF const& StMixerPair::lorentzVector() const { return mLorentzVector;}
-inline float StMixerPair::rapidity()    const { return mLorentzVector.rapidity();}
-inline float StMixerPair::m()    const { return mLorentzVector.m();}
-inline float StMixerPair::pt()   const { return mLorentzVector.perp();}
-inline float StMixerPair::eta()  const { return mLorentzVector.pseudoRapidity();}
-inline float StMixerPair::phi()  const { return mLorentzVector.phi();}
-inline float StMixerPair::px()   const { return mLorentzVector.px();}
-inline float StMixerPair::py()   const { return mLorentzVector.py();}
-inline float StMixerPair::pz()   const { return mLorentzVector.pz();}
+inline TLorentzVector const& StMixerPair::lorentzVector() const { return mLorentzVector;}
+inline float StMixerPair::rapidity()    const { return mLorentzVector.Rapidity();}
+inline float StMixerPair::m()    const { return mLorentzVector.M();}
+inline float StMixerPair::pt()   const { return mLorentzVector.Perp();}
+inline float StMixerPair::eta()  const { return mLorentzVector.PseudoRapidity();}
+inline float StMixerPair::phi()  const { return mLorentzVector.Phi();}
+inline float StMixerPair::px()   const { return mLorentzVector.Px();}
+inline float StMixerPair::py()   const { return mLorentzVector.Py();}
+inline float StMixerPair::pz()   const { return mLorentzVector.Pz();}
 inline float StMixerPair::pointingAngle() const { return mPointingAngle;}
 inline float StMixerPair::decayLength()   const { return mDecayLength;}
 inline float StMixerPair::particle1Dca()  const { return mParticle1Dca;}

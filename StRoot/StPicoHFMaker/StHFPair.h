@@ -31,7 +31,6 @@
 #include "TVector3.h"
 #include "TLorentzVector.h"
 
-
 #include "StPicoEvent/StPicoEvent.h"
 #include "StarClassLibrary/StLorentzVectorF.hh"
 #include "StarClassLibrary/StThreeVectorF.hh"

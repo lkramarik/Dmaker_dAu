@@ -6,10 +6,11 @@
 
 #include "StLorentzVectorF.hh"
 #include "StThreeVectorF.hh"
-#include "StPicoEvent/StPicoPhysicalHelix.h"
 #include "phys_constants.h"
 #include "SystemOfUnits.h"
+
 #include "StPicoEvent/StPicoTrack.h"
+#include "StPicoEvent/StPicoPhysicalHelix.h"
 
 ClassImp(StKaonPion)
 
@@ -77,19 +78,20 @@ StKaonPion::StKaonPion(StPicoTrack const * const kaon, StPicoTrack const * const
    TVector3 const kMomAtDca = kHelix.momentumAt(ss.first, bField * kilogauss);
    TVector3 const pMomAtDca = pHelix.momentumAt(ss.second, bField * kilogauss);
 
-   StLorentzVectorF const kFourMom(kMomAtDca, kMomAtDca.massHypothesis(M_KAON_PLUS));
-   StLorentzVectorF const pFourMom(pMomAtDca, pMomAtDca.massHypothesis(M_PION_PLUS));
+   TLorentzVector const kFourMom(kMomAtDca, kMomAtDca.massHypothesis(M_KAON_PLUS));
+   TLorentzVector const pFourMom(pMomAtDca, pMomAtDca.massHypothesis(M_PION_PLUS));
 
    mLorentzVector = kFourMom + pFourMom;
 
    // calculate cosThetaStar
-   StLorentzVectorF const kpFourMomReverse(-mLorentzVector.px(), -mLorentzVector.py(), -mLorentzVector.pz(), mLorentzVector.e());
-   StLorentzVectorF const kFourMomStar = kFourMom.boost(kpFourMomReverse);
-   mCosThetaStar = std::cos(kFourMomStar.vect().Angle(mLorentzVector.vect()));
+   TVector3 const kpFourMomReverse(-mLorentzVector.Px(), -mLorentzVector.Py(), -mLorentzVector.Pz());
+   TLorentzVector const kFourMomStar = kFourMom;
+   kFourMomStar.Boost(kpFourMomReverse);
+   mCosThetaStar = std::cos(kFourMomStar.Vect().Angle(mLorentzVector.Vect()));
 
    // calculate pointing angle and decay length
    TVector3 const vtxToV0 = (kAtDcaToPion + pAtDcaToKaon) * 0.5 - vtx;
-   mPointingAngle = vtxToV0.Angle(mLorentzVector.vect());
+   mPointingAngle = vtxToV0.Angle(mLorentzVector.Vect());
    mDecayLength = vtxToV0.Mag();
 
    // calculate DCA of tracks to primary vertex

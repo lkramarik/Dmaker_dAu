@@ -3,7 +3,7 @@
 #include "StMixerEvent.h"
 #include "StPicoEvent/StPicoEvent.h"
 
-StMixerEvent::StMixerEvent() :  mVtx(StThreeVectorF()),
+StMixerEvent::StMixerEvent() :  mVtx(TVector3()),
     mBField(std::numeric_limits<float>::quiet_NaN())
 {
 }
@@ -12,7 +12,7 @@ StMixerEvent::StMixerEvent(StMixerEvent *t) : mVtx(t->mVtx), mBField(t->mBField)
 					      mEventKaons(t->mEventKaons), mEventPions(t->mEventPions), mEventProtons(t->mEventProtons)
 {
 }
-StMixerEvent::StMixerEvent(TVector3 vtx, float b) :  mVtx(StThreeVectorF()),
+StMixerEvent::StMixerEvent(TVector3 vtx, float b) :  mVtx(TVector3()),
     mBField(std::numeric_limits<float>::quiet_NaN())
 {
     mVtx = vtx;

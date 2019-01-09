@@ -30,8 +30,8 @@ class StMixerHists
   StMixerHists(char* fileBaseName);
   ~StMixerHists();
 
-  void fillSameEvt(const StThreeVectorF& vtx);
-  void fillMixedEvt(const StThreeVectorF& vtx);
+  void fillSameEvt(const TVector3& vtx);
+  void fillMixedEvt(const TVector3& vtx);
 //  void fillSameEvtTriplet(StMixerTriplet const* const, int charge, float weight);
 //  void fillMixedEvtTriplet(StMixerTriplet const* const, int charge, float weight);
   void closeFile();
@@ -45,11 +45,11 @@ class StMixerHists
   TH2F* mME_US_plus;
   TH2F* mME_US_minus;
 };
-inline void StMixerHists::fillSameEvt(const StThreeVectorF& vtx)
+inline void StMixerHists::fillSameEvt(const TVector3& vtx)
 {
   mSE_Vtx->Fill(vtx.x(), vtx.y(), 1);
 }
-inline void StMixerHists::fillMixedEvt(const StThreeVectorF& vtx)
+inline void StMixerHists::fillMixedEvt(const TVector3& vtx)
 {
   mME_Vtx->Fill(vtx.x(), vtx.y(), 1);
 }

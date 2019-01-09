@@ -11,10 +11,10 @@
 ClassImp(StMixerPair)
 
 // _________________________________________________________
-StMixerPair::StMixerPair(): mLorentzVector(StLorentzVectorF()), mDecayVertex(StThreeVectorF()),
+StMixerPair::StMixerPair(): mLorentzVector(TLorentzVector()), mDecayVertex(TVector3()),
     mPointingAngle(std::numeric_limits<float>::quiet_NaN()), mDecayLength(std::numeric_limits<float>::quiet_NaN()),
     mParticle1Dca(std::numeric_limits<float>::quiet_NaN()), mParticle2Dca(std::numeric_limits<float>::quiet_NaN()),
-    mParticle1Mom(StThreeVectorF()), mParticle2Mom(StThreeVectorF()),
+    mParticle1Mom(TVector3()), mParticle2Mom(TVector3()),
     mDcaDaughters(std::numeric_limits<float>::max()), mCosThetaStar(std::numeric_limits<float>::quiet_NaN()) {
 }
 
@@ -30,7 +30,7 @@ StMixerPair::StMixerPair(StMixerPair const * t) : mLorentzVector(t->mLorentzVect
 //StMixerPair::StMixerPair(StMixerTrack const& particle1, StMixerTrack const& particle2,
 StMixerPair::StMixerPair(StPicoTrack const&  particle1, StPicoTrack const& particle2,
                          float p1MassHypo, float p2MassHypo,
-                         TVector3 const& vtx1, TVector3 const& vtx2, float const bField) :  mLorentzVector(StLorentzVectorF()), mDecayVertex(StThreeVectorF()),
+                         TVector3 const& vtx1, TVector3 const& vtx2, float const bField) :  mLorentzVector(TLorentzVector()), mDecayVertex(TVector3()),
     mPointingAngle(std::numeric_limits<float>::quiet_NaN()), mDecayLength(std::numeric_limits<float>::quiet_NaN()),
     mParticle1Dca(std::numeric_limits<float>::quiet_NaN()), mParticle2Dca(std::numeric_limits<float>::quiet_NaN()),
     mParticle1Mom(particle1.gMom()), mParticle2Mom(particle2.gMom()),
@@ -70,22 +70,23 @@ StMixerPair::StMixerPair(StPicoTrack const&  particle1, StPicoTrack const& parti
     TVector3 const p1MomAtDca = p1Helix.momentumAt(ss.first,  bField * kilogauss);
     TVector3 const p2MomAtDca = p2Helix.momentumAt(ss.second, bField * kilogauss);
 
-    StLorentzVectorF const p1FourMom(p1MomAtDca, p1MomAtDca.massHypothesis(p1MassHypo));
-    StLorentzVectorF const p2FourMom(p2MomAtDca, p2MomAtDca.massHypothesis(p2MassHypo));
+    TLorentzVector const p1FourMom(p1MomAtDca, p1MomAtDca.massHypothesis(p1MassHypo));
+    TLorentzVector const p2FourMom(p2MomAtDca, p2MomAtDca.massHypothesis(p2MassHypo));
 
     mLorentzVector = p1FourMom + p2FourMom;
 
     // -- calculate cosThetaStar
-    StLorentzVectorF const pairFourMomReverse(-mLorentzVector.px(), -mLorentzVector.py(), -mLorentzVector.pz(), mLorentzVector.e());
-    StLorentzVectorF const p1FourMomStar = p1FourMom.boost(pairFourMomReverse);
-    mCosThetaStar = std::cos(p1FourMomStar.vect().Angle(mLorentzVector.vect()));
+    TVector3 const pairFourMomReverse(-mLorentzVector.Px(), -mLorentzVector.Py(), -mLorentzVector.Pz());
+    TLorentzVector p1FourMomStar = p1FourMom;
+    p1FourMomStar.Boost(pairFourMomReverse);
+    mCosThetaStar = std::cos(p1FourMomStar.Vect().Angle(mLorentzVector.Vect()));
 
     // -- calculate decay vertex (secondary or tertiary)
     mDecayVertex = (p1AtDcaToP2 + p2AtDcaToP1) * 0.5 ;
 
     // -- calculate pointing Angle and decay length with respect to primary vertex
     TVector3 const vtxToV0 = mDecayVertex - vtx1;
-    mPointingAngle = vtxToV0.Angle(mLorentzVector.vect());
+    mPointingAngle = vtxToV0.Angle(mLorentzVector.Vect());
     mDecayLength = vtxToV0.Mag();
 
     // -- calculate DCA of tracks to primary vertex
