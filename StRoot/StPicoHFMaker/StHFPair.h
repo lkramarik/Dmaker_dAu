@@ -51,7 +51,7 @@ public:
 
 	~StHFPair() {;}
 
-	StLorentzVectorF const & lorentzVector() const;
+	TLorentzVector const & lorentzVector() const;
 	TVector3 const & decayVertex() const;
 	float rapidity()    const;
 	float m()    const;
