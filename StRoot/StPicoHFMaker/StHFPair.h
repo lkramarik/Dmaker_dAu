@@ -77,7 +77,7 @@ public:
 private:
 	StHFPair(StHFPair const &);
 	StHFPair& operator=(StHFPair const &);
-	TLorentzVector mLorentzVector;
+	LorentzVector mLorentzVector;
 	TVector3   mDecayVertex;
 
 	float mPointingAngle;
