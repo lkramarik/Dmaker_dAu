@@ -28,6 +28,10 @@
 
 #include "TObject.h"
 #include "TClonesArray.h"
+#include "TVector3.h"
+#include "TLorentzVector.h"
+
+
 #include "StPicoEvent/StPicoEvent.h"
 #include "StarClassLibrary/StLorentzVectorF.hh"
 #include "StarClassLibrary/StThreeVectorF.hh"
@@ -77,7 +81,7 @@ public:
 private:
 	StHFPair(StHFPair const &);
 	StHFPair& operator=(StHFPair const &);
-	LorentzVector mLorentzVector;
+	TLorentzVector mLorentzVector;
 	TVector3   mDecayVertex;
 
 	float mPointingAngle;
