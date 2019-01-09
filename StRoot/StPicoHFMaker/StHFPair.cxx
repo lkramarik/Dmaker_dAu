@@ -79,10 +79,10 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
   // -- calculate cosThetaStar
   TLorentzVector const pairFourMomReverse(-mLorentzVector.px(), -mLorentzVector.py(), -mLorentzVector.pz(), mLorentzVector.e());
   TLorentzVector const p1FourMomStar = p1FourMom.boost(pairFourMomReverse);
-  mCosThetaStar = std::cos(p1FourMomStar.Vect().Angle(mLorentzVector.vect()));
+  mCosThetaStar = std::cos(p1FourMomStar.Vect().Angle(mLorentzVector.Vect()));
 
   TVector3 const vtxToV0 = mDecayVertex - vtx;
-  mPointingAngle = vtxToV0.Angle(mLorentzVector.vect());
+  mPointingAngle = vtxToV0.Angle(mLorentzVector.Vect());
   mDecayLength = vtxToV0.Mag();
 
   mParticle1Dca = (p1Helix.origin() - vtx).Mag();
@@ -96,7 +96,7 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
 float StHFPair::pointingAngle(TVector3 const & vtx2) const{
   // -- Overloaded function recalculates pointing angle given secondary vertex
   TVector3 const vtx2ToTertiary(mDecayVertex - vtx2);
-  float const nPointingAngle = vtx2ToTertiary.Angle(mLorentzVector.vect());
+  float const nPointingAngle = vtx2ToTertiary.Angle(mLorentzVector.Vect());
   return nPointingAngle;
 }
 // _________________________________________________________
