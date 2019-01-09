@@ -78,7 +78,7 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
 
   // -- calculate cosThetaStar
   TLorentzVector const pairFourMomReverse(-mLorentzVector.Px(), -mLorentzVector.Py(), -mLorentzVector.Pz(), mLorentzVector.E());
-  TLorentzVector const p1FourMomStar = p1FourMom.boost(pairFourMomReverse);
+  TLorentzVector const p1FourMomStar = p1FourMom.Boost(pairFourMomReverse);
   mCosThetaStar = std::cos(p1FourMomStar.Vect().Angle(mLorentzVector.Vect()));
 
   TVector3 const vtxToV0 = mDecayVertex - vtx;
