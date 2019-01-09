@@ -57,7 +57,7 @@ int StPicoKKMaker::createCandidates() {
     //making array of good kaons
     for(unsigned int k = 0; k < mPicoDst->numberOfTracks(); ++k) {
         StPicoTrack const *trkTest = mPicoDst->track(k);
-        if (abs(trkTest->gMom().pseudoRapidity())>1) continue;
+        if (abs(trkTest->gMom().PseudoRapidity())>1) continue;
         if (mHFCuts->isGoodKaon(trkTest)) mIdxPicoKaons.push_back(k);
     }
     for (unsigned short j = 0; j < mIdxPicoKaons.size(); ++j) {
@@ -81,16 +81,16 @@ int StPicoKKMaker::createCandidates() {
             ntVar[ii++] = pair->particle1Dca();
             ntVar[ii++] = kaon1->nSigmaKaon();
             ntVar[ii++] = kaon1->nHitsFit();
-            ntVar[ii++] = kaon1->gMom().pseudoRapidity();
-            ntVar[ii++] = kaon1->gMom().phi();
+            ntVar[ii++] = kaon1->gMom().PseudoRapidity();
+            ntVar[ii++] = kaon1->gMom().Phi();
             ntVar[ii++] = mHFCuts->getOneOverBeta(kaon1, mHFCuts->getTofBetaBase(kaon1), StPicoCutsBase::kKaon);
 
             ntVar[ii++] = kaon2->gPt();
             ntVar[ii++] = pair->particle2Dca();
             ntVar[ii++] = kaon2->nSigmaKaon();
             ntVar[ii++] = kaon2->nHitsFit();
-            ntVar[ii++] = kaon2->gMom().pseudoRapidity();
-            ntVar[ii++] = kaon2->gMom().phi();
+            ntVar[ii++] = kaon2->gMom().PseudoRapidity();
+            ntVar[ii++] = kaon2->gMom().Phi();
             ntVar[ii++] = mHFCuts->getOneOverBeta(kaon2, mHFCuts->getTofBetaBase(kaon2), StPicoCutsBase::kKaon);
 
             ntVar[ii++] = pair->dcaDaughters();
