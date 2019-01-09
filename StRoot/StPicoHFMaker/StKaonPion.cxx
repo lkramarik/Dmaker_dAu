@@ -6,7 +6,7 @@
 
 #include "StLorentzVectorF.hh"
 #include "StThreeVectorF.hh"
-#include "StPicoPhysicalHelix.h"
+#include "StPicoEvent/StPicoPhysicalHelix.h"
 #include "phys_constants.h"
 #include "SystemOfUnits.h"
 #include "StPicoEvent/StPicoTrack.h"
