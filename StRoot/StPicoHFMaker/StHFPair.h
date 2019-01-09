@@ -95,13 +95,13 @@ private:
 };
 inline StLorentzVectorF const & StHFPair::lorentzVector() const { return mLorentzVector;}
 inline float StHFPair::rapidity()    const { return mLorentzVector.rapidity();}
-inline float StHFPair::m()    const { return mLorentzVector.m();}
-inline float StHFPair::pt()   const { return mLorentzVector.perp();}
-inline float StHFPair::eta()  const { return mLorentzVector.pseudoRapidity();}
-inline float StHFPair::phi()  const { return mLorentzVector.phi();}
-inline float StHFPair::px()   const { return mLorentzVector.px();}
-inline float StHFPair::py()   const { return mLorentzVector.py();}
-inline float StHFPair::pz()   const { return mLorentzVector.pz();}
+inline float StHFPair::m()    const { return mLorentzVector.M();}
+inline float StHFPair::pt()   const { return mLorentzVector.Pt();}
+inline float StHFPair::eta()  const { return mLorentzVector.Eta();}
+inline float StHFPair::phi()  const { return mLorentzVector.Phi();}
+inline float StHFPair::px()   const { return mLorentzVector.Px();}
+inline float StHFPair::py()   const { return mLorentzVector.Py();}
+inline float StHFPair::pz()   const { return mLorentzVector.Pz();}
 inline float StHFPair::pointingAngle() const { return mPointingAngle;}
 inline float StHFPair::decayLength()   const { return mDecayLength;}
 inline float StHFPair::particle1Dca()  const { return mParticle1Dca;}
