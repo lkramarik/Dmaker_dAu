@@ -30,7 +30,7 @@ void runPicoMixedEvent(
 			const Char_t *outputFile="outputBaseName",  
 			const Char_t *badRunListFileName = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoLists/picoList_bad.list") {
 
-  string SL_version = "SL17d";
+  string SL_version = "SL18f";
   string env_SL = getenv ("STAR");
   if (env_SL.find(SL_version)==string::npos) {
       cout<<"Environment Star Library does not match the requested library in runPicoHFMyAnaMaker.C. Exiting..."<<endl;

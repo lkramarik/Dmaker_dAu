@@ -26,13 +26,13 @@ class StMaker;
 StChain *chain;
 
 void runPicoD0AnaMakerLocal(
-			const Char_t *inputFile="/gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoLists/runs_local_test.list",	
+			const Char_t *inputFile="/gpfs01/star/pwg/lkramarik/Dmaker_ndAu/Dmaker_dAu/picoLists/runs_local_test.list",
 			const Char_t *outputFile="outputBaseName",  
             const unsigned int makerMode = 0 ,
-			const Char_t *badRunListFileName = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoLists/picoList_bad.list",
+			const Char_t *badRunListFileName = "/gpfs01/star/pwg/lkramarik/Dmaker_ndAu/Dmaker_dAu/picoLists/picoList_bad.list",
             const Char_t *treeName = "picoHFtree",
-			const Char_t *productionBasePath = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/") {
-  string SL_version = "SL17d";
+			const Char_t *productionBasePath = "/gpfs01/star/pwg/lkramarik/Dmaker_ndAu/Dmaker_dAu/") {
+  string SL_version = "SL18f";
   string env_SL = getenv ("STAR");
   if (env_SL.find(SL_version)==string::npos) {
       cout<<"Environment Star Library does not match the requested library in runPicoHFMyAnaMaker.C. Exiting..."<<endl;
@@ -69,7 +69,7 @@ void runPicoD0AnaMakerLocal(
   // -- ADD USER CUTS HERE ----------------------------
 
   hfCuts->setCutVzMax(6.);
-  hfCuts->setCutVzVpdVzMax(3.);
+  hfCuts->setCutVzVpdVzMax(6.);
   hfCuts->addTriggerId(530003); //VPD-5
 
   hfCuts->setCutNHitsFitMin(15); //default is 20

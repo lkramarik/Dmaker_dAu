@@ -30,7 +30,7 @@ void runPicoPhiAnaMaker(
     const Char_t *outputFile,  
     const Char_t *badRunListFileName, const Char_t *treeName,
     const Char_t *productionBasePath) {
-    string SL_version = "SL17d";
+    string SL_version = "SL18f";
     string env_SL = getenv ("STAR");
     if (env_SL.find(SL_version)==string::npos) {
         cout<<"Environment Star Library does not match the requested library in run**.C. Exiting..."<<endl;
