@@ -70,14 +70,14 @@ void runPicoPhiAnaMaker(
     float dcaDaughtersMax = 1;  // maximum
     float decayLengthMin  = 0.000; // minimum
     float decayLengthMax  = 25; //std::numeric_limits<float>::max();
-    float cosThetaMin     = 0.9;   // minimum
+    float cosThetaMin     = 0.85;   // minimum
     float minMass         = 1;
     float maxMass         = 1.05;
     float pairDcaMax      = 1;
 
     hfCuts->setCutPtRange(0.15,50.0,StHFCuts::kKaon);
     hfCuts->setCutTPCNSigmaKaon(6);
-    hfCuts->setCutTOFDeltaOneOverBeta(999, StHFCuts::kKaon);
+    hfCuts->setCutTOFDeltaOneOverBeta(0.08, StHFCuts::kKaon);
     hfCuts->setCutPtotRangeHybridTOF(0.15,50.0,StHFCuts::kKaon);
 
     hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass, pairDcaMax);

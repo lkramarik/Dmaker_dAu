@@ -78,14 +78,14 @@ StMixerPair::StMixerPair(StPicoTrack const&  particle1, StPicoTrack const& parti
     // -- calculate cosThetaStar
     StLorentzVectorF const pairFourMomReverse(-mLorentzVector.px(), -mLorentzVector.py(), -mLorentzVector.pz(), mLorentzVector.e());
     StLorentzVectorF const p1FourMomStar = p1FourMom.boost(pairFourMomReverse);
-    mCosThetaStar = std::cos(p1FourMomStar.vect().angle(mLorentzVector.vect()));
+    mCosThetaStar = std::cos(p1FourMomStar.vect().Angle(mLorentzVector.vect()));
 
     // -- calculate decay vertex (secondary or tertiary)
     mDecayVertex = (p1AtDcaToP2 + p2AtDcaToP1) * 0.5 ;
 
-    // -- calculate pointing angle and decay length with respect to primary vertex
+    // -- calculate pointing Angle and decay length with respect to primary vertex
     TVector3 const vtxToV0 = mDecayVertex - vtx1;
-    mPointingAngle = vtxToV0.angle(mLorentzVector.vect());
+    mPointingAngle = vtxToV0.Angle(mLorentzVector.vect());
     mDecayLength = vtxToV0.Mag();
 
     // -- calculate DCA of tracks to primary vertex

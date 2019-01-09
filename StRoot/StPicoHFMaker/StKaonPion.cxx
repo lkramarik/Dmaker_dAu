@@ -85,11 +85,11 @@ StKaonPion::StKaonPion(StPicoTrack const * const kaon, StPicoTrack const * const
    // calculate cosThetaStar
    StLorentzVectorF const kpFourMomReverse(-mLorentzVector.px(), -mLorentzVector.py(), -mLorentzVector.pz(), mLorentzVector.e());
    StLorentzVectorF const kFourMomStar = kFourMom.boost(kpFourMomReverse);
-   mCosThetaStar = std::cos(kFourMomStar.vect().angle(mLorentzVector.vect()));
+   mCosThetaStar = std::cos(kFourMomStar.vect().Angle(mLorentzVector.vect()));
 
    // calculate pointing angle and decay length
    TVector3 const vtxToV0 = (kAtDcaToPion + pAtDcaToKaon) * 0.5 - vtx;
-   mPointingAngle = vtxToV0.angle(mLorentzVector.vect());
+   mPointingAngle = vtxToV0.Angle(mLorentzVector.vect());
    mDecayLength = vtxToV0.Mag();
 
    // calculate DCA of tracks to primary vertex
