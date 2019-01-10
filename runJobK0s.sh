@@ -6,6 +6,7 @@ analyzer="lkramarik"
 mkdir $productionId
 cd $productionId
 #copylist
+
 cp /gpfs01/star/pwg/$analyzer/Dmaker_dAu/picoLists/runs_path_all.list  ./
 list="runs_path_all.list"
 
