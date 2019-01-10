@@ -15,7 +15,6 @@ cp -r /gpfs01/star/pwg/$analyzer/Dmaker_dAu/.sl73_gcc485 ./
 cp -Lr /gpfs01/star/pwg/$analyzer/Dmaker_dAu/StRoot ./
 cp /gpfs01/star/pwg/$analyzer/Dmaker_dAu/picoLists/picoList_bad.list ./
 mkdir starSubmit
-cp /gpfs01/star/pwg/$analyzer/Dmaker_dAu/starSubmit/submitPicoHFMaker.csh ./starSubmit
 cp /gpfs01/star/pwg/$analyzer/Dmaker_dAu/starSubmit/submitPicoHFMaker.xml ./starSubmit
 
 mkdir -p production

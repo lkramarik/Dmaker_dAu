@@ -14,7 +14,6 @@ cp -r ../../.sl73_gcc485 ./
 cp -Lr ../../StRoot ./
 cp ../../picoLists/picoList_bad.list ./
 mkdir starSubmit
-cp ../../starSubmit/submitPicoHFMaker.csh ./starSubmit
 cp ../../starSubmit/submitPicoHFMaker.xml ./starSubmit
 
 mkdir -p production
