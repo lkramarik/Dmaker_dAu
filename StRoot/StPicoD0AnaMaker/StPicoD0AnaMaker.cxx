@@ -216,7 +216,7 @@ int StPicoD0AnaMaker::createCandidates() {
             ntVar[ii++] = flag;
             ntVar[ii++] = mPrimVtx.z();
             ntVar[ii++] = mPicoEvent->vzVpd();
-            ntVar[ii++] = fabs(mPicoEvent->primaryVertex().z() - mPicoEvent->vzVpd());
+            ntVar[ii++] = mPicoEvent->primaryVertex().z() - mPicoEvent->vzVpd();
 
             ntVar[ii++] = pair->pointingAngle();
             ntVar[ii++] = cos(pair->pointingAngle());
