@@ -4,7 +4,6 @@
 #include <vector>
 #include "TVector3.h"
 
-#include "StarClassLibrary/StThreeVectorF.hh"
 #include "StPicoEvent/StPicoTrack.h"
 
 #include "StMixerTrack.h"

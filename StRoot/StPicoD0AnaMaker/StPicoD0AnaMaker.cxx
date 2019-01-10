@@ -4,7 +4,6 @@
 #include "StPicoEvent/StPicoTrack.h"
 #include "StPicoHFMaker/StHFCuts.h"
 #include "phys_constants.h"
-#include "StBTofUtil/tofPathLength.hh"
 #include "StPicoD0AnaMaker.h"
 ClassImp(StPicoD0AnaMaker)
 

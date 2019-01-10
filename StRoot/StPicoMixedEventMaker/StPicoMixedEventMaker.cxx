@@ -6,7 +6,6 @@
 #include "TH2.h"
 #include "TList.h"
 #include "TString.h" // needed for the Form(...)
-#include "StarClassLibrary/StThreeVectorF.hh"
 #include "StPicoEvent/StPicoDst.h"
 #include "StPicoDstMaker/StPicoDstMaker.h"
 #include "StPicoEvent/StPicoEvent.h"

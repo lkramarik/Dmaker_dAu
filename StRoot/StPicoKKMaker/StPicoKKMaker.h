@@ -8,8 +8,6 @@
 //#include "StPicoD0AnaHists.h"
 #include <vector>
 #include "TClonesArray.h"
-#include "StThreeVectorF.hh"
-#include "StLorentzVectorF.hh"
 #include "StPicoEvent/StPicoDst.h"
 #include "StPicoDstMaker/StPicoDstMaker.h"
 #include "StPicoEvent/StPicoEvent.h"
@@ -19,7 +17,6 @@
 #include "StPicoHFMaker/StHFCuts.h"
 #include "StPicoHFMaker/StHFPair.h"
 //#include "StPicoHFMaker/StHFTriplet.h"
-#include "StBTofUtil/tofPathLength.hh"
 
 #include "phys_constants.h"
 

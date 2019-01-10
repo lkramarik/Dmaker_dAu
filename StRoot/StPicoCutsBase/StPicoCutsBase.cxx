@@ -6,12 +6,9 @@
 
 #include "StPicoCutsBase.h"
 
-#include "StLorentzVectorF.hh"
-#include "StarClassLibrary/StThreeVectorF.hh"
 #include "StPicoEvent/StPicoPhysicalHelix.h"
 #include "phys_constants.h"
 #include "SystemOfUnits.h"
-#include "StBTofUtil/tofPathLength.hh"
 
 #include "StPicoEvent/StPicoDst.h"
 #include "StPicoEvent/StPicoTrack.h"
@@ -187,10 +184,10 @@ bool StPicoCutsBase::isGoodEvent(StPicoDst const * const picoDst, int *aEventCut
   
   // -- is rejected
   bool isGoodEvent = true;
-  for (unsigned int ii = 0; ii < mEventStatMax; ++ii)
-    if  (aEventCuts[ii])
-      isGoodEvent = false;
-        
+  for (unsigned int ii = 0; ii < mEventStatMax; ++ii) {
+    if (aEventCuts[ii]) isGoodEvent = false;
+  }
+
   return isGoodEvent;
 }
 
@@ -390,7 +387,6 @@ float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk,
   if (!tofPid) 
     return beta;
 //
-//  StThreeVectorD tofHit = tofPid->btofHitPos();
 //
 //  // -- set waypoints
 //  mTOFCorr->setVectors3D(mPrimVtx)(secondaryVtx)(tofHit);

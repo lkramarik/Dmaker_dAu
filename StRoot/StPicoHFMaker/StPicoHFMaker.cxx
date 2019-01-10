@@ -5,8 +5,6 @@
 #include "TFile.h"
 #include "TChain.h"
 
-#include "StarClassLibrary/StThreeVectorF.hh"
-#include "StarClassLibrary/StLorentzVectorF.hh"
 #include "StPicoEvent/StPicoDst.h"
 #include "StPicoDstMaker/StPicoDstMaker.h"
 #include "StPicoEvent/StPicoEvent.h"
@@ -209,10 +207,10 @@ void StPicoHFMaker::fillEventStats(int *aEventStat) {
       hEventStat0->Fill(idx);
   }
 
-  for (unsigned int idx = 0; idx < mHFCuts->eventStatMax(); ++idx) {
-    if (aEventStat[idx])
-      break;
-    hEventStat1->Fill(idx);
+//  for (unsigned int idx = 0; idx < mHFCuts->eventStatMax(); ++idx) {
+//    if (aEventStat[idx])
+//      break;
+//    hEventStat1->Fill(idx);
   }
 }
 

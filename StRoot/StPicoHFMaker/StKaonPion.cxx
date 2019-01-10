@@ -4,8 +4,6 @@
 #ifdef __ROOT__
 #include "StKaonPion.h"
 
-#include "StLorentzVectorF.hh"
-#include "StThreeVectorF.hh"
 #include "phys_constants.h"
 #include "SystemOfUnits.h"
 
