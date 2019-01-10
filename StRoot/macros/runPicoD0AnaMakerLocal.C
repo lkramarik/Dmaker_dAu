@@ -35,7 +35,7 @@ void runPicoD0AnaMakerLocal(
   string SL_version = "SL18f";
   string env_SL = getenv ("STAR");
   if (env_SL.find(SL_version)==string::npos) {
-      cout<<"Environment Star Library does not match the requested library in runPicoHFMyAnaMaker.C. Exiting..."<<endl;
+      cout<<"Environment Star Library does not match the requested library. Exiting..."<<endl;
       exit(1);
   }
   
