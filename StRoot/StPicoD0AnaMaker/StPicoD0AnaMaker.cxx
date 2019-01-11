@@ -368,8 +368,6 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
 {
   StPicoEvent *event = (StPicoEvent *)mPicoDst->event();
   int mult = event->grefMult();
-  StPicoTrack const* kaon = mPicoDst->track(kp->particle1Idx());
-  StPicoTrack const* pion = mPicoDst->track(kp->particle2Idx());
   
   double hadronv2=1;
   float multBin[6] = {0,7,12,16,22,100};
@@ -384,15 +382,15 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
 
 
     D_phi->Fill(kp->phi());
-    
+
     for(unsigned int i=0; i<mPicoDst->numberOfTracks();i++)
     {
       StPicoTrack const* hadron = mPicoDst->track(i);
       if(hadron->pMom().perp()<0.2) continue;
       if(!isGoodHadron(hadron)) continue;
       if(i==kp->particle1Idx() || i==kp->particle2Idx()) continue;
-      float etaHadron = hadron->pMom().pseudoRapidity();
-      float phiHadron = hadron->pMom().phi(); 
+      float etaHadron = hadron->gMom().pseudoRapidity();
+      float phiHadron = hadron->gMom().phi(); 
       if(!isEtaGap(kp->eta(),etaGap[k],etaHadron))  continue;
       corFill[3]++;
       corFill[4] += sin(2 * phiHadron)/sqrt(hadronv2);
