@@ -418,7 +418,7 @@ void StPicoD0AnaMaker::DeclareHistograms() {
     }
   }
   hadron_phi = new TH1D("hadron_phi", "Hadron phi", 2000, -5, 5);
-  D_phi = new TH1D("hadron_phi", "Hadron phi", 2000, -5, 5);
+  D_phi = new TH1D("D_phi", "D phi", 2000, -5, 5);
   float ptbin1[12] = {0.225,0.375,0.525,0.675,0.825,0.975,1.12,1.27,1.42,1.58,1.73,1.88};
   float ptbin2[11];
   for(int i=0;i<11;i++)
@@ -431,15 +431,7 @@ void StPicoD0AnaMaker::DeclareHistograms() {
       hadronV2[i][k]->Sumw2();
       hadronV2_sum[i][k] = new TH1D(Form("hadronsum_%s_%i",flatten[i].Data(),k),"",9,0,9);
       hadronV2_sum[i][k]->Sumw2();
-      /*
-      for(int j=0;j<9;j++)
-      {
-        hadronV2_excl[i][j][k] = new TH1D(Form("hadron_%s_cent%i_%i",flatten[i].Data(),j,k),"",10,ptbin2);
-        hadronV2_excl[i][j][k]->Sumw2();
-        hadronV2_excl_sum[i][j][k] = new TH1D(Form("hadronsum_%s_cent%i_%i",flatten[i].Data(),j,k),"",10,ptbin2);
-        hadronV2_excl_sum[i][j][k]->Sumw2();
-      }
-      */
+      
     }
 }
 
@@ -498,7 +490,6 @@ void StPicoD0AnaMaker::WriteHistograms() {
     for(int i=0;i<5;i++)
     {
       hadronV2[i][k]->Write();
-      hadronV2_sum[i][k]->Write();
     }
   }
   for(int m = 0; m < 4; m++)
