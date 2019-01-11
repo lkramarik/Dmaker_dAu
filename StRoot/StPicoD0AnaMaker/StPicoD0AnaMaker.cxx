@@ -376,7 +376,7 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
   float multBin[6] = {0,7,12,16,22,100};
   double etaGap[3] = {0,0.15,0.05};
 
-  int k=0
+  int k=0;
     double corFill[7] = {0};
     corFill[0] = 1 ;
     corFill[1] = sin(2* kp->phi())/sqrt(hadronv2);
