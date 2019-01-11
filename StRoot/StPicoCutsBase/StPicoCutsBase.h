@@ -29,6 +29,7 @@ public:
     bool isGoodTrack(StPicoTrack const * const trk) const;
     bool isGoodPion(StPicoTrack const * const trk) const;
     bool isGoodKaon(StPicoTrack const * const trk) const;
+    bool isGoodProton(StPicoTrack const * const trk) const;
 
     // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
     // -- DCA to Primary vertex

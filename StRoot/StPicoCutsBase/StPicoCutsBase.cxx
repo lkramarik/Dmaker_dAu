@@ -243,6 +243,17 @@ bool StPicoCutsBase::isGoodKaon(StPicoTrack const *const trk) const {
     return tof;
 }
 
+bool StPicoCutsBase::isGoodProton(StPicoTrack const *const trk) const {
+    if (!isGoodTrack(trk)) return false;
+    if (!cutMinDcaToPrimVertex(trk, StPicoCutsBase::kProton)) return false;
+    if (!isTPCProton(trk)) return false;
+    bool tof = false;
+    if (mHybridTof) tof = isHybridTOFProton(trk);
+    if (!mHybridTof) tof = isTOFProton(trk);
+
+    return tof;
+}
+
 bool StPicoCutsBase::cutMinDcaToPrimVertex(StPicoTrack const * const trk, int pidFlag) const {
   // -- check on min dca for identified particle
   float dca = (mPrimVtx - trk->dcaPoint()).mag();

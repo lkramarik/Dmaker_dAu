@@ -172,7 +172,8 @@ int StPicoD0AnaMaker::createCandidates() {
 
             
             //this is messy!! I will rewrite it to a isD0pair function ASAP! 
-            if(pair->m() < 1.81 || pair->m() > 1.91 || pair->pt() < 1 || pair->pt() > 5) continue;
+            if(pair->m() < 1.804 || pair->m() > 1.924 || pair->pt() < 1 || pair->pt() > 5) continue;
+            //mean 1.864, sigma 0.02
             if(pair->pt() > 1 && pair->pt() < 2)
             {
             	if(pair->decayLength() > 0.012 && pair->dcaDaughters() < 0.007 && pair->DcaToPrimaryVertex() < 0.005 && cos(pair->pointingAngle()) > 0.5 && pair->particle2Dca() > 0.007 && pair->particle1Dca() > 0.009);
@@ -241,29 +242,12 @@ int StPicoD0AnaMaker::analyzeCandidates() {
             }
         }
     }
-//    for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
-//        StPicoTrack const *t = mPicoDst->track(mIdxPicoPions[idxPion1]);
-//        ntp_pion->Fill(t->gPt(), t->gMom().phi(), t->gMom().pseudoRapidity(), t->nSigmaPion(), t->nHitsFit(), getOneOverBeta(t, mHFCuts->getTofBetaBase(t), StPicoCutsBase::kPion), mPicoEvent->eventId(), mPicoEvent->runId());
-//    }
-//
-//    for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
-//        StPicoTrack const *t = mPicoDst->track(mIdxPicoKaons[idxKaon]);
-//        ntp_kaon->Fill(t->gPt(), t->gMom().phi(), t->gMom().pseudoRapidity(), t->nSigmaKaon(), t->nHitsFit(), getOneOverBeta(t, mHFCuts->getTofBetaBase(t), StPicoCutsBase::kKaon), mPicoEvent->eventId(), mPicoEvent->runId());
-//    }
     return kStOK;
 }
 
 
 void StPicoD0AnaMaker::DeclareHistograms() {
-    // for v2 calcualtion
-  TString flatten[5];
-  flatten[0] = "v2";
-  flatten[1] = "cos_BS";
-  flatten[2] = "sin_BS";
-  flatten[3] = "cos_FS";
-  flatten[4] = "sin_FS";
-  TString sb[8] = {"s1like","s3like","hSBlike","lSBlike","s1unlike","s3unlike","hSBunlike","lSBunlike"};
-
+ 
   TString names[4] = {"cos_B", "cos_F", "sin_B", "sin_F"}; //backward and forward samples
   float multBin[6] = {0,7,12,16,22,100};
   for(int m = 0; m < 4; m++)
@@ -295,122 +279,15 @@ void StPicoD0AnaMaker::DeclareHistograms() {
   refFlow = new TProfile("refFlow", "", 5, multBin);
   refFlow2 = new TProfile("refFlow_no_mult", "", 1, 0, 100);
   
-  // float xbin[7] = {0,1,2,3,4,5,10};
-  const int xbinSize=10;
-  float xbin[11] = {0,0.5,1,1.5,2,2.5,3,3.5,4,5,10};
-  float binMass[2001];
-  float binPhi[2001];
-  candPt = new TProfile("candPt","",xbinSize,xbin);
-  for(int i=0;i<2001;i++)
-    binPhi[i] = 0.005*i-5;
-  for(int i=0;i<2001;i++)
-    binMass[i] = 0.01*i;
-  massPt = new TH2D("massPt","",2000,binMass,xbinSize,xbin);
-  massPtLike = new TH2D("massPtLike","",2000,binMass,xbinSize,xbin);
-  massLike = new TH2D("massLike","",2000,binMass,xbinSize,xbin);
-  massLike->Sumw2();
-  massUnlike = new TH2D("massUnlike","",2000,binMass,xbinSize,xbin);
-  massUnlike->Sumw2();
-  float xWeight[10];
-  for(int ii=0;ii<10;ii++)
-  	xWeight[ii] = ii;
-  for(int i=0;i!=8;i++)
-  {
-    for(int k=0;k!=3;k++)
-    {
-      for(int j=0;j!=5;j++)
-      {
-        TString name = sb[i]+flatten[j]+Form("_%i",k);
-        profV2[i][j][k] = new TProfile(name.Data(),"",xbinSize,xbin);
-        profV2[i][j][k]->Sumw2();
-      }
-      TString weightName = sb[i]+Form("_%i_weigth",k);
-      v2Weight[i][k] = new TH2D(weightName.Data(),"",5,xWeight,xbinSize,xbin);
-      v2Weight[i][k]->Sumw2();
-
-      TString namehPhi = "hadronPhi_"+sb[i]+Form("_%i",k);
-      TString nameDPhi = "DPhi_"+sb[i]+Form("_%i",k);
-      hPhiHadron[i][k] = new TH2F(namehPhi.Data(),"",2000,binPhi,xbinSize,xbin);
-      hPhiD[i][k]= new TH2F(nameDPhi.Data(),"",2000,binPhi,xbinSize,xbin);
-      hPhiD[i][k]->Sumw2();
-      hPhiHadron[i][k]->Sumw2();
-    }
-  }
+  
   hadron_phi = new TH1D("hadron_phi", "Hadron phi", 2000, -5, 5);
   D_phi = new TH1D("D_phi", "D phi", 2000, -5, 5);
-  float ptbin1[12] = {0.225,0.375,0.525,0.675,0.825,0.975,1.12,1.27,1.42,1.58,1.73,1.88};
-  float ptbin2[11];
-  for(int i=0;i<11;i++)
-    ptbin2[i] = 0.5*(ptbin1[i]+ptbin1[i+1]);
-  for(int k=0;k<3;k++)
-  {
-    for(int i=0;i<5;i++)
-    {
-      hadronV2[i][k] = new TH1D(Form("hadron_%s_%i",flatten[i].Data(),k),"",9,0,9);
-      hadronV2[i][k]->Sumw2();
-      hadronV2_sum[i][k] = new TH1D(Form("hadronsum_%s_%i",flatten[i].Data(),k),"",9,0,9);
-      hadronV2_sum[i][k]->Sumw2();
-      
-    }
-}
 
-  double fitmean[6] = {1.85921,1.8633,1.86403,1.86475,1.86252,1.86534};
-  double fitsigma[6] = {0.018139,0.0139476,0.0158346,0.0169282,0.0199567,0.0189131};
-  // ifstream ifs("efficiency.txt");
-  // for(int i=0; i<6; i++)
-  //   for(int j=0; j<4; j++)
-  //     ifs>>efficiency[j][i];
-  for(int i=0;i<6;i++)//pt bin
-  {
-    for(int j=0;j<5;j++)//flatten
-    {
-      TString massName[2];
-      massName[0] = Form("likeMass%i",i)+flatten[j];
-      massName[1] = Form("unlikeMass%i",i)+flatten[j];
-      for(int k=0;k<2;k++)
-      {
-        V2Mass[k][i][j] = new TProfile(massName[k].Data(),"",18,fitmean[i]-9*fitsigma[i],fitmean[i]+9*fitsigma[i]);
-        V2Mass[k][i][j]->Sumw2();
-      }
-    }
-  }
 
-      //printf("Histograms declared! \n");//
 }
 
 void StPicoD0AnaMaker::WriteHistograms() {
-   //Saving for v2 calculation
-  for(int i=0;i!=8;i++)
-  {
-    for(int k=0;k!=3;k++)
-    {
-      for(int j=0;j!=5;j++)
-      {
-        profV2[i][j][k]->Write();
-      }
-      v2Weight[i][k]->Write();
-      hPhiD[i][k]->Write();
-      hPhiHadron[i][k]->Write();
-    }
-  }
-  for(int i=0;i<6;i++)
-  {
-    for(int j=0;j<5;j++)
-    {
-      for(int k=0;k<2;k++)
-        V2Mass[k][i][j]->Write();
-    }
-  }
-  massLike->Write();
-  candPt->Write();
-  massUnlike->Write();
-  for(int k=0;k<3;k++)
-  {
-    for(int i=0;i<5;i++)
-    {
-      hadronV2[i][k]->Write();
-    }
-  }
+ 
   for(int m = 0; m < 4; m++)
   {
   	qVec[m]->Write();
@@ -433,7 +310,6 @@ void StPicoD0AnaMaker::WriteHistograms() {
   hadron_phi->Write();
   D_phi->Write();
 
-      //printf("Histograms written! \n");
 }
 
 bool StPicoD0AnaMaker::getHadronCorV2(int idxGap)
@@ -449,9 +325,10 @@ bool StPicoD0AnaMaker::getHadronCorV2(int idxGap)
   {
     StPicoTrack const* hadron = mPicoDst->track(i);
     if(hadron->pMom().perp()<0.2) continue;
-    if(!isGoodHadron(hadron)) continue;
-    float etaHadron = hadron->pMom().pseudoRapidity();
-    float phiHadron = hadron->pMom().phi();
+    if(!mHFCuts->isGoodTrack(hadron)) continue;
+    if(!mHFCuts->isGoodProton(hadron) || !mHFCuts->isGoodKaon(hadron) || !mHFCuts->isGoodPion(hadron)) continue;
+    float etaHadron = hadron->gMom().pseudoRapidity();
+    float phiHadron = hadron->gMom().phi();
     if(etaHadron<-0.5*mEtaGap)//backward sample 
     {
       hadronFill[0]++;
@@ -470,15 +347,10 @@ bool StPicoD0AnaMaker::getHadronCorV2(int idxGap)
   //mHadronTuple->Fill(hadronFill);
   if(hadronFill[0]==0 || hadronFill[3]==0)
     return false; 
-  double temp = (hadronFill[1]*hadronFill[4]+hadronFill[2]*hadronFill[5]);
-  hadronV2[0][idxGap]->Fill(mult,temp*reweight);
-  hadronV2[1][idxGap]->Fill(mult,hadronFill[2]*reweight);
-  hadronV2[2][idxGap]->Fill(mult,hadronFill[1]*reweight);
-  hadronV2[3][idxGap]->Fill(mult,hadronFill[5]*reweight);
-  hadronV2[4][idxGap]->Fill(mult,hadronFill[4]*reweight);
 
+  //Z code: reference flow creation: average sin/cos phi of a hadron in an event.... (no error!)  
+  hadron_phi->Fill(phiHadron);
 
-  //Z code: reference flow creation: average sin/cos of a hadron in an event.... (no error!)  
   if(idxGap==1)
   {
  	qVec[0]->Fill(mult,hadronFill[2]/hadronFill[0],reweight);
@@ -500,18 +372,6 @@ bool StPicoD0AnaMaker::getHadronCorV2(int idxGap)
   return true;
 }
 
-bool StPicoD0AnaMaker::isGoodHadron(StPicoTrack const * const trk) const
-{
-  //return trk->pMom().perp() > mycuts::hadronPtMin &&trk->pMom().perp() < mycuts::hadronPtMax && trk->nHitsFit() >= mycuts::nHitsFit &&fabs(trk->pMom().pseudoRapidity())<1.&&fabs(trk->nSigmaElectron())>3 && (1.0*trk->nHitsFit()/trk->nHitsMax())>0.52;
-  int tofIndex = trk->bTofPidTraitsIndex();
-  bool TofMatch = kFALSE;
-  StPicoBTofPidTraits* tofPidTraits;
-  if (tofIndex >= 0)  tofPidTraits = mPicoDst->btofPidTraits(tofIndex); //GNX
-  if (tofIndex >= 0 && tofPidTraits && tofPidTraits->btofMatchFlag() > 0)  TofMatch = kTRUE;
-  return TofMatch && trk->pMom().perp() > 0.2 &&trk->pMom().perp() < 2.0 && trk->nHitsFit() >= 15 &&fabs(trk->pMom().pseudoRapidity())<1. && (1.0*trk->nHitsFit()/trk->nHitsMax())>0.52;
-}
-
-
 
 bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
 {
@@ -528,19 +388,7 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
   int ptIdx = 5;
   if(kp->pt()<5)
     ptIdx = static_cast<int>(kp->pt());
-  double fitmean[6] = {1.85921,1.8633,1.86403,1.86475,1.86252,1.86534};
-  double fitsigma[6] = {0.018139,0.0139476,0.0158346,0.0169282,0.0199567,0.0189131};
-  double mean = fitmean[ptIdx];
-  double sigma = fitsigma[ptIdx];
-  bool fillSB[8];
-  fillSB[0] =  (charge>0)&& (dMass>(mean-1*sigma)) &&  (dMass<(mean+1*sigma));
-  fillSB[1] =  (charge>0)&& (dMass>(mean-3*sigma)) &&  (dMass<(mean+3*sigma));
-  fillSB[2] =  (charge>0) && (((dMass>(mean+4*sigma)) &&  (dMass<(mean+9*sigma))) ||((dMass>(mean-9*sigma)) &&  (dMass<(mean-4*sigma))));
-  fillSB[4] = (charge==-1)&& (dMass>(mean-1*sigma)) &&  (dMass<(mean+1*sigma));
-  fillSB[5] = (charge==-1)&& (dMass>(mean-3*sigma)) &&  (dMass<(mean+3*sigma));
-  fillSB[6] = (charge==-1)&& (((dMass>(mean+4*sigma)) &&  (dMass<(mean+9*sigma))) ||((dMass>(mean-9*sigma)) &&  (dMass<(mean-4*sigma))));
-  fillSB[3] = fillSB[1] || fillSB[2];
-  fillSB[7] = fillSB[5] || fillSB[6];
+
   double etaGap[3] = {0,0.15,0.05};
 
   for(int k=0;k<3;k++)
@@ -549,23 +397,9 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
     corFill[0] = 1 ;
     corFill[1] = sin(2* kp->phi())/sqrt(hadronv2);
     corFill[2] = cos(2* kp->phi())/sqrt(hadronv2);
-    //corFill[1] = sin(2* kp->phi());
-    //corFill[2] = cos(2* kp->phi());
+
     int chargeIdx = charge>0 ? 0:1;
-    if(k==0)
-    {
-      V2Mass[chargeIdx][ptIdx][1]->Fill(kp->m(),corFill[1],weight);
-      V2Mass[chargeIdx][ptIdx][2]->Fill(kp->m(),corFill[2],weight);
-    }
-    for(int j=0;j<8;j++)
-    {
-      if(fillSB[j])
-      {	
-      	profV2[j][1][k]->Fill(kp->pt(),corFill[1],weight);
-        profV2[j][2][k]->Fill(kp->pt(),corFill[2],weight);
-        hPhiD[j][k]->Fill(kp->phi(),kp->pt(),weight);
-      }
-    }
+
     D_phi->Fill(kp->phi());
     for(unsigned int i=0; i<mPicoDst->numberOfTracks();i++)
     {
@@ -579,21 +413,8 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
       corFill[3]++;
       corFill[4] += sin(2 * phiHadron)/sqrt(hadronv2);
       corFill[5] += cos(2 * phiHadron)/sqrt(hadronv2);
-      hadron_phi->Fill(phiHadron);
-      if(k==0)
-      {
-        V2Mass[chargeIdx][ptIdx][3]->Fill(kp->m(),sin(2*phiHadron)/sqrt(hadronv2),weight);
-        V2Mass[chargeIdx][ptIdx][4]->Fill(kp->m(),cos(2*phiHadron)/sqrt(hadronv2),weight);
-      }
-      for(int j=0;j<8;j++)
-      {
-        if(fillSB[j])
-        {
-          profV2[j][3][k]->Fill(kp->pt(),sin(2*phiHadron),weight);
-          profV2[j][4][k]->Fill(kp->pt(),cos(2*phiHadron),weight);
-          hPhiHadron[j][k]->Fill(phiHadron,kp->pt(),weight);
-        }
-      }
+      
+  
       if(k==1)
       {
       	for(int m = 0; m < 5; m++)
@@ -610,22 +431,7 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
       	dirFlow2->Fill(kp->pt(),corFill[2]*corFill[5]/corFill[3],weight);
       }
     }
-    if(corFill[3]<=0) return false;
-    double cumulant = (corFill[1]*corFill[4]+corFill[2]*corFill[5])/(corFill[3]); 
-    if(k==0)
-    {
-      if(charge<0)  massUnlike->Fill(kp->m(),kp->pt(),weight);
-      if(charge>0)  massLike->Fill(kp->m(),kp->pt(),weight);
-      V2Mass[chargeIdx][ptIdx][0]->Fill(kp->m(),cumulant, corFill[3]*weight);
-    }
-    for(int j=0;j<8;j++)
-    {
-      if(fillSB[j])
-      {
-        profV2[j][0][k]->Fill(kp->pt(),cumulant, corFill[3]*weight);
-        //v2Weight[j][k]->Fill(centrality,kp->pt(),corFill[3]*weight);
-      }
-    }
+    
   }
   return true;
 }
