@@ -86,7 +86,7 @@ int StPicoQAMaker::InitHF() {
     mOutList->Add(new TH2D("h_QA_BBC_rate_kaons_HFT_TOF", "BBC_rate_kaons_Vs_N_HFT_TOF_kaons_", 400, 0, 2000, 600, 0, 600)); //check binning and range
     mOutList->Add(new TH2D("h_QA_BBC_rate_pions_HFT_TOF", "BBC_rate_pions_Vs_N_HFT_TOF_pions", 400, 0, 2000, 600, 0, 600)); //check binning and range
 
-    mOutList->Add(new TH2D("h_QA_BBC_rate_pions_HFT_hybridTOF", "BBC_rate_kaons_Vs_N_HFT_hybridTOF_kaons_", 400, 0, 2000, 600, 0, 600)); //check binning and range
+    mOutList->Add(new TH2D("h_QA_BBC_rate_kaons_HFT_hybridTOF", "BBC_rate_kaons_Vs_N_HFT_hybridTOF_kaons", 400, 0, 2000, 600, 0, 600)); //check binning and range
     mOutList->Add(new TH2D("h_QA_BBC_rate_pions_HFT_hybridTOF", "BBC_rate_pions_Vs_N_HFT_hybridTOF_pions", 400, 0, 2000, 600, 0, 600)); //check binning and range
 
 //    mOutList->Add(new TH2D("h_HFT_ratio_ZDC", "h_HFT_ratio_ZDC", 250, 0, 250, 2, 0, 2));
