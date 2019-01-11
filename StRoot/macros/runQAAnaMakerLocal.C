@@ -16,11 +16,10 @@
 
 using namespace std;
 
-class StChain;
-class StPicoDstMaker;
-class StPicoQAMaker;
-class StMaker;
-StChain *chain;
+//class StChain;
+//class StPicoDstMaker;
+//class StPicoQAMaker;
+//class StMaker;
 
 void runQAAnaMakerLocal(
 			const Char_t *inputFile="/gpfs01/star/pwg/lkramarik/Dmaker_ndAu/Dmaker_dAu/picoLists/runs_local_test.list",
@@ -40,8 +39,7 @@ void runQAAnaMakerLocal(
 
   gROOT->LoadMacro("loadSharedHFLibraries.C");
   loadSharedHFLibraries();
-
-  chain = new StChain();
+  StChain *chain = new StChain();
 
   TString sInputFile(inputFile);
   TString sInputListHF("");
