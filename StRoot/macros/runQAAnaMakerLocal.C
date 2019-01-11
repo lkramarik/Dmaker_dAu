@@ -106,7 +106,7 @@ void runQAAnaMakerLocal(
   hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kPion);
 
   StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
-  StPicoQAMaker* PicoQAAnaMaker = new StPicoD0AnaMaker("picoQAAnaMaker", picoDstMaker, outputFile, sInputListHF);
+  StPicoQAMaker* PicoQAAnaMaker = new StPicoQAMaker("picoQAAnaMaker", picoDstMaker, outputFile, sInputListHF);
   PicoQAAnaMaker->setTreeName(treeName);
   PicoQAAnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
   PicoQAAnaMaker->setHFBaseCuts(hfCuts);
