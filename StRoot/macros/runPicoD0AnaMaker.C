@@ -17,17 +17,10 @@
 
 using namespace std;
 
-#else
-class StChain;
-#endif
-class StPicoDstMaker;
-class StPicoMixedEventMaker;
-class StMaker;
-StChain *chain;
 void runPicoD0AnaMaker(
     const char*  inputFile,
     const Char_t *outputFile,  
-    const Char_t *badRunListFileName, const Char_t *treeName,
+    const Char_t *badRunListFileName,
     const Char_t *productionBasePath) {
     string SL_version = "SL18f";
     string env_SL = getenv ("STAR");
@@ -36,12 +29,7 @@ void runPicoD0AnaMaker(
         exit(1);
     }
 
-    #ifdef __CINT__
-    gROOT->LoadMacro("loadSharedHFLibraries.C");
-    loadSharedHFLibraries();
-    #endif
-
-    chain = new StChain();
+    StChain *chain = new StChain();
     TString sInputFile(inputFile);
     TString sInputListHF("");  
     TString sProductionBasePath(productionBasePath);
@@ -95,7 +83,6 @@ void runPicoD0AnaMaker(
     StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
 
     StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile, sInputListHF);
-    PicoD0AnaMaker->treeName(treeName);
     PicoD0AnaMaker->setHFBaseCuts(hfCuts);
 
 //    StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile, inputFile);
@@ -113,15 +100,10 @@ void runPicoD0AnaMaker(
         if (iret) { cout << "Bad return code!" << iret << endl; break;}
     }
     
-    cout << "****************************************** " << endl;
-    cout << "Work done... now its time to close up shop!"<< endl;
-    cout << "****************************************** " << endl;
     chain->Finish();
     double duration = (double) (clock() - start) / (double) CLOCKS_PER_SEC;
     cout << "****************************************** " << endl;
-    cout << "total number of events  " << nEvents << endl;
-    cout << "****************************************** " << endl;
+    cout << "Work done, total number of events  " << nEvents << endl;
     cout << "Time needed " << duration << " s" << endl;
-    cout << "****************************************** " << endl;
     delete chain;
 }

@@ -18,18 +18,10 @@
 
 using namespace std;
 
-#else
-class StChain;
-#endif
-class StPicoDstMaker;
-class StMaker;
-class StPicoPiPiMaker;
-
-StChain *chain;
 void runPicoK0sAnaMaker(
     const char*  inputFile,
     const Char_t *outputFile,  
-    const Char_t *badRunListFileName, const Char_t *treeName,
+    const Char_t *badRunListFileName,
     const Char_t *productionBasePath) {
     string SL_version = "SL18f";
     string env_SL = getenv ("STAR");
@@ -38,12 +30,7 @@ void runPicoK0sAnaMaker(
         exit(1);
     }
 
-    #ifdef __CINT__
-    gROOT->LoadMacro("loadSharedHFLibraries.C");
-    loadSharedHFLibraries();
-    #endif
-
-    chain = new StChain();
+    StChain *chain = new StChain();
     TString sInputFile(inputFile);
     TString sInputListHF("");  
     TString sProductionBasePath(productionBasePath);
@@ -96,16 +83,11 @@ void runPicoK0sAnaMaker(
         int iret = chain->Make(i);
         if (iret) { cout << "Bad return code!" << iret << endl; break;}
     }
-    
-    cout << "****************************************** " << endl;
-    cout << "Work done... now its time to close up shop!"<< endl;
-    cout << "****************************************** " << endl;
+
     chain->Finish();
     double duration = (double) (clock() - start) / (double) CLOCKS_PER_SEC;
     cout << "****************************************** " << endl;
-    cout << "total number of events  " << nEvents << endl;
-    cout << "****************************************** " << endl;
+    cout << "Work done, total number of events  " << nEvents << endl;
     cout << "Time needed " << duration << " s" << endl;
-    cout << "****************************************** " << endl;
     delete chain;
 }

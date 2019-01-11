@@ -17,20 +17,10 @@
 
 using namespace std;
 
-#else
-class StChain;
-#endif
-class StPicoDstMaker;
-class StPicoMixedEventMaker;
-class StMaker;
-StChain *chain;
-
 void runPicoD0AnaMakerLocal(
 			const Char_t *inputFile="/gpfs01/star/pwg/lkramarik/Dmaker_ndAu/Dmaker_dAu/picoLists/runs_local_test.list",
-			const Char_t *outputFile="outputBaseName",  
-            const unsigned int makerMode = 0 ,
+			const Char_t *outputFile="outputLocal",
 			const Char_t *badRunListFileName = "/gpfs01/star/pwg/lkramarik/Dmaker_ndAu/Dmaker_dAu/picoLists/picoList_bad.list",
-            const Char_t *treeName = "picoHFtree",
 			const Char_t *productionBasePath = "/gpfs01/star/pwg/lkramarik/Dmaker_ndAu/Dmaker_dAu/") {
   string SL_version = "SL18f";
   string env_SL = getenv ("STAR");
@@ -41,12 +31,7 @@ void runPicoD0AnaMakerLocal(
   
   Int_t nEvents = 1000000;
 
-#ifdef __CINT__
-  gROOT->LoadMacro("loadSharedHFLibraries.C");
-  loadSharedHFLibraries();
-#endif
-
-  chain = new StChain();
+  StChain *chain = new StChain();
 
   TString sInputFile(inputFile);
   TString sInputListHF("");
@@ -65,8 +50,6 @@ void runPicoD0AnaMakerLocal(
   // -- File name of bad run list
    hfCuts->setBadRunListFileName(badRunListFileName); 
 
-  // -- ADD USER CUTS HERE ----------------------------
-
   hfCuts->setCutVzMax(6.);
   hfCuts->setCutVzVpdVzMax(6.);
   hfCuts->addTriggerId(530003); //VPD-5
@@ -78,9 +61,6 @@ void runPicoD0AnaMakerLocal(
   //LK  hfCuts->setCutDcaMin(0.007,StHFCuts::kKaon); //federic 3aug2016
   //hfCuts->setCutNHitsFitnHitsMax(0.52);  kvapil
 
-  // -- Channel0
-
-  // -- ADD USER CUTS HERE ----------------------------
    // kaonPion pair cuts
   float dcaDaughtersMax = 0.2;  // maximum
   float decayLengthMin  = 0.000; // minimum
@@ -128,19 +108,12 @@ void runPicoD0AnaMakerLocal(
 
     if (iret) { cout << "Bad return code!" << iret << endl; break;}
     }
-  
-  cout << "****************************************** " << endl;
-  cout << "Work done... now its time to close up shop!"<< endl;
-  cout << "****************************************** " << endl;
+
   chain->Finish();
   double duration = (double) (clock() - start) / (double) CLOCKS_PER_SEC;
   cout << "****************************************** " << endl;
-  cout << "total number of events  " << nEvents << endl;
-  cout << "****************************************** " << endl;
+  cout << "Work done, total number of events  " << nEvents << endl;
   cout << "Time needed " << duration << " s" << endl;
-  cout << "****************************************** " << endl;
-  
   delete chain;
-
 }
 

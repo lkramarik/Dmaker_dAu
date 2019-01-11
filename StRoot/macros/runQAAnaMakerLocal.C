@@ -16,17 +16,10 @@
 
 using namespace std;
 
-//class StChain;
-//class StPicoDstMaker;
-//class StPicoQAMaker;
-//class StMaker;
-
 void runQAAnaMakerLocal(
 			const Char_t *inputFile="/gpfs01/star/pwg/lkramarik/Dmaker_ndAu/Dmaker_dAu/picoLists/runs_local_test.list",
-			const Char_t *outputFile="outputBaseName",  
-            const unsigned int makerMode = 0 ,
+			const Char_t *outputFile="outputLocal",
 			const Char_t *badRunListFileName = "/gpfs01/star/pwg/lkramarik/Dmaker_ndAu/Dmaker_dAu/picoLists/picoList_bad.list",
-            const Char_t *treeName = "picoHFtree",
 			const Char_t *productionBasePath = "/gpfs01/star/pwg/lkramarik/Dmaker_ndAu/Dmaker_dAu/") {
   string SL_version = "SL18f";
   string env_SL = getenv ("STAR");
@@ -37,8 +30,6 @@ void runQAAnaMakerLocal(
   
   Int_t nEvents = 1000000;
 
-  gROOT->LoadMacro("loadSharedHFLibraries.C");
-  loadSharedHFLibraries();
   StChain *chain = new StChain();
 
   TString sInputFile(inputFile);
@@ -52,13 +43,8 @@ void runQAAnaMakerLocal(
 
   StHFCuts* hfCuts = new StHFCuts("hfBaseCuts");
   cout<<"event stuff set"<<endl;
-  // ---------------------------------------------------
-  // -- Set Base cuts for HF analysis
 
-  // -- File name of bad run list
-   hfCuts->setBadRunListFileName(badRunListFileName); 
-
-  // -- ADD USER CUTS HERE ----------------------------
+  hfCuts->setBadRunListFileName(badRunListFileName);
 
   hfCuts->setCutVzMax(6.);
   hfCuts->setCutVzVpdVzMax(6.);
@@ -67,13 +53,9 @@ void runQAAnaMakerLocal(
   hfCuts->setCutNHitsFitMin(15); //default is 20
   hfCuts->setCutRequireHFT(true);
   hfCuts->setHybridTof(false);
-  //LK hfCuts->setCutDcaMin(0.009,StHFCuts::kPion); //federic 1aug2016
-  //LK  hfCuts->setCutDcaMin(0.007,StHFCuts::kKaon); //federic 3aug2016
-  //hfCuts->setCutNHitsFitnHitsMax(0.52);  kvapil
+  //LK hfCuts->setCutDcaMin(0.009,StHFCuts::kPion);
+  //LK  hfCuts->setCutDcaMin(0.007,StHFCuts::kKaon);
 
-  // -- Channel0
-
-  // -- ADD USER CUTS HERE ----------------------------
    // kaonPion pair cuts
   float dcaDaughtersMax = 0.2;  // maximum
   float decayLengthMin  = 0.000; // minimum
