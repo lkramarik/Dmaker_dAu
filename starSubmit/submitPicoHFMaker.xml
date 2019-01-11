@@ -13,7 +13,7 @@
 
   <command>
     starver SL18f
-    root -q -b -l StRoot/macros/loadSharedHFLibraries.C StRoot/macros/&rootMacro;++\(\"$FILELIST\",\"&prodId;_$JOBINDEX\",\"picoList_bad.list\",\"&productionBasePath;\"\) &gt;&amp; ${JOBID}.log
+    root -q -b -l StRoot/macros/loadSharedHFLibraries.C StRoot/macros/&rootMacro;++\(\"$FILELIST\",\"&prodId;_$JOBINDEX\",\"picoList_bad.list\"\) &gt;&amp; ${JOBID}.log
   </command>
 
   <output fromScratch="*.root"    toURL="&basePath;/production/" />

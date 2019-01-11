@@ -8,8 +8,8 @@
 ClassImp(StPicoQAMaker)
 
 // _________________________________________________________
-StPicoQAMaker::StPicoQAMaker(char const* name, StPicoDstMaker* picoMaker, char const* outputBaseFileName, char const* inputHFListHFtree = "") :
-        StPicoHFMaker(name, picoMaker, outputBaseFileName, inputHFListHFtree),
+StPicoQAMaker::StPicoQAMaker(char const* name, StPicoDstMaker* picoMaker, char const* outputBaseFileName) :
+        StPicoHFMaker(name, picoMaker, outputBaseFileName),
         mOutFileBaseName(outputBaseFileName){
     // constructor
 }

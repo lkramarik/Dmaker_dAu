@@ -19,8 +19,7 @@ using namespace std;
 void runQAAnaMakerLocal(
 			const Char_t *inputFile="./picoLists/runs_local_test.list",
 			const Char_t *outputFile="outputLocal",
-			const Char_t *badRunListFileName = "/gpfs01/star/pwg/lkramarik/Dmaker_ndAu/Dmaker_dAu/picoLists/picoList_bad.list",
-			const Char_t *productionBasePath = "/gpfs01/star/pwg/lkramarik/Dmaker_ndAu/Dmaker_dAu/") {
+			const Char_t *badRunListFileName = "./picoLists/picoList_bad.list") {
   string SL_version = "SL18f";
   string env_SL = getenv ("STAR");
   if (env_SL.find(SL_version)==string::npos) {
@@ -33,8 +32,6 @@ void runQAAnaMakerLocal(
   StChain *chain = new StChain();
 
   TString sInputFile(inputFile);
-  TString sInputListHF("");
-  TString sProductionBasePath(productionBasePath);
 
   if (!sInputFile.Contains(".list") && !sInputFile.Contains("picoDst.root")) {
     cout << "No input list or picoDst root file provided! Exiting..." << endl;
@@ -80,7 +77,7 @@ void runQAAnaMakerLocal(
   hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kPion);
 
   StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
-  StPicoQAMaker* PicoQAAnaMaker = new StPicoQAMaker("picoQAAnaMaker", picoDstMaker, outputFile, sInputListHF);
+  StPicoQAMaker* PicoQAAnaMaker = new StPicoQAMaker("picoQAAnaMaker", picoDstMaker, outputFile);
   PicoQAAnaMaker->setHFBaseCuts(hfCuts);
 
   clock_t start = clock(); // getting starting time

@@ -8,8 +8,8 @@
 ClassImp(StPicoD0AnaMaker)
 
 // _________________________________________________________
-StPicoD0AnaMaker::StPicoD0AnaMaker(char const* name, StPicoDstMaker* picoMaker, char const* outputBaseFileName, char const* inputHFListHFtree = "") :
-        StPicoHFMaker(name, picoMaker, outputBaseFileName, inputHFListHFtree),
+StPicoD0AnaMaker::StPicoD0AnaMaker(char const* name, StPicoDstMaker* picoMaker, char const* outputBaseFileName) :
+        StPicoHFMaker(name, picoMaker, outputBaseFileName),
         mOutFileBaseName(outputBaseFileName){
     // constructor
 }

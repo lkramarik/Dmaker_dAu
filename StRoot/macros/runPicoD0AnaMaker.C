@@ -19,8 +19,7 @@ using namespace std;
 void runPicoD0AnaMaker(
     const char*  inputFile,
     const Char_t *outputFile,  
-    const Char_t *badRunListFileName,
-    const Char_t *productionBasePath) {
+    const Char_t *badRunListFileName) {
     string SL_version = "SL18f";
     string env_SL = getenv ("STAR");
     if (env_SL.find(SL_version)==string::npos) {
@@ -30,8 +29,6 @@ void runPicoD0AnaMaker(
 
     StChain *chain = new StChain();
     TString sInputFile(inputFile);
-    TString sInputListHF("");  
-    TString sProductionBasePath(productionBasePath);
 
     if (!sInputFile.Contains(".list") && !sInputFile.Contains("picoDst.root")) {
         cout << "No input list or picoDst root file provided! Exiting..." << endl;
@@ -81,7 +78,7 @@ void runPicoD0AnaMaker(
 
     StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
 
-    StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile, sInputListHF);
+    StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile);
     PicoD0AnaMaker->setHFBaseCuts(hfCuts);
 
 //    StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile, inputFile);

@@ -20,8 +20,7 @@ using namespace std;
 void runPicoPhiAnaMaker(
     const char*  inputFile,
     const Char_t *outputFile,  
-    const Char_t *badRunListFileName,
-    const Char_t *productionBasePath) {
+    const Char_t *badRunListFileName) {
     string SL_version = "SL18f";
     string env_SL = getenv ("STAR");
     if (env_SL.find(SL_version)==string::npos) {
@@ -31,8 +30,6 @@ void runPicoPhiAnaMaker(
 
     StChain *chain = new StChain();
     TString sInputFile(inputFile);
-    TString sInputListHF("");  
-    TString sProductionBasePath(productionBasePath);
 
     if (!sInputFile.Contains(".list") && !sInputFile.Contains("picoDst.root")) {
         cout << "No input list or picoDst root file provided! Exiting..." << endl;
@@ -70,7 +67,7 @@ void runPicoPhiAnaMaker(
 
     StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
 
-    StPicoKKMaker* PicoPhiAnaMaker = new StPicoKKMaker("picoPhiAnaMaker", picoDstMaker, outputFile, sInputListHF);
+    StPicoKKMaker* PicoPhiAnaMaker = new StPicoKKMaker("picoPhiAnaMaker", picoDstMaker, outputFile);
     PicoPhiAnaMaker->setHFBaseCuts(hfCuts);
 
     clock_t start = clock(); // getting starting time

@@ -8,8 +8,8 @@
 ClassImp(StPicoPiPiMaker)
 
 // _________________________________________________________
-StPicoPiPiMaker::StPicoPiPiMaker(char const* name, StPicoDstMaker* picoMaker, char const* outputBaseFileName, char const* inputHFListHFtree = "") :
-        StPicoHFMaker(name, picoMaker, outputBaseFileName, inputHFListHFtree),
+StPicoPiPiMaker::StPicoPiPiMaker(char const* name, StPicoDstMaker* picoMaker, char const* outputBaseFileName) :
+        StPicoHFMaker(name, picoMaker, outputBaseFileName),
         mOutFileBaseName(outputBaseFileName){
     // constructor
 }

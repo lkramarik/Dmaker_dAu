@@ -67,7 +67,6 @@ class StPicoHFMaker : public StMaker
     void  fillEventStats(int *aEventStat);
 
     TString         mOutputFileBaseName; // base name for output files
-    TString         mInputFileName;      // filename of input list of HF trees
     TFile*          mOutputFileTree;     // ptr to file saving the HFtree
     TFile*          mOutputFileList;     // ptr to file saving the list of histograms
     ClassDef(StPicoHFMaker, 0)

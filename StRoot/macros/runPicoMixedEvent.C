@@ -32,7 +32,6 @@ void runPicoMixedEvent(
   StChain *chain = new StChain();
 
   TString sInputFile(inputFile);
-  TString sInputListHF("");
 
   if (!sInputFile.Contains(".list") && !sInputFile.Contains("picoDst.root")) {
     cout << "No input list or picoDst root file provided! Exiting..." << endl;

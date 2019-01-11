@@ -31,4 +31,4 @@ baseFolder=${path}
 rootMacro=runPicoK0sAnaMaker.C
 inputList=runs_path_all.list
 
-star-submit-template -template ./starSubmit/submitPicoHFMaker.xml -entities listOfFiles=${inputList},basePath=${baseFolder},prodId=${productionId},productionBasePath=${baseFolder},rootMacro=${rootMacro}
+star-submit-template -template ./starSubmit/submitPicoHFMaker.xml -entities listOfFiles=${inputList},basePath=${baseFolder},prodId=${productionId},rootMacro=${rootMacro}

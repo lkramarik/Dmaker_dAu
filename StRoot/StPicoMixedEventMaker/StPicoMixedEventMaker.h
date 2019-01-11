@@ -38,8 +38,7 @@ class StPicoMixedEventMaker : public StMaker
 {
   public:
   StPicoMixedEventMaker(char const* name, StPicoDstMaker* picoMaker, StHFCuts* hfCuts,
-			char const* outputBaseFileName,  
-			char const* inputHFListHFtree);
+			char const* outputBaseFileName);
     ~StPicoMixedEventMaker();
     Int_t Init();
     Int_t Make();
@@ -70,7 +69,6 @@ private:
     StPicoEventMixer* mPicoEventMixer[10][9];
 
     TString         mOuputFileBaseName; 
-    TString         mInputFileName;     
     int		    mBufferSize;
     bool loadEventPlaneCorr(int const runId);
                                         
