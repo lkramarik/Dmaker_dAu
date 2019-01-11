@@ -331,7 +331,8 @@ bool StPicoD0AnaMaker::getHadronCorV2(int idxGap)
       hadronFill[3]++;
       hadronFill[4] += sin(2 * phiHadron);
       hadronFill[5] += cos(2 * phiHadron);
-    }		
+    }
+    hadron_phi->Fill(phiHadron);		
   }
   hadronFill[6] = mult;
   hadronFill[7] = reweight;
@@ -339,8 +340,8 @@ bool StPicoD0AnaMaker::getHadronCorV2(int idxGap)
   if(hadronFill[0]==0 || hadronFill[3]==0)
     return false; 
 
-  //hadron_phi->Fill(1);
-cout << phiHadron << endl;
+  
+
 
   //Z code: reference flow creation: average sin/cos phi of a hadron in an event.... (no error!)  
   
