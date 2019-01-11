@@ -158,8 +158,8 @@ int StPicoD0AnaMaker::createCandidates() {
                 ntp_DMeson_Signal->Fill(ntVar);
             else
             	ntp_DMeson_Background->Fill(ntVar);
-                   
-            
+                      
+            double reweight = 1;
 
             
             //this is messy!! I will rewrite it to a isD0pair function ASAP! 
@@ -370,16 +370,9 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
   int mult = event->grefMult();
   StPicoTrack const* kaon = mPicoDst->track(kp->particle1Idx());
   StPicoTrack const* pion = mPicoDst->track(kp->particle2Idx());
-  int charge = kaon->charge() * pion->charge();
-  double dMass = kp->m();
+  
   double hadronv2=1;
   float multBin[6] = {0,7,12,16,22,100};
-
-  if(kp->pt()>10) return false;
-  int ptIdx = 5;
-  if(kp->pt()<5)
-    ptIdx = static_cast<int>(kp->pt());
-
   double etaGap[3] = {0,0.15,0.05};
 
   for(int k=0;k<3;k++)
@@ -389,9 +382,9 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
     corFill[1] = sin(2* kp->phi())/sqrt(hadronv2);
     corFill[2] = cos(2* kp->phi())/sqrt(hadronv2);
 
-    int chargeIdx = charge>0 ? 0:1;
 
     D_phi->Fill(kp->phi());
+    
     for(unsigned int i=0; i<mPicoDst->numberOfTracks();i++)
     {
       StPicoTrack const* hadron = mPicoDst->track(i);
