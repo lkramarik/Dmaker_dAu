@@ -260,7 +260,7 @@ int StPicoQAMaker::MakeHF() {
 ////        StPicoPhysicalHelix helix = trk->helix(b);
 ////        dcaxy =helix.geometricSignedDistance(vtx.x(),vtx.y());
 ////        dcaz =(trk->origin().z() - vtx.z());
-////        dca = (vtx-trk->origin()).mag();
+////        dca = (vtx-trk->origin()).Mag();
 //        phi->Fill(trk->gMom(vtx,b).Phi());
 //        eta->Fill(trk->gMom(vtx,b).PseudoRapidity());
 //        if(trk->isHFTTrack()) {
@@ -506,7 +506,7 @@ int StPicoQAMaker::MakeHF() {
         StPicoPhysicalHelix helix = trk->helix(b);
         float dca_xy_QA = float(helix.geometricSignedDistance(pVtx.x(), pVtx.y()));
         float dca_z_QA = trk->origin().z() - vertex_z_QA;
-        float dca_QA = (pVtx - trk->origin()).mag();
+        float dca_QA = (pVtx - trk->origin()).Mag();
         if (abs(dca_QA) > 1.5) continue;
 
         float phi_QA = momentum.Phi();
@@ -712,7 +712,7 @@ int StPicoQAMaker::MakeHF() {
 //            h_QA_BEMC_TOWId->Fill(Emc->btowId(), RunIndex);
 //            h_QA_BSMD_nEta->Fill(Emc->bemcSmdNEta(), RunIndex);
 //            h_QA_BSMD_nPhi->Fill(Emc->bemcSmdNPhi(), RunIndex);
-//            h_pOverE->Fill(momentum.mag() / Emc->bemcE0(), RunIndex);
+//            h_pOverE->Fill(momentum.Mag() / Emc->bemcE0(), RunIndex);
 //        }
 
         if (fabs(trk->nSigmaKaon())<3) {
