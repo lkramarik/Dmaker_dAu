@@ -21,7 +21,7 @@ StPicoQAMaker::~StPicoQAMaker() {
 
 // _________________________________________________________
 int StPicoQAMaker::InitHF() {
-    ifstream RunList("./ListOfRuns/Runnumber.list");
+    ifstream RunList("./picoLists/runs_numbers.list");
 
     if (RunList.is_open()) {
         int Run;
@@ -234,8 +234,6 @@ void StPicoQAMaker::ClearHF(Option_t *opt="") {
 // _________________________________________________________
 int StPicoQAMaker::FinishHF() {
     ntp_event -> Write(ntp_event->GetName(), TObject::kOverwrite);
-//    ntp_track -> Write(ntp_track->GetName(), TObject::kOverwrite);
-//    ntp_hft_track -> Write(ntp_hft_track->GetName(), TObject::kOverwrite);
     return kStOK;
 }
 // _________________________________________________________
@@ -247,7 +245,7 @@ int StPicoQAMaker::MakeHF() {
 //    TH1D *phi = static_cast<TH1D*>(mOutList->FindObject("h_phi_track"));
 //    TH1D *eta = static_cast<TH1D*>(mOutList->FindObject("h_eta_track"));
 //    StPicoEvent *event = (StPicoEvent *)mPicoDst->event();
-//    StThreeVectorF vtx = event->primaryVertex();
+//    TVector3 vtx = event->primaryVertex();
 //    float b = event->bField();
 //    float bbc_rate = event->BBCx()/1000.;
 //    float zdc_rate = event->ZDCx()/1000.;
@@ -259,7 +257,7 @@ int StPicoQAMaker::MakeHF() {
 //        if(!mHFCuts->isGoodTrack(trk)) continue;  //TOF match, HFT, NHitFit, dcaMax - hft needs to be set to fault to make all needed comp
 //        float pt = trk->gPt();
 //        if (pt<0.2) continue;
-////        StPhysicalHelixD helix = trk->helix(b);
+////        StPicoPhysicalHelix helix = trk->helix(b);
 ////        dcaxy =helix.geometricSignedDistance(vtx.x(),vtx.y());
 ////        dcaz =(trk->dcaPoint().z() - vtx.z());
 ////        dca = (vtx-trk->dcaPoint()).mag();
@@ -452,7 +450,7 @@ int StPicoQAMaker::MakeHF() {
     TH2F *h_QA_BSMD_nPhi = static_cast<TH2F *>(mOutList->FindObject("h_QA_BSMD_nPhi"));
     TH2F *h_pOverE = static_cast<TH2F *>(mOutList->FindObject("h_pOverE"));
 
-    StThreeVectorF pVtx = mPicoDst->event()->primaryVertex();
+    TVector3 pVtx = mPicoDst->event()->primaryVertex();
     h_mh1gRefmultCor->Fill(mPicoDst->event()->refMult(), RunIndex);
     h_QA_nEvents->Fill(RunIndex); //number of 0 filled to this histogram = number of events
 
@@ -494,18 +492,18 @@ int StPicoQAMaker::MakeHF() {
         h_QA_nSigmaPion->Fill(trk->nSigmaPion(), RunIndex);
         h_QA_nHitsDedx->Fill(trk->nHitsDedx(),RunIndex);
         if (!isnan(Beta) && Beta > 0) {
-            if (abs(trk->nSigmaKaon()<3)) h_QA_OneOverBetaDiffKaon->Fill(getOneOverBeta(trk,Beta,StPicoCutsBase::kKaon), RunIndex);
-            if (abs(trk->nSigmaPion()<3)) h_QA_OneOverBetaDiffPion->Fill(getOneOverBeta(trk,Beta,StPicoCutsBase::kPion), RunIndex);
+            if (abs(trk->nSigmaKaon()<3)) h_QA_OneOverBetaDiffKaon->Fill(mHFCuts->getOneOverBeta(trk,Beta,StPicoCutsBase::kKaon), RunIndex);
+            if (abs(trk->nSigmaPion()<3)) h_QA_OneOverBetaDiffPion->Fill(mHFCuts->getOneOverBeta(trk,Beta,StPicoCutsBase::kPion), RunIndex);
             h_QA_Beta->Fill(Beta, RunIndex);
             h_QA_nHitsFitTOF->Fill(trk->nHitsFit(), RunIndex);
         }
 
         if (trk->nHitsFit() < 15) continue;
 
-        StThreeVectorF momentum = trk->gMom(pVtx, mPicoDst->event()->bField());
+        TVector3 momentum = trk->gMom();
         float eta_QA = momentum.pseudoRapidity();
         if (eta_QA>1) continue;
-        StPhysicalHelixD helix = trk->helix(mPicoDst->event()->bField());
+        StPicoPhysicalHelix helix = trk->helix();
         float dca_xy_QA = float(helix.geometricSignedDistance(pVtx.x(), pVtx.y()));
         float dca_z_QA = trk->dcaPoint().z() - vertex_z_QA;
         float dca_QA = (pVtx - trk->dcaPoint()).mag();

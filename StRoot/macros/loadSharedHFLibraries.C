@@ -20,6 +20,7 @@ void loadSharedHFLibraries() {
   gSystem->Load("StPicoD0AnaMaker");
   gSystem->Load("StPicoPiPiMaker");
   gSystem->Load("StPicoKKMaker");
+  gSystem->Load("StPicoQAMaker");
   gSystem->Load("StPicoMixedEventMaker");
 //  gSystem->Load("StPicoD0AnaHists");
 //  gSystem->Load("StRefMultCorr");
