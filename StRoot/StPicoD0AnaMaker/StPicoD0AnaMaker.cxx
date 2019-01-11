@@ -399,7 +399,8 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
       corFill[3]++;
       corFill[4] += sin(2 * phiHadron)/sqrt(hadronv2);
       corFill[5] += cos(2 * phiHadron)/sqrt(hadronv2);
-      
+
+      cout << "TU SOM " << endl;      
   
       if(k==1)
       {
