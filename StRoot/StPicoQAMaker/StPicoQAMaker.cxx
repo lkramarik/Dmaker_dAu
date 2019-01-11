@@ -21,7 +21,7 @@ StPicoQAMaker::~StPicoQAMaker() {
 
 // _________________________________________________________
 int StPicoQAMaker::InitHF() {
-    ifstream RunList("./picoLists/runs_numbers.list");
+    ifstream RunList("./StRoot/StPicoQAMaker/runs_numbers.list");
 
     if (RunList.is_open()) {
         int Run;
@@ -224,7 +224,6 @@ void StPicoQAMaker::ClearHF(Option_t *opt="") {
 
 // _________________________________________________________
 int StPicoQAMaker::FinishHF() {
-    cout<<"FinishHF"<<endl;
     ntp_event -> Write(ntp_event->GetName(), TObject::kOverwrite);
     return kStOK;
 }
@@ -496,7 +495,6 @@ int StPicoQAMaker::MakeHF() {
         if (abs(dca_QA) > 1.5) continue;
 
         float phi_QA = momentum.Phi();
-        cout<<"ok1"<<endl;
         if (!isnan(Beta) && Beta > 0) {
             nTrk+=1;
             h_QA_ZDC_rate_pileUp_TOF->Fill(mPicoDst->event()->ZDCx() / 1000., RunIndex);
@@ -619,7 +617,6 @@ int StPicoQAMaker::MakeHF() {
             //Fill all (IST or SSD) histograms here
             h_QA_nTracks_HFT_IST_or_SSD->Fill(pT_QA, RunIndex);
         }
-        cout<<"ok2"<<endl;
 
         h_QA_nHFTHits->Fill(nHFTHits,RunIndex);
 
@@ -711,7 +708,6 @@ int StPicoQAMaker::MakeHF() {
         }
 
     } // .. end tracks loop
-    cout<<"ok3"<<endl;
 
 //    ntp_event->Fill(nTrk,nTrk0406,nTrk1012,nTrk3040,nTrkHft,nTrkHft0406,nTrkHft1012,nTrkHft3040,ZDC,BBC,mPicoDst->event()->runId(),RunIndex);
 
@@ -725,8 +721,6 @@ int StPicoQAMaker::MakeHF() {
     h_QA_BBC_rate_pions_HFT_TOF->Fill(mPicoDst->event()->BBCx()/1000., nPionsHFTTOF);
     h_QA_BBC_rate_kaons_HFT_hybridTOF->Fill(mPicoDst->event()->BBCx()/1000., nKaonsHFThybridTOF);
     h_QA_BBC_rate_pions_HFT_hybridTOF->Fill(mPicoDst->event()->BBCx()/1000., nPionsHFThybridTOF);
-
-    cout<<"ok4"<<endl;
 
     return kStOK;
 }
