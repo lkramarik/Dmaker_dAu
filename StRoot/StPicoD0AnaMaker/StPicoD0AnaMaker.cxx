@@ -154,20 +154,11 @@ int StPicoD0AnaMaker::createCandidates() {
             ntVar[ii++] = pair->pt();
             ntVar[ii++] = pair->m();
 
-            //double reweight = mGRefMultCorrUtil->getWeight(); THIS DOESNT WORK
-            double reweight = 1;
-            float d0Pt = pair->pt();
-            double dMass = pair->m();
-            if ((flag == 0) || (flag == 1)) {
+            if ((flag == 0) || (flag == 1))
                 ntp_DMeson_Signal->Fill(ntVar);
-                if(dMass>1.81&&dMass<1.91)
-            		candPt->Fill(d0Pt,d0Pt,reweight);
-        		massPt->Fill(dMass,d0Pt,reweight);
-            } else {
-                ntp_DMeson_Background->Fill(ntVar);
-                massPtLike->Fill(dMass,d0Pt,reweight);
-            }
-            
+            else
+            	ntp_DMeson_Background->Fill(ntVar);
+                   
             
 
             
