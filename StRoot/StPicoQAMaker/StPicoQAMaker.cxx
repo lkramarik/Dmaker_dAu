@@ -436,7 +436,7 @@ int StPicoQAMaker::MakeHF() {
     TH2F *h_QA_vertex_z_TOF = static_cast<TH2F *>(mOutList->FindObject("h_QA_vertex_z_TOF"));
 
     TVector3 pVtx = mPicoDst->event()->primaryVertex();
-    float b = mPicoDst->event->bField();
+    float b = mPicoDst->event()->bField();
 
     h_mh1gRefmultCor->Fill(mPicoDst->event()->refMult(), RunIndex);
     h_QA_nEvents->Fill(RunIndex); //number of 0 filled to this histogram = number of events
