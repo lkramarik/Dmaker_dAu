@@ -390,7 +390,8 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
     {
       StPicoTrack const* hadron = mPicoDst->track(i);
       if(hadron->pMom().perp()<0.2) continue;
-      if(!isGoodHadron(hadron)) continue;
+      if(!mHFCuts->isGoodTrack(hadron)) continue;
+      if(!mHFCuts->isGoodProton(hadron) || !mHFCuts->isGoodKaon(hadron) || !mHFCuts->isGoodPion(hadron)) continue;
       if(i==kp->particle1Idx() || i==kp->particle2Idx()) continue;
       float etaHadron = hadron->gMom().pseudoRapidity();
       float phiHadron = hadron->gMom().phi(); 
