@@ -1,4 +1,3 @@
-#ifndef __CINT__
 #include "TROOT.h"
 #include "TSystem.h"
 #include "TChain.h"
@@ -17,9 +16,7 @@
 
 using namespace std;
 
-#else
 class StChain;
-#endif
 class StPicoDstMaker;
 class StPicoQAMaker;
 class StMaker;
@@ -41,10 +38,8 @@ void runQAAnaMakerLocal(
   
   Int_t nEvents = 1000000;
 
-#ifdef __CINT__
   gROOT->LoadMacro("loadSharedHFLibraries.C");
   loadSharedHFLibraries();
-#endif
 
   chain = new StChain();
 
