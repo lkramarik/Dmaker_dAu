@@ -376,8 +376,7 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
   float multBin[6] = {0,7,12,16,22,100};
   double etaGap[3] = {0,0.15,0.05};
 
-  for(int k=0;k<3;k++)
-  {
+  int k=0
     double corFill[7] = {0};
     corFill[0] = 1 ;
     corFill[1] = sin(2* kp->phi())/sqrt(hadronv2);
@@ -402,8 +401,7 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
 
       cout << "TU SOM " << endl;      
   
-      if(k==1)
-      {
+      
       	for(int m = 0; m < 5; m++)
       	{
       		if(mult >= multBin[m] && mult < multBin[m+1])
@@ -416,10 +414,8 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
       	corrD2[0]->Fill(kp->pt(),corFill[2],weight);
       	corrD2[1]->Fill(kp->pt(),corFill[1],weight);
       	dirFlow2->Fill(kp->pt(),corFill[2]*corFill[5]/corFill[3],weight);
-      }
     }
     
-  }
   return true;
 }
 
