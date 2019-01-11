@@ -248,6 +248,8 @@ int StPicoD0AnaMaker::createCandidates() {
             //for(int ii = 0; ii<3; ii++)
             //	getHadronCorV2(ii);
 
+
+            if(pair->m() < 1.81 || pair->m() > 1.91 || pair->pt() < 1 || pair->pt() > 5) continue;
             //this is messy!! I will rewrite it to a isD0pair function ASAP! 
             if(pair->pt() > 1 && pair->pt() < 2)
             {
@@ -337,10 +339,10 @@ void StPicoD0AnaMaker::DeclareHistograms() {
     // for v2 calcualtion
   TString flatten[5];
   flatten[0] = "v2";
-  flatten[1] = "cosD";
-  flatten[2] = "sinD";
-  flatten[3] = "cosHadron";
-  flatten[4] = "sinHadron";
+  flatten[1] = "cos_h_BS";
+  flatten[2] = "sin_h_BS";
+  flatten[3] = "cos_h_FS";
+  flatten[4] = "sin_h_FS";
   TString sb[8] = {"s1like","s3like","hSBlike","lSBlike","s1unlike","s3unlike","hSBunlike","lSBunlike"};
 
   TString names[4] = {"cos_B", "cos_F", "sin_B", "sin_F"}; //backward and forward samples
@@ -415,6 +417,8 @@ void StPicoD0AnaMaker::DeclareHistograms() {
       hPhiHadron[i][k]->Sumw2();
     }
   }
+  hadron_phi = new TH1D("hadron_phi", "Hadron phi", 2000, -5, 5);
+  D_phi = new TH1D("hadron_phi", "Hadron phi", 2000, -5, 5);
   float ptbin1[12] = {0.225,0.375,0.525,0.675,0.825,0.975,1.12,1.27,1.42,1.58,1.73,1.88};
   float ptbin2[11];
   for(int i=0;i<11;i++)
@@ -516,6 +520,9 @@ void StPicoD0AnaMaker::WriteHistograms() {
   dirFlow2->Write();
   refFlow2->Write();
 
+  hadron_phi->Write();
+  D_phi->Write();
+
       //printf("Histograms written! \n");
 }
 
@@ -559,12 +566,9 @@ bool StPicoD0AnaMaker::getHadronCorV2(int idxGap)
   hadronV2[2][idxGap]->Fill(mult,hadronFill[1]*reweight);
   hadronV2[3][idxGap]->Fill(mult,hadronFill[5]*reweight);
   hadronV2[4][idxGap]->Fill(mult,hadronFill[4]*reweight);
-  hadronV2_sum[0][idxGap]->Fill(mult,hadronFill[0]*hadronFill[3]*reweight);
-  hadronV2_sum[1][idxGap]->Fill(mult,hadronFill[0]*reweight);
-  hadronV2_sum[2][idxGap]->Fill(mult,hadronFill[0]*reweight);
-  hadronV2_sum[3][idxGap]->Fill(mult,hadronFill[3]*reweight);
-  hadronV2_sum[4][idxGap]->Fill(mult,hadronFill[3]*reweight);
 
+
+  //Z code: reference flow creation: average sin/cos of a hadron in an event.... (no error!)  
   if(idxGap==1)
   {
  	qVec[0]->Fill(mult,hadronFill[2]/hadronFill[0],reweight);
@@ -583,18 +587,6 @@ bool StPicoD0AnaMaker::getHadronCorV2(int idxGap)
   	qVec2[3]->Fill(mult,hadronFill[4]/hadronFill[3],reweight);
   	refFlow2->Fill(mult,((hadronFill[2]*hadronFill[5])/(hadronFill[0]*hadronFill[3])),reweight);
   }
-  //    StPicoTrack const* hadron = picoDst->track(i);
-  //  hadronV2_excl[0][centrality]->Fill(hadron->pMom().perp(),temp*reweight);
-  //  hadronV2_excl[1][centrality]->Fill(hadron->pMom().perp(),hadronFill[2]*reweight);
-  //  hadronV2_excl[2][centrality]->Fill(hadron->pMom().perp(),hadronFill[1]*reweight);
-  //  hadronV2_excl[3][centrality]->Fill(hadron->pMom().perp(),hadronFill[5]*reweight);
-  //  hadronV2_excl[4][centrality]->Fill(hadron->pMom().perp(),hadronFill[4]*reweight);
-  //  hadronV2_excl_sum[0][centrality]->Fill(hadron->pMom().perp(),hadronFill[0]*hadronFill[3]*reweight);
-  //  hadronV2_excl_sum[1][centrality]->Fill(hadron->pMom().perp(),hadronFill[0]*reweight);
-  //  hadronV2_excl_sum[2][centrality]->Fill(hadron->pMom().perp(),hadronFill[0]*reweight);
-  //  hadronV2_excl_sum[3][centrality]->Fill(hadron->pMom().perp(),hadronFill[3]*reweight);
-  //  hadronV2_excl_sum[4][centrality]->Fill(hadron->pMom().perp(),hadronFill[3]*reweight);
-      //printf("GetCor done! \n");
   return true;
 }
 
@@ -613,11 +605,8 @@ bool StPicoD0AnaMaker::isGoodHadron(StPicoTrack const * const trk) const
 
 bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
 {
-  // int centrality  = mGRefMultCorrUtil->getCentralityBin9();
   StPicoEvent *event = (StPicoEvent *)mPicoDst->event();
   int mult = event->grefMult();
-  // TClonesArray const * aKaonPion = mPicoD0Event->kaonPionArray();
-  // StKaonPion const* kp = (StKaonPion*)aKaonPion->At(idxCand);
   StPicoTrack const* kaon = mPicoDst->track(kp->particle1Idx());
   StPicoTrack const* pion = mPicoDst->track(kp->particle2Idx());
   int charge = kaon->charge() * pion->charge();
@@ -667,6 +656,7 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
         hPhiD[j][k]->Fill(kp->phi(),kp->pt(),weight);
       }
     }
+    D_phi->Fill(kp->phi());
     for(unsigned int i=0; i<mPicoDst->numberOfTracks();i++)
     {
       StPicoTrack const* hadron = mPicoDst->track(i);
@@ -679,6 +669,7 @@ bool StPicoD0AnaMaker::getCorV2(StHFPair *kp,double weight)
       corFill[3]++;
       corFill[4] += sin(2 * phiHadron)/sqrt(hadronv2);
       corFill[5] += cos(2 * phiHadron)/sqrt(hadronv2);
+      hadron_phi->Fill(phiHadron);
       if(k==0)
       {
         V2Mass[chargeIdx][ptIdx][3]->Fill(kp->m(),sin(2*phiHadron)/sqrt(hadronv2),weight);

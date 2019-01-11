@@ -69,6 +69,8 @@ private:
     TProfile *profV2[8][5][3];//i.S or B; j.flatten; k. differetn etaGap
     TH1D *hadronV2[5][3];
     TH1D *hadronV2_sum[5][3];
+    TH1D *hadron_phi;
+    TH1D *D_phi;
     TH2D *fitPhi[6];
     TH2D *massPt;
     TH2D *massPtLike;
