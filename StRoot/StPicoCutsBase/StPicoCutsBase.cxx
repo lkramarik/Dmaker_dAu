@@ -346,13 +346,11 @@ StPicoBTofPidTraits* StPicoCutsBase::hasTofPid(StPicoTrack const * const trk) co
 
 // _________________________________________________________
 float StPicoCutsBase::getTofBetaBase(StPicoTrack const * const trk) const {
-//  same as liang
   int index2tof = trk->bTofPidTraitsIndex();
   float beta = std::numeric_limits<float>::quiet_NaN();
 
-  if(index2tof >= 0) { //toto je trocha ine ako predtym, inak je to rovnake... 25.01.
+  if(index2tof >= 0) {
     StPicoBTofPidTraits *tofPid = mPicoDst->btofPidTraits(index2tof);
-
     if(tofPid)  beta = tofPid->btofBeta();
   }
 

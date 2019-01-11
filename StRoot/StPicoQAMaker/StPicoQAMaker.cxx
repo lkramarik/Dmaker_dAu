@@ -89,8 +89,6 @@ int StPicoQAMaker::InitHF() {
     mOutList->Add(new TH2D("h_QA_BBC_rate_pions_HFT_hybridTOF", "BBC_rate_kaons_Vs_N_HFT_hybridTOF_kaons_", 400, 0, 2000, 600, 0, 600)); //check binning and range
     mOutList->Add(new TH2D("h_QA_BBC_rate_pions_HFT_hybridTOF", "BBC_rate_pions_Vs_N_HFT_hybridTOF_pions", 400, 0, 2000, 600, 0, 600)); //check binning and range
 
-
-
 //    mOutList->Add(new TH2D("h_HFT_ratio_ZDC", "h_HFT_ratio_ZDC", 250, 0, 250, 2, 0, 2));
 //    mOutList->Add(new TH2D("h_HFT_ratio_BBC", "h_HFT_ratio_BBC", 2000, 0, 2000, 2, 0, 2));
 //
@@ -211,13 +209,6 @@ int StPicoQAMaker::InitHF() {
     mOutList->Add(new TH2F("h_QA_BSMD_nPhi", "BSMD_Phi_wires_vs_RunIndex", 11, 0, 10, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
     mOutList->Add(new TH2F("h_pOverE", "E/p_vs_RunIndex", 200, 0, 10, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
 
-//___dEdx_dNdx_nSigma_QA______________________________________________________________________________________________________
-
-//	set RefMultCorr
-//    mRefmultCorrUtil->setVzForWeight(6, -6.0, 6.0);
-//    mRefmultCorrUtil->readScaleForWeight(
-//            "StRoot/StRefMultCorr/macros/weight_grefmult_VpdnoVtx_Vpd5_Run16.txt"); //for new StRefMultCorr, Run16, SL16j
-
     mRunNumber = 0;
 
     mOutFileBaseName = mOutFileBaseName.ReplaceAll(".root", "");
@@ -233,9 +224,11 @@ void StPicoQAMaker::ClearHF(Option_t *opt="") {
 
 // _________________________________________________________
 int StPicoQAMaker::FinishHF() {
+    cout<<"FinishHF"<<endl;
     ntp_event -> Write(ntp_event->GetName(), TObject::kOverwrite);
     return kStOK;
 }
+
 // _________________________________________________________
 int StPicoQAMaker::MakeHF() {
 //    float dcaxy, dcaz, dca;
@@ -244,9 +237,7 @@ int StPicoQAMaker::MakeHF() {
 //    TH1D *eta_hft = static_cast<TH1D*>(mOutList->FindObject("h_eta_hft_track"));
 //    TH1D *phi = static_cast<TH1D*>(mOutList->FindObject("h_phi_track"));
 //    TH1D *eta = static_cast<TH1D*>(mOutList->FindObject("h_eta_track"));
-    StPicoEvent *event = (StPicoEvent *)mPicoDst->event();
-    TVector3 vtx = event->primaryVertex();
-    float b = event->bField();
+
 //    float bbc_rate = event->BBCx()/1000.;
 //    float zdc_rate = event->ZDCx()/1000.;
 //    UInt_t nTracks = mPicoDst->numberOfTracks();
@@ -444,13 +435,9 @@ int StPicoQAMaker::MakeHF() {
     TH2F *h_QA_vertex_y_TOF = static_cast<TH2F *>(mOutList->FindObject("h_QA_vertex_y_TOF"));
     TH2F *h_QA_vertex_z_TOF = static_cast<TH2F *>(mOutList->FindObject("h_QA_vertex_z_TOF"));
 
-//___BEMC QA histograms_______________________________________________________________________________________________________
-    TH2F *h_QA_BEMC_TOWId = static_cast<TH2F *>(mOutList->FindObject("h_QA_BEMC_TOWId"));
-    TH2F *h_QA_BSMD_nEta = static_cast<TH2F *>(mOutList->FindObject("h_QA_BSMD_nEta"));
-    TH2F *h_QA_BSMD_nPhi = static_cast<TH2F *>(mOutList->FindObject("h_QA_BSMD_nPhi"));
-    TH2F *h_pOverE = static_cast<TH2F *>(mOutList->FindObject("h_pOverE"));
-
     TVector3 pVtx = mPicoDst->event()->primaryVertex();
+    float b = mPicoDst->event->bField();
+
     h_mh1gRefmultCor->Fill(mPicoDst->event()->refMult(), RunIndex);
     h_QA_nEvents->Fill(RunIndex); //number of 0 filled to this histogram = number of events
 
@@ -479,8 +466,7 @@ int StPicoQAMaker::MakeHF() {
     Int_t nKaonsHFTTOF=0;
     Int_t nKaonsHFThybridTOF=0;
 
-    UInt_t nTracks = mPicoDst->numberOfTracks();
-    for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
+    for (unsigned short iTrack = 0; iTrack < mPicoDst->numberOfTracks(); ++iTrack) {
         StPicoTrack const *trk = mPicoDst->track(iTrack);
         if (!trk) continue;
         float pT_QA = trk->gPt();
@@ -510,7 +496,7 @@ int StPicoQAMaker::MakeHF() {
         if (abs(dca_QA) > 1.5) continue;
 
         float phi_QA = momentum.Phi();
-
+        cout<<"ok1"<<endl;
         if (!isnan(Beta) && Beta > 0) {
             nTrk+=1;
             h_QA_ZDC_rate_pileUp_TOF->Fill(mPicoDst->event()->ZDCx() / 1000., RunIndex);
@@ -633,6 +619,7 @@ int StPicoQAMaker::MakeHF() {
             //Fill all (IST or SSD) histograms here
             h_QA_nTracks_HFT_IST_or_SSD->Fill(pT_QA, RunIndex);
         }
+        cout<<"ok2"<<endl;
 
         h_QA_nHFTHits->Fill(nHFTHits,RunIndex);
 
@@ -702,18 +689,6 @@ int StPicoQAMaker::MakeHF() {
             h_QA_nHFTHitsTOF->Fill(nHFTHits,RunIndex);
 
         }
-        // TO BE REMOVED
-        //-------------------------------------FILL BEMC QA INFORMATION------------------------
-//        if (trk->bemcPidTraitsIndex() > -1) //check good BEMC tracks - no BEMC info i current SL16j Run16 PicoDst production
-//        {
-//            StPicoBEmcPidTraits *Emc = mPicoDst->bemcPidTraits(trk->bemcPidTraitsIndex()); //check that this works
-//            h_QA_nTracks_BEMC->Fill(pT_QA, RunIndex);
-//
-//            h_QA_BEMC_TOWId->Fill(Emc->btowId(), RunIndex);
-//            h_QA_BSMD_nEta->Fill(Emc->bemcSmdNEta(), RunIndex);
-//            h_QA_BSMD_nPhi->Fill(Emc->bemcSmdNPhi(), RunIndex);
-//            h_pOverE->Fill(momentum.Mag() / Emc->bemcE0(), RunIndex);
-//        }
 
         if (fabs(trk->nSigmaKaon())<3) {
             nKaons = nKaons + 1;
@@ -723,7 +698,6 @@ int StPicoQAMaker::MakeHF() {
             if (trk->isHFTTrack()) nKaonsHFT=nKaonsHFT+1;
             if (trk->isHFTTrack() && !isnan(Beta) && Beta > 0) nKaonsHFTTOF=nKaonsHFTTOF+1;
             if (trk->isHFTTrack() && mHFCuts->isHybridTOFKaon(trk)) nKaonsHFThybridTOF=nKaonsHFThybridTOF+1;
-
         }
 
         if (fabs(trk->nSigmaPion())<3) {
@@ -737,20 +711,22 @@ int StPicoQAMaker::MakeHF() {
         }
 
     } // .. end tracks loop
+    cout<<"ok3"<<endl;
 
     ntp_event->Fill(nTrk,nTrk0406,nTrk1012,nTrk3040,nTrkHft,nTrkHft0406,nTrkHft1012,nTrkHft3040,ZDC,BBC,mPicoDst->event()->runId(),RunIndex);
 
-    h_QA_BBC_rate_kaons -> Fill(mPicoDst->event()->BBCx()/1000., nKaons);
-    h_QA_BBC_rate_pions -> Fill(mPicoDst->event()->BBCx()/1000., nPions);
-    h_QA_BBC_rate_pions_matching -> Fill(mPicoDst->event()->BBCx()/1000., nPionsTOFMatching);
-    h_QA_BBC_rate_kaons_matching -> Fill(mPicoDst->event()->BBCx()/1000., nKaonsTOFMatching);
-    h_QA_BBC_rate_kaons_HFT -> Fill(mPicoDst->event()->BBCx()/1000., nKaonsHFT);
-    h_QA_BBC_rate_pions_HFT -> Fill(mPicoDst->event()->BBCx()/1000., nPionsHFT);
-    h_QA_BBC_rate_kaons_HFT_TOF -> Fill(mPicoDst->event()->BBCx()/1000., nKaonsHFTTOF);
-    h_QA_BBC_rate_pions_HFT_TOF -> Fill(mPicoDst->event()->BBCx()/1000., nPionsHFTTOF);
-    h_QA_BBC_rate_kaons_HFT_hybridTOF -> Fill(mPicoDst->event()->BBCx()/1000., nKaonsHFThybridTOF);
-    h_QA_BBC_rate_pions_HFT_hybridTOF -> Fill(mPicoDst->event()->BBCx()/1000., nPionsHFThybridTOF);
+    h_QA_BBC_rate_kaons->Fill(mPicoDst->event()->BBCx()/1000., nKaons);
+    h_QA_BBC_rate_pions->Fill(mPicoDst->event()->BBCx()/1000., nPions);
+    h_QA_BBC_rate_pions_matching->Fill(mPicoDst->event()->BBCx()/1000., nPionsTOFMatching);
+    h_QA_BBC_rate_kaons_matching->Fill(mPicoDst->event()->BBCx()/1000., nKaonsTOFMatching);
+    h_QA_BBC_rate_kaons_HFT->Fill(mPicoDst->event()->BBCx()/1000., nKaonsHFT);
+    h_QA_BBC_rate_pions_HFT->Fill(mPicoDst->event()->BBCx()/1000., nPionsHFT);
+    h_QA_BBC_rate_kaons_HFT_TOF->Fill(mPicoDst->event()->BBCx()/1000., nKaonsHFTTOF);
+    h_QA_BBC_rate_pions_HFT_TOF->Fill(mPicoDst->event()->BBCx()/1000., nPionsHFTTOF);
+    h_QA_BBC_rate_kaons_HFT_hybridTOF->Fill(mPicoDst->event()->BBCx()/1000., nKaonsHFThybridTOF);
+    h_QA_BBC_rate_pions_HFT_hybridTOF->Fill(mPicoDst->event()->BBCx()/1000., nPionsHFThybridTOF);
 
+    cout<<"ok4"<<endl;
 
     return kStOK;
 }

@@ -97,12 +97,12 @@ void runQAAnaMakerLocal(
   hfCuts->setCutPtRange(0.15,50.0,StHFCuts::kPion); //0.2 , 50.0
   hfCuts->setCutPtRange(0.15,50.0,StHFCuts::kKaon); //0.2, 50.0
   //TPC setters
-  hfCuts->setCutTPCNSigmaPion(3.0); //3
-  hfCuts->setCutTPCNSigmaKaon(2.0); //3
+  hfCuts->setCutTPCNSigmaPion(10); //3
+  hfCuts->setCutTPCNSigmaKaon(10); //3
   //TOF setters, need to set pt range as well
-  hfCuts->setCutTOFDeltaOneOverBeta(0.05, StHFCuts::kKaon); // v podstate 5 sigma; nastavene = f * (sigmaTOF), sigma TOF je 0.013 
+  hfCuts->setCutTOFDeltaOneOverBeta(0.1, StHFCuts::kKaon); // v podstate 5 sigma; nastavene = f * (sigmaTOF), sigma TOF je 0.013
   hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kKaon);
-  hfCuts->setCutTOFDeltaOneOverBeta(0.06, StHFCuts::kPion); // v podstate 6 sigma
+  hfCuts->setCutTOFDeltaOneOverBeta(0.1, StHFCuts::kPion); // v podstate 6 sigma
   hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kPion);
 
   StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
@@ -122,8 +122,7 @@ void runQAAnaMakerLocal(
     if(i%10==0)       cout << "Working on eventNumber " << i << endl;
 
     chain->Clear();
-
-	 int iret = chain->Make(i);
+    int iret = chain->Make(i);
 
     if (iret) { cout << "Bad return code!" << iret << endl; break;}
     }
