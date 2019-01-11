@@ -244,9 +244,9 @@ int StPicoQAMaker::MakeHF() {
 //    TH1D *eta_hft = static_cast<TH1D*>(mOutList->FindObject("h_eta_hft_track"));
 //    TH1D *phi = static_cast<TH1D*>(mOutList->FindObject("h_phi_track"));
 //    TH1D *eta = static_cast<TH1D*>(mOutList->FindObject("h_eta_track"));
-//    StPicoEvent *event = (StPicoEvent *)mPicoDst->event();
-//    TVector3 vtx = event->primaryVertex();
-//    float b = event->bField();
+    StPicoEvent *event = (StPicoEvent *)mPicoDst->event();
+    TVector3 vtx = event->primaryVertex();
+    float b = event->bField();
 //    float bbc_rate = event->BBCx()/1000.;
 //    float zdc_rate = event->ZDCx()/1000.;
 //    UInt_t nTracks = mPicoDst->numberOfTracks();
@@ -259,14 +259,14 @@ int StPicoQAMaker::MakeHF() {
 //        if (pt<0.2) continue;
 ////        StPicoPhysicalHelix helix = trk->helix(b);
 ////        dcaxy =helix.geometricSignedDistance(vtx.x(),vtx.y());
-////        dcaz =(trk->dcaPoint().z() - vtx.z());
-////        dca = (vtx-trk->dcaPoint()).mag();
-//        phi->Fill(trk->gMom(vtx,b).phi());
-//        eta->Fill(trk->gMom(vtx,b).pseudoRapidity());
+////        dcaz =(trk->origin().z() - vtx.z());
+////        dca = (vtx-trk->origin()).mag();
+//        phi->Fill(trk->gMom(vtx,b).Phi());
+//        eta->Fill(trk->gMom(vtx,b).PseudoRapidity());
 //        if(trk->isHFTTrack()) {
 //            isHft = 1;
-//            phi_hft->Fill(trk->gMom(vtx,b).phi());
-//            eta_hft->Fill(trk->gMom(vtx,b).pseudoRapidity());
+//            phi_hft->Fill(trk->gMom(vtx,b).Phi());
+//            eta_hft->Fill(trk->gMom(vtx,b).PseudoRapidity());
 ////            ntp_hft_track->Fill(pt,zdc_rate,bbc_rate,event->runId(),dca,dcaxy,dcaz);
 //        }
 ////        ntp_track->Fill(isHft,pt,dca,zdc_rate,bbc_rate,event->runId());
@@ -501,15 +501,15 @@ int StPicoQAMaker::MakeHF() {
         if (trk->nHitsFit() < 15) continue;
 
         TVector3 momentum = trk->gMom();
-        float eta_QA = momentum.pseudoRapidity();
+        float eta_QA = momentum.PseudoRapidity();
         if (eta_QA>1) continue;
-        StPicoPhysicalHelix helix = trk->helix();
+        StPicoPhysicalHelix helix = trk->helix(b);
         float dca_xy_QA = float(helix.geometricSignedDistance(pVtx.x(), pVtx.y()));
-        float dca_z_QA = trk->dcaPoint().z() - vertex_z_QA;
-        float dca_QA = (pVtx - trk->dcaPoint()).mag();
+        float dca_z_QA = trk->origin().z() - vertex_z_QA;
+        float dca_QA = (pVtx - trk->origin()).mag();
         if (abs(dca_QA) > 1.5) continue;
 
-        float phi_QA = momentum.phi();
+        float phi_QA = momentum.Phi();
 
         if (!isnan(Beta) && Beta > 0) {
             nTrk+=1;
@@ -702,19 +702,18 @@ int StPicoQAMaker::MakeHF() {
             h_QA_nHFTHitsTOF->Fill(nHFTHits,RunIndex);
 
         }
-
+        // TO BE REMOVED
         //-------------------------------------FILL BEMC QA INFORMATION------------------------
-        if (trk->bemcPidTraitsIndex() > -1) //check good BEMC tracks - no BEMC info i current SL16j Run16 PicoDst production
-        {
-            StPicoBEmcPidTraits *Emc = mPicoDst->bemcPidTraits(trk->bemcPidTraitsIndex()); //check that this works
-            //cout<<"BEMC track"<<endl;
-            h_QA_nTracks_BEMC->Fill(pT_QA, RunIndex);
-
-            h_QA_BEMC_TOWId->Fill(Emc->btowId(), RunIndex);
-            h_QA_BSMD_nEta->Fill(Emc->bemcSmdNEta(), RunIndex);
-            h_QA_BSMD_nPhi->Fill(Emc->bemcSmdNPhi(), RunIndex);
-            h_pOverE->Fill(momentum.mag() / Emc->bemcE0(), RunIndex);
-        }
+//        if (trk->bemcPidTraitsIndex() > -1) //check good BEMC tracks - no BEMC info i current SL16j Run16 PicoDst production
+//        {
+//            StPicoBEmcPidTraits *Emc = mPicoDst->bemcPidTraits(trk->bemcPidTraitsIndex()); //check that this works
+//            h_QA_nTracks_BEMC->Fill(pT_QA, RunIndex);
+//
+//            h_QA_BEMC_TOWId->Fill(Emc->btowId(), RunIndex);
+//            h_QA_BSMD_nEta->Fill(Emc->bemcSmdNEta(), RunIndex);
+//            h_QA_BSMD_nPhi->Fill(Emc->bemcSmdNPhi(), RunIndex);
+//            h_pOverE->Fill(momentum.mag() / Emc->bemcE0(), RunIndex);
+//        }
 
         if (fabs(trk->nSigmaKaon())<3) {
             nKaons = nKaons + 1;
