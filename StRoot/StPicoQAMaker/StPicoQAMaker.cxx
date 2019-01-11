@@ -713,7 +713,7 @@ int StPicoQAMaker::MakeHF() {
     } // .. end tracks loop
     cout<<"ok3"<<endl;
 
-    ntp_event->Fill(nTrk,nTrk0406,nTrk1012,nTrk3040,nTrkHft,nTrkHft0406,nTrkHft1012,nTrkHft3040,ZDC,BBC,mPicoDst->event()->runId(),RunIndex);
+//    ntp_event->Fill(nTrk,nTrk0406,nTrk1012,nTrk3040,nTrkHft,nTrkHft0406,nTrkHft1012,nTrkHft3040,ZDC,BBC,mPicoDst->event()->runId(),RunIndex);
 
     h_QA_BBC_rate_kaons->Fill(mPicoDst->event()->BBCx()/1000., nKaons);
     h_QA_BBC_rate_pions->Fill(mPicoDst->event()->BBCx()/1000., nPions);

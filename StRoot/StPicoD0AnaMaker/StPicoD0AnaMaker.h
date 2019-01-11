@@ -53,7 +53,8 @@ private:
     int createCandidates();
     int analyzeCandidates();
 
-    TNtuple *ntp_event;
+    TNtuple *ntp_DMeson_Signal;
+    TNtuple *ntp_DMeson_Background;
 
     int mRunNumber;
     TString mOutFileBaseName;
