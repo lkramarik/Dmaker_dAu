@@ -1,6 +1,6 @@
 #!/bin/bash
 cd workDir
-productionId=`date +%F_%H-%M`
+productionId=`date +%F_%H-%M`_QA
 analyzer="lkramarik"
 
 mkdir $productionId
@@ -28,7 +28,6 @@ path=`pwd -P`
 path=$( echo $path | sed 's|//|/|g' )
 
 baseFolder=${path}
-input=${baseFolder}/${productionId}
 treeName=MyAna.picoHFtree
 rootMacro=runQAAnaMaker.C
 inputList=runs_path_all.list

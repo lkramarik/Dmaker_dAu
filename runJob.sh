@@ -1,9 +1,9 @@
 #!/bin/bash
 cd workDir
-productionId=`date +%F_%H-%M`
+productionId=`date +%F_%H-%M`_D0
 analyzer="lkramarik"
 
-mkdir $productionId
+mkdir ${productionId}
 cd $productionId
 #copylist
 cp ../../picoLists/runs_path_all.list  ./
@@ -28,7 +28,6 @@ path=`pwd -P`
 path=$( echo $path | sed 's|//|/|g' )
 
 baseFolder=${path}
-input=${baseFolder}/${productionId}
 treeName=MyAna.picoHFtree
 rootMacro=runPicoD0AnaMaker.C
 inputList=runs_path_all.list

@@ -71,10 +71,7 @@ private:
 
     TString         mOuputFileBaseName; 
     TString         mInputFileName;     
-
-    int             mEventCounter;
     int		    mBufferSize;
-
     bool loadEventPlaneCorr(int const runId);
                                         
     TFile*          mOutputFileTreeSigSE;

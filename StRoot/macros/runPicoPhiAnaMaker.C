@@ -46,8 +46,7 @@ void runPicoPhiAnaMaker(
     TString sInputFile(inputFile);
     TString sInputListHF("");  
     TString sProductionBasePath(productionBasePath);
-    TString sTreeName(treeName);
-    
+
     if (!sInputFile.Contains(".list") && !sInputFile.Contains("picoDst.root")) {
         cout << "No input list or picoDst root file provided! Exiting..." << endl;
         exit(1);
@@ -85,8 +84,6 @@ void runPicoPhiAnaMaker(
     StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
 
     StPicoKKMaker* PicoPhiAnaMaker = new StPicoKKMaker("picoPhiAnaMaker", picoDstMaker, outputFile, sInputListHF);
-    PicoPhiAnaMaker->setTreeName(treeName);
-    PicoPhiAnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
     PicoPhiAnaMaker->setHFBaseCuts(hfCuts);
 
     clock_t start = clock(); // getting starting time

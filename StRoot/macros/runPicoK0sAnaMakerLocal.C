@@ -52,7 +52,6 @@ void runPicoK0sAnaMakerLocal(
   TString sInputFile(inputFile);
   TString sInputListHF("");
   TString sProductionBasePath(productionBasePath);
-  TString sTreeName(treeName);
 
   if (!sInputFile.Contains(".list") && !sInputFile.Contains("picoDst.root")) {
     cout << "No input list or picoDst root file provided! Exiting..." << endl;
@@ -104,8 +103,6 @@ void runPicoK0sAnaMakerLocal(
   StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
 
   StPicoPiPiMaker* PicoK0sAnaMaker = new StPicoPiPiMaker("picoK0sAnaMaker", picoDstMaker, outputFile, sInputListHF);
-  PicoK0sAnaMaker->setTreeName(treeName);
-  PicoK0sAnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
   PicoK0sAnaMaker->setHFBaseCuts(hfCuts);
 
 //  StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile, sInputListHF);

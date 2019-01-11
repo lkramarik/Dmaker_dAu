@@ -24,9 +24,8 @@ ClassImp(StPicoHFMaker)
 StPicoHFMaker::StPicoHFMaker(char const* name, StPicoDstMaker* picoMaker,
                              char const* outputBaseFileName,  char const* inputHFListHFtree = "") :
         StMaker(name), mPicoDst(NULL), mHFCuts(NULL), mPicoHFEvent(NULL), mBField(0.), mOutList(NULL),
-        mDecayMode(StPicoHFEvent::kTwoParticleDecay), mMakerMode(StPicoHFMaker::kAnalyze), mMcMode(false),
-        mOutputTreeName("picoHFtree"), mOutputFileBaseName(outputBaseFileName), mInputFileName(inputHFListHFtree),
-        mPicoDstMaker(picoMaker), mPicoEvent(NULL), mTree(NULL), mHFChain(NULL), mEventCounter(0),
+        mOutputFileBaseName(outputBaseFileName), mInputFileName(inputHFListHFtree),
+        mPicoDstMaker(picoMaker), mPicoEvent(NULL),
         mOutputFileTree(NULL), mOutputFileList(NULL) {
   // -- constructor
 }

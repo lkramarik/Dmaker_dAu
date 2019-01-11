@@ -51,7 +51,6 @@ void runQAAnaMakerLocal(
   TString sInputFile(inputFile);
   TString sInputListHF("");
   TString sProductionBasePath(productionBasePath);
-  TString sTreeName(treeName);
 
   if (!sInputFile.Contains(".list") && !sInputFile.Contains("picoDst.root")) {
     cout << "No input list or picoDst root file provided! Exiting..." << endl;
@@ -107,8 +106,6 @@ void runQAAnaMakerLocal(
 
   StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
   StPicoQAMaker* PicoQAAnaMaker = new StPicoQAMaker("picoQAAnaMaker", picoDstMaker, outputFile, sInputListHF);
-  PicoQAAnaMaker->setTreeName(treeName);
-  PicoQAAnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
   PicoQAAnaMaker->setHFBaseCuts(hfCuts);
 
   clock_t start = clock(); // getting starting time

@@ -15,17 +15,12 @@ void loadSharedHFLibraries() {
   gSystem->Load("StPicoEvent");
   gSystem->Load("StPicoDstMaker");
   gSystem->Load("StPicoCutsBase");
-//  gSystem->Load("StPicoPrescales");
   gSystem->Load("StPicoHFMaker");
   gSystem->Load("StPicoD0AnaMaker");
   gSystem->Load("StPicoPiPiMaker");
   gSystem->Load("StPicoKKMaker");
   gSystem->Load("StPicoQAMaker");
   gSystem->Load("StPicoMixedEventMaker");
-//  gSystem->Load("StPicoD0AnaHists");
-//  gSystem->Load("StRefMultCorr");
+
   cout << " loading of shared HF libraries are done" << endl;
-
-  // -->>> ADD your own library/class HERE 
-
  }

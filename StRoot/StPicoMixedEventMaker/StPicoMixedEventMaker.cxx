@@ -35,7 +35,6 @@ StPicoMixedEventMaker::StPicoMixedEventMaker(char const* name, StPicoDstMaker* p
         mHFCuts(hfCuts),
         mOuputFileBaseName(outputBaseFileName),
         mInputFileName(inputHFListHFtree),
-        mEventCounter(0),
         mBufferSize(5),
         mOutList(NULL),
         mSETupleSig(NULL),
