@@ -245,17 +245,16 @@ int StPicoD0AnaMaker::createCandidates() {
                 ntp_DMeson_Background->Fill(ntVar);
                 massPtLike->Fill(dMass,d0Pt,reweight);
             }
-            //for(int ii = 0; ii<3; ii++)
-            //	getHadronCorV2(ii);
+            
+            getHadronCorV2(1);
 
-
-            if(pair->m() < 1.81 || pair->m() > 1.91 || pair->pt() < 1 || pair->pt() > 5) continue;
+            
             //this is messy!! I will rewrite it to a isD0pair function ASAP! 
+            if(pair->m() < 1.81 || pair->m() > 1.91 || pair->pt() < 1 || pair->pt() > 5) continue;
             if(pair->pt() > 1 && pair->pt() < 2)
             {
             	if(pair->decayLength() > 0.012 && pair->dcaDaughters() < 0.007 && pair->DcaToPrimaryVertex() < 0.005 && cos(pair->pointingAngle()) > 0.5 && pair->particle2Dca() > 0.007 && pair->particle1Dca() > 0.009);
             	{
-            		getHadronCorV2(1);
             		getCorV2(pair, reweight);
             	}
             }
@@ -263,7 +262,6 @@ int StPicoD0AnaMaker::createCandidates() {
             {
 				if(pair->decayLength() > 0.003 && pair->dcaDaughters() < 0.016 && pair->DcaToPrimaryVertex() < 0.0065 && cos(pair->pointingAngle()) > 0.5 && pair->particle2Dca() > 0.01 && pair->particle1Dca() > 0.009);
             	{
-            		getHadronCorV2(1);
             		getCorV2(pair, reweight);
             	}
             }
@@ -271,7 +269,6 @@ int StPicoD0AnaMaker::createCandidates() {
             {
             	if(pair->decayLength() > 0.009 && pair->dcaDaughters() < 0.015 && pair->DcaToPrimaryVertex() < 0.0064 && cos(pair->pointingAngle()) > 0.6 && pair->particle2Dca() > 0.0076 && pair->particle1Dca() > 0.0064);
             	{
-            		getHadronCorV2(1);
             		getCorV2(pair, reweight);
             	}
             }
@@ -339,10 +336,10 @@ void StPicoD0AnaMaker::DeclareHistograms() {
     // for v2 calcualtion
   TString flatten[5];
   flatten[0] = "v2";
-  flatten[1] = "cos_h_BS";
-  flatten[2] = "sin_h_BS";
-  flatten[3] = "cos_h_FS";
-  flatten[4] = "sin_h_FS";
+  flatten[1] = "cos_BS";
+  flatten[2] = "sin_BS";
+  flatten[3] = "cos_FS";
+  flatten[4] = "sin_FS";
   TString sb[8] = {"s1like","s3like","hSBlike","lSBlike","s1unlike","s3unlike","hSBunlike","lSBunlike"};
 
   TString names[4] = {"cos_B", "cos_F", "sin_B", "sin_F"}; //backward and forward samples
