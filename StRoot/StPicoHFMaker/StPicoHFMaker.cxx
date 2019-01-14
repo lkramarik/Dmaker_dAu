@@ -24,7 +24,7 @@ ClassImp(StPicoHFMaker)
 StPicoHFMaker::StPicoHFMaker(char const* name, StPicoDstMaker* picoMaker,
                              char const* outputBaseFileName) :
         StMaker(name), mPicoDst(NULL), mHFCuts(NULL), mPicoHFEvent(NULL), mBField(0.), mOutList(NULL),
-        mOutputFileBaseName(outputBaseFileName)),
+        mOutputFileBaseName(outputBaseFileName),
         mPicoDstMaker(picoMaker), mPicoEvent(NULL),
         mOutputFileTree(NULL), mOutputFileList(NULL) {
   // -- constructor
