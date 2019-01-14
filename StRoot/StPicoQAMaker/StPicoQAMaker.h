@@ -33,7 +33,7 @@ class StHFCuts;
 class StPicoQAMaker : public StPicoHFMaker
 {
 public:
-    StPicoQAMaker(char const*, StPicoDstMaker*, char const*, char const*);
+    StPicoQAMaker(char const*, StPicoDstMaker*, char const*);
     virtual ~StPicoQAMaker();
 
     virtual Int_t InitHF();

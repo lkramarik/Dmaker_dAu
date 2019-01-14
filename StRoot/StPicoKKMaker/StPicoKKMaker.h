@@ -37,7 +37,7 @@ class StHFCuts;
 class StPicoKKMaker : public StPicoHFMaker
 {
 public:
-    StPicoKKMaker(char const*, StPicoDstMaker*, char const*, char const*);
+    StPicoKKMaker(char const*, StPicoDstMaker*, char const*);
     virtual ~StPicoKKMaker();
 
     virtual Int_t InitHF();

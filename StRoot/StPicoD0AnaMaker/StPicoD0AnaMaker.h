@@ -39,7 +39,7 @@ class StHFCuts;
 class StPicoD0AnaMaker : public StPicoHFMaker
 {
 public:
-    StPicoD0AnaMaker(char const*, StPicoDstMaker*, char const*, char const*);
+    StPicoD0AnaMaker(char const*, StPicoDstMaker*, char const*);
     virtual ~StPicoD0AnaMaker();
 
     virtual Int_t InitHF();
