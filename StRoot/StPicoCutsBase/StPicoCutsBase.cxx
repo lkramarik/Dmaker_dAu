@@ -218,6 +218,7 @@ bool StPicoCutsBase::isGoodTrack(StPicoTrack const * const trk) const {
   return ((!mRequireHFT || trk->isHFTTrack()) && trk->nHitsFit() >= mNHitsFitMin && cutMaxDcaToPrimVertex(trk) && trk->gPt() > mPtMin);
 }
 
+// _________________________________________________________
 bool StPicoCutsBase::isGoodPion(StPicoTrack const *const trk) const {
     if (!isGoodTrack(trk)) return false;
     if (!cutMinDcaToPrimVertex(trk, StPicoCutsBase::kPion)) return false;
@@ -229,6 +230,7 @@ bool StPicoCutsBase::isGoodPion(StPicoTrack const *const trk) const {
     return tof;
 }
 
+// _________________________________________________________
 bool StPicoCutsBase::isGoodKaon(StPicoTrack const *const trk) const {
     if (!isGoodTrack(trk)) return false;
     if (!cutMinDcaToPrimVertex(trk, StPicoCutsBase::kKaon)) return false;
@@ -240,18 +242,21 @@ bool StPicoCutsBase::isGoodKaon(StPicoTrack const *const trk) const {
     return tof;
 }
 
+// _________________________________________________________
 bool StPicoCutsBase::cutMinDcaToPrimVertex(StPicoTrack const * const trk, int pidFlag) const {
   // -- check on min dca for identified particle
   float dca = (mPrimVtx - trk->origin()).Mag();
   return (dca >= mDcaMin[pidFlag]);
 }
 
+// _________________________________________________________
 bool StPicoCutsBase::cutMaxDcaToPrimVertex(StPicoTrack const * const trk) const {
   // -- check on max dca for all particles
   float dca = (mPrimVtx - trk->origin()).Mag();
   return (dca <= mPrimaryDCAtoVtxMax);
 }
 
+// _________________________________________________________
 bool StPicoCutsBase::cutMinDcaToPrimVertexTertiary(StPicoTrack const * const trk, int pidFlag) const {
   // -- check on min dca for identified particle - used for tertiary particles only
 
@@ -304,6 +309,7 @@ bool StPicoCutsBase::isTOFHadron(StPicoTrack const *trk, float const & tofBeta, 
   return isTOFHadronPID(trk, tofBeta, pidFlag);
 }
 
+// _________________________________________________________
 bool StPicoCutsBase::isTOFmatched(StPicoTrack const *trk) const {
     int tofIndex = trk->bTofPidTraitsIndex();
     bool TofMatch = kFALSE;
@@ -357,7 +363,7 @@ float StPicoCutsBase::getTofBetaBase(StPicoTrack const * const trk) const {
   return beta;
 }
 
-
+// _________________________________________________________
 float StPicoCutsBase::getOneOverBeta(StPicoTrack const * const trk,  float const & tofBeta, int pidFlag) const {
   if ((tofBeta <= 0) || (tofBeta!=tofBeta))
     return std::numeric_limits<float>::max();
