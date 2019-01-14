@@ -21,8 +21,7 @@ class StHFCuts;
 class StPicoHFMaker : public StMaker 
 {
   public:
-    StPicoHFMaker(char const* , StPicoDstMaker* , char const* ,
-		       char const* );
+    StPicoHFMaker(char const* , StPicoDstMaker* , char const*);
     virtual ~StPicoHFMaker();
     
     // -- TO BE IMPLEMENTED BY DAUGHTER CLASS
