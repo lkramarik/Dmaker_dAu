@@ -84,7 +84,7 @@ void runPicoD0AnaMakerLocal(
   StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile);
   PicoD0AnaMaker->setHFBaseCuts(hfCuts);
 
-  StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile, inputFile);
+  StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile);
   picoMixedEventMaker->setBufferSize(3);
 
   clock_t start = clock(); // getting starting time
