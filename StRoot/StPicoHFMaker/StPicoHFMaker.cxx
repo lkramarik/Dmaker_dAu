@@ -50,8 +50,6 @@ Int_t StPicoHFMaker::Init() {
   // -- check for cut class
   if (!mHFCuts)    mHFCuts = new StHFCuts;
   mHFCuts->init();
-  // -- create HF event - using the proper decay mode to initialize
-//  mPicoHFEvent = new StPicoHFEvent(mDecayMode);
 
   // -- file with outputs
   mOutputFileList = new TFile(Form("%s.%s.root", mOutputFileBaseName.Data(), GetName()), "RECREATE");
@@ -68,10 +66,6 @@ Int_t StPicoHFMaker::Init() {
 
   // -- create event stat histograms
   initializeEventStats();
-
-  // -- initialize histogram class
-//  mHFHists = new StHFHists(Form("hfHists_%s",GetName()));
-//  mHFHists->init(mOutList,mDecayMode);
 
   // -- call method of daughter class
   InitHF();
@@ -120,9 +114,6 @@ Int_t StPicoHFMaker::Make() {
 // -- Inhertited from StMaker 
   //    NOT TO BE OVERWRITTEN by daughter class
   //    daughter class should implement MakeHF()
-  // -- isPion, isKaon, isProton methods are to be 
-  //    implemented by daughter class (
-  //    -> methods of StHFCuts can and should be used
 
   if (!mPicoDstMaker) {
     LOG_WARN << " StPicoHFMaker - No PicoDstMaker! Skip! " << endm;
@@ -136,6 +127,7 @@ Int_t StPicoHFMaker::Make() {
   }
 
   Int_t iReturn = kStOK;
+
   if (setupEvent()) {
 //    UInt_t nTracks = mPicoDst->numberOfTracks();
 //    for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
@@ -161,16 +153,12 @@ bool StPicoHFMaker::setupEvent() {
   // -- fill members from pico event, check for good eventa and fill event statistics
 
   mPicoEvent = mPicoDst->event();
-//  mPicoHFEvent->addPicoEvent(*mPicoEvent);
-
   mBField = mPicoEvent->bField();
   mPrimVtx = mPicoEvent->primaryVertex();
 
   int aEventStat[mHFCuts->eventStatMax()];
-
   bool bResult = mHFCuts->isGoodEvent(mPicoDst, aEventStat);
 
-  // -- fill event statistics histograms
   fillEventStats(aEventStat);
 
   return bResult;
@@ -199,7 +187,7 @@ void StPicoHFMaker::fillEventStats(int *aEventStat) {
   // -- Fill event statistics 
 
   TH1F *hEventStat0 = static_cast<TH1F*>(mOutList->FindObject("hEventStat0"));
-  TH1F *hEventStat1 = static_cast<TH1F*>(mOutList->FindObject("hEventStat1"));
+//  TH1F *hEventStat1 = static_cast<TH1F*>(mOutList->FindObject("hEventStat1"));
 
   for (unsigned int idx = 0; idx < mHFCuts->eventStatMax() ; ++idx) {
     if (!aEventStat[idx])

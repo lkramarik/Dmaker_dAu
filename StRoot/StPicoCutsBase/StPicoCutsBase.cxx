@@ -132,10 +132,7 @@ void StPicoCutsBase::initBase() {
 
 // _________________________________________________________
 bool StPicoCutsBase::isGoodEvent(StPicoDst const * const picoDst, int *aEventCuts) {
-  // -- method to check if good event
-  //    sets also mPicoDst and mPrimVtx
-  
-  // -- set current mPicoDst 
+  // -- set current mPicoDst
   mPicoDst = picoDst;
 
   // -- get picoDst event
@@ -156,31 +153,25 @@ bool StPicoCutsBase::isGoodEvent(StPicoDst const * const picoDst, int *aEventCut
     aEventCuts[ii] = 0;
   
   unsigned int iCut = 0;
-
   // -- 0 - before event cuts
   aEventCuts[iCut] = 0;
 
   // -- 1 - is bad run
   ++iCut;
-  if (!isGoodRun(picoEvent))
-    aEventCuts[iCut] = 1;
+  if (!isGoodRun(picoEvent)) aEventCuts[iCut] = 1;
 
   // -- 2 - No Trigger fired
   ++iCut;
-//  aEventCuts[iCut] = 0; //not looking at triggers
 //  trigger - is ok?
-  if (!isGoodTrigger(picoEvent))
-    aEventCuts[iCut] = 1;
+  if (!isGoodTrigger(picoEvent)) aEventCuts[iCut] = 1;
 
   // -- 3 - Vertex z outside cut window
   ++iCut;
-  if (fabs(picoEvent->primaryVertex().z()) >= mVzMax)
-    aEventCuts[iCut] = 1;
+  if (fabs(picoEvent->primaryVertex().z()) >= mVzMax) aEventCuts[iCut] = 1;
 
   // -- 4 Vertex z - vertex_z(vpd) outside cut window
   ++iCut;
-  if (fabs(picoEvent->primaryVertex().z() - picoEvent->vzVpd()) >= mVzVpdVzMax)
-    aEventCuts[iCut] = 1;  
+  if (fabs(picoEvent->primaryVertex().z() - picoEvent->vzVpd()) >= mVzVpdVzMax) aEventCuts[iCut] = 1;
   
   // -- is rejected
   bool isGoodEvent = true;
