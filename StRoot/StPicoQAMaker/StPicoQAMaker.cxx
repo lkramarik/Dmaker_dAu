@@ -677,7 +677,7 @@ int StPicoQAMaker::MakeHF() {
 
         if (fabs(trk->nSigmaKaon())<3) {
             nKaons = nKaons + 1;
-            if (mHFCuts->isTOFmatched(trk) {
+            if (mHFCuts->isTOFmatched(trk)) {
                 nKaonsTOFMatching = nKaonsTOFMatching+1;
             }
             if (trk->isHFTTrack()) nKaonsHFT=nKaonsHFT+1;
