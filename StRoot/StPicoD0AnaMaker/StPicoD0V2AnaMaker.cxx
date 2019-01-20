@@ -57,6 +57,7 @@ int StPicoD0V2AnaMaker::createCandidates() {
             if (!mHFCuts -> isGoodKaon(kaon)) continue;
             StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), i, j, mPrimVtx, mBField, kTRUE);
             if (!mHFCuts->isGoodSecondaryVertexPair(pair)) continue;
+            if(pair->m() < 1.804 || pair->m() > 1.924 || pair->pt() < 1 || pair->pt() > 5) continue;
 
             makeV2(pair, 1);
         }  // for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon)
@@ -66,7 +67,6 @@ int StPicoD0V2AnaMaker::createCandidates() {
 }
 
 int StPicoD0V2AnaMaker::makeV2(StHFPair* pair, double reweight){
-    if(pair->m() < 1.804 || pair->m() > 1.924 || pair->pt() < 1 || pair->pt() > 5) continue;
     //mean 1.864, sigma 0.02
     if(pair->pt() > 1 && pair->pt() < 2) {
         if(pair->decayLength() > 0.012 && pair->dcaDaughters() < 0.007 && pair->DcaToPrimaryVertex() < 0.005 && cos(pair->pointingAngle()) > 0.5 && pair->particle2Dca() > 0.007 && pair->particle1Dca() > 0.009) {
@@ -107,7 +107,7 @@ void StPicoD0V2AnaMaker::DeclareHistograms() {
 
     float momBins[7] = {0,1,2,3,4,5,10};
     TString multBinNames[6] = {"0","7","12","16","22","100"};
-    int nMomBins = sizeof(momBins) / momBins(array[0]);
+    int nMomBins = sizeof(momBins) / sizeof(momBins[0]);
 
 
     for(int m = 0; m < 5; m++) {
@@ -229,7 +229,7 @@ bool StPicoD0V2AnaMaker::getCorV2(StHFPair *kp,double weight) {
 
     for(unsigned int i=0; i<mPicoDst->numberOfTracks();i++) {
         StPicoTrack const* hadron = mPicoDst->track(i);
-        if(hadron->pMom().perp()<0.2) continue;
+        if(hadron->pMom().Perp()<0.2) continue;
         if(!mHFCuts->isGoodTrack(hadron)) continue;
         if(!mHFCuts->isGoodProton(hadron) && !mHFCuts->isGoodKaon(hadron) && !mHFCuts->isGoodPion(hadron)) continue;
         if(i==kp->particle1Idx() || i==kp->particle2Idx()) continue;
