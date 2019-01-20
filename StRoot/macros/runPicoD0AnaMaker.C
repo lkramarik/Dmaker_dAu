@@ -13,6 +13,7 @@
 #include <ctime>
 #include <cstdio>
 #include "StPicoD0AnaMaker/StPicoD0AnaMaker.h"
+#include "StPicoD0V2AnaMaker/StPicoD0V2AnaMaker.h"
 
 using namespace std;
 
@@ -77,9 +78,13 @@ void runPicoD0AnaMaker(
     hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass, pairDcaMax);
 
     StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
-
     StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile);
     PicoD0AnaMaker->setHFBaseCuts(hfCuts);
+
+    StPicoD0V2AnaMaker* PicoD0V2AnaMaker = new StPicoD0V2AnaMaker("picoD0V2AnaMaker", picoDstMaker, outputFile);
+    PicoD0V2AnaMaker->setHFBaseCuts(hfCuts);
+
+
 
 //    StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile, inputFile);
 //    picoMixedEventMaker->setBufferSize(7);
