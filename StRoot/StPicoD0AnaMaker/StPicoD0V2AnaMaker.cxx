@@ -222,10 +222,10 @@ bool StPicoD0V2AnaMaker::getCorV2(StHFPair *kp,double weight) {
     int k=0;
     double corFill[7] = {0};
     corFill[0] = 1 ;
-    corFill[1] = sin(2* kp->Phi())/sqrt(hadronv2);
-    corFill[2] = cos(2* kp->Phi())/sqrt(hadronv2);
+    corFill[1] = sin(2* kp->phi())/sqrt(hadronv2);
+    corFill[2] = cos(2* kp->phi())/sqrt(hadronv2);
 
-    D_phi->Fill(kp->Phi());
+    D_phi->Fill(kp->phi());
 
     for(unsigned int i=0; i<mPicoDst->numberOfTracks();i++) {
         StPicoTrack const* hadron = mPicoDst->track(i);
