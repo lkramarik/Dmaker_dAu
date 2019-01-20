@@ -82,11 +82,11 @@ void runPicoD0AnaMakerLocal(
   hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kPion);
 
   StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
-  StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile);
-  PicoD0AnaMaker->setHFBaseCuts(hfCuts);
+//  StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile);
+//  PicoD0AnaMaker->setHFBaseCuts(hfCuts);
 
-  StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile);
-  picoMixedEventMaker->setBufferSize(3);
+//  StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile);
+//  picoMixedEventMaker->setBufferSize(3);
 
   StPicoD0V2AnaMaker* PicoD0V2AnaMaker = new StPicoD0V2AnaMaker("picoD0V2AnaMaker", picoDstMaker, outputFile);
   PicoD0V2AnaMaker->setHFBaseCuts(hfCuts);
@@ -101,13 +101,10 @@ void runPicoD0AnaMakerLocal(
   for (Int_t i=0; i<nEvents; i++) {
 //  for (Int_t i=0; i<2000; i++) {
     if(i%10==0)       cout << "Working on eventNumber " << i << endl;
-
     chain->Clear();
-
-	 int iret = chain->Make(i);
-
+    int iret = chain->Make(i);
     if (iret) { cout << "Bad return code!" << iret << endl; break;}
-    }
+  }
 
   chain->Finish();
   double duration = (double) (clock() - start) / (double) CLOCKS_PER_SEC;

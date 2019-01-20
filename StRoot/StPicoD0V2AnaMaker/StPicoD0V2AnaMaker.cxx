@@ -96,6 +96,9 @@ void StPicoD0V2AnaMaker::DeclareHistograms() {
     float multBin[6] = {0, 7, 12, 16, 22, 100};
     int nMultBins = sizeof(multBin)/sizeof(multBin[0])-1;
 
+    float momBins[7] = {0,1,2,3,4,5,10};
+    int nMomBins = sizeof(momBins)/sizeof(momBins[0])-1;
+
     for(int m = 0; m < 4; m++) {
         qVec[m] = new TProfile(names[m].Data(),"Q vector", nMultBins, multBin);
         qVec[m]->Sumw2();
@@ -106,29 +109,21 @@ void StPicoD0V2AnaMaker::DeclareHistograms() {
         qVec2[m] = new TProfile((names[m]+"_no_mult").Data(),"Q vector", 1, 0, 100);
         qVec2[m]->Sumw2();
     }
-    cout<<"Declare Hist qVec"<<endl;
-
-    float momBins[7] = {0,1,2,3,4,5,10};
-    int nMomBins = sizeof(momBins)/sizeof(momBins[0])-1;
 
     for(int m = 0; m < 5; m++) {
         corrD[0][m] = new TProfile(Form("cosD_%.0f_%.0f", multBin[m], multBin[m+1]), "", nMomBins, momBins);
         corrD[1][m] = new TProfile(Form("sinD_%.0f_%.0f", multBin[m], multBin[m+1]), "", nMomBins, momBins);
         dirFlow[m] = new TProfile(Form("dirFlow_%.0f_%.0f", multBin[m], multBin[m+1]), "", nMomBins, momBins);
     }
-    cout<<"Declare Hist corrD"<<endl;
 
     corrD2[0] = new TProfile("cosD_no_mult","cos D", nMomBins, momBins);
     corrD2[1] = new TProfile("sinD_no_mult","sin D", nMomBins, momBins);
     dirFlow2 = new TProfile("dirFlow_no_mult","dir flow", nMomBins, momBins);
     refFlow = new TProfile("refFlow", "", nMultBins, multBin);
     refFlow2 = new TProfile("refFlow_no_mult", "", 1, 0, 100);
-    cout<<"Declare Hist refFlow2"<<endl;
-
 
     hadron_phi = new TH1D("hadron_phi", "Hadron phi", 2000, -5, 5);
     D_phi = new TH1D("D_phi", "D phi", 2000, -5, 5);
-    cout<<"Declare Hist end"<<endl;
 }
 
 // _________________________________________________________
@@ -162,8 +157,7 @@ bool StPicoD0V2AnaMaker::getHadronCorV2(int idxGap) {
     float hadronFill[7] = {0};
     const double reweight = 1;//mGRefMultCorrUtil->getWeight();
     // int centrality  = mGRefMultCorrUtil->getCentralityBin9();
-    StPicoEvent *event = (StPicoEvent *)mPicoDst->event();
-    int mult = event->grefMult();
+    int mult = mPicoEvent->grefMult();
 
     for(unsigned int i=0;i<mPicoDst->numberOfTracks();++i) {
         StPicoTrack const* hadron = mPicoDst->track(i);
@@ -216,8 +210,7 @@ bool StPicoD0V2AnaMaker::getHadronCorV2(int idxGap) {
 
 // _________________________________________________________
 bool StPicoD0V2AnaMaker::getCorV2(StHFPair *kp,double weight) {
-    StPicoEvent *event = (StPicoEvent *)mPicoDst->event();
-    int mult = event->grefMult();
+    int mult = mPicoEvent->grefMult();
 
     double hadronv2=1;
     float multBin[6] = {0,7,12,16,22,100};
