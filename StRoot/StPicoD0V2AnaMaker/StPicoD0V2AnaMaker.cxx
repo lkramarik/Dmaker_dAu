@@ -115,7 +115,7 @@ void StPicoD0V2AnaMaker::DeclareHistograms() {
     for(int m = 0; m < 5; m++) {
         TString aa = "cosD_" + multBinNames[m] + "_" + multBinNames[m+1];
         cout<<aa<<endl;
-        TString bb = Form("cosD_%.0f_%.0f", multBin[m] + "_" + multBin[m+1]);
+        TString bb = Form("cosD_%.0f_%.0f", multBin[m], multBin[m+1]);
         cout<<bb<<endl;
         corrD[0][m] = new TProfile(aa.Data(),"",nMomBins,momBins);
         aa = "sinD_" + multBinNames[m] + "_" + multBinNames[m+1];
