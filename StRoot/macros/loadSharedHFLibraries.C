@@ -17,6 +17,7 @@ void loadSharedHFLibraries() {
   gSystem->Load("StPicoCutsBase");
   gSystem->Load("StPicoHFMaker");
   gSystem->Load("StPicoD0AnaMaker");
+  gSystem->Load("StPicoD0V2AnaMaker");
   gSystem->Load("StPicoPiPiMaker");
   gSystem->Load("StPicoKKMaker");
   gSystem->Load("StPicoQAMaker");
