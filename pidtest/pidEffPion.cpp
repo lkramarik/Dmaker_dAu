@@ -31,7 +31,9 @@ void pidEffPion() {
 //    gSystem->Load("FitPID");
     gROOT->ProcessLine(".L FitPID.c++");
 
-    TString input = "ntp.picoK0sAnaMaker.root";
+//    TString input = "ntp.picoK0sAnaMaker.root";
+    TString inputMass = "/media/lukas/376AD6A434B7392F/work/pid/ntp.noHft.picoK0sAnaMaker.root";
+    TString input = "/media/lukas/376AD6A434B7392F/work/pid/ntp.noHft.picoK0sAnaMaker.small.root";
 //    TString input = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/K0s_last/production/ntp.picoK0sAnaMaker.root";
 //    TString input = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/Phi_large/production/ntp.picoPhiAnaMaker.root";
 //    TString input = "outputBaseName.picoK0sAnaMaker.root";
@@ -51,18 +53,19 @@ void pidEffPion() {
     pair = "#pi#pi";
     pairName = "pipi";
 
-    massMin = 0.4;// K to pipi
-    massMax = 0.6;// K to pipi
+    massMin = 0.42;// K to pipi
+    massMax = 0.58;// K to pipi
     mean = 0.5;
     sigma = 0.004;
     ptPairMin = 0.5;
     ptPairMax = 10;
     Float_t height = 40000;
     fitmass->setOutputFileName("mass_" + pairName + ".root");
-    fitmass->setHeight(10000);
+    fitmass->setHeight(1000000);
     cut = Form("pair_mass>%.3f && pair_mass<%.3f", massMin, massMax);
-    cutPair = Form("pair_pt>%.3f && pair_pt<%.3f && pair_decayL<5", ptPairMin, ptPairMax);
-    TH1F *signal = (TH1F*) fitmass->projectSubtractBckg(input, 50, massMin, massMax, ptPairMin, ptPairMax, pair, cut + cutPair, "pair_mass", "Mass_{%s} (GeV/c^{2})");
+//    cutPair = Form("pair_pt>%.3f && pair_pt<%.3f && pair_decayL<4", ptPairMin, ptPairMax);
+    cutPair = Form("pair_pt>%.3f && pair_pt<%.3f", ptPairMin, ptPairMax);
+    TH1F *signal = (TH1F*) fitmass->projectSubtractBckg(inputMass, 50, massMin, massMax, ptPairMin, ptPairMax, pair, cut + cutPair, "pair_mass", "Mass_{%s} (GeV/c^{2})");
 
     fitmass->peakFit(signal, mean, sigma, massMin, massMax, pair, ptPairMin, ptPairMax, "mass");
     massMean = fitmass->getMean();
@@ -98,13 +101,13 @@ void pidEffPion() {
         //tof pions after my PID cut:
         FitPID *pidAna1 = new FitPID();
         pidAna1->setOutputFileName("nSigma_"+pairName+"_ana_1.root");
-        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta>0", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]); //tof match
+        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta<3", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]); //tof match
 //        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta<0.03", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]); //tof match
         TH1F *hSigmaSignalAna1 = (TH1F*) pidAna1->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair, "pi1_nSigma", "Pion n#sigma^{TPC}");
 
         FitPID *pidAna2 = new FitPID();
         pidAna2->setOutputFileName("nSigma_"+pairName+"_ana_2.root");
-        cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%f && pi2_pt<%f && pi2_TOFinvbeta>0", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
+        cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%f && pi2_pt<%f && pi2_TOFinvbeta<3", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
 //        cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%f && pi2_pt<%f && pi2_TOFinvbeta<0.03", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
         TH1F *hSigmaSignalAna2 = (TH1F*) pidAna2->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair, "pi2_nSigma", "Pion n#sigma^{TPC}"); //tof match
 
@@ -168,4 +171,7 @@ void pidEffPion() {
     gMean->Write("mean");
     gSigmas->Write("sigma");
     resOut->Close();
+    gSystem->Exec(“hadd -k -f nSigma_pipi.root nSigma_pipi_1.root nSigma_pipi_2.root”);
+    gSystem->Exec(“rm nSigma_pipi_1.root nSigma_pipi_2.root”);
+
 }

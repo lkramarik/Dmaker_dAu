@@ -292,4 +292,3 @@ int StPicoD0AnaMaker::analyzeCandidates() {
 //    }
     return kStOK;
 }
-
