@@ -66,6 +66,7 @@ int StPicoD0V2AnaMaker::createCandidates() {
     return kStOK;
 }
 
+// _________________________________________________________
 int StPicoD0V2AnaMaker::makeV2(StHFPair* pair, double reweight){
     //mean 1.864, sigma 0.02
     if(pair->pt() > 1 && pair->pt() < 2) {
@@ -89,6 +90,7 @@ int StPicoD0V2AnaMaker::makeV2(StHFPair* pair, double reweight){
     return kStOK;
 }
 
+// _________________________________________________________
 void StPicoD0V2AnaMaker::DeclareHistograms() {
     TString names[4] = {"cos_B", "cos_F", "sin_B", "sin_F"}; //backward and forward samples
     float multBin[6] = {0,7,12,16,22,100};
@@ -108,10 +110,13 @@ void StPicoD0V2AnaMaker::DeclareHistograms() {
     float momBins[7] = {0,1,2,3,4,5,10};
     TString multBinNames[6] = {"0","7","12","16","22","100"};
     int nMomBins = sizeof(momBins) / sizeof(momBins[0]);
-
+    cout<<nMomBins<<endl;
 
     for(int m = 0; m < 5; m++) {
         TString aa = "cosD_" + multBinNames[m] + "_" + multBinNames[m+1];
+        cout<<aa<<endl;
+        TString bb = Form("cosD_%.0f_%.0f", multBin[m] + "_" + multBin[m+1]);
+        cout<<bb<<endl;
         corrD[0][m] = new TProfile(aa.Data(),"",nMomBins,momBins);
         aa = "sinD_" + multBinNames[m] + "_" + multBinNames[m+1];
         corrD[1][m] = new TProfile(aa.Data(),"",6,momBins);
@@ -129,6 +134,7 @@ void StPicoD0V2AnaMaker::DeclareHistograms() {
     D_phi = new TH1D("D_phi", "D phi", 2000, -5, 5);
 }
 
+// _________________________________________________________
 void StPicoD0V2AnaMaker::WriteHistograms() {
     for(int m = 0; m < 4; m++) {
         qVec[m]->Write();
@@ -152,6 +158,7 @@ void StPicoD0V2AnaMaker::WriteHistograms() {
     D_phi->Write();
 }
 
+// _________________________________________________________
 bool StPicoD0V2AnaMaker::getHadronCorV2(int idxGap) {
     double etaGap[3] = {0,0.15,0.05};
     double mEtaGap = etaGap[idxGap];
@@ -210,7 +217,7 @@ bool StPicoD0V2AnaMaker::getHadronCorV2(int idxGap) {
     return true;
 }
 
-
+// _________________________________________________________
 bool StPicoD0V2AnaMaker::getCorV2(StHFPair *kp,double weight) {
     StPicoEvent *event = (StPicoEvent *)mPicoDst->event();
     int mult = event->grefMult();
@@ -258,6 +265,7 @@ bool StPicoD0V2AnaMaker::getCorV2(StHFPair *kp,double weight) {
     return true;
 }
 
+// _________________________________________________________
 bool StPicoD0V2AnaMaker::isEtaGap(double dEta,double mGap,double hEta) {
     if(mGap == 0) return true;
     //double range =  2. - mGap*2;
