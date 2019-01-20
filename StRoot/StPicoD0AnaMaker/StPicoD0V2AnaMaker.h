@@ -85,12 +85,11 @@ private:
     TProfile *corrD2[2];
     TProfile *dirFlow2;
 
-    int makeV2(StHFPair, double){
+    int makeV2(StHFPair, double)
     bool getHadronCorV2(int );
     bool getCorV2(StHFPair *, double);
     bool isEtaGap(double, double ,double);
 
-    int mRunNumber;
     TString mOutFileBaseName;
 
     TFile* mOutFile;
