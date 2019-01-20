@@ -65,7 +65,7 @@ int StPicoD0V2AnaMaker::createCandidates() {
     return kStOK;
 }
 
-int StPicoD0V2AnaMaker::makeV2(StHFPair pair, double reweight){
+int StPicoD0V2AnaMaker::makeV2(StHFPair* pair, double reweight){
     if(pair->m() < 1.804 || pair->m() > 1.924 || pair->pt() < 1 || pair->pt() > 5) continue;
     //mean 1.864, sigma 0.02
     if(pair->pt() > 1 && pair->pt() < 2) {
@@ -107,7 +107,7 @@ void StPicoD0V2AnaMaker::DeclareHistograms() {
 
     float momBins[7] = {0,1,2,3,4,5,10};
     TString multBinNames[6] = {"0","7","12","16","22","100"};
-    int nMomBins = sizeof(array) / sizeof(array[0]);
+    int nMomBins = sizeof(momBins) / momBins(array[0]);
 
 
     for(int m = 0; m < 5; m++) {
