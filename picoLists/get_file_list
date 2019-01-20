@@ -2,5 +2,5 @@
 #get_file_list.pl -cond trgsetupname=dAu200_production_2016,filename~st_physics,storage!=hpss -keys 'path,filename' -delim / -limit 0 > runs_path_test.txt
 #get_file_list.pl -cond trgsetupname=dAu200_production_2016,production=P17ib,filename~st_physics,filetype~picoDst,storage=nfs -keys 'path,filename' -delim / -limit 0 > runs_filename_nfs.txt
 #get_file_list.pl  -cond trgsetupname=dAu200_production_2016,production=P17id,library=SL18f,filename~st_physics,filetype~picoDst,storage=local -keys 'filename,events' -delim + -limit 0 -o runs_nevents.txt
-get_file_list.pl  -cond trgsetupname=dAu200_production_2016,production=P17id,library=SL18f,filename~st_physics,filetype~picoDst,storage=local -keys 'node,path,filename,events' -delim / -limit 0 -o runs_path_all.list
+get_file_list.pl  -cond trgsetupname=dAu200_production_2016,production=P17id,library=SL18f,filename~st_physics,filetype~picoDst,storage=local -keys 'path,filename' -delim / -limit 0 -o runs_path_all.list
 
