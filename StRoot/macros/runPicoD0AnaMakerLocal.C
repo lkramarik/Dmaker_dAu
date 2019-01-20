@@ -13,6 +13,7 @@
 #include <ctime>
 #include <cstdio>
 #include "StPicoD0AnaMaker/StPicoD0AnaMaker.h"
+#include "StPicoD0V2AnaMaker/StPicoD0V2AnaMaker.h"
 
 using namespace std;
 
@@ -89,7 +90,7 @@ void runPicoD0AnaMakerLocal(
 
   StPicoD0V2AnaMaker* PicoD0V2AnaMaker = new StPicoD0V2AnaMaker("picoD0V2AnaMaker", picoDstMaker, outputFile);
   PicoD0V2AnaMaker->setHFBaseCuts(hfCuts);
-  
+
   clock_t start = clock(); // getting starting time
   chain->Init();
   
