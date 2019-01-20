@@ -94,14 +94,19 @@ int StPicoD0V2AnaMaker::makeV2(StHFPair* pair, double reweight){
 void StPicoD0V2AnaMaker::DeclareHistograms() {
     TString names[4] = {"cos_B", "cos_F", "sin_B", "sin_F"}; //backward and forward samples
     float multBin[6] = {0,7,12,16,22,100};
+    int nMultBins = sizeof(multBin) / sizeof(multBin[0]);
+
     TString multBinNames[6] = {"0","7","12","16","22","100"};
 
     for(int m = 0; m < 4; m++) {
         TString aa = names[m];
-        qVec[m] = new TProfile(aa.Data(),"Q vector", 5, multBin);
-        aa += "Pow2";
-        qVecPow2[m] = new TProfile(aa.Data(),"Q vector", 5, multBin);
+//        qVec[m] = new TProfile(aa.Data(),"Q vector", nMultBins, multBin);
+        qVec[m] = new TProfile(names[m].Data(),"Q vector", nMultBins, multBin);
         qVec[m]->Sumw2();
+
+        aa += "Pow2";
+//        qVecPow2[m] = new TProfile(aa.Data(),"Q vector", nMultBins, multBin);
+        qVecPow2[m] = new TProfile((names[m]+"Pow2").Data(),"Q vector", nMultBins, multBin);
         qVecPow2[m]->Sumw2();
         aa = names[m];
         aa += "_no_mult";
@@ -117,10 +122,10 @@ void StPicoD0V2AnaMaker::DeclareHistograms() {
         dirFlow[m] = new TProfile(Form("dirFlow_%.0f_%.0f", multBin[m], multBin[m+1]), "", nMomBins, momBins);
     }
 
-    corrD2[0] = new TProfile("cosD_no_mult","cos D",6,momBins);
-    corrD2[1] = new TProfile("sinD_no_mult","sin D",6,momBins);
-    dirFlow2 = new TProfile("dirFlow_no_mult","dir flow",6,momBins);
-    refFlow = new TProfile("refFlow", "", 5, multBin);
+    corrD2[0] = new TProfile("cosD_no_mult","cos D",nMomBins,momBins);
+    corrD2[1] = new TProfile("sinD_no_mult","sin D",nMomBins,momBins);
+    dirFlow2 = new TProfile("dirFlow_no_mult","dir flow",nMomBins,momBins);
+    refFlow = new TProfile("refFlow", "", nMultBins, multBin);
     refFlow2 = new TProfile("refFlow_no_mult", "", 1, 0, 100);
 
     hadron_phi = new TH1D("hadron_phi", "Hadron phi", 2000, -5, 5);
