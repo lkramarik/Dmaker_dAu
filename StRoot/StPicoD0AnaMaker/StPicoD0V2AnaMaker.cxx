@@ -4,8 +4,8 @@
 #include "StPicoEvent/StPicoTrack.h"
 #include "StPicoHFMaker/StHFCuts.h"
 #include "phys_constants.h"
-#include "StPicoD0AnaMaker.h"
-ClassImp(StPicoD0AnaMaker)
+#include "StPicoD0V2AnaMaker.h"
+ClassImp(StPicoD0V2AnaMaker)
 
 // _________________________________________________________
 StPicoD0V2AnaMaker::StPicoD0V2AnaMaker(char const* name, StPicoDstMaker* picoMaker, char const* outputBaseFileName) :
