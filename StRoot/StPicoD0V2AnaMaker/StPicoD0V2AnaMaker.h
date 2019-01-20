@@ -50,6 +50,7 @@ public:
     void DeclareHistograms();
     void WriteHistograms();
     bool isGoodHadron(StPicoTrack const*) const;
+
 protected:
 
 private:

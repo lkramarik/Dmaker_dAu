@@ -93,43 +93,42 @@ int StPicoD0V2AnaMaker::makeV2(StHFPair* pair, double reweight){
 // _________________________________________________________
 void StPicoD0V2AnaMaker::DeclareHistograms() {
     TString names[4] = {"cos_B", "cos_F", "sin_B", "sin_F"}; //backward and forward samples
-    float multBin[6] = {0,7,12,16,22,100};
-    int nMultBins = sizeof(multBin) / sizeof(multBin[0]);
-
-    TString multBinNames[6] = {"0","7","12","16","22","100"};
+    float multBin[6] = {0, 7, 12, 16, 22, 100};
+    int nMultBins = sizeof(multBin)/sizeof(multBin[0]);
 
     for(int m = 0; m < 4; m++) {
-        TString aa = names[m];
-//        qVec[m] = new TProfile(aa.Data(),"Q vector", nMultBins, multBin);
         qVec[m] = new TProfile(names[m].Data(),"Q vector", nMultBins, multBin);
         qVec[m]->Sumw2();
 
-        aa += "Pow2";
-//        qVecPow2[m] = new TProfile(aa.Data(),"Q vector", nMultBins, multBin);
         qVecPow2[m] = new TProfile((names[m]+"Pow2").Data(),"Q vector", nMultBins, multBin);
         qVecPow2[m]->Sumw2();
-        aa = names[m];
-        aa += "_no_mult";
-        qVec2[m] = new TProfile(aa.Data(),"Q vector", 1, 0, 100);
+
+        qVec2[m] = new TProfile((names[m]+"_no_mult").Data(),"Q vector", 1, 0, 100);
+        qVec2[m]->Sumw2();
     }
+    cout<<"Declare Hist qVec"<<endl;
 
     float momBins[7] = {0,1,2,3,4,5,10};
-    int nMomBins = sizeof(momBins) / sizeof(momBins[0]);
+    int nMomBins = sizeof(momBins)/sizeof(momBins[0]);
 
     for(int m = 0; m < 5; m++) {
         corrD[0][m] = new TProfile(Form("cosD_%.0f_%.0f", multBin[m], multBin[m+1]),"",nMomBins,momBins);
         corrD[1][m] = new TProfile(Form("sinD_%.0f_%.0f", multBin[m], multBin[m+1]),"",nMomBins,momBins);
         dirFlow[m] = new TProfile(Form("dirFlow_%.0f_%.0f", multBin[m], multBin[m+1]), "", nMomBins, momBins);
     }
+    cout<<"Declare Hist corrD"<<endl;
 
-    corrD2[0] = new TProfile("cosD_no_mult","cos D",nMomBins,momBins);
-    corrD2[1] = new TProfile("sinD_no_mult","sin D",nMomBins,momBins);
-    dirFlow2 = new TProfile("dirFlow_no_mult","dir flow",nMomBins,momBins);
+    corrD2[0] = new TProfile("cosD_no_mult","cos D", nMomBins, momBins);
+    corrD2[1] = new TProfile("sinD_no_mult","sin D", nMomBins, momBins);
+    dirFlow2 = new TProfile("dirFlow_no_mult","dir flow", nMomBins, momBins);
     refFlow = new TProfile("refFlow", "", nMultBins, multBin);
     refFlow2 = new TProfile("refFlow_no_mult", "", 1, 0, 100);
+    cout<<"Declare Hist refFlow2"<<endl;
+
 
     hadron_phi = new TH1D("hadron_phi", "Hadron phi", 2000, -5, 5);
     D_phi = new TH1D("D_phi", "D phi", 2000, -5, 5);
+    cout<<"Declare Hist end"<<endl;
 }
 
 // _________________________________________________________
@@ -196,21 +195,21 @@ bool StPicoD0V2AnaMaker::getHadronCorV2(int idxGap) {
     //Z code: reference flow creation: average sin/cos phi of a hadron in an event.... (no error!)
 
     if(idxGap==1)  {
-        qVec[0]->Fill(mult,hadronFill[2]/hadronFill[0],reweight);
-        qVec[1]->Fill(mult,hadronFill[5]/hadronFill[3],reweight);
-        qVec[2]->Fill(mult,hadronFill[1]/hadronFill[0],reweight);
-        qVec[3]->Fill(mult,hadronFill[4]/hadronFill[3],reweight);
-        qVecPow2[0]->Fill(mult,(hadronFill[2]*hadronFill[2])/(hadronFill[0]*hadronFill[0]),reweight);
-        qVecPow2[1]->Fill(mult,(hadronFill[5]*hadronFill[5])/(hadronFill[3]*hadronFill[3]),reweight);
-        qVecPow2[2]->Fill(mult,(hadronFill[1]*hadronFill[1])/(hadronFill[0]*hadronFill[0]),reweight);
-        qVecPow2[3]->Fill(mult,(hadronFill[4]*hadronFill[4])/(hadronFill[3]*hadronFill[3]),reweight);
-        refFlow->Fill(mult,((hadronFill[2]*hadronFill[5])/(hadronFill[0]*hadronFill[3])),reweight);
+        qVec[0]->Fill(mult, hadronFill[2]/hadronFill[0], reweight);
+        qVec[1]->Fill(mult, hadronFill[5]/hadronFill[3], reweight);
+        qVec[2]->Fill(mult, hadronFill[1]/hadronFill[0], reweight);
+        qVec[3]->Fill(mult, hadronFill[4]/hadronFill[3], reweight);
+        qVecPow2[0]->Fill(mult, (hadronFill[2]*hadronFill[2])/(hadronFill[0]*hadronFill[0]), reweight);
+        qVecPow2[1]->Fill(mult, (hadronFill[5]*hadronFill[5])/(hadronFill[3]*hadronFill[3]), reweight);
+        qVecPow2[2]->Fill(mult, (hadronFill[1]*hadronFill[1])/(hadronFill[0]*hadronFill[0]), reweight);
+        qVecPow2[3]->Fill(mult, (hadronFill[4]*hadronFill[4])/(hadronFill[3]*hadronFill[3]), reweight);
+        refFlow->Fill(mult, ((hadronFill[2]*hadronFill[5])/(hadronFill[0]*hadronFill[3])), reweight);
         //no mult
-        qVec2[0]->Fill(mult,hadronFill[2]/hadronFill[0],reweight);
-        qVec2[1]->Fill(mult,hadronFill[5]/hadronFill[3],reweight);
-        qVec2[2]->Fill(mult,hadronFill[1]/hadronFill[0],reweight);
-        qVec2[3]->Fill(mult,hadronFill[4]/hadronFill[3],reweight);
-        refFlow2->Fill(mult,((hadronFill[2]*hadronFill[5])/(hadronFill[0]*hadronFill[3])),reweight);
+        qVec2[0]->Fill(mult, hadronFill[2]/hadronFill[0], reweight);
+        qVec2[1]->Fill(mult, hadronFill[5]/hadronFill[3], reweight);
+        qVec2[2]->Fill(mult, hadronFill[1]/hadronFill[0], reweight);
+        qVec2[3]->Fill(mult, hadronFill[4]/hadronFill[3], reweight);
+        refFlow2->Fill(mult, ((hadronFill[2]*hadronFill[5])/(hadronFill[0]*hadronFill[3])), reweight);
     }
     return true;
 }
@@ -242,22 +241,20 @@ bool StPicoD0V2AnaMaker::getCorV2(StHFPair *kp,double weight) {
         float phiHadron = hadron->gMom().Phi();
         if(!isEtaGap(kp->eta(),etaGap[k],etaHadron))  continue;
         corFill[3]++;
-        corFill[4] += sin(2 * phiHadron)/sqrt(hadronv2);
-        corFill[5] += cos(2 * phiHadron)/sqrt(hadronv2);
-
-        cout << "TU SOM " << endl;
-
+        corFill[4] += sin(2*phiHadron)/sqrt(hadronv2);
+        corFill[5] += cos(2*phiHadron)/sqrt(hadronv2);
 
         for(int m = 0; m < 5; m++) {
             if(mult >= multBin[m] && mult < multBin[m+1]) {
-                corrD[0][m]->Fill(kp->pt(),corFill[2],weight);
-                corrD[1][m]->Fill(kp->pt(),corFill[1],weight);
-                dirFlow[m]->Fill(kp->pt(),corFill[2]*corFill[5]/corFill[3],weight);
+                corrD[0][m]->Fill(kp->pt(), corFill[2], weight);
+                corrD[1][m]->Fill(kp->pt(), corFill[1], weight);
+                dirFlow[m]->Fill(kp->pt(), corFill[2]*corFill[5]/corFill[3], weight);
             }
         }
-        corrD2[0]->Fill(kp->pt(),corFill[2],weight);
-        corrD2[1]->Fill(kp->pt(),corFill[1],weight);
-        dirFlow2->Fill(kp->pt(),corFill[2]*corFill[5]/corFill[3],weight);
+
+        corrD2[0]->Fill(kp->pt(), corFill[2], weight);
+        corrD2[1]->Fill(kp->pt(), corFill[1], weight);
+        dirFlow2->Fill(kp->pt(), corFill[2]*corFill[5]/corFill[3], weight);
     }
 
     return true;
