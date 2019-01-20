@@ -1,5 +1,5 @@
-#ifndef StPicoD0AnaMaker_h
-#define StPicoD0AnaMaker_h
+#ifndef StPicoD0V2AnaMaker_h
+#define StPicoD0V2AnaMaker_h
 
 #include "StPicoHFMaker/StPicoHFMaker.h"
 #include "TNtuple.h"
