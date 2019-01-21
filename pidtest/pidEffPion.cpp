@@ -39,6 +39,7 @@ void pidEffPion() {
 //    TString input = "ntp.picoK0sAnaMaker.root";
     TString inputMass = "/media/lukas/376AD6A434B7392F/work/pid/ntp.noHft.picoK0sAnaMaker.root";
     TString input = "/media/lukas/376AD6A434B7392F/work/pid/ntp.noHft.picoK0sAnaMaker.small.root";
+
 //    TString input = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/K0s_last/production/ntp.picoK0sAnaMaker.root";
 //    TString input = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/Phi_large/production/ntp.picoPhiAnaMaker.root";
 //    TString input = "outputBaseName.picoK0sAnaMaker.root";
@@ -82,6 +83,7 @@ void pidEffPion() {
 //    cutPair = Form("pair_pt>%.3f && pair_pt<%.3f && pair_decayL<4", ptPairMin, ptPairMax);
     cutPair = Form("pair_pt>%.3f && pair_pt<%.3f", ptPairMin, ptPairMax);
     TH1F *signal = (TH1F*) fitmass->projectSubtractBckg(inputMass, 50, massMin, massMax, ptPairMin, ptPairMax, pair, cut + cutPair, "pair_mass", "Mass_{%s} (GeV/c^{2})");
+
 
     fitmass->peakFit(signal, mean, sigma, massMin, massMax, pair, ptPairMin, ptPairMax, "mass");
     massMean = fitmass->getMean();

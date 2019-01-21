@@ -145,7 +145,7 @@ void FitPID::peakFit(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin,
     gPad->SetLeftMargin(0.15);
     gStyle->SetOptFit(1);
     hToFit->GetYaxis()->SetTitleOffset(1.25);
-    hToFit->Fit(funLS, "LRM");
+    hToFit->Fit(funLS, "ILRM");
 
     mHeight = funLS->GetParameter(2);
     mSigma = funLS->GetParameter(4);
