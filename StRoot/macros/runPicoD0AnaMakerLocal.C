@@ -74,9 +74,9 @@ void runPicoD0AnaMakerLocal(
   hfCuts->setCutPtRange(0.15,50.0,StHFCuts::kKaon); //0.2, 50.0
   //TPC setters
   hfCuts->setCutTPCNSigmaPion(3.0); //3
-  hfCuts->setCutTPCNSigmaKaon(2.0); //3
+  hfCuts->setCutTPCNSigmaKaon(3.0); //2
   //TOF setters, need to set pt range as well
-  hfCuts->setCutTOFDeltaOneOverBeta(0.05, StHFCuts::kKaon); // v podstate 5 sigma; nastavene = f * (sigmaTOF), sigma TOF je 0.013 
+  hfCuts->setCutTOFDeltaOneOverBeta(0.06, StHFCuts::kKaon); // v podstate 5 sigma; nastavene = f * (sigmaTOF), sigma TOF je 0.013
   hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kKaon);
   hfCuts->setCutTOFDeltaOneOverBeta(0.06, StHFCuts::kPion); // v podstate 6 sigma
   hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kPion);
@@ -87,7 +87,7 @@ void runPicoD0AnaMakerLocal(
   hfCuts->setCutSecondaryPairPtBin(3,      5,              0.015,          0.009,         0.6,      0.0064,   0.0064, 0.0076);
   hfCuts->setCutSecondaryPairPtBin(0,      5,              0.03,           0.009,         0.6,      0.1,   0.0064, 0.0076);
 
- 
+
 
   StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
 //  StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile);
