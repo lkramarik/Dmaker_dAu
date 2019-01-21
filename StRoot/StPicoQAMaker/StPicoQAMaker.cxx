@@ -41,10 +41,11 @@ int StPicoQAMaker::InitHF() {
     mOutList->Add(new TH3F("h_mh2CentVzWg", "CentralityVsVzWg;cent;VzvsRunIndex", 10, -1.5, 8.5, 200, -10, 10, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
 
     mOutList->Add(new TH2D("h_QA_Vz", "Vz_vs_RunIndex", 200, -10, 10, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
-    mOutList->Add(new TH2D("h_QA_VzmVzVPD", "Vz-VzVPD_vs_RunIndex", 100, -4, 4, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
+    mOutList->Add(new TH2D("h_QA_VzmVzVPD", "Vz-VzVPD_vs_RunIndex", 100, -10, 10, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
 
     mOutList->Add(new TH2D("h_QA_ZDC_rate", "ZDC_rateVsRunIndex", 250, 0, 250, RunNumberVector.size() + 1, -1, RunNumberVector.size())); //check binning and range
     mOutList->Add(new TH2D("h_QA_BBC_rate", "BBC_rateVsRunIndex", 2000, 0, 2000, RunNumberVector.size() + 1, -1, RunNumberVector.size())); //check binning and range
+    mOutList->Add(new TH2D("h_QA_ZDC_over_BBC", "ZDC/BBC_rateVsRunIndex", 5000, 0, 5, RunNumberVector.size() + 1, -1, RunNumberVector.size())); //check binning and range
 
     mOutList->Add(new TH2D("h_QA_ZDC_rate_pileUp", "ZDC_rateVsRunIndex", 250, 0, 250, RunNumberVector.size() + 1, -1, RunNumberVector.size())); //check binning and range
     mOutList->Add(new TH2D("h_QA_BBC_rate_pileUp", "BBC_rateVsRunIndex", 2000, 0, 2000, RunNumberVector.size() + 1, -1, RunNumberVector.size())); //check binning and range
@@ -140,12 +141,12 @@ int StPicoQAMaker::InitHF() {
     //Number of tracks vs. pT - get from integral of pT spectrum
 //____general QA histograms (all tracks within (TPC, track quality) cuts, NO TOF and HFT)__________________________________
     mOutList->Add(new TH2F("h_QA_pT", "Transverse_momentum_TPCvsRunIndex", 200, 0, 20, RunNumberVector.size() + 1, -1, RunNumberVector.size())); //check binning and range
-    mOutList->Add(new TH2F("h_QA_eta", "Pseudorapidity_TPCvsRunIndex", 200, -1., 1., RunNumberVector.size() + 1, -1, RunNumberVector.size()));
+    mOutList->Add(new TH2F("h_QA_eta", "Pseudorapidity_TPCvsRunIndex", 400, -2., 2., RunNumberVector.size() + 1, -1, RunNumberVector.size()));
     mOutList->Add(new TH2F("h_QA_phi", "Azimuthal_angle_TPCvsRunIndex", 200, -TMath::Pi(), TMath::Pi(), RunNumberVector.size() + 1, -1, RunNumberVector.size()));
 
-    mOutList->Add(new TH2F("h_QA_vertex_x", "Vertex_x_positionvsRunIndex", 100, -0.5, 0.5, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
-    mOutList->Add(new TH2F("h_QA_vertex_z", "Vertex_z_positionvsRunIndex", 100, -0.5, 0.5, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
-    mOutList->Add(new TH2F("h_QA_vertex_y", "Vertex_y_positionvsRunIndex", 100, -0.5, 0.5, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
+    mOutList->Add(new TH2F("h_QA_vertex_x", "Vertex_x_positionvsRunIndex", 2000, -10, 10, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
+    mOutList->Add(new TH2F("h_QA_vertex_z", "Vertex_z_positionvsRunIndex", 2000, -10, 10, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
+    mOutList->Add(new TH2F("h_QA_vertex_y", "Vertex_y_positionvsRunIndex", 2000, -10, 10, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
 
     mOutList->Add(new TH2F("h_QA_DCA_xy_TPC", "DCA_xy_TPCvsRunIndex", 600, -3, 3, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
     mOutList->Add(new TH2F("h_QA_DCA_xy_zoom_TPC", "DCA_xy_zoom_TPCvsRunIndex", 100, -0.1, 0.1, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
@@ -157,7 +158,7 @@ int StPicoQAMaker::InitHF() {
 
 //___HFT QA hitograms______________________________________________________________________________________________________
     mOutList->Add(new TH2F("h_QA_pT_HFT", "Transverse_momentum_HFTvsRunIndex", 200, 0, 20, RunNumberVector.size() + 1, -1, RunNumberVector.size())); //check binning and range
-    mOutList->Add(new TH2F("h_QA_eta_HFT", "Pseudorapidity_HFTvsRunIndex", 200, -1., 1., RunNumberVector.size() + 1, -1, RunNumberVector.size()));
+    mOutList->Add(new TH2F("h_QA_eta_HFT", "Pseudorapidity_HFTvsRunIndex", 400, -2., 2., RunNumberVector.size() + 1, -1, RunNumberVector.size()));
     mOutList->Add(new TH2F("h_QA_phi_HFT", "Azimuthal_angle_HFTvsRunIndex", 200, -TMath::Pi(), TMath::Pi(), RunNumberVector.size() + 1, -1, RunNumberVector.size()));
 
     mOutList->Add(new TH2F("h_QA_pT_HFT_TOF", "Transverse_momentum_HFT_TOFvsRunIndex", 200, 0, 20, RunNumberVector.size() + 1, -1, RunNumberVector.size())); //check binning and range
@@ -211,7 +212,7 @@ int StPicoQAMaker::InitHF() {
     mRunNumber = 0;
 
     mOutFileBaseName = mOutFileBaseName.ReplaceAll(".root", "");
-    ntp_event = new TNtuple("ntp_event","event tuple","nTrk:nTrk0406:nTrk1012:nTrk3040:nTrkHft:nTrkHft0406:nTrkHft1012:nTrkHft3040:ZDC:BBC:runId:RunIndex");
+//    ntp_event = new TNtuple("ntp_event","event tuple","nTrk:nTrk0406:nTrk1012:nTrk3040:nTrkHft:nTrkHft0406:nTrkHft1012:nTrkHft3040:ZDC:BBC:runId:RunIndex");
 //    ntp_hft_track = new TNtuple("ntp_hft_track", "hft track tree","pt:zdc:bbc:runId:dca:dca_xy:dca_z");
     return kStOK;
 }
@@ -223,7 +224,7 @@ void StPicoQAMaker::ClearHF(Option_t *opt="") {
 
 // _________________________________________________________
 int StPicoQAMaker::FinishHF() {
-    ntp_event -> Write(ntp_event->GetName(), TObject::kOverwrite);
+//    ntp_event -> Write(ntp_event->GetName(), TObject::kOverwrite);
     return kStOK;
 }
 
@@ -278,6 +279,7 @@ int StPicoQAMaker::MakeHF() {
 
     TH2D *h_QA_ZDC_rate = static_cast<TH2D *>(mOutList->FindObject("h_QA_ZDC_rate"));
     TH2D *h_QA_BBC_rate = static_cast<TH2D *>(mOutList->FindObject("h_QA_BBC_rate"));
+    TH2D *h_QA_ZDC_over_BBC = static_cast<TH2D *>(mOutList->FindObject("h_QA_ZDC_over_BBC"));
 
     TH2D *h_QA_ZDC_rate_pileUp = static_cast<TH2D *>(mOutList->FindObject("h_QA_ZDC_rate_pileUp"));
     TH2D *h_QA_BBC_rate_pileUp = static_cast<TH2D *>(mOutList->FindObject("h_QA_BBC_rate_pileUp"));
@@ -441,6 +443,7 @@ int StPicoQAMaker::MakeHF() {
 
     h_QA_ZDC_rate->Fill(mPicoDst->event()->ZDCx() / 1000., RunIndex);
     h_QA_BBC_rate->Fill(mPicoDst->event()->BBCx() / 1000., RunIndex);
+    h_QA_ZDC_over_BBC->Fill(mPicoDst->event()->ZDCx()/mPicoDst->event()->BBCx(), RunIndex);
 
     float ZDC = mPicoDst->event()->ZDCx() / 1000.;
     float BBC = mPicoDst->event()->BBCx() / 1000.;

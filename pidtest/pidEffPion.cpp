@@ -31,6 +31,11 @@ void pidEffPion() {
 //    gSystem->Load("FitPID");
     gROOT->ProcessLine(".L FitPID.c++");
 
+    gSystem->Exec("rm rootFiles/nSigma_pipi_1.root rootFiles/nSigma_pipi_2.root");
+    gSystem->Exec("rm rootFiles/nSigma_pipi_ana_1.root rootFiles/nSigma_pipi_ana_2.root");
+    gSystem->Exec("rm rootFiles/nSigma_pipi_ana.root rootFiles/nSigma_pipi.root");
+    gSystem->Exec("rm rootFiles/mass_pipi.root");
+
 //    TString input = "ntp.picoK0sAnaMaker.root";
     TString inputMass = "/media/lukas/376AD6A434B7392F/work/pid/ntp.noHft.picoK0sAnaMaker.root";
     TString input = "/media/lukas/376AD6A434B7392F/work/pid/ntp.noHft.picoK0sAnaMaker.small.root";
@@ -47,11 +52,22 @@ void pidEffPion() {
 
     Float_t massMin, massMax, mean, sigma, ptPairMin, ptPairMax;
     TString pair, pairName;
-    TCut cut, cutPair;
+    TCut cut, cutPair, tof1, tof2;
     FitPID *fitmass = new FitPID();
 
     pair = "#pi#pi";
     pairName = "pipi";
+
+    bool hybridTof=true;
+
+    if (hybridTof) {
+        tof1="pi1_TOFinvbeta<0.03 || pi1_TOFinvbeta>93";
+        tof2="pi2_TOFinvbeta<0.03 || pi2_TOFinvbeta>93";
+    }
+    else {
+        tof1="pi1_TOFinvbeta<93";
+        tof2="pi2_TOFinvbeta<93";
+    }
 
     massMin = 0.42;// K to pipi
     massMax = 0.58;// K to pipi
@@ -76,12 +92,12 @@ void pidEffPion() {
     for (int i = 0; i < nBins - 1; ++i) {
         //clean pions:
         FitPID *pid1 = new FitPID();
-        pid1->setOutputFileName("nSigma_" + pairName + "_1.root");
+        pid1->setOutputFileName("rootFiles/nSigma_" + pairName + "_1.root");
         cut = Form("pair_mass>%f && pair_mass<%f && pi1_pt>%.3f && pi1_pt<%.3f", massMean - 2 * massSigma, massMean + 2 * massSigma, ptBins[i], ptBins[i + 1]);
         TH1F *hSigmaSignal1 = (TH1F *) pid1->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i + 1], pair, cut + cutPair, "pi1_nSigma", "Pion n#sigma^{TPC}");
 
         FitPID *pid2 = new FitPID();
-        pid2->setOutputFileName("nSigma_" + pairName + "_2.root");
+        pid2->setOutputFileName("rootFiles/nSigma_" + pairName + "_2.root");
         cut = Form("pair_mass>%f && pair_mass<%f && pi2_pt>%.3f && pi2_pt<%.3f", massMean - 2 * massSigma, massMean + 2 * massSigma, ptBins[i], ptBins[i + 1]);
         TH1F *hSigmaSignal2 = (TH1F *) pid2->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i + 1], pair, cut + cutPair, "pi2_nSigma", "Pion n#sigma^{TPC}");
 
@@ -100,16 +116,14 @@ void pidEffPion() {
 
         //tof pions after my PID cut:
         FitPID *pidAna1 = new FitPID();
-        pidAna1->setOutputFileName("nSigma_"+pairName+"_ana_1.root");
-        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta<3", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]); //tof match
-//        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta<0.03", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]); //tof match
-        TH1F *hSigmaSignalAna1 = (TH1F*) pidAna1->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair, "pi1_nSigma", "Pion n#sigma^{TPC}");
+        pidAna1->setOutputFileName("rootFiles/nSigma_"+pairName+"_ana_1.root");
+        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]); //tof match
+        TH1F *hSigmaSignalAna1 = (TH1F*) pidAna1->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair+tof1, "pi1_nSigma", "Pion n#sigma^{TPC}");
 
         FitPID *pidAna2 = new FitPID();
-        pidAna2->setOutputFileName("nSigma_"+pairName+"_ana_2.root");
-        cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%f && pi2_pt<%f && pi2_TOFinvbeta<3", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
-//        cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%f && pi2_pt<%f && pi2_TOFinvbeta<0.03", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
-        TH1F *hSigmaSignalAna2 = (TH1F*) pidAna2->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair, "pi2_nSigma", "Pion n#sigma^{TPC}"); //tof match
+        pidAna2->setOutputFileName("rootFiles/nSigma_"+pairName+"_ana_2.root");
+        cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%f && pi2_pt<%f", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
+        TH1F *hSigmaSignalAna2 = (TH1F*) pidAna2->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair+tof2, "pi2_nSigma", "Pion n#sigma^{TPC}"); //tof match
 
         hSigmaSignalAna1->Add(hSigmaSignalAna2);
 
@@ -137,7 +151,7 @@ void pidEffPion() {
     gMean->GetXaxis()->SetTitle("p_{T} (GeV/c)");
     gMean->SetTitle("");
     gMean->Draw("ap");
-    c1->SaveAs("mean.root");
+    c1->SaveAs("rootFiles/meanPion.root");
     c1->Close();
 
     TCanvas *c2 = new TCanvas("c2","%.3f_%.3f",1000,900);
@@ -150,7 +164,7 @@ void pidEffPion() {
     gSigmas->GetXaxis()->SetTitle("p_{T} (GeV/c)");
     gSigmas->SetTitle("");
     gSigmas->Draw("ap");
-    c2->SaveAs("sigma.root");
+    c2->SaveAs("rootFiles/sigmaPion.root");
     c2->Close();
 
     TCanvas *c3 = new TCanvas("c3","%.3f_%.3f",1000,900);
@@ -163,15 +177,19 @@ void pidEffPion() {
     gEff->GetXaxis()->SetTitle("p_{T} (GeV/c)");
     gEff->SetTitle("");
     gEff->Draw("ap");
-    c3->SaveAs("effTOF.root");
+    c3->SaveAs("rootFiles/effTOFPion.root");
     c3->Close();
 
-    TFile* resOut = new TFile("results_pipi.root" ,"RECREATE");
+    TFile* resOut = new TFile("rootFiles/results_pipi.root" ,"RECREATE");
     gEff->Write("eff");
     gMean->Write("mean");
     gSigmas->Write("sigma");
     resOut->Close();
-    gSystem->Exec(“hadd -k -f nSigma_pipi.root nSigma_pipi_1.root nSigma_pipi_2.root”);
-    gSystem->Exec(“rm nSigma_pipi_1.root nSigma_pipi_2.root”);
+
+    gSystem->Exec("hadd -k -f rootFiles/nSigma_pipi.root rootFiles/nSigma_pipi_1.root rootFiles/nSigma_pipi_2.root");
+    gSystem->Exec("hadd -k -f rootFiles/nSigma_pipi_ana.root rootFiles/nSigma_pipi_ana_1.root rootFiles/nSigma_pipi_ana_2.root");
+    gSystem->Exec("rm rootFiles/nSigma_pipi_1.root rootFiles/nSigma_pipi_2.root");
+    gSystem->Exec("rm rootFiles/nSigma_pipi_ana_1.root rootFiles/nSigma_pipi_ana_2.root");
+
 
 }

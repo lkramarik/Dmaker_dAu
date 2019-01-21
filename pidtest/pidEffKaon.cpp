@@ -35,13 +35,9 @@ void pidEffKaon() {
     gSystem->Exec("rm rootFiles/nSigma_KK_1.root rootFiles/nSigma_KK_2.root");
     gSystem->Exec("rm rootFiles/nSigma_KK_ana_1.root rootFiles/nSigma_KK_ana_2.root");
     gSystem->Exec("rm rootFiles/nSigma_KK_ana.root rootFiles/nSigma_KK.root");
-
+    gSystem->Exec("rm rootFiles/mass_KK.root");
 
     TString input = "/media/lukas/376AD6A434B7392F/work/pid/ntp.picoPhiAnaMaker.1501.root";
-//    TString input = "small_ntp.picoPhiAnaMaker.root";
-//    TString input = "ntp.picoK0sAnaMaker.root";
-//    TString input = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/Phi_large/production/ntp.picoPhiAnaMaker.root";
-//    TString input = "outputBaseName.picoK0sAnaMaker.root";
 
 //    Float_t ptBins[] = {2.2, 2.5, 3};
     Float_t ptBins[] = {0.2, 0.5, 1, 1.2, 1.4, 1.7, 2.3, 3, 4}; //kaon
@@ -55,7 +51,7 @@ void pidEffKaon() {
     Float_t massMin, massMax, mean, sigma, ptPairMin, ptPairMax;
     Float_t height = 1000;
     TString pair, pairName;
-    TCut cut, cutPair;
+    TCut cut, cutPair, tof1, tof2;
     FitPID *fitmass = new FitPID();
 
     pair = "KK";
@@ -69,6 +65,18 @@ void pidEffKaon() {
 
     fitmass->setOutputFileName("rootFiles/mass_" + pairName + ".root");
     fitmass->setHeight(15000);
+
+    bool hybridTof=true;
+
+    if (hybridTof) {
+        tof1="pi1_TOFinvbeta<0.03 || pi1_TOFinvbeta>93";
+        tof2="pi2_TOFinvbeta<0.03 || pi2_TOFinvbeta>93";
+    }
+    else {
+        tof1="pi1_TOFinvbeta<93";
+        tof2="pi2_TOFinvbeta<93";
+    }
+
 
     cut = Form("pair_mass>%.3f && pair_mass<%.3f", massMin, massMax);
     cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && pair_cosTheta>0.85 && pi2_pt>0.15", ptPairMin, ptPairMax);
@@ -86,8 +94,6 @@ void pidEffKaon() {
     for (int i = 0; i < nBins-1; ++i) {
         //clean pions:
         FitPID *pid1 = new FitPID();
-        cout<<"ok"<<endl;
-
         pid1->setOutputFileName("rootFiles/nSigma_" + pairName + "_1.root");
         cut = Form("pair_mass>%f && pair_mass<%f && pi1_pt>%.3f && pi1_pt<%.3f", massMean - 2*massSigma, massMean + 2*massSigma, ptBins[i], ptBins[i+1]);
         TH1F *hSigmaSignal1 = (TH1F *) pid1->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i + 1], pair, cut + cutPair, "pi1_nSigma", "Kaon n#sigma^{TPC}");
@@ -117,16 +123,15 @@ void pidEffKaon() {
         //tof pions after my PID cut:
         FitPID *pidAna1 = new FitPID();
         pidAna1->setOutputFileName("rootFiles/nSigma_"+pairName+"_ana_1.root");
-        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta<3", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
-//        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta>0", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
-//        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta<0.03 && pi1_TOFinvbeta>0", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
-        TH1F *hSigmaSignalAna1 = (TH1F*) pidAna1->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair, "pi1_nSigma", "Kaon n#sigma^{TPC}");
+//        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta<3", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]); //TOF matching
+        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]); // hybrid TOF
+        TH1F *hSigmaSignalAna1 = (TH1F*) pidAna1->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair+tof1, "pi1_nSigma", "Kaon n#sigma^{TPC}");
 //
         FitPID *pidAna2 = new FitPID();
         pidAna2->setOutputFileName("rootFiles/nSigma_"+pairName+"_ana_2.root");
-        cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%f && pi2_pt<%f && pi2_TOFinvbeta<3", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
+        cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%f && pi2_pt<%f", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
 //        cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%f && pi2_pt<%f && pi2_TOFinvbeta>0", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
-        TH1F *hSigmaSignalAna2 = (TH1F*) pidAna2->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair, "pi2_nSigma", "Kaon n#sigma^{TPC}");
+        TH1F *hSigmaSignalAna2 = (TH1F*) pidAna2->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair+tof2, "pi2_nSigma", "Kaon n#sigma^{TPC}");
 //
         hSigmaSignalAna1->Add(hSigmaSignalAna2);
         pidAna1->setHeight(height);
@@ -207,8 +212,8 @@ void pidEffKaon() {
     gSigmas->Write("sigma");
     resOut->Close();
 
-    gSystem->Exec("hadd -k -f rootFiles/nSigma_KK.root nSigma_KK_1.root rootFiles/nSigma_KK_2.root");
-    gSystem->Exec("hadd -k -f rootFiles/nSigma_KK_ana.root nSigma_KK_ana_1.root rootFiles/nSigma_KK_ana_2.root");
+    gSystem->Exec("hadd -k -f rootFiles/nSigma_KK.root rootFiles/nSigma_KK_1.root rootFiles/nSigma_KK_2.root");
+    gSystem->Exec("hadd -k -f rootFiles/nSigma_KK_ana.root rootFiles/nSigma_KK_ana_1.root rootFiles/nSigma_KK_ana_2.root");
     gSystem->Exec("rm rootFiles/nSigma_KK_1.root rootFiles/nSigma_KK_2.root");
     gSystem->Exec("rm rootFiles/nSigma_KK_ana_1.root rootFiles/nSigma_KK_ana_2.root");
 
