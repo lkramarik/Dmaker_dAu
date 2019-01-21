@@ -90,7 +90,7 @@ bool StHFCuts::isGoodTertiaryVertexPair(StHFPair const & pair) const {
 
 // _________________________________________________________
 bool StHFCuts::isGoodSecondaryVertexPairPtBin(StHFPair const & pair) const {
-	if (!(mCutsDecayLength.size() == mCutsDcaDaughters.size() == mCutsDcaToPrimaryVertex.size() == mCutsPtMin.size() == mCutsPtMin.size() == mCutsPointingAngle.size() == mCutsKaonDca.size() == mCutsPionDca.size)){
+	if (!((mCutsDecayLength.size()) == (mCutsDcaDaughters.size()) == (mCutsDcaToPrimaryVertex.size()) == (mCutsPtMin.size()) == (mCutsPtMin.size()) == (mCutsPointingAngle.size()) == (mCutsKaonDca.size()) == (mCutsPionDca.size))){
 		cout<<"Ooops"<<endl;
 	}
 
