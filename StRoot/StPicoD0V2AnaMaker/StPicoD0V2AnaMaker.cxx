@@ -59,7 +59,7 @@ int StPicoD0V2AnaMaker::createCandidates() {
             if (!mHFCuts -> isGoodKaon(kaon)) continue;
             StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), i, j, mPrimVtx, mBField, kTRUE); //the order (pion1, kaon) needs to stay same!
             if (!mHFCuts->isGoodSecondaryVertexPair(pair)) continue;
-//            if(pair->m() < 1.804 || pair->m() > 1.924 || pair->pt() < 1 || pair->pt() > 5) continue;
+            if(pair->m() < 1.804 || pair->m() > 1.924 || pair->pt() < 1 || pair->pt() > 5) continue;
 
             makeV2(pair, 1);
         }  // for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon)
@@ -71,35 +71,29 @@ int StPicoD0V2AnaMaker::createCandidates() {
 // _________________________________________________________
 int StPicoD0V2AnaMaker::makeV2(StHFPair* pair, double reweight){
     //mean 1.864, sigma 0.02
-    cout<<"make v2"<<endl;
-    if(pair->pt() > 1 && pair->pt() < 2) {
-        if(pair->decayLength() > 0.012 && pair->dcaDaughters() < 0.007 && pair->DcaToPrimaryVertex() < 0.005 && cos(pair->pointingAngle()) > 0.5 && pair->particle2Dca() > 0.007 && pair->particle1Dca() > 0.009) {
-            getCorV2(pair, reweight);
-            cout<<"pt bin old ok 12"<<endl;
-        }
+//    if(pair->pt() > 1 && pair->pt() < 2) {
+//        if(pair->decayLength() > 0.012 && pair->dcaDaughters() < 0.007 && pair->DcaToPrimaryVertex() < 0.005 && cos(pair->pointingAngle()) > 0.5 && pair->particle2Dca() > 0.007 && pair->particle1Dca() > 0.009) {
+//            getCorV2(pair, reweight);
+//            cout<<"pt bin old ok 12"<<endl;
+//        }
+//    }
+//    if(pair->pt() > 2 && pair->pt() < 3)
+//    {
+//        if(pair->decayLength() > 0.003 && pair->dcaDaughters() < 0.016 && pair->DcaToPrimaryVertex() < 0.0065 && cos(pair->pointingAngle()) > 0.5 && pair->particle2Dca() > 0.01 && pair->particle1Dca() > 0.009) {
+//            getCorV2(pair, reweight);
+//            cout<<"pt bin old ok 23"<<endl;
+//        }
+//    }
+//    if(pair->pt() > 3 && pair->pt() < 5) {
+//        if (pair->decayLength() > 0.009 && pair->dcaDaughters() < 0.015 && pair->DcaToPrimaryVertex() < 0.0064 && cos(pair->pointingAngle()) > 0.6 && pair->particle2Dca() > 0.0076 && pair->particle1Dca() > 0.0064) {
+//            getCorV2(pair, reweight);
+//            cout << "pt bin old ok 35" << endl;
+//        }
+//    }
+//
+    if (mHFCuts->isGoodSecondaryVertexPairPtBin(pair)) {
+        getCorV2(pair, reweight);
     }
-    if(pair->pt() > 2 && pair->pt() < 3)
-    {
-        if(pair->decayLength() > 0.003 && pair->dcaDaughters() < 0.016 && pair->DcaToPrimaryVertex() < 0.0065 && cos(pair->pointingAngle()) > 0.5 && pair->particle2Dca() > 0.01 && pair->particle1Dca() > 0.009) {
-            getCorV2(pair, reweight);
-            cout<<"pt bin old ok 23"<<endl;
-        }
-    }
-    if(pair->pt() > 3 && pair->pt() < 5)
-    {
-        if(pair->decayLength() > 0.009 && pair->dcaDaughters() < 0.015 && pair->DcaToPrimaryVertex() < 0.0064 && cos(pair->pointingAngle()) > 0.6 && pair->particle2Dca() > 0.0076 && pair->particle1Dca() > 0.0064) {
-            getCorV2(pair, reweight);
-            cout<<"pt bin old ok 35"<<endl;
-        }
-    }
-    if(pair->pt() > 0 && pair->pt() < 5)
-    {
-        if(pair->decayLength() > 0.009 && pair->dcaDaughters() < 0.03 && pair->DcaToPrimaryVertex() < 0.1 && cos(pair->pointingAngle()) > 0.6 && pair->particle2Dca() > 0.0076 && pair->particle1Dca() > 0.0064) {
-            getCorV2(pair, reweight);
-            cout<<"test cut"<<endl;
-        }
-    }
-    if (mHFCuts->isGoodSecondaryVertexPairPtBin(pair)) {cout<<"pt bin new ok"<<endl;}
     return kStOK;
 }
 
