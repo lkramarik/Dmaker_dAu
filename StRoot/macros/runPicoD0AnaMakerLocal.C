@@ -53,7 +53,7 @@ void runPicoD0AnaMakerLocal(
 
   hfCuts->setCutNHitsFitMin(15); //default is 20
   hfCuts->setCutRequireHFT(true);
-  hfCuts->setHybridTof(false);
+  hfCuts->setHybridTof(true);
   //LK hfCuts->setCutDcaMin(0.009,StHFCuts::kPion); //federic 1aug2016
   //LK  hfCuts->setCutDcaMin(0.007,StHFCuts::kKaon); //federic 3aug2016
   //hfCuts->setCutNHitsFitnHitsMax(0.52);  kvapil
@@ -85,6 +85,15 @@ void runPicoD0AnaMakerLocal(
   hfCuts->setCutSecondaryPairPtBin(1,      2,              0.007,          0.012,         0.5,      0.005,    0.009, 0.007);
   hfCuts->setCutSecondaryPairPtBin(2,      3,              0.016,          0.003,         0.5,      0.0065,   0.009, 0.01);
   hfCuts->setCutSecondaryPairPtBin(3,      5,              0.015,          0.009,         0.6,      0.0064,   0.0064, 0.0076);
+  hfCuts->setCutSecondaryPairPtBin(0,      5,              0.03,           0.009,         0.6,      0.1,   0.0064, 0.0076);
+
+  if(pair->pt() > 0 && pair->pt() < 5)
+  {
+    if(pair->decayLength() > 0.009 && pair->dcaDaughters() < 0.03 && pair->DcaToPrimaryVertex() < 0.1 && cos(pair->pointingAngle()) > 0.6 && pair->particle2Dca() > 0.0076 && pair->particle1Dca() > 0.0064) {
+      getCorV2(pair, reweight);
+      cout<<"test cut"<<endl;
+    }
+  }
 
   StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
 //  StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile);
