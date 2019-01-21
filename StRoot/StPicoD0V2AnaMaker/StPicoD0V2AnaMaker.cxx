@@ -7,6 +7,8 @@
 #include "StPicoD0V2AnaMaker.h"
 ClassImp(StPicoD0V2AnaMaker)
 
+float multBin[6] = {0,7,12,16,22,100};
+
 // _________________________________________________________
 StPicoD0V2AnaMaker::StPicoD0V2AnaMaker(char const* name, StPicoDstMaker* picoMaker, char const* outputBaseFileName) :
         StPicoHFMaker(name, picoMaker, outputBaseFileName),
