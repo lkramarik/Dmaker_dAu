@@ -48,6 +48,8 @@ public:
     virtual Int_t FinishHF();
 
 protected:
+    std::vector<unsigned short> mIdxPicoPions;
+    std::vector<unsigned short> mIdxPicoKaons;
 
 private:
     int createCandidates();

@@ -166,31 +166,44 @@ int StPicoD0AnaMaker::MakeHF() {
 
 // _________________________________________________________
 int StPicoD0AnaMaker::createCandidates() {
-//    for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
-//        StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
-//        for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
-//            StPicoTrack const *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
-//    StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
 
-    for(unsigned int i=0;i<mPicoDst->numberOfTracks();i++)  {
-        StPicoTrack const* pion1 = mPicoDst->track(i);
-        if (!mHFCuts -> isGoodPion(pion1)) continue;
+    UInt_t nTracks = mPicoDst->numberOfTracks();
+    for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
+        StPicoTrack* trk = mPicoDst->track(iTrack);
+        if (abs(trkTest->gMom().PseudoRapidity())>1) continue;
+        if (mHFCuts->isGoodPion(trkTest)) mIdxPicoPions.push_back(iTrack);
+        if (mHFCuts->isGoodKaon(trkTest)) mIdxPicoKaons.push_back(iTrack);
+//        if (isProton(trk)) mIdxPicoProtons.push_back(iTrack); // isProton method to be implemented by daughter class
+    }
 
-        for(unsigned  int j=0;j<mPicoDst->numberOfTracks();j++)  {
-            StPicoTrack const* kaon = mPicoDst->track(j);
-            if (pion1->id() == kaon->id()) continue;
+    for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
+        StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
+        for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
+            StPicoTrack const *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
+            StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
 
-            if (!mHFCuts -> isGoodKaon(kaon)) continue;
-            StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), i, j, mPrimVtx, mBField, kTRUE);
+//    for(unsigned int i=0;i<mPicoDst->numberOfTracks();i++)  {
+//        StPicoTrack const* pion1 = mPicoDst->track(i);
+//        if (!mHFCuts -> isGoodPion(pion1)) continue;
+//
+//        for(unsigned  int j=0;j<mPicoDst->numberOfTracks();j++)  {
+//            StPicoTrack const* kaon = mPicoDst->track(j);
+//            if (pion1->id() == kaon->id()) continue;
+//
+//            if (!mHFCuts -> isGoodKaon(kaon)) continue;
+//            StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), i, j, mPrimVtx, mBField, kTRUE);
+
             if (!mHFCuts->isGoodSecondaryVertexPair(pair)) continue;
 
             float flag = -99.;
+            bool isD0 = false;
+            if((kaon->charge() + pion1->charge() == 0) ) isD0=true;
 
-            if( kaon->charge()<0 && pion1->charge()>0 ) flag=0.; // -+
-            if( kaon->charge()>0 && pion1->charge()<0 ) flag=1.; // +-
+            if(kaon->charge()<0 && pion1->charge()>0 ) flag=0.; // -+
+            if(kaon->charge()>0 && pion1->charge()<0 ) flag=1.; // +-
 
-            if( kaon->charge()<0 && pion1->charge()<0) flag=4.; // --
-            if( kaon->charge()>0 && pion1->charge()>0) flag=5.; // ++
+            if(kaon->charge()<0 && pion1->charge()<0) flag=4.; // --
+            if(kaon->charge()>0 && pion1->charge()>0) flag=5.; // ++
 
             int ii=0;
             float ntVar[27];
@@ -227,13 +240,21 @@ int StPicoD0AnaMaker::createCandidates() {
             ntVar[ii++] = pair->pt();
             ntVar[ii++] = pair->m();
 
-            if ((flag == 0) || (flag == 1)) {
+            if (isD0) {
                 ntp_DMeson_Signal->Fill(ntVar);
             } else {
                 ntp_DMeson_Background->Fill(ntVar);
             }
+
+//            if ((flag == 0) || (flag == 1)) {
+//                ntp_DMeson_Signal->Fill(ntVar);
+//            } else {
+//                ntp_DMeson_Background->Fill(ntVar);
+//            }
         }  // for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon)
     } // for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1)
+    mIdxPicoPions.clear();
+    mIdxPicoKaons.clear();
 
     return kStOK;
 }
