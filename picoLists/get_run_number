@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+get_file_list.pl -cond trgsetupname=dAu200_production_2016,filename~st_physics,filetype~picoDst,production=P17id -keys 'runnumber' -onefile -limit 0 > runs_p17id_all.txt

@@ -1,16 +1,15 @@
 #include "StPicoDstMaker/StPicoDstMaker.h"
-#include "StPicoDstMaker/StPicoDst.h"
+#include "StPicoEvent/StPicoDst.h"
 #include "StPicoEvent/StPicoEvent.h"
 #include "StPicoEvent/StPicoTrack.h"
 #include "StPicoHFMaker/StHFCuts.h"
 #include "phys_constants.h"
-#include "StBTofUtil/tofPathLength.hh"
 #include "StPicoPiPiMaker.h"
 ClassImp(StPicoPiPiMaker)
 
 // _________________________________________________________
-StPicoPiPiMaker::StPicoPiPiMaker(char const* name, StPicoDstMaker* picoMaker, char const* outputBaseFileName, char const* inputHFListHFtree = "") :
-        StPicoHFMaker(name, picoMaker, outputBaseFileName, inputHFListHFtree),
+StPicoPiPiMaker::StPicoPiPiMaker(char const* name, StPicoDstMaker* picoMaker, char const* outputBaseFileName) :
+        StPicoHFMaker(name, picoMaker, outputBaseFileName),
         mOutFileBaseName(outputBaseFileName){
     // constructor
 }
@@ -59,7 +58,7 @@ int StPicoPiPiMaker::createCandidates() {
     for(unsigned int k = 0; k < mPicoDst->numberOfTracks(); ++k) {
         StPicoTrack const *trkTest = mPicoDst->track(k);
 
-        if (abs(trkTest->gMom().pseudoRapidity())>1) continue;
+        if (abs(trkTest->gMom().PseudoRapidity())>1) continue;
         if (mHFCuts->isGoodPion(trkTest)) mIdxPicoPions.push_back(k);
     }
 
@@ -84,16 +83,16 @@ int StPicoPiPiMaker::createCandidates() {
             ntVar[ii++] = pair->particle1Dca();
             ntVar[ii++] = pion1->nSigmaPion();
             ntVar[ii++] = pion1->nHitsFit();
-            ntVar[ii++] = pion1->gMom().pseudoRapidity();
-            ntVar[ii++] = pion1->gMom().phi();
+            ntVar[ii++] = pion1->gMom().PseudoRapidity();
+            ntVar[ii++] = pion1->gMom().Phi();
             ntVar[ii++] = mHFCuts->getOneOverBeta(pion1, mHFCuts->getTofBetaBase(pion1), StPicoCutsBase::kPion);
 
             ntVar[ii++] = pion2->gPt();
             ntVar[ii++] = pair->particle2Dca();
             ntVar[ii++] = pion2->nSigmaPion();
             ntVar[ii++] = pion2->nHitsFit();
-            ntVar[ii++] = pion2->gMom().pseudoRapidity();
-            ntVar[ii++] = pion2->gMom().phi();
+            ntVar[ii++] = pion2->gMom().PseudoRapidity();
+            ntVar[ii++] = pion2->gMom().Phi();
             ntVar[ii++] = mHFCuts->getOneOverBeta(pion2, mHFCuts->getTofBetaBase(pion2), StPicoCutsBase::kPion);
 
             ntVar[ii++] = pair->dcaDaughters();

@@ -1,4 +1,3 @@
-#ifndef __CINT__
 #include "TROOT.h"
 #include "TSystem.h"
 #include "TChain.h"
@@ -14,44 +13,26 @@
 #include <ctime>
 #include <cstdio>
 #include "StPicoD0AnaMaker/StPicoD0AnaMaker.h"
+#include "StPicoD0V2AnaMaker/StPicoD0V2AnaMaker.h"
 
 using namespace std;
 
-#else
-class StChain;
-#endif
-class StPicoDstMaker;
-class StPicoMixedEventMaker;
-class StMaker;
-StChain *chain;
-
 void runPicoD0AnaMakerLocal(
-			const Char_t *inputFile="/gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoLists/runs_local_test.list",	
-			const Char_t *outputFile="outputBaseName",  
-            const unsigned int makerMode = 0 ,
-			const Char_t *badRunListFileName = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoLists/picoList_bad.list",
-            const Char_t *treeName = "picoHFtree",
-			const Char_t *productionBasePath = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/") {
-  string SL_version = "SL17d";
+			const Char_t *inputFile="./picoLists/runs_local_test.list",
+			const Char_t *outputFile="outputLocal",
+			const Char_t *badRunListFileName = "./picoLists/picoList_bad.list") {
+  string SL_version = "SL18f";
   string env_SL = getenv ("STAR");
   if (env_SL.find(SL_version)==string::npos) {
-      cout<<"Environment Star Library does not match the requested library in runPicoHFMyAnaMaker.C. Exiting..."<<endl;
+      cout<<"Environment Star Library does not match the requested library. Exiting..."<<endl;
       exit(1);
   }
   
   Int_t nEvents = 1000000;
 
-#ifdef __CINT__
-  gROOT->LoadMacro("loadSharedHFLibraries.C");
-  loadSharedHFLibraries();
-#endif
-
-  chain = new StChain();
+  StChain *chain = new StChain();
 
   TString sInputFile(inputFile);
-  TString sInputListHF("");
-  TString sProductionBasePath(productionBasePath);
-  TString sTreeName(treeName);
 
   if (!sInputFile.Contains(".list") && !sInputFile.Contains("picoDst.root")) {
     cout << "No input list or picoDst root file provided! Exiting..." << endl;
@@ -66,22 +47,17 @@ void runPicoD0AnaMakerLocal(
   // -- File name of bad run list
    hfCuts->setBadRunListFileName(badRunListFileName); 
 
-  // -- ADD USER CUTS HERE ----------------------------
-
   hfCuts->setCutVzMax(6.);
-  hfCuts->setCutVzVpdVzMax(3.);
+  hfCuts->setCutVzVpdVzMax(6.);
   hfCuts->addTriggerId(530003); //VPD-5
 
   hfCuts->setCutNHitsFitMin(15); //default is 20
   hfCuts->setCutRequireHFT(true);
-  hfCuts->setHybridTof(false);
+  hfCuts->setHybridTof(true);
   //LK hfCuts->setCutDcaMin(0.009,StHFCuts::kPion); //federic 1aug2016
   //LK  hfCuts->setCutDcaMin(0.007,StHFCuts::kKaon); //federic 3aug2016
   //hfCuts->setCutNHitsFitnHitsMax(0.52);  kvapil
 
-  // -- Channel0
-
-  // -- ADD USER CUTS HERE ----------------------------
    // kaonPion pair cuts
   float dcaDaughtersMax = 0.2;  // maximum
   float decayLengthMin  = 0.000; // minimum
@@ -98,21 +74,29 @@ void runPicoD0AnaMakerLocal(
   hfCuts->setCutPtRange(0.15,50.0,StHFCuts::kKaon); //0.2, 50.0
   //TPC setters
   hfCuts->setCutTPCNSigmaPion(3.0); //3
-  hfCuts->setCutTPCNSigmaKaon(2.0); //3
+  hfCuts->setCutTPCNSigmaKaon(3.0); //2
   //TOF setters, need to set pt range as well
-  hfCuts->setCutTOFDeltaOneOverBeta(0.05, StHFCuts::kKaon); // v podstate 5 sigma; nastavene = f * (sigmaTOF), sigma TOF je 0.013 
+  hfCuts->setCutTOFDeltaOneOverBeta(0.06, StHFCuts::kKaon); // v podstate 5 sigma; nastavene = f * (sigmaTOF), sigma TOF je 0.013
   hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kKaon);
   hfCuts->setCutTOFDeltaOneOverBeta(0.06, StHFCuts::kPion); // v podstate 6 sigma
   hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kPion);
 
-  StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
-  StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile, sInputListHF);
-  PicoD0AnaMaker->setTreeName(treeName);
-  PicoD0AnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
-  PicoD0AnaMaker->setHFBaseCuts(hfCuts);
+  //                               ptmin, ptmax, dcaDaughtersMax, decayLengthMin,  cosThetaMin, pairDcaMax, pionDca, kaonDca
+  hfCuts->setCutSecondaryPairPtBin(1,      2,              0.007,          0.012,         0.5,      0.005,    0.009, 0.007);
+  hfCuts->setCutSecondaryPairPtBin(2,      3,              0.016,          0.003,         0.5,      0.0065,   0.009, 0.01);
+  hfCuts->setCutSecondaryPairPtBin(3,      5,              0.015,          0.009,         0.6,      0.0064,   0.0064, 0.0076);
 
-  StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile, inputFile);
-  picoMixedEventMaker->setBufferSize(3);
+
+  StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
+//  StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile);
+//  PicoD0AnaMaker->setHFBaseCuts(hfCuts);
+
+//  StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile);
+//  picoMixedEventMaker->setBufferSize(3);
+
+  StPicoD0V2AnaMaker* PicoD0V2AnaMaker = new StPicoD0V2AnaMaker("picoD0V2AnaMaker", picoDstMaker, outputFile);
+  PicoD0V2AnaMaker->setHFBaseCuts(hfCuts);
+
 
   clock_t start = clock(); // getting starting time
   chain->Init();
@@ -121,29 +105,19 @@ void runPicoD0AnaMakerLocal(
   cout << " Total entries = " << total << endl;
   if(nEvents>total) nEvents = total;
 
-//  for (Int_t i=0; i<nEvents; i++) {
-  for (Int_t i=0; i<2000; i++) {
+  for (Int_t i=0; i<nEvents; i++) {
+//  for (Int_t i=0; i<2000; i++) {
     if(i%10==0)       cout << "Working on eventNumber " << i << endl;
-
     chain->Clear();
-
-	 int iret = chain->Make(i);
-
+    int iret = chain->Make(i);
     if (iret) { cout << "Bad return code!" << iret << endl; break;}
-    }
-  
-  cout << "****************************************** " << endl;
-  cout << "Work done... now its time to close up shop!"<< endl;
-  cout << "****************************************** " << endl;
+  }
+
   chain->Finish();
   double duration = (double) (clock() - start) / (double) CLOCKS_PER_SEC;
   cout << "****************************************** " << endl;
-  cout << "total number of events  " << nEvents << endl;
-  cout << "****************************************** " << endl;
+  cout << "Work done, total number of events  " << nEvents << endl;
   cout << "Time needed " << duration << " s" << endl;
-  cout << "****************************************** " << endl;
-  
   delete chain;
-
 }
 

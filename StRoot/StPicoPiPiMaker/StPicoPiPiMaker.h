@@ -8,9 +8,7 @@
 //#include "StPicoD0AnaHists.h"
 #include <vector>
 #include "TClonesArray.h"
-#include "StThreeVectorF.hh"
-#include "StLorentzVectorF.hh"
-#include "StPicoDstMaker/StPicoDst.h"
+#include "StPicoEvent/StPicoDst.h"
 #include "StPicoDstMaker/StPicoDstMaker.h"
 #include "StPicoEvent/StPicoEvent.h"
 #include "StPicoEvent/StPicoTrack.h"
@@ -19,7 +17,6 @@
 #include "StPicoHFMaker/StHFCuts.h"
 #include "StPicoHFMaker/StHFPair.h"
 //#include "StPicoHFMaker/StHFTriplet.h"
-#include "StBTofUtil/tofPathLength.hh"
 
 #include "phys_constants.h"
 
@@ -40,7 +37,7 @@ class StHFCuts;
 class StPicoPiPiMaker : public StPicoHFMaker
 {
 public:
-    StPicoPiPiMaker(char const*, StPicoDstMaker*, char const*, char const*);
+    StPicoPiPiMaker(char const*, StPicoDstMaker*, char const*);
     virtual ~StPicoPiPiMaker();
 
     virtual Int_t InitHF();

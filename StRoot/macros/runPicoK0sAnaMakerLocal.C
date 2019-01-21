@@ -1,4 +1,3 @@
-#ifndef __CINT__
 #include "TROOT.h"
 #include "TSystem.h"
 #include "TChain.h"
@@ -9,31 +8,18 @@
 #include "StPicoHFMaker/StHFCuts.h"
 #include "StPicoEvent/StPicoEvent.h"
 #include "macros/loadSharedHFLibraries.C"
-#include "StPicoMixedEventMaker/StPicoMixedEventMaker.h"
 #include <iostream>
 #include <ctime>
 #include <cstdio>
-#include "StPicoD0AnaMaker/StPicoD0AnaMaker.h"
 #include "StPicoPiPiMaker/StPicoPiPiMaker.h"
 
 using namespace std;
 
-#else
-class StChain;
-#endif
-class StPicoDstMaker;
-class StPicoPiPiMaker;
-class StMaker;
-StChain *chain;
-
 void runPicoK0sAnaMakerLocal(
-			const Char_t *inputFile="/gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoLists/runs_local_test.list",	
-			const Char_t *outputFile="outputBaseName",  
-            const unsigned int makerMode = 0 ,
-			const Char_t *badRunListFileName = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoLists/picoList_bad.list",
-            const Char_t *treeName = "picoHFtree",
-			const Char_t *productionBasePath = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/") {
-  string SL_version = "SL17d";
+			const Char_t *inputFile="./picoLists/runs_local_test.list",
+			const Char_t *outputFile="outputLocal",
+			const Char_t *badRunListFileName = "./picoLists/picoList_bad.list") {
+  string SL_version = "SL18f";
   string env_SL = getenv ("STAR");
   if (env_SL.find(SL_version)==string::npos) {
       cout<<"Environment Star Library does not match the requested library in runPicoHFMyAnaMaker.C. Exiting..."<<endl;
@@ -42,17 +28,9 @@ void runPicoK0sAnaMakerLocal(
   
   Int_t nEvents = 1000000;
 
-#ifdef __CINT__
-  gROOT->LoadMacro("loadSharedHFLibraries.C");
-  loadSharedHFLibraries();
-#endif
-
-  chain = new StChain();
+  StChain *chain = new StChain();
 
   TString sInputFile(inputFile);
-  TString sInputListHF("");
-  TString sProductionBasePath(productionBasePath);
-  TString sTreeName(treeName);
 
   if (!sInputFile.Contains(".list") && !sInputFile.Contains("picoDst.root")) {
     cout << "No input list or picoDst root file provided! Exiting..." << endl;
@@ -103,9 +81,7 @@ void runPicoK0sAnaMakerLocal(
 
   StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
 
-  StPicoPiPiMaker* PicoK0sAnaMaker = new StPicoPiPiMaker("picoK0sAnaMaker", picoDstMaker, outputFile, sInputListHF);
-  PicoK0sAnaMaker->setTreeName(treeName);
-  PicoK0sAnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
+  StPicoPiPiMaker* PicoK0sAnaMaker = new StPicoPiPiMaker("picoK0sAnaMaker", picoDstMaker, outputFile);
   PicoK0sAnaMaker->setHFBaseCuts(hfCuts);
 
 //  StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile, sInputListHF);
@@ -133,19 +109,12 @@ void runPicoK0sAnaMakerLocal(
 
     if (iret) { cout << "Bad return code!" << iret << endl; break;}
     }
-  
-  cout << "****************************************** " << endl;
-  cout << "Work done... now its time to close up shop!"<< endl;
-  cout << "****************************************** " << endl;
+
   chain->Finish();
   double duration = (double) (clock() - start) / (double) CLOCKS_PER_SEC;
   cout << "****************************************** " << endl;
-  cout << "total number of events  " << nEvents << endl;
-  cout << "****************************************** " << endl;
+  cout << "Work done, total number of events  " << nEvents << endl;
   cout << "Time needed " << duration << " s" << endl;
-  cout << "****************************************** " << endl;
-  
   delete chain;
-
 }
 

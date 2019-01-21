@@ -28,9 +28,10 @@
 
 #include "TObject.h"
 #include "TClonesArray.h"
+#include "TVector3.h"
+#include "TLorentzVector.h"
+
 #include "StPicoEvent/StPicoEvent.h"
-#include "StarClassLibrary/StLorentzVectorF.hh"
-#include "StarClassLibrary/StThreeVectorF.hh"
 
 class StPicoTrack;
 
@@ -43,25 +44,25 @@ public:
 	StHFPair(StPicoTrack const * particle1, StPicoTrack const * particle2,
 			 float p1MassHypo, float p2MassHypo,
 			 unsigned short p1Idx, unsigned short p2Idx,
-			 StThreeVectorF const & vtx, float bField, bool useStraightLine = true);
+			 TVector3 const & vtx, float bField, bool useStraightLine = true);
 
 	~StHFPair() {;}
 
-	StLorentzVectorF const & lorentzVector() const;
-	StThreeVectorF const & decayVertex() const;
+	TLorentzVector const & lorentzVector() const;
+	TVector3 const & decayVertex() const;
 	float rapidity()    const;
 	float m()    const;
 	float pt()   const;
 	float eta()  const;
 	float phi()  const;
 	float pointingAngle() const;
-	float pointingAngle(StThreeVectorF const & vtx2) const;
+	float pointingAngle(TVector3 const & vtx2) const;
 	float decayLength() const;
-	float decayLength(StThreeVectorF const & vtx2) const;
+	float decayLength(TVector3 const & vtx2) const;
 	float particle1Dca() const;
-	float particle1Dca(StPicoTrack const * p1track, StThreeVectorF const & vtx2, float bField) const;
+	float particle1Dca(StPicoTrack const * p1track, TVector3 const & vtx2, float bField) const;
 	float particle2Dca() const;
-	float particle2Dca(StPicoTrack const * p1track, StThreeVectorF const & vtx2, float bField) const;
+	float particle2Dca(StPicoTrack const * p1track, TVector3 const & vtx2, float bField) const;
 	unsigned short particle1Idx() const;
 	unsigned short particle2Idx() const;
 	float dcaDaughters() const;
@@ -77,8 +78,8 @@ public:
 private:
 	StHFPair(StHFPair const &);
 	StHFPair& operator=(StHFPair const &);
-	StLorentzVectorF mLorentzVector;
-	StThreeVectorF   mDecayVertex;
+	TLorentzVector mLorentzVector;
+	TVector3   mDecayVertex;
 
 	float mPointingAngle;
 	float mDecayLength;
@@ -93,15 +94,15 @@ private:
 
 	ClassDef(StHFPair,1)
 };
-inline StLorentzVectorF const & StHFPair::lorentzVector() const { return mLorentzVector;}
-inline float StHFPair::rapidity()    const { return mLorentzVector.rapidity();}
-inline float StHFPair::m()    const { return mLorentzVector.m();}
-inline float StHFPair::pt()   const { return mLorentzVector.perp();}
-inline float StHFPair::eta()  const { return mLorentzVector.pseudoRapidity();}
-inline float StHFPair::phi()  const { return mLorentzVector.phi();}
-inline float StHFPair::px()   const { return mLorentzVector.px();}
-inline float StHFPair::py()   const { return mLorentzVector.py();}
-inline float StHFPair::pz()   const { return mLorentzVector.pz();}
+inline TLorentzVector const & StHFPair::lorentzVector() const { return mLorentzVector;}
+inline float StHFPair::rapidity()    const { return mLorentzVector.Rapidity();}
+inline float StHFPair::m()    const { return mLorentzVector.M();}
+inline float StHFPair::pt()   const { return mLorentzVector.Pt();}
+inline float StHFPair::eta()  const { return mLorentzVector.Eta();}
+inline float StHFPair::phi()  const { return mLorentzVector.Phi();}
+inline float StHFPair::px()   const { return mLorentzVector.Px();}
+inline float StHFPair::py()   const { return mLorentzVector.Py();}
+inline float StHFPair::pz()   const { return mLorentzVector.Pz();}
 inline float StHFPair::pointingAngle() const { return mPointingAngle;}
 inline float StHFPair::decayLength()   const { return mDecayLength;}
 inline float StHFPair::particle1Dca()  const { return mParticle1Dca;}
@@ -110,7 +111,7 @@ inline unsigned short StHFPair::particle1Idx() const { return mParticle1Idx;}
 inline unsigned short StHFPair::particle2Idx() const { return mParticle2Idx;}
 inline float StHFPair::dcaDaughters() const { return mDcaDaughters;}
 inline float StHFPair::cosThetaStar() const { return mCosThetaStar;}
-inline StThreeVectorF const & StHFPair::decayVertex() const { return mDecayVertex;}
+inline TVector3 const & StHFPair::decayVertex() const { return mDecayVertex;}
 inline float StHFPair::v0x() const { return mDecayVertex.x();}
 inline float StHFPair::v0y() const { return mDecayVertex.y();}
 inline float StHFPair::v0z() const { return mDecayVertex.z();}

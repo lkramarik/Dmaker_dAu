@@ -6,8 +6,7 @@
 #include "TH2.h"
 #include "TList.h"
 #include "TString.h" // needed for the Form(...)
-#include "StarClassLibrary/StThreeVectorF.hh"
-#include "StPicoDstMaker/StPicoDst.h"
+#include "StPicoEvent/StPicoDst.h"
 #include "StPicoDstMaker/StPicoDstMaker.h"
 #include "StPicoEvent/StPicoEvent.h"
 #include "StPicoEvent/StPicoTrack.h"
@@ -28,15 +27,13 @@ static float constexpr m_multEdge[m_nmultEdge+1] = {0, 2000};
 
 // _________________________________________________________
 StPicoMixedEventMaker::StPicoMixedEventMaker(char const* name, StPicoDstMaker* picoMaker, StHFCuts* hfCuts,
-                                             char const* outputBaseFileName,  char const* inputHFListHFtree = "") :
+                                             char const* outputBaseFileName) :
         StMaker(name),
         mPicoDst(NULL),
         mPicoDstMaker(picoMaker),
         mPicoEvent(NULL),
         mHFCuts(hfCuts),
         mOuputFileBaseName(outputBaseFileName),
-        mInputFileName(inputHFListHFtree),
-        mEventCounter(0),
         mBufferSize(5),
         mOutList(NULL),
         mSETupleSig(NULL),
@@ -172,7 +169,7 @@ Int_t StPicoMixedEventMaker::Make() {
 
     if (!eventTest) return kStOk;
 
-    StThreeVectorF const pVtx = picoDst->event()->primaryVertex();
+    TVector3 const pVtx = picoDst->event()->primaryVertex();
 
     int multiplicity = mPicoDst->event()->refMult();
     int centrality = getMultIndex(multiplicity);
@@ -191,7 +188,7 @@ Int_t StPicoMixedEventMaker::SetCategories() {
 }
 // _________________________________________________________
 int StPicoMixedEventMaker::categorize(StPicoDst const * picoDst ) {
-    StThreeVectorF pVertex = (picoDst->event())->primaryVertex();
+    TVector3 pVertex = (picoDst->event())->primaryVertex();
     if( fabs(pVertex.z())>6.0 ) return -99;
     int bin = -6.0 + (pVertex.z()+6.0)/1.2;
     return bin;

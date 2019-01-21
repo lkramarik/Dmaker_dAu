@@ -22,7 +22,6 @@
 
 #include "StPicoCutsBase/StPicoCutsBase.h"
 
-
 class StHFPair;
 class StHFTriplet;
 
@@ -44,6 +43,7 @@ class StHFCuts : public StPicoCutsBase
 
   bool isGoodSecondaryVertexPair(StHFPair const & pair) const;
   bool isGoodTertiaryVertexPair(StHFPair const & pair) const;
+  bool isGoodSecondaryVertexPairPtBin(StHFPair const & pair) const;
   bool isGoodSecondaryVertexTriplet(StHFTriplet const & triplet) const;
 
   // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --   
@@ -52,8 +52,11 @@ class StHFCuts : public StPicoCutsBase
   
   void setCutSecondaryPair(float dcaDaughtersMax, float decayLengthMin, float decayLengthMax, 
 			   float cosThetaMin, float massMin, float massMax, float pairDcaMax);
-  
-  void setCutTertiaryPair(float dcaDaughtersMax, float decayLengthMin, float decayLengthMax, 
+
+  void setCutSecondaryPairPtBin(float ptmin, float ptmax, float dcaDaughtersMax, float decayLengthMin,
+                                float cosThetaMin, float pairDcaMax, float pionDca, float kaonDca);
+
+  void setCutTertiaryPair(float dcaDaughtersMax, float decayLengthMin, float decayLengthMax,
 			  float cosThetaMin, float massMin, float massMax); 
   
   void setCutSecondaryTriplet(float dcaDaughters12Max, float dcaDaughters23Max, float dcaDaughters31Max, 
@@ -92,6 +95,15 @@ class StHFCuts : public StPicoCutsBase
   const float&    cutSecondaryTripletCosThetaMin()        const;
   const float&    cutSecondaryTripletMassMin()            const;
   const float&    cutSecondaryTripletMassMax()            const;
+
+  std::vector<float> mCutsDecayLength;
+  std::vector<float> mCutsDcaDaughters;
+  std::vector<float> mCutsDcaToPrimaryVertex;
+  std::vector<float> mCutsPtMin;
+  std::vector<float> mCutsPtMax;
+  std::vector<float> mCutsPointingAngle;
+  std::vector<float> mCutsKaonDca;
+  std::vector<float> mCutsPionDca;
 
  private:
   
@@ -144,6 +156,18 @@ inline void StHFCuts::setCutSecondaryPair(float dcaDaughtersMax, float decayLeng
   mSecondaryPairMassMin = massMin;
   mSecondaryPairMassMax = massMax;
   mSecondaryPairDcaToPvMax = pairDcaMax;
+}
+
+inline void StHFCuts::setCutSecondaryPairPtBin(float ptmin, float ptmax, float dcaDaughtersMax, float decayLengthMin,
+                                                float cosThetaMin, float pairDcaMax, float pionDca, float kaonDca)  {
+    mCutsPtMin.push_back(ptmin);
+    mCutsPtMax.push_back(ptmax);
+    mCutsDcaDaughters.push_back(dcaDaughtersMax);
+    mCutsDecayLength.push_back(decayLengthMin);
+    mCutsPointingAngle.push_back(cosThetaMin);
+    mCutsDcaToPrimaryVertex.push_back(pairDcaMax);
+    mCutsPionDca.push_back(pionDca);
+    mCutsKaonDca.push_back(kaonDca);
 }
 
 inline void StHFCuts::setCutTertiaryPair(float dcaDaughtersMax, float decayLengthMin, float decayLengthMax, 

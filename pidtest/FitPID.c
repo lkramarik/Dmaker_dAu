@@ -244,7 +244,21 @@ void FitPID::peakMassFit(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t mass
     gStyle->SetOptFit(1);
     hToFit->GetYaxis()->SetTitleOffset(1.25);
     hToFit->Fit(funLS, "LRM");
+
+    mHeight = funLS->GetParameter(2);
+    mSigma = funLS->GetParameter(4);
+    mSigmaE = funLS->GetParError(4);
+    mMean = funLS->GetParameter(3);
+    mMeanE = funLS->GetParError(3);
+
+    TLine *left = new TLine(mMean - 1*mSigma, hToFit->GetMaximum(), mMean - 1*mSigma, hToFit->GetMinimum());
+    left->SetLineColor(46);
+    TLine *right = new TLine(mMean + 1*mSigma, hToFit->GetMaximum(), mMean + 1*mSigma, hToFit->GetMinimum());
+    right->SetLineColor(46);
+
     hToFit->Draw();
+    left->Draw("same");
+    right->Draw("same");
     mHeight = funLS->GetParameter(2);
     mSigma = funLS->GetParameter(4);
     mSigmaE = funLS->GetParError(4);

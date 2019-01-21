@@ -2,7 +2,8 @@
 #define StMixerEvent_hh
 
 #include <vector>
-#include "StarClassLibrary/StThreeVectorF.hh"
+#include "TVector3.h"
+
 #include "StPicoEvent/StPicoTrack.h"
 
 #include "StMixerTrack.h"
@@ -35,7 +36,7 @@ class StMixerEvent{
  public:
   StMixerEvent();
   StMixerEvent(StMixerEvent *);
-  StMixerEvent(StThreeVectorF, float);
+  StMixerEvent(TVector3, float);
   ~StMixerEvent(){;};
   void addPion(int);
   void addKaon(int);
@@ -57,7 +58,7 @@ class StMixerEvent{
   const StPicoTrack pionAt(int const);
   const StPicoTrack kaonAt(int const);
   const StPicoTrack protonAt(int const);
-  StThreeVectorF const & vertex() const;
+  TVector3 const & vertex() const;
   double const field() const;
 //  void setWeight(float weight) { mWeightFromCentrality = weight; }
 //  float weight() { return mWeightFromCentrality; }
@@ -67,7 +68,7 @@ class StMixerEvent{
   void addPicoEvent(StPicoEvent const & event);
 
  private:
-  StThreeVectorF mVtx;
+  TVector3 mVtx;
   float mBField;
   std::vector <StPicoTrack  > mTracks;
 //  std::vector <StMixerTrack  > mTracks;
@@ -80,7 +81,7 @@ class StMixerEvent{
   int mRunId;
 };
 inline void StMixerEvent::setPos( float const vx, float const vy, float const vz){
-  mVtx = StThreeVectorF(vx, vy, vz);
+  mVtx = TVector3(vx, vy, vz);
 }
 inline void StMixerEvent::setField( float const field ){ mBField = field; }
 inline int StMixerEvent::getNoPions(){ return mEventPions.size(); }
@@ -96,6 +97,6 @@ inline const StPicoTrack StMixerEvent::pionAt(int const counter) { return( mTrac
 inline const StPicoTrack StMixerEvent::kaonAt(int const counter) { return( mTracks.at(mEventKaons.at(counter)) );}
 //inline StMixerTrack StMixerEvent::protonAt(int const counter) { return( mTracks.at(mEventProtons.at(counter)) );}
 inline const StPicoTrack StMixerEvent::protonAt(int const counter) { return( mTracks.at(mEventProtons.at(counter)) );}
-inline StThreeVectorF const & StMixerEvent::vertex() const { return mVtx; }
+inline TVector3 const & StMixerEvent::vertex() const { return mVtx; }
 inline double const StMixerEvent::field() const {return mBField; }
 #endif

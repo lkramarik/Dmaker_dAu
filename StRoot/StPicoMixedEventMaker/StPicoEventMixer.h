@@ -25,7 +25,6 @@
 #include "TNtuple.h"
 #include "TList.h"
 
-#include "StarClassLibrary/StThreeVectorF.hh"
 #include "StPicoHFMaker/StHFCuts.h"
 
 class TTree;

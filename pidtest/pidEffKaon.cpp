@@ -32,9 +32,13 @@
 void pidEffKaon() {
 //    gSystem->Load("FitPID");
     gROOT->ProcessLine(".L FitPID.c++");
+    gSystem->Exec("rm rootFiles/nSigma_KK_1.root rootFiles/nSigma_KK_2.root");
+    gSystem->Exec("rm rootFiles/nSigma_KK_ana_1.root rootFiles/nSigma_KK_ana_2.root");
+    gSystem->Exec("rm rootFiles/nSigma_KK_ana.root rootFiles/nSigma_KK.root");
 
-//    TString input = "ntp.picoPhiAnaMaker.root";
-    TString input = "small_ntp.picoPhiAnaMaker.root";
+
+    TString input = "/media/lukas/376AD6A434B7392F/work/pid/ntp.picoPhiAnaMaker.1501.root";
+//    TString input = "small_ntp.picoPhiAnaMaker.root";
 //    TString input = "ntp.picoK0sAnaMaker.root";
 //    TString input = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/Phi_large/production/ntp.picoPhiAnaMaker.root";
 //    TString input = "outputBaseName.picoK0sAnaMaker.root";
@@ -60,14 +64,14 @@ void pidEffKaon() {
     massMax = 1.04;// Phi to KK
     mean = 1.02;
     sigma = 0.002;
-    ptPairMin = 0.3;
+    ptPairMin = 0.2;
     ptPairMax = 10;
 
-    fitmass->setOutputFileName("mass_" + pairName + ".root");
+    fitmass->setOutputFileName("rootFiles/mass_" + pairName + ".root");
     fitmass->setHeight(15000);
 
     cut = Form("pair_mass>%.3f && pair_mass<%.3f", massMin, massMax);
-    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && pair_cosTheta>0.85 && pi2_pt>0.5", ptPairMin, ptPairMax);
+    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && pair_cosTheta>0.85 && pi2_pt>0.15", ptPairMin, ptPairMax);
 //    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && pair_cosTheta>0.6 && dcaDaughters<0.3 && pair_dcaToPv<0.3", ptPairMin, ptPairMax);
 //    cutPair = Form("pair_pt>%.3f && pair_pt<%.3f && pi2_pt>1 && fabs(pi2_nSigma)<2.", ptPairMin, ptPairMax);
 //    cutPair = Form("pair_pt>%.3f && pair_pt<%.3f", ptPairMin, ptPairMax);
@@ -84,12 +88,12 @@ void pidEffKaon() {
         FitPID *pid1 = new FitPID();
         cout<<"ok"<<endl;
 
-        pid1->setOutputFileName("nSigma_" + pairName + "_1.root");
+        pid1->setOutputFileName("rootFiles/nSigma_" + pairName + "_1.root");
         cut = Form("pair_mass>%f && pair_mass<%f && pi1_pt>%.3f && pi1_pt<%.3f", massMean - 2*massSigma, massMean + 2*massSigma, ptBins[i], ptBins[i+1]);
         TH1F *hSigmaSignal1 = (TH1F *) pid1->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i + 1], pair, cut + cutPair, "pi1_nSigma", "Kaon n#sigma^{TPC}");
 
         FitPID *pid2 = new FitPID();
-        pid2->setOutputFileName("nSigma_" + pairName + "_2.root");
+        pid2->setOutputFileName("rootFiles/nSigma_" + pairName + "_2.root");
         cut = Form("pair_mass>%f && pair_mass<%f && pi2_pt>%.3f && pi2_pt<%.3f", massMean - 2*massSigma, massMean + 2*massSigma, ptBins[i], ptBins[i+1]);
         TH1F *hSigmaSignal2 = (TH1F *) pid2->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i + 1], pair, cut + cutPair, "pi2_nSigma", "Kaon n#sigma^{TPC}");
 
@@ -98,8 +102,6 @@ void pidEffKaon() {
 //        TH1F *hSigmaSignalRes = (TH1F*) pid1->peakFit(hSigmaSignal1, 0, 1, -5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma");
         if (i==1) pid1->peakFit(hSigmaSignal1, 0, 1, -1.5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma");
         else         pid1->peakFit(hSigmaSignal1, 0, 1, -5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma");
-
-
 
         binWidth[i] = (ptBins[i + 1] - ptBins[i]) / 2;
         xPt[i] = (ptBins[i + 1] + ptBins[i]) / 2;
@@ -114,15 +116,15 @@ void pidEffKaon() {
 
         //tof pions after my PID cut:
         FitPID *pidAna1 = new FitPID();
-        pidAna1->setOutputFileName("nSigma_"+pairName+"_ana_1.root");
-        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta>0 && pi1_TOFinvbeta<0.03", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
+        pidAna1->setOutputFileName("rootFiles/nSigma_"+pairName+"_ana_1.root");
+        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta<3", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
 //        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta>0", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
 //        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta<0.03 && pi1_TOFinvbeta>0", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
         TH1F *hSigmaSignalAna1 = (TH1F*) pidAna1->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair, "pi1_nSigma", "Kaon n#sigma^{TPC}");
 //
         FitPID *pidAna2 = new FitPID();
-        pidAna2->setOutputFileName("nSigma_"+pairName+"_ana_2.root");
-        cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%f && pi2_pt<%f && pi2_TOFinvbeta>0 && pi2_TOFinvbeta<0.03", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
+        pidAna2->setOutputFileName("rootFiles/nSigma_"+pairName+"_ana_2.root");
+        cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%f && pi2_pt<%f && pi2_TOFinvbeta<3", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
 //        cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%f && pi2_pt<%f && pi2_TOFinvbeta>0", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
         TH1F *hSigmaSignalAna2 = (TH1F*) pidAna2->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair, "pi2_nSigma", "Kaon n#sigma^{TPC}");
 //
@@ -170,7 +172,7 @@ void pidEffKaon() {
     gMean->GetXaxis()->SetTitle("p_{T} (GeV/c)");
     gMean->SetTitle("");
     gMean->Draw("ap");
-    c1->SaveAs("meanKaon.root");
+    c1->SaveAs("rootFiles/meanKaon.root");
     c1->Close();
 
     TCanvas *c2 = new TCanvas("c2","%.3f_%.3f",1000,900);
@@ -183,7 +185,7 @@ void pidEffKaon() {
     gSigmas->GetXaxis()->SetTitle("p_{T} (GeV/c)");
     gSigmas->SetTitle("");
     gSigmas->Draw("ap");
-    c2->SaveAs("sigmaKaon.root");
+    c2->SaveAs("rootFiles/sigmaKaon.root");
     c2->Close();
 
     TCanvas *c3 = new TCanvas("c3","%.3f_%.3f",1000,900);
@@ -196,12 +198,18 @@ void pidEffKaon() {
     gEff->GetXaxis()->SetTitle("p_{T} (GeV/c)");
     gEff->SetTitle("");
     gEff->Draw("ap");
-    c3->SaveAs("effTOFKaon.root");
+    c3->SaveAs("rootFiles/effTOFKaon.root");
     c3->Close();
 
-    TFile* resOut = new TFile("results_KK.root" ,"RECREATE");
+    TFile* resOut = new TFile("rootFiles/results_KK.root" ,"RECREATE");
     gEff->Write("eff");
     gMean->Write("mean");
     gSigmas->Write("sigma");
     resOut->Close();
+
+    gSystem->Exec("hadd -k -f rootFiles/nSigma_KK.root nSigma_KK_1.root rootFiles/nSigma_KK_2.root");
+    gSystem->Exec("hadd -k -f rootFiles/nSigma_KK_ana.root nSigma_KK_ana_1.root rootFiles/nSigma_KK_ana_2.root");
+    gSystem->Exec("rm rootFiles/nSigma_KK_1.root rootFiles/nSigma_KK_2.root");
+    gSystem->Exec("rm rootFiles/nSigma_KK_ana_1.root rootFiles/nSigma_KK_ana_2.root");
+
 }

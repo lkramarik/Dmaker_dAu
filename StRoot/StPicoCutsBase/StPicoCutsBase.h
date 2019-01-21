@@ -3,7 +3,8 @@
 #include <vector>
 #include "TNamed.h"
 #include "TString.h"
-#include "StarClassLibrary/StLorentzVectorF.hh"
+#include "TVector3.h"
+
 #include "StBTofUtil/StV0TofCorrection.h"
 
 class StPicoTrack;
@@ -29,6 +30,7 @@ public:
     bool isGoodTrack(StPicoTrack const * const trk) const;
     bool isGoodPion(StPicoTrack const * const trk) const;
     bool isGoodKaon(StPicoTrack const * const trk) const;
+    bool isGoodProton(StPicoTrack const * const trk) const;
 
     // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
     // -- DCA to Primary vertex
@@ -157,12 +159,12 @@ public:
 
     // -- calculate corrected beta of track -- for secondary particles
     float getTofBeta(StPicoTrack const * const trk,
-                     StLorentzVectorF const & secondaryMother, StThreeVectorF const & secondaryVtx) const;
+                     TVector3 const & secondaryMother, TVector3 const & secondaryVtx) const;
 
     // -- calculate corrected beta of track -- for tertiary particles
     float getTofBeta(StPicoTrack const * const trk,
-                     StLorentzVectorF const & secondaryMother, StThreeVectorF const & secondaryVtx,
-                     StLorentzVectorF const & tertiaryMother,  StThreeVectorF const & tertiaryVtx) const;
+                     TVector3 const & secondaryMother, TVector3 const & secondaryVtx,
+                     TVector3 const & tertiaryMother,  TVector3 const & tertiaryVtx) const;
 
     const float& getHypotheticalMass(int pidFlag)           const;
 
@@ -173,7 +175,7 @@ private:
 
     StV0TofCorrection* mTOFCorr;  // TOF correction
 
-    StThreeVectorF    mPrimVtx;   // primary vertex of current event
+    TVector3    mPrimVtx;   // primary vertex of current event
     const StPicoDst*  mPicoDst;   //! ptr to picoDst
 
     unsigned int mEventStatMax;   // number of event cuts

@@ -2,26 +2,30 @@
 
 Compile on STAR's RCAF:
 ```sh
-starver SL17d
+starver SL18f
 cons
 ```
 
 Run analysis locally on one picoDst with:
 ```sh
-starver SL17d
+starver SL18f
 root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runPicoD0AnaMakerLocal.C++
 ```
 ```sh
-starver SL17d
+starver SL18f
 root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runPicoMixedEvent.C++
 ```
 ```sh
-starver SL17d
+starver SL18f
 root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runPicoK0sAnaMakerLocal.C++
 ```
 ```sh
-starver SL17d
+starver SL18f
 root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runPicoPhiAnaMakerLocal.C++
+```
+```sh
+starver SL18f
+root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runQAAnaMakerLocal.C++
 ```
 Actual file list is loaded from:
 ```sh

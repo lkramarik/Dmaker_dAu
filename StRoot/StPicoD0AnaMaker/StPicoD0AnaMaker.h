@@ -3,14 +3,14 @@
 
 #include "StPicoHFMaker/StPicoHFMaker.h"
 #include "TNtuple.h"
+#include "TVector3.h"
+
 //#include "StRefMultCorr/StRefMultCorr.h"
 #include "TH2F.h"
 //#include "StPicoD0AnaHists.h"
 #include <vector>
 #include "TClonesArray.h"
-#include "StThreeVectorF.hh"
-#include "StLorentzVectorF.hh"
-#include "StPicoDstMaker/StPicoDst.h"
+#include "StPicoEvent/StPicoDst.h"
 #include "StPicoDstMaker/StPicoDstMaker.h"
 #include "StPicoEvent/StPicoEvent.h"
 #include "StPicoEvent/StPicoTrack.h"
@@ -19,7 +19,6 @@
 #include "StPicoHFMaker/StHFCuts.h"
 #include "StPicoHFMaker/StHFPair.h"
 //#include "StPicoHFMaker/StHFTriplet.h"
-#include "StBTofUtil/tofPathLength.hh"
 
 #include "phys_constants.h"
 
@@ -40,7 +39,7 @@ class StHFCuts;
 class StPicoD0AnaMaker : public StPicoHFMaker
 {
 public:
-    StPicoD0AnaMaker(char const*, StPicoDstMaker*, char const*, char const*);
+    StPicoD0AnaMaker(char const*, StPicoDstMaker*, char const*);
     virtual ~StPicoD0AnaMaker();
 
     virtual Int_t InitHF();
@@ -49,6 +48,8 @@ public:
     virtual Int_t FinishHF();
 
 protected:
+    std::vector<unsigned short> mIdxPicoPions;
+    std::vector<unsigned short> mIdxPicoKaons;
 
 private:
     int createCandidates();
@@ -56,9 +57,6 @@ private:
 
     TNtuple *ntp_DMeson_Signal;
     TNtuple *ntp_DMeson_Background;
-//    TNtuple *ntp_kaon;
-//    TNtuple *ntp_pion;
-
 
     int mRunNumber;
     TString mOutFileBaseName;

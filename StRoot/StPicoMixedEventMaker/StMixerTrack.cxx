@@ -4,19 +4,19 @@
 #include "StPicoEvent/StPicoTrack.h"
 
 StMixerTrack::StMixerTrack() : 
-  mOrigin(StThreeVectorF()), 
-  mMom(StThreeVectorF()), 
+  mOrigin(TVector3()),
+  mMom(TVector3()),
   mTrackInfo(std::numeric_limits<short>::min())
 //  StPicoTrack()
 {
 }
-StMixerTrack::StMixerTrack(StThreeVectorF const & pVtx, float B, StPicoTrack const& picoTrack, bool isTpcPi, bool isTofPi, bool isTpcK, bool isTofK, bool isTpcP, bool isTofP) :
+StMixerTrack::StMixerTrack(TVector3 const & pVtx, float B, StPicoTrack const& picoTrack, bool isTpcPi, bool isTofPi, bool isTpcK, bool isTofK, bool isTpcP, bool isTofP) :
     mOrigin(), 
     mMom(picoTrack.gMom(pVtx,B)), 
     mTrackInfo(0)
 //    StPicoTrack()
 {
-  StPhysicalHelix helix = picoTrack.helix(B);
+  StPicoPhysicalHelix helix = picoTrack.helix(B);
   helix.moveOrigin(helix.pathLength(pVtx));
   mOrigin = helix.origin();
 

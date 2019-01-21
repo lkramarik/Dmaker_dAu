@@ -10,7 +10,7 @@
 #include "StPicoEventMixer.h"
 #include "StPicoEvent/StPicoEvent.h"
 #include "StPicoEvent/StPicoTrack.h"
-#include "StPicoDstMaker/StPicoDst.h"
+#include "StPicoEvent/StPicoDst.h"
 
 #include "StPicoMixedEventMaker.h"
 #include "StMixerEvent.h"
@@ -48,7 +48,7 @@ void StPicoEventMixer::finish() {
 //-----------------------------------------------------------
 bool StPicoEventMixer::addPicoEvent(StPicoDst const* const picoDst, float weight) {
     unsigned int nTracks = picoDst->numberOfTracks();
-    StThreeVectorF pVertex = picoDst->event()->primaryVertex();
+    TVector3 pVertex = picoDst->event()->primaryVertex();
     StMixerEvent* event = new StMixerEvent(pVertex, picoDst->event()->bField());
     event->addPicoEvent(*(picoDst->event()));
 
@@ -221,7 +221,7 @@ void StPicoEventMixer::fillNtpMixedEvtPair(float ntVar[], int charge) {
 //        const float eta = trk.gMom().pseudoRapidity();
 //        const float phi = trk.gMom().phi();
 //        const float pt = trk.gMom().perp();
-//        const float dca  = (trk.origin() - evt->vertex()).mag();
+//        const float dca  = (trk.origin() - evt->vertex()).Mag();
 //
 ////        etaPhiHist->Fill(phi,eta,weight);
 ////        phiPtHist->Fill(pt,phi, weight);

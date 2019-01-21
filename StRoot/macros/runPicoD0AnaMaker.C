@@ -1,4 +1,3 @@
-#ifndef __CINT__
 #include "TROOT.h"
 #include "TSystem.h"
 #include "TChain.h"
@@ -14,39 +13,24 @@
 #include <ctime>
 #include <cstdio>
 #include "StPicoD0AnaMaker/StPicoD0AnaMaker.h"
+#include "StPicoD0V2AnaMaker/StPicoD0V2AnaMaker.h"
 
 using namespace std;
 
-#else
-class StChain;
-#endif
-class StPicoDstMaker;
-class StPicoMixedEventMaker;
-class StMaker;
-StChain *chain;
 void runPicoD0AnaMaker(
     const char*  inputFile,
     const Char_t *outputFile,  
-    const Char_t *badRunListFileName, const Char_t *treeName,
-    const Char_t *productionBasePath) {
-    string SL_version = "SL17d";
+    const Char_t *badRunListFileName) {
+    string SL_version = "SL18f";
     string env_SL = getenv ("STAR");
     if (env_SL.find(SL_version)==string::npos) {
         cout<<"Environment Star Library does not match the requested library in run**.C. Exiting..."<<endl;
         exit(1);
     }
 
-    #ifdef __CINT__
-    gROOT->LoadMacro("loadSharedHFLibraries.C");
-    loadSharedHFLibraries();
-    #endif
-
-    chain = new StChain();
+    StChain *chain = new StChain();
     TString sInputFile(inputFile);
-    TString sInputListHF("");  
-    TString sProductionBasePath(productionBasePath);
-    TString sTreeName(treeName);
-    
+
     if (!sInputFile.Contains(".list") && !sInputFile.Contains("picoDst.root")) {
         cout << "No input list or picoDst root file provided! Exiting..." << endl;
         exit(1);
@@ -58,7 +42,7 @@ void runPicoD0AnaMaker(
     hfCuts->addTriggerId(530003); //VPD-5
     hfCuts->setCutPrimaryDCAtoVtxMax(10);
     hfCuts->setCutVzMax(6);
-    hfCuts->setCutVzVpdVzMax(3.);
+    hfCuts->setCutVzVpdVzMax(6.);
     hfCuts->setCutNHitsFitMin(15);
     hfCuts->setCutRequireHFT(true);
     hfCuts->setHybridTof(true);
@@ -93,12 +77,18 @@ void runPicoD0AnaMaker(
 
     hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass, pairDcaMax);
 
-    StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
+    hfCuts->setCutSecondaryPairPtBin(1,      2,              0.007,          0.012,         0.5,      0.005,    0.009, 0.007);
+    hfCuts->setCutSecondaryPairPtBin(2,      3,              0.016,          0.003,         0.5,      0.0065,   0.009, 0.01);
+    hfCuts->setCutSecondaryPairPtBin(3,      5,              0.015,          0.009,         0.6,      0.0064,   0.0064, 0.0076);
 
-    StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile, sInputListHF);
-    PicoD0AnaMaker->setTreeName(treeName);
-    PicoD0AnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
+    StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
+    StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile);
     PicoD0AnaMaker->setHFBaseCuts(hfCuts);
+
+    StPicoD0V2AnaMaker* PicoD0V2AnaMaker = new StPicoD0V2AnaMaker("picoD0V2AnaMaker", picoDstMaker, outputFile);
+    PicoD0V2AnaMaker->setHFBaseCuts(hfCuts);
+
+
 
 //    StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile, inputFile);
 //    picoMixedEventMaker->setBufferSize(7);
@@ -115,15 +105,10 @@ void runPicoD0AnaMaker(
         if (iret) { cout << "Bad return code!" << iret << endl; break;}
     }
     
-    cout << "****************************************** " << endl;
-    cout << "Work done... now its time to close up shop!"<< endl;
-    cout << "****************************************** " << endl;
     chain->Finish();
     double duration = (double) (clock() - start) / (double) CLOCKS_PER_SEC;
     cout << "****************************************** " << endl;
-    cout << "total number of events  " << nEvents << endl;
-    cout << "****************************************** " << endl;
+    cout << "Work done, total number of events  " << nEvents << endl;
     cout << "Time needed " << duration << " s" << endl;
-    cout << "****************************************** " << endl;
     delete chain;
 }

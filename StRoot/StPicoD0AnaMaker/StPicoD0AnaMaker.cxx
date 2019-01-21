@@ -1,16 +1,15 @@
 #include "StPicoDstMaker/StPicoDstMaker.h"
-#include "StPicoDstMaker/StPicoDst.h"
+#include "StPicoEvent/StPicoDst.h"
 #include "StPicoEvent/StPicoEvent.h"
 #include "StPicoEvent/StPicoTrack.h"
 #include "StPicoHFMaker/StHFCuts.h"
 #include "phys_constants.h"
-#include "StBTofUtil/tofPathLength.hh"
 #include "StPicoD0AnaMaker.h"
 ClassImp(StPicoD0AnaMaker)
 
 // _________________________________________________________
-StPicoD0AnaMaker::StPicoD0AnaMaker(char const* name, StPicoDstMaker* picoMaker, char const* outputBaseFileName, char const* inputHFListHFtree = "") :
-        StPicoHFMaker(name, picoMaker, outputBaseFileName, inputHFListHFtree),
+StPicoD0AnaMaker::StPicoD0AnaMaker(char const* name, StPicoDstMaker* picoMaker, char const* outputBaseFileName) :
+        StPicoHFMaker(name, picoMaker, outputBaseFileName),
         mOutFileBaseName(outputBaseFileName){
     // constructor
 }
@@ -110,14 +109,14 @@ int StPicoD0AnaMaker::MakeHF() {
 //
 //    TH2F *h_dedx = static_cast<TH2F*>(mOutList->FindObject("h_dedx"));
 //
-//    StThreeVectorF pVtx = mPicoDst->event()->primaryVertex();
+//    TVector3 pVtx = mPicoDst->event()->primaryVertex();
 //
 //    UInt_t nTracks = mPicoDst->numberOfTracks();
 //    for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack){
 //        StPicoTrack const* trk = mPicoDst->track(iTrack);
 //        if (!trk) continue;
 //        StPhysicalHelixD helix = trk->helix(mBField);
-//        StThreeVectorF momentum = trk->gMom(pVtx, mPicoDst->event()->bField());
+//        TVector3 momentum = trk->gMom(pVtx, mPicoDst->event()->bField());
 //
 //        if (!(trk->nHitsFit()>=15)) continue;
 //        if (!(fabs(momentum.pseudoRapidity()) <= 1.0)) continue;
@@ -155,10 +154,10 @@ int StPicoD0AnaMaker::MakeHF() {
 //            }
 //        }
 //
-//        h_pinsigma->Fill(momentum.mag(),trk->nSigmaPion());
-//        h_knsigma->Fill(momentum.mag(),trk->nSigmaKaon());
-//        h_pnsigma->Fill(momentum.mag(),trk->nSigmaProton());
-//        h_dedx->Fill(momentum.mag(),trk->dEdx());
+//        h_pinsigma->Fill(momentum.Mag(),trk->nSigmaPion());
+//        h_knsigma->Fill(momentum.Mag(),trk->nSigmaKaon());
+//        h_pnsigma->Fill(momentum.Mag(),trk->nSigmaProton());
+//        h_dedx->Fill(momentum.Mag(),trk->dEdx());
 //
 //    } // .. end tracks loop
 
@@ -167,31 +166,44 @@ int StPicoD0AnaMaker::MakeHF() {
 
 // _________________________________________________________
 int StPicoD0AnaMaker::createCandidates() {
-//    for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
-//        StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
-//        for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
-//            StPicoTrack const *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
-//    StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
 
-    for(unsigned int i=0;i<mPicoDst->numberOfTracks();i++)  {
-        StPicoTrack const* pion1 = mPicoDst->track(i);
-        if (!mHFCuts -> isGoodPion(pion1)) continue;
+    UInt_t nTracks = mPicoDst->numberOfTracks();
+    for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
+        StPicoTrack* trk = mPicoDst->track(iTrack);
+        if (abs(trk->gMom().PseudoRapidity())>1) continue;
+        if (mHFCuts->isGoodPion(trk)) mIdxPicoPions.push_back(iTrack);
+        if (mHFCuts->isGoodKaon(trk)) mIdxPicoKaons.push_back(iTrack);
+//        if (isProton(trk)) mIdxPicoProtons.push_back(iTrack); // isProton method to be implemented by daughter class
+    }
 
-        for(unsigned  int j=0;j<mPicoDst->numberOfTracks();j++)  {
-            StPicoTrack const* kaon = mPicoDst->track(j);
-            if (pion1->id() == kaon->id()) continue;
+    for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
+        StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
+        for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
+            StPicoTrack const *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
+            StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
 
-            if (!mHFCuts -> isGoodKaon(kaon)) continue;
-            StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), i, j, mPrimVtx, mBField, kTRUE);
+//    for(unsigned int i=0;i<mPicoDst->numberOfTracks();i++)  {
+//        StPicoTrack const* pion1 = mPicoDst->track(i);
+//        if (!mHFCuts -> isGoodPion(pion1)) continue;
+//
+//        for(unsigned  int j=0;j<mPicoDst->numberOfTracks();j++)  {
+//            StPicoTrack const* kaon = mPicoDst->track(j);
+//            if (pion1->id() == kaon->id()) continue;
+//
+//            if (!mHFCuts -> isGoodKaon(kaon)) continue;
+//            StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), i, j, mPrimVtx, mBField, kTRUE);
+
             if (!mHFCuts->isGoodSecondaryVertexPair(pair)) continue;
 
             float flag = -99.;
+            bool isD0 = false;
+            if((kaon->charge() + pion1->charge() == 0) ) isD0=true;
 
-            if( kaon->charge()<0 && pion1->charge()>0 ) flag=0.; // -+
-            if( kaon->charge()>0 && pion1->charge()<0 ) flag=1.; // +-
+            if(kaon->charge()<0 && pion1->charge()>0 ) flag=0.; // -+
+            if(kaon->charge()>0 && pion1->charge()<0 ) flag=1.; // +-
 
-            if( kaon->charge()<0 && pion1->charge()<0) flag=4.; // --
-            if( kaon->charge()>0 && pion1->charge()>0) flag=5.; // ++
+            if(kaon->charge()<0 && pion1->charge()<0) flag=4.; // --
+            if(kaon->charge()>0 && pion1->charge()>0) flag=5.; // ++
 
             int ii=0;
             float ntVar[27];
@@ -217,7 +229,7 @@ int StPicoD0AnaMaker::createCandidates() {
             ntVar[ii++] = flag;
             ntVar[ii++] = mPrimVtx.z();
             ntVar[ii++] = mPicoEvent->vzVpd();
-            ntVar[ii++] = fabs(mPicoEvent->primaryVertex().z() - mPicoEvent->vzVpd());
+            ntVar[ii++] = mPicoEvent->primaryVertex().z() - mPicoEvent->vzVpd();
 
             ntVar[ii++] = pair->pointingAngle();
             ntVar[ii++] = cos(pair->pointingAngle());
@@ -228,13 +240,21 @@ int StPicoD0AnaMaker::createCandidates() {
             ntVar[ii++] = pair->pt();
             ntVar[ii++] = pair->m();
 
-            if ((flag == 0) || (flag == 1)) {
+            if (isD0) {
                 ntp_DMeson_Signal->Fill(ntVar);
             } else {
                 ntp_DMeson_Background->Fill(ntVar);
             }
+
+//            if ((flag == 0) || (flag == 1)) {
+//                ntp_DMeson_Signal->Fill(ntVar);
+//            } else {
+//                ntp_DMeson_Background->Fill(ntVar);
+//            }
         }  // for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon)
     } // for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1)
+    mIdxPicoPions.clear();
+    mIdxPicoKaons.clear();
 
     return kStOK;
 }
@@ -260,7 +280,7 @@ int StPicoD0AnaMaker::analyzeCandidates() {
 
         float pt=t->gPt();
         if ((pt>0.6) && mHFCuts->isGoodTrack(t)) h_tracktest->Fill(3);
-        float dca = (mPrimVtx - t->dcaPoint()).mag();
+        float dca = (mPrimVtx - t->origin()).Mag();
         if (dca<1.5 && (pt>0.6) && mHFCuts->isGoodTrack(t)) h_tracktest->Fill(4);
         bool tpcPion = mHFCuts->isTPCHadron(t, StPicoCutsBase::kPion);
         bool tpcKaon = mHFCuts->isTPCHadron(t, StPicoCutsBase::kKaon);
@@ -293,4 +313,3 @@ int StPicoD0AnaMaker::analyzeCandidates() {
 //    }
     return kStOK;
 }
-

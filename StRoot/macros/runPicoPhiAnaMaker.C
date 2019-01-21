@@ -1,4 +1,3 @@
-#ifndef __CINT__
 #include "TROOT.h"
 #include "TSystem.h"
 #include "TChain.h"
@@ -18,36 +17,20 @@
 
 using namespace std;
 
-#else
-class StChain;
-#endif
-class StPicoDstMaker;
-class StPicoKKMaker;
-class StMaker;
-StChain *chain;
 void runPicoPhiAnaMaker(
     const char*  inputFile,
     const Char_t *outputFile,  
-    const Char_t *badRunListFileName, const Char_t *treeName,
-    const Char_t *productionBasePath) {
-    string SL_version = "SL17d";
+    const Char_t *badRunListFileName) {
+    string SL_version = "SL18f";
     string env_SL = getenv ("STAR");
     if (env_SL.find(SL_version)==string::npos) {
         cout<<"Environment Star Library does not match the requested library in run**.C. Exiting..."<<endl;
         exit(1);
     }
 
-    #ifdef __CINT__
-    gROOT->LoadMacro("loadSharedHFLibraries.C");
-    loadSharedHFLibraries();
-    #endif
-
-    chain = new StChain();
+    StChain *chain = new StChain();
     TString sInputFile(inputFile);
-    TString sInputListHF("");  
-    TString sProductionBasePath(productionBasePath);
-    TString sTreeName(treeName);
-    
+
     if (!sInputFile.Contains(".list") && !sInputFile.Contains("picoDst.root")) {
         cout << "No input list or picoDst root file provided! Exiting..." << endl;
         exit(1);
@@ -70,23 +53,21 @@ void runPicoPhiAnaMaker(
     float dcaDaughtersMax = 1;  // maximum
     float decayLengthMin  = 0.000; // minimum
     float decayLengthMax  = 25; //std::numeric_limits<float>::max();
-    float cosThetaMin     = 0.9;   // minimum
+    float cosThetaMin     = 0.85;   // minimum
     float minMass         = 1;
     float maxMass         = 1.05;
     float pairDcaMax      = 1;
 
     hfCuts->setCutPtRange(0.15,50.0,StHFCuts::kKaon);
     hfCuts->setCutTPCNSigmaKaon(6);
-    hfCuts->setCutTOFDeltaOneOverBeta(999, StHFCuts::kKaon);
+    hfCuts->setCutTOFDeltaOneOverBeta(0.08, StHFCuts::kKaon);
     hfCuts->setCutPtotRangeHybridTOF(0.15,50.0,StHFCuts::kKaon);
 
     hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass, pairDcaMax);
 
     StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
 
-    StPicoKKMaker* PicoPhiAnaMaker = new StPicoKKMaker("picoPhiAnaMaker", picoDstMaker, outputFile, sInputListHF);
-    PicoPhiAnaMaker->setTreeName(treeName);
-    PicoPhiAnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
+    StPicoKKMaker* PicoPhiAnaMaker = new StPicoKKMaker("picoPhiAnaMaker", picoDstMaker, outputFile);
     PicoPhiAnaMaker->setHFBaseCuts(hfCuts);
 
     clock_t start = clock(); // getting starting time
@@ -100,16 +81,11 @@ void runPicoPhiAnaMaker(
         int iret = chain->Make(i);
         if (iret) { cout << "Bad return code!" << iret << endl; break;}
     }
-    
-    cout << "****************************************** " << endl;
-    cout << "Work done... now its time to close up shop!"<< endl;
-    cout << "****************************************** " << endl;
+
     chain->Finish();
     double duration = (double) (clock() - start) / (double) CLOCKS_PER_SEC;
     cout << "****************************************** " << endl;
-    cout << "total number of events  " << nEvents << endl;
-    cout << "****************************************** " << endl;
+    cout << "Work done, total number of events  " << nEvents << endl;
     cout << "Time needed " << duration << " s" << endl;
-    cout << "****************************************** " << endl;
     delete chain;
 }

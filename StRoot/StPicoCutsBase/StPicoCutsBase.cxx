@@ -6,14 +6,11 @@
 
 #include "StPicoCutsBase.h"
 
-#include "StLorentzVectorF.hh"
-#include "StThreeVectorF.hh"
-#include "StPhysicalHelixD.hh"
+#include "StPicoEvent/StPicoPhysicalHelix.h"
 #include "phys_constants.h"
 #include "SystemOfUnits.h"
-#include "StBTofUtil/tofPathLength.hh"
 
-#include "StPicoDstMaker/StPicoDst.h"
+#include "StPicoEvent/StPicoDst.h"
 #include "StPicoEvent/StPicoTrack.h"
 #include "StPicoEvent/StPicoEvent.h"
 #include "StPicoEvent/StPicoBTofPidTraits.h"
@@ -135,10 +132,7 @@ void StPicoCutsBase::initBase() {
 
 // _________________________________________________________
 bool StPicoCutsBase::isGoodEvent(StPicoDst const * const picoDst, int *aEventCuts) {
-  // -- method to check if good event
-  //    sets also mPicoDst and mPrimVtx
-  
-  // -- set current mPicoDst 
+  // -- set current mPicoDst
   mPicoDst = picoDst;
 
   // -- get picoDst event
@@ -159,38 +153,32 @@ bool StPicoCutsBase::isGoodEvent(StPicoDst const * const picoDst, int *aEventCut
     aEventCuts[ii] = 0;
   
   unsigned int iCut = 0;
-
   // -- 0 - before event cuts
   aEventCuts[iCut] = 0;
 
   // -- 1 - is bad run
   ++iCut;
-  if (!isGoodRun(picoEvent))
-    aEventCuts[iCut] = 1;
+  if (!isGoodRun(picoEvent)) aEventCuts[iCut] = 1;
 
   // -- 2 - No Trigger fired
   ++iCut;
-//  aEventCuts[iCut] = 0; //not looking at triggers
 //  trigger - is ok?
-  if (!isGoodTrigger(picoEvent))
-    aEventCuts[iCut] = 1;
+  if (!isGoodTrigger(picoEvent)) aEventCuts[iCut] = 1;
 
   // -- 3 - Vertex z outside cut window
   ++iCut;
-  if (fabs(picoEvent->primaryVertex().z()) >= mVzMax)
-    aEventCuts[iCut] = 1;
+  if (fabs(picoEvent->primaryVertex().z()) >= mVzMax) aEventCuts[iCut] = 1;
 
   // -- 4 Vertex z - vertex_z(vpd) outside cut window
   ++iCut;
-  if (fabs(picoEvent->primaryVertex().z() - picoEvent->vzVpd()) >= mVzVpdVzMax)
-    aEventCuts[iCut] = 1;  
+  if (fabs(picoEvent->primaryVertex().z() - picoEvent->vzVpd()) >= mVzVpdVzMax) aEventCuts[iCut] = 1;
   
   // -- is rejected
   bool isGoodEvent = true;
-  for (unsigned int ii = 0; ii < mEventStatMax; ++ii)
-    if  (aEventCuts[ii])
-      isGoodEvent = false;
-        
+  for (unsigned int ii = 0; ii < mEventStatMax; ++ii) {
+    if (aEventCuts[ii]) isGoodEvent = false;
+  }
+
   return isGoodEvent;
 }
 
@@ -221,6 +209,7 @@ bool StPicoCutsBase::isGoodTrack(StPicoTrack const * const trk) const {
   return ((!mRequireHFT || trk->isHFTTrack()) && trk->nHitsFit() >= mNHitsFitMin && cutMaxDcaToPrimVertex(trk) && trk->gPt() > mPtMin);
 }
 
+// _________________________________________________________
 bool StPicoCutsBase::isGoodPion(StPicoTrack const *const trk) const {
     if (!isGoodTrack(trk)) return false;
     if (!cutMinDcaToPrimVertex(trk, StPicoCutsBase::kPion)) return false;
@@ -232,6 +221,7 @@ bool StPicoCutsBase::isGoodPion(StPicoTrack const *const trk) const {
     return tof;
 }
 
+// _________________________________________________________
 bool StPicoCutsBase::isGoodKaon(StPicoTrack const *const trk) const {
     if (!isGoodTrack(trk)) return false;
     if (!cutMinDcaToPrimVertex(trk, StPicoCutsBase::kKaon)) return false;
@@ -243,24 +233,39 @@ bool StPicoCutsBase::isGoodKaon(StPicoTrack const *const trk) const {
     return tof;
 }
 
+// _________________________________________________________
+bool StPicoCutsBase::isGoodProton(StPicoTrack const *const trk) const {
+  if (!isGoodTrack(trk)) return false;
+  if (!cutMinDcaToPrimVertex(trk, StPicoCutsBase::kProton)) return false;
+  if (!isTPCProton(trk)) return false;
+  bool tof = false;
+  if (mHybridTof) tof = isHybridTOFProton(trk);
+  if (!mHybridTof) tof = isTOFProton(trk);
+
+  return tof;
+}
+
+// _________________________________________________________
 bool StPicoCutsBase::cutMinDcaToPrimVertex(StPicoTrack const * const trk, int pidFlag) const {
   // -- check on min dca for identified particle
-  float dca = (mPrimVtx - trk->dcaPoint()).mag();
+  float dca = (mPrimVtx - trk->origin()).Mag();
   return (dca >= mDcaMin[pidFlag]);
 }
 
+// _________________________________________________________
 bool StPicoCutsBase::cutMaxDcaToPrimVertex(StPicoTrack const * const trk) const {
   // -- check on max dca for all particles
-  float dca = (mPrimVtx - trk->dcaPoint()).mag();
+  float dca = (mPrimVtx - trk->origin()).Mag();
   return (dca <= mPrimaryDCAtoVtxMax);
 }
 
+// _________________________________________________________
 bool StPicoCutsBase::cutMinDcaToPrimVertexTertiary(StPicoTrack const * const trk, int pidFlag) const {
   // -- check on min dca for identified particle - used for tertiary particles only
 
-  StPhysicalHelixD helix = trk->helix(mPicoDst->event()->bField());
+  StPicoPhysicalHelix helix = trk->helix(mPicoDst->event()->bField());
   helix.moveOrigin(helix.pathLength(mPrimVtx));
-  float dca = (mPrimVtx - helix.origin()).mag();
+  float dca = (mPrimVtx - helix.origin()).Mag();
 
   return (dca >= mDcaMinTertiary[pidFlag]);
 }
@@ -307,6 +312,7 @@ bool StPicoCutsBase::isTOFHadron(StPicoTrack const *trk, float const & tofBeta, 
   return isTOFHadronPID(trk, tofBeta, pidFlag);
 }
 
+// _________________________________________________________
 bool StPicoCutsBase::isTOFmatched(StPicoTrack const *trk) const {
     int tofIndex = trk->bTofPidTraitsIndex();
     bool TofMatch = kFALSE;
@@ -349,33 +355,18 @@ StPicoBTofPidTraits* StPicoCutsBase::hasTofPid(StPicoTrack const * const trk) co
 
 // _________________________________________________________
 float StPicoCutsBase::getTofBetaBase(StPicoTrack const * const trk) const {
-//  same as liang
   int index2tof = trk->bTofPidTraitsIndex();
   float beta = std::numeric_limits<float>::quiet_NaN();
 
-  if(index2tof >= 0) { //toto je trocha ine ako predtym, inak je to rovnake... 25.01.
+  if(index2tof >= 0) {
     StPicoBTofPidTraits *tofPid = mPicoDst->btofPidTraits(index2tof);
-
-    if(tofPid)   {
-      beta = tofPid->btofBeta();
-
-      if (beta < 1e-4) {
-        StThreeVectorF const btofHitPos = tofPid->btofHitPos();
-        // StPhysicalHelixD helix = trk->helix();
-        StPhysicalHelixD helix = trk->helix(mPicoDst->event()->bField());
-
-        float L = tofPathLength(&mPrimVtx, &btofHitPos, helix.curvature());
-        float tof = tofPid->btof();
-        if (tof > 0) beta = L / (tof * (C_C_LIGHT / 1.e9));
-        else beta = std::numeric_limits<float>::quiet_NaN();
-      }
-    }
+    if(tofPid)  beta = tofPid->btofBeta();
   }
 
   return beta;
 }
 
-
+// _________________________________________________________
 float StPicoCutsBase::getOneOverBeta(StPicoTrack const * const trk,  float const & tofBeta, int pidFlag) const {
   if ((tofBeta <= 0) || (tofBeta!=tofBeta))
     return std::numeric_limits<float>::max();
@@ -391,8 +382,8 @@ float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk) const {
 }
 
 // _________________________________________________________
-float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk, 
-				 StLorentzVectorF const & secondaryMother, StThreeVectorF const & secondaryVtx) const {
+float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk,
+                                 TVector3 const & secondaryMother, TVector3 const & secondaryVtx) const {
   // -- provide correced beta of TOF for pico track
   //    use for 
   //      - secondaries 
@@ -402,57 +393,56 @@ float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk,
   StPicoBTofPidTraits *tofPid = hasTofPid(trk);
   if (!tofPid) 
     return beta;
-
-  StThreeVectorD tofHit = tofPid->btofHitPos();
-
-  // -- set waypoints
-  mTOFCorr->setVectors3D(mPrimVtx)(secondaryVtx)(tofHit);
-
-  // -- set mother track
-  mTOFCorr->setMotherTracks(secondaryMother);
-  
-  float tof = tofPid->btof();
-StPhysicalHelixD helix = trk->helix(mPicoDst->event()->bField()); 
-  
-  // -- correct beta
-  mTOFCorr->correctBeta(helix, tof, beta);
-
-  // -- clean up
-  mTOFCorr->clearContainers();
-  
+//
+//
+//  // -- set waypoints
+//  mTOFCorr->setVectors3D(mPrimVtx)(secondaryVtx)(tofHit);
+//
+//  // -- set mother track
+//  mTOFCorr->setMotherTracks(secondaryMother);
+//
+//  float tof = tofPid->btof();
+//  StPicoPhysicalHelix helix = trk->helix(mPicoDst->event()->bField());
+//
+//  // -- correct beta
+//  mTOFCorr->correctBeta(helix, tof, beta);
+//
+//  // -- clean up
+//  mTOFCorr->clearContainers();
+//
   return beta;
 }
 
 // _________________________________________________________
-float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk, 
-				 StLorentzVectorF const & secondaryMother, StThreeVectorF const & secondaryVtx, 
-				 StLorentzVectorF const & tertiaryMother,  StThreeVectorF const & tertiaryVtx) const {
+float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk,
+                                 TVector3 const & secondaryMother, TVector3 const & secondaryVtx,
+                                 TVector3 const & tertiaryMother,  TVector3 const & tertiaryVtx) const {
   // -- provide correced beta of TOF for pico track
   //    use for 
   //      - tertiaries 
 
   float beta = std::numeric_limits<float>::quiet_NaN();
 
-  StPicoBTofPidTraits *tofPid = hasTofPid(trk);
-  if (!tofPid) 
-    return beta;
-
-  StThreeVectorD tofHit = tofPid->btofHitPos();
-
-  // -- set waypoints
-  mTOFCorr->setVectors3D(mPrimVtx)(secondaryVtx)(tertiaryVtx)(tofHit);
-
-  // -- set mother track
-  mTOFCorr->setMotherTracks(secondaryMother)(tertiaryMother);
-  
-  float tof = tofPid->btof();
-  StPhysicalHelixD helix = trk->helix(mPicoDst->event()->bField());
-    
-  // -- correct beta
-  mTOFCorr->correctBeta(helix, tof, beta);
-
-  // -- clean up
-  mTOFCorr->clearContainers();
+//  StPicoBTofPidTraits *tofPid = hasTofPid(trk);
+//  if (!tofPid)
+//    return beta;
+//
+//  StThreeVectorD tofHit = tofPid->btofHitPos();
+//
+//  // -- set waypoints
+//  mTOFCorr->setVectors3D(mPrimVtx)(secondaryVtx)(tertiaryVtx)(tofHit);
+//
+//  // -- set mother track
+//  mTOFCorr->setMotherTracks(secondaryMother)(tertiaryMother);
+//
+//  float tof = tofPid->btof();
+//  StPicoPhysicalHelix helix = trk->helix(mPicoDst->event()->bField());
+//
+//  // -- correct beta
+////  mTOFCorr->correctBeta(helix, tof, beta);
+//
+//  // -- clean up
+//  mTOFCorr->clearContainers();
   
   return beta;
 }
