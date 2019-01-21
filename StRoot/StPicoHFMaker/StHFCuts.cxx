@@ -90,12 +90,13 @@ bool StHFCuts::isGoodTertiaryVertexPair(StHFPair const & pair) const {
 
 // _________________________________________________________
 bool StHFCuts::isGoodSecondaryVertexPairPtBin(StHFPair const & pair) const {
+	cout<<"testptbin"<<endl
 	if (!((mCutsDecayLength.size()) == (mCutsDcaDaughters.size()))){
 		cout<<"Ooops"<<endl;
 	}
 
 	for (unsigned short i = 0; i < mCutsPtMin.size(); ++i) {
-		if (pair.pt() > mCutsPtMin[i] && pair.pt() < mCutsPtMin[i] &&
+		if (pair.pt() > mCutsPtMin[i] && pair.pt() < mCutsPtMax[i] &&
 			std::cos(pair.pointingAngle()) > mCutsPointingAngle[i] &&
 			pair.decayLength() > mCutsDecayLength[i] &&
 			pair.dcaDaughters() < mCutsDcaDaughters[i] &&
