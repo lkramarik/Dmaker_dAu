@@ -89,6 +89,27 @@ bool StHFCuts::isGoodTertiaryVertexPair(StHFPair const & pair) const {
 }
 
 // _________________________________________________________
+bool StHFCuts::isGoodSecondaryVertexPairPtBin(StHFPair const & pair) const {
+	if (!(mCutsDecayLength.size() == mCutsDcaDaughters.size() == mCutsDcaToPrimaryVertex.size() == mCutsPtMin.size() == mCutsPtMin.size() == mCutsPointingAngle.size() == mCutsKaonDca.size() == mCutsPionDca.size)){
+		cout<<"Ooops"<<endl;
+	}
+
+	for (unsigned short i = 0; i < mCutsPtMin.size(); ++i) {
+		if (pair.pt() > mCutsPtMin[i] && pair.pt() < mCutsPtMin[i] &&
+			std::cos(pair.pointingAngle()) > mCutsPointingAngle[i] &&
+			pair.decayLength() > mCutsDecayLength[i] &&
+			pair.dcaDaughters() < mCutsDcaDaughters[i] &&
+			pair.DcaToPrimaryVertex() < mCutsDcaToPrimaryVertex[i] &&
+			pair.particle1Dca > mCutsPionDca[i] && pair.particle2Dca > mCutsKaonDca[i]
+			)
+			return true;
+	}
+
+	return false;
+}
+
+
+// _________________________________________________________
 /*bool StHFCuts::isGoodSecondaryVertexTriplet(StHFTriplet const & triplet) const {
   // -- check for good secondary vertex triplet
 

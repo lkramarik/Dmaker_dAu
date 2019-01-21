@@ -55,7 +55,7 @@ int StPicoD0V2AnaMaker::createCandidates() {
             StPicoTrack const* kaon = mPicoDst->track(j);
             if (pion1->id() == kaon->id()) continue;
             if (!mHFCuts -> isGoodKaon(kaon)) continue;
-            StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), i, j, mPrimVtx, mBField, kTRUE);
+            StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), i, j, mPrimVtx, mBField, kTRUE); //the order (pion1, kaon) needs to stay same!
             if (!mHFCuts->isGoodSecondaryVertexPair(pair)) continue;
             if(pair->m() < 1.804 || pair->m() > 1.924 || pair->pt() < 1 || pair->pt() > 5) continue;
 
@@ -93,7 +93,7 @@ int StPicoD0V2AnaMaker::makeV2(StHFPair* pair, double reweight){
 // _________________________________________________________
 void StPicoD0V2AnaMaker::DeclareHistograms() {
     TString names[4] = {"cos_B", "cos_F", "sin_B", "sin_F"}; //backward and forward samples
-    float multBin[6] = {0, 7, 12, 16, 22, 100};
+//    float multBin[6] = {0, 7, 12, 16, 22, 100};
     int nMultBins = sizeof(multBin)/sizeof(multBin[0])-1;
 
     float momBins[7] = {0,1,2,3,4,5,10};
@@ -213,7 +213,7 @@ bool StPicoD0V2AnaMaker::getCorV2(StHFPair *kp,double weight) {
     int mult = mPicoEvent->grefMult();
 
     double hadronv2=1;
-    float multBin[6] = {0,7,12,16,22,100};
+//    float multBin[6] = {0,7,12,16,22,100};
     double etaGap[3] = {0,0.15,0.05};
 
     int k=0;
@@ -226,7 +226,6 @@ bool StPicoD0V2AnaMaker::getCorV2(StHFPair *kp,double weight) {
 
     for(unsigned int i=0; i<mPicoDst->numberOfTracks();i++) {
         StPicoTrack const* hadron = mPicoDst->track(i);
-        if(hadron->pMom().Perp()<0.2) continue;
         if(!mHFCuts->isGoodTrack(hadron)) continue;
         if(!mHFCuts->isGoodProton(hadron) && !mHFCuts->isGoodKaon(hadron) && !mHFCuts->isGoodPion(hadron)) continue;
         if(i==kp->particle1Idx() || i==kp->particle2Idx()) continue;

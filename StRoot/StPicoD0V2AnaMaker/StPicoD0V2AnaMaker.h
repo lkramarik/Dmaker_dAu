@@ -91,6 +91,8 @@ private:
     bool getCorV2(StHFPair *, double);
     bool isEtaGap(double, double ,double);
 
+    float multBin[6] = {0,7,12,16,22,100};
+
     TString mOutFileBaseName;
 
     TFile* mOutFile;
