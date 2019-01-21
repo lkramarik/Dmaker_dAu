@@ -43,6 +43,7 @@ class StHFCuts : public StPicoCutsBase
 
   bool isGoodSecondaryVertexPair(StHFPair const & pair) const;
   bool isGoodTertiaryVertexPair(StHFPair const & pair) const;
+  bool isGoodSecondaryVertexPairPtBin(StHFPair const & pair) const;
   bool isGoodSecondaryVertexTriplet(StHFTriplet const & triplet) const;
 
   // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --   
