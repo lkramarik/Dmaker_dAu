@@ -81,15 +81,21 @@ void runPicoD0AnaMakerLocal(
   hfCuts->setCutTOFDeltaOneOverBeta(0.06, StHFCuts::kPion); // v podstate 6 sigma
   hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kPion);
 
+  //                               ptmin, ptmax, dcaDaughtersMax, decayLengthMin,  cosThetaMin, pairDcaMax, pionDca, kaonDca
+  hfCuts->setCutSecondaryPairPtBin(1,      2,              0.007,          0.012,         0.5,      0.005,    0.009, 0.007);
+  hfCuts->setCutSecondaryPairPtBin(2,      3,              0.016,          0.003,         0.5,      0.0065,   0.009, 0.01);
+  hfCuts->setCutSecondaryPairPtBin(3,      5,              0.015,          0.009,         0.6,      0.0064,   0.0064, 0.0076);
+
   StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
-  StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile);
-  PicoD0AnaMaker->setHFBaseCuts(hfCuts);
+//  StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile);
+//  PicoD0AnaMaker->setHFBaseCuts(hfCuts);
 
 //  StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile);
 //  picoMixedEventMaker->setBufferSize(3);
 
-//  StPicoD0V2AnaMaker* PicoD0V2AnaMaker = new StPicoD0V2AnaMaker("picoD0V2AnaMaker", picoDstMaker, outputFile);
-//  PicoD0V2AnaMaker->setHFBaseCuts(hfCuts);
+  StPicoD0V2AnaMaker* PicoD0V2AnaMaker = new StPicoD0V2AnaMaker("picoD0V2AnaMaker", picoDstMaker, outputFile);
+  PicoD0V2AnaMaker->setHFBaseCuts(hfCuts);
+
 
   clock_t start = clock(); // getting starting time
   chain->Init();

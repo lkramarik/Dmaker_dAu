@@ -74,21 +74,24 @@ int StPicoD0V2AnaMaker::makeV2(StHFPair* pair, double reweight){
     if(pair->pt() > 1 && pair->pt() < 2) {
         if(pair->decayLength() > 0.012 && pair->dcaDaughters() < 0.007 && pair->DcaToPrimaryVertex() < 0.005 && cos(pair->pointingAngle()) > 0.5 && pair->particle2Dca() > 0.007 && pair->particle1Dca() > 0.009) {
             getCorV2(pair, reweight);
+            cout<<"pt bin old ok 12"<<endl;
         }
     }
     if(pair->pt() > 2 && pair->pt() < 3)
     {
         if(pair->decayLength() > 0.003 && pair->dcaDaughters() < 0.016 && pair->DcaToPrimaryVertex() < 0.0065 && cos(pair->pointingAngle()) > 0.5 && pair->particle2Dca() > 0.01 && pair->particle1Dca() > 0.009) {
             getCorV2(pair, reweight);
+            cout<<"pt bin old ok 23"<<endl;
         }
     }
     if(pair->pt() > 3 && pair->pt() < 5)
     {
         if(pair->decayLength() > 0.009 && pair->dcaDaughters() < 0.015 && pair->DcaToPrimaryVertex() < 0.0064 && cos(pair->pointingAngle()) > 0.6 && pair->particle2Dca() > 0.0076 && pair->particle1Dca() > 0.0064) {
             getCorV2(pair, reweight);
+            cout<<"pt bin old ok 35"<<endl;
         }
     }
-
+    if (mHFCuts->isGoodSecondaryVertexPairPtBin(pair)) {cout<<"pt bin new ok"<<endl;}
     return kStOK;
 }
 
