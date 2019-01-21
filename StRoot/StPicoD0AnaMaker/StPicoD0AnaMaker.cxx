@@ -170,7 +170,7 @@ int StPicoD0AnaMaker::createCandidates() {
     UInt_t nTracks = mPicoDst->numberOfTracks();
     for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
         StPicoTrack* trk = mPicoDst->track(iTrack);
-        if (abs(trkTest->gMom().PseudoRapidity())>1) continue;
+        if (abs(trk->gMom().PseudoRapidity())>1) continue;
         if (mHFCuts->isGoodPion(trkTest)) mIdxPicoPions.push_back(iTrack);
         if (mHFCuts->isGoodKaon(trkTest)) mIdxPicoKaons.push_back(iTrack);
 //        if (isProton(trk)) mIdxPicoProtons.push_back(iTrack); // isProton method to be implemented by daughter class
