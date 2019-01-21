@@ -87,13 +87,7 @@ void runPicoD0AnaMakerLocal(
   hfCuts->setCutSecondaryPairPtBin(3,      5,              0.015,          0.009,         0.6,      0.0064,   0.0064, 0.0076);
   hfCuts->setCutSecondaryPairPtBin(0,      5,              0.03,           0.009,         0.6,      0.1,   0.0064, 0.0076);
 
-  if(pair->pt() > 0 && pair->pt() < 5)
-  {
-    if(pair->decayLength() > 0.009 && pair->dcaDaughters() < 0.03 && pair->DcaToPrimaryVertex() < 0.1 && cos(pair->pointingAngle()) > 0.6 && pair->particle2Dca() > 0.0076 && pair->particle1Dca() > 0.0064) {
-      getCorV2(pair, reweight);
-      cout<<"test cut"<<endl;
-    }
-  }
+ 
 
   StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
 //  StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile);
