@@ -59,7 +59,7 @@ void pidEffPion() {
     pair = "#pi#pi";
     pairName = "pipi";
 
-    bool hybridTof=true;
+    bool hybridTof=false;
 
     if (hybridTof) {
         tof1="pi1_TOFinvbeta<0.03 || pi1_TOFinvbeta>93";
@@ -129,7 +129,21 @@ void pidEffPion() {
 
         hSigmaSignalAna1->Add(hSigmaSignalAna2);
 
-        Double_t integralAna = hSigmaSignalAna1->IntegralAndError(hSigmaSignalAna1->FindBin(pid1->getMean()-1*pid1->getSigma()),hSigmaSignalAna1->FindBin(pid1->getMean()+1*pid1->getSigma()),errorAna,""); //number of it without PID cut
+
+        Double_t integralAna = hSigmaSignalAna1->IntegralAndError(hSigmaSignalAna1->FindBin(pid1->getMean() - 1*pid1->getSigma()), hSigmaSignalAna1->FindBin(pid1->getMean() + 1*pid1->getSigma()), errorAna, ""); //number of it without PID cut
+        TLine *left = new TLine(pid1->getMean() - 1*pid1->getSigma(), hSigmaSignalAna1->GetMaximum(), pid1->getMean() - 1*pid1->getSigma(), hSigmaSignalAna1->GetMinimum());
+        left->SetLineColor(46);
+        TLine *right = new TLine(pid1->getMean() + 1*pid1->getSigma(), hSigmaSignalAna1->GetMaximum(), pid1->getMean() + 1*pid1->getSigma(), hSigmaSignalAna1->GetMinimum());
+        right->SetLineColor(46);
+        TCanvas *c = new TCanvas("c",Form("%.2f_%.2f", ptBins[i],ptBins[i+1]),1000,900);
+        hSigmaSignalAna1->Draw();
+        left->Draw("same");
+        right->Draw("same");
+        c->SaveAs(Form("img/pipi/fit/ana.%.2f_%.2f.png", ptBins[i], ptBins[i+1]));
+        c->Close();
+        left=0x0;
+        right=0x0;
+
         cout<<integralAna<<endl;
         eff[i]=(float)integralAna/(float)integralClean;
         effError[i]=sqrt(errorAna*errorAna/(pow(integralClean,2)) + errorClean*errorClean*integralAna*integralAna/(pow(integralClean,4)));

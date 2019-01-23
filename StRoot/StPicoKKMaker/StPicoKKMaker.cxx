@@ -26,7 +26,7 @@ int StPicoKKMaker::InitHF() {
 
     mOutFileBaseName = mOutFileBaseName.ReplaceAll(".root", "");
 
-    TString ntpVars = "pi1_pt:pi1_dca:pi1_nSigma:pi1_nHitFit:pi1_eta:pi1_phi:pi1_TOFinvbeta:pi2_pt:pi2_dca:pi2_nSigma:pi2_nHitFit:pi2_eta:pi2_phi:pi2_TOFinvbeta:dcaDaughters:primVz:primVzVpd:pair_cosTheta:pair_decayL:pair_dcaToPv:pair_cosThetaStar:pair_pt:pair_mass";
+    TString ntpVars = "pi1_pt:pi1_dca:pi1_nSigma:pi1_nHitFit:pi1_eta:pi1_phi:pi1_TOFinvbeta:pi2_pt:pi2_dca:pi2_nSigma:pi2_nHitFit:pi2_eta:pi2_phi:pi2_TOFinvbeta:dcaDaughters:primVz:primVzVpd:bbcRate:nTofTracks:pair_cosTheta:pair_decayL:pair_dcaToPv:pair_pt:pair_mass";
 
     ntp_signal = new TNtuple("ntp_signal","phi_Signal", ntpVars);
     ntp_background = new TNtuple("ntp_background","phi_background",ntpVars);
@@ -75,7 +75,7 @@ int StPicoKKMaker::createCandidates() {
             if (kaon1->charge()+kaon2->charge() == 0) isPhi = true;
 
             int ii=0;
-            float ntVar[23];
+            float ntVar[24];
             ntVar[ii++] = kaon1->gPt();
             ntVar[ii++] = pair->particle1Dca();
             ntVar[ii++] = kaon1->nSigmaKaon();
@@ -95,11 +95,12 @@ int StPicoKKMaker::createCandidates() {
             ntVar[ii++] = pair->dcaDaughters();
             ntVar[ii++] = mPrimVtx.z();
             ntVar[ii++] = mPicoEvent->vzVpd();
+            ntVar[ii++] = mPicoEvent->BBCx() / 1000.;
+            ntVar[ii++] = nTofTracks;
+
             ntVar[ii++] = cos(pair->pointingAngle());
             ntVar[ii++] = pair->decayLength();
-
             ntVar[ii++] = pair->DcaToPrimaryVertex();
-            ntVar[ii++] = pair->cosThetaStar();
             ntVar[ii++] = pair->pt();
             ntVar[ii++] = pair->m();
 
