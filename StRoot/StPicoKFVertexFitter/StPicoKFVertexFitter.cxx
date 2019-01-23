@@ -32,7 +32,8 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
     KFParticle* particles[tracksToUse.size()];
 
     for (size_t iTrk = 0; iTrk < tracksToUse.size(); ++iTrk) {
-        StPicoTrack* gTrack = (StPicoTrack*)picoDst->track(tracksToUse[iTrk]);
+//        StPicoTrack* gTrack = (StPicoTrack*)picoDst->track(tracksToUse[iTrk]);
+        StGlobalTrack* gTrack = (StGlobalTrack*)picoDst->track(tracksToUse[iTrk]);
 
         StDcaGeometry dcaG = gTrack->dcaGeometry();
         Double_t xyzp[6], CovXyzp[21];
@@ -59,7 +60,7 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
     TVector3 kfVertex(-999.,-999.,-999.);
 
     if (aVertex.GetX()) {
-        kfVertex.set(aVertex.GetX(), aVertex.GetY(), aVertex.GetZ());
+        kfVertex.SetXYZ(aVertex.GetX(), aVertex.GetY(), aVertex.GetZ());
     }
 
     return kfVertex;
