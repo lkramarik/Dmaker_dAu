@@ -83,8 +83,8 @@ void runPicoPhiAnaMakerLocal(
   cout << " Total entries = " << total << endl;
   if(nEvents>total) nEvents = total;
 
-//  for (Int_t i=0; i<nEvents; i++) {
-  for (Int_t i=0; i<2000; i++) {
+  for (Int_t i=0; i<nEvents; i++) {
+//  for (Int_t i=0; i<2000; i++) {
     if(i%10==0)       cout << "Working on eventNumber " << i << endl;
 
     chain->Clear();
