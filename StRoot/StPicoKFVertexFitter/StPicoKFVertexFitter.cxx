@@ -6,6 +6,7 @@
 #include "StPicoDstMaker/StPicoDstMaker.h"
 #include "StPicoEvent/StPicoDst.h"
 #include "StPicoEvent/StPicoEvent.h"
+#include "StEvent/StGlobalTrack.h"
 #include "StPicoEvent/StPicoTrack.h"
 
 using namespace std;
@@ -32,10 +33,12 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
     KFParticle* particles[tracksToUse.size()];
 
     for (size_t iTrk = 0; iTrk < tracksToUse.size(); ++iTrk) {
-//        StPicoTrack* gTrack = (StPicoTrack*)picoDst->track(tracksToUse[iTrk]);
-        StGlobalTrack* gTrack = (StGlobalTrack*)picoDst->track(tracksToUse[iTrk]);
+        StPicoTrack* gTrack = (StPicoTrack*)picoDst->track(tracksToUse[iTrk]);
+//        StDcaGeometry dcaG = gTrack->dcaGeometry();
 
-        StDcaGeometry dcaG = gTrack->dcaGeometry();
+        StPicoTrackCovMatrix *cov = picoDst->trackCovMatrix(iTrack);
+        const StDcaGeometry dcaG = cov->dcaGeometry();
+
         Double_t xyzp[6], CovXyzp[21];
         dcaG.GetXYZ(xyzp, CovXyzp);
         MTrack track;
@@ -66,3 +69,7 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
     return kfVertex;
 
 }
+//michal
+//    Int_t q = 1; if (gTrack->charge() < 0) q = -1;
+//    KFPTrack track;
+//    if( !GetTrack(dcaG, track, q, index) ) continue;
