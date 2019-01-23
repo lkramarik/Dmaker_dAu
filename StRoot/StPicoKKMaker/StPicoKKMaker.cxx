@@ -54,8 +54,10 @@ int StPicoKKMaker::MakeHF() {
 // _________________________________________________________
 int StPicoKKMaker::createCandidates() {
     //making array of good kaons
+    float nTofTracks = 0;
     for(unsigned int k = 0; k < mPicoDst->numberOfTracks(); ++k) {
         StPicoTrack const *trkTest = mPicoDst->track(k);
+        if (mHFCuts->isTOFmatched(trkTest)) nTofTracks += 1;
         if (abs(trkTest->gMom().PseudoRapidity())>1) continue;
         if (mHFCuts->isGoodKaon(trkTest)) mIdxPicoKaons.push_back(k);
     }
