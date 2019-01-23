@@ -8,6 +8,7 @@
 #include "StPicoEvent/StPicoEvent.h"
 #include "StEvent/StGlobalTrack.h"
 #include "StPicoEvent/StPicoTrack.h"
+#include "StPicoEvent/StPicoTrackCovMatrix.h"
 
 using namespace std;
 
@@ -36,7 +37,7 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
         StPicoTrack* gTrack = (StPicoTrack*)picoDst->track(tracksToUse[iTrk]);
 //        StDcaGeometry dcaG = gTrack->dcaGeometry();
 
-        StPicoTrackCovMatrix *cov = picoDst->trackCovMatrix(iTrack);
+        StPicoTrackCovMatrix *cov = picoDst->trackCovMatrix(tracksToUse[iTrk]);
         const StDcaGeometry dcaG = cov->dcaGeometry();
 
         Double_t xyzp[6], CovXyzp[21];
