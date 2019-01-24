@@ -29,9 +29,9 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* const picoDst
         if (! gTrack) continue;
         if(std::binary_search(tracksToRemove.begin(), tracksToRemove.end(), iTrk)) continue;
 //        if(!gTrack->isPrimary()) continue;
-        cout<<gTrack->gDCAz(Vtx.z())<<endl;
-        if(!abs(gTrack->gDCAz(Vtx.z()))<3) continue;
-        if(!abs(gTrack->gDCAxy(Vtx.x(),Vtx.y()))<1.5) continue;
+//        cout<<gTrack->gDCAz(Vtx.z())<<endl;
+        if(abs(gTrack->gDCAz(Vtx.z()))>3) continue;
+//        if(!abs(gTrack->gDCAxy(Vtx.x(),Vtx.y()))<1.5) continue;
         goodTracks.push_back(iTrk);
     }
 
