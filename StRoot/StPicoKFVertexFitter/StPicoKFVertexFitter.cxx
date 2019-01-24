@@ -37,11 +37,12 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
     for (size_t iTrk = 0; iTrk < tracksToUse.size(); ++iTrk) {
         StPicoTrack* gTrack = (StPicoTrack*)picoDst->track(tracksToUse[iTrk]);
 //        StDcaGeometry dcaG = gTrack->dcaGeometry();
-//        const StDcaGeometry dcaG = cov->dcaGeometry();
 
         StPicoTrackCovMatrix *cov = picoDst->trackCovMatrix(tracksToUse[iTrk]);
-        StDcaGeometry* dcaG = new StDcaGeometry();
-        dcaG->set(cov->params(),cov->sigmas());
+        const StDcaGeometry dcaG = cov->dcaGeometry();
+
+//        StDcaGeometry* dcaG = new StDcaGeometry();
+//        dcaG->set(cov->params(),cov->sigmas());
 
         Double_t xyzp[6], CovXyzp[21]; //ok
         dcaG->GetXYZ(xyzp, CovXyzp); //ok
