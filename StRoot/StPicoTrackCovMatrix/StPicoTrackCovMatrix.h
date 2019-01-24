@@ -86,7 +86,7 @@ class StPicoTrackCovMatrix : public TObject {
   Float16_t mSigma[5];
   Float16_t mCorr[10];   //[-1,1,20] 
 
-  ClassDef(StPicoTrackCovMatrix, 1)
+  ClassDef(StPicoTrackCovMatrix, 2)
 };
 
 /**
