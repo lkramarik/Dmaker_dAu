@@ -59,10 +59,10 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
         track.SetID(gTrack->id()); //ok
         track.SetCharge(q); //ok
 
-//        Int_t pdg = dcaG.charge() > 0 ? 211 : -211; // assume all tracks are pions.
-
-        particles[iTrk] = new KFParticle(track, 211);
-//        particles[iTrk] = new KFParticle(track, pdg);
+        Int_t pdg = dcaG.charge() > 0 ? 211 : -211; // assume all tracks are pions.
+//
+//        particles[iTrk] = new KFParticle(track, 211);
+        particles[iTrk] = new KFParticle(track, pdg);
     }
 
     TArrayC Flag(tracksToUse.size());
