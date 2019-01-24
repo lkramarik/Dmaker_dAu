@@ -1,5 +1,5 @@
 /// PicoDst headers
-#include "StPicoMessMgr.h"
+#include "StPicoEvent/StPicoMessMgr.h"
 #include "StPicoTrackCovMatrix.h"
 
 ClassImp(StPicoTrackCovMatrix)
