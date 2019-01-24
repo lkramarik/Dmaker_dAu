@@ -8,7 +8,7 @@
 #include "StPicoEvent/StPicoEvent.h"
 #include "StEvent/StGlobalTrack.h"
 #include "StPicoEvent/StPicoTrack.h"
-#include "StPicoEvent/StPicoTrackCovMatrix.h"
+#include "StPicoTrackCovMatrix/StPicoTrackCovMatrix.h"
 //#include "KFPTrack.h"
 
 using namespace std;
@@ -45,7 +45,7 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
 //        dcaG->set(cov->params(),cov->sigmas());
 
         Double_t xyzp[6], CovXyzp[21]; //ok
-        dcaG->GetXYZ(xyzp, CovXyzp); //ok
+        dcaG.GetXYZ(xyzp, CovXyzp); //ok
 
         Int_t q = 1; if (gTrack->charge() < 0) q = -1; //ok
 
@@ -57,7 +57,7 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
         track.SetID(gTrack->id()); //ok
         track.SetCharge(q); //ok
 
-        Int_t pdg = dcaG->charge() > 0 ? 211 : -211; // assume all tracks are pions.
+        Int_t pdg = dcaG.charge() > 0 ? 211 : -211; // assume all tracks are pions.
 
         particles[iTrk] = new KFParticle(track, pdg);
     }
@@ -78,6 +78,25 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
     return kfVertex;
 
 }
+
+//StDcaGeometry &StPicoKFVertexFitter::dcaGeometry(StPicoTrackCovMatrix *cov) const {
+//    static StDcaGeometry a;
+//    Float_t errMatrix[15];
+//    Float16_t* mSigma=cov->sigmas();
+//    Int_t ii = 0;
+//    for (int i = 0; i < 5; i++) {
+//        errMatrix[ii] = mSigma[i]*mSigma[i];
+//        for (int j = 0; j < i; j++) {
+//            Int_t ij = ii - i - 1 + j + 1;
+//            Int_t ij1 = ij - i;
+//            errMatrix[ij] = mCorr[ij1]*mSigma[i]*mSigma[j];
+//        }
+//        ii += i+2;
+//    }
+//    a.set(params(), errMatrix);
+//    return *&a;
+//}
+
 //michal
 //    Int_t q = 1; if (gTrack->charge() < 0) q = -1;
 //    KFPTrack track;

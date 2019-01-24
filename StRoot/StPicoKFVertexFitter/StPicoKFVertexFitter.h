@@ -18,6 +18,7 @@
 
 #include <vector>
 #include "TVector3.h"
+//#include "StEvent/StDcaGeometry.h"
 
 class StPicoDst;
 
@@ -26,6 +27,8 @@ class StPicoKFVertexFitter
 public:
     StPicoKFVertexFitter() {}
     ~StPicoKFVertexFitter() {}
+
+//    StDcaGeometry &dcaGeometry() const;
 
     TVector3 primaryVertexRefit(StPicoDst const*) const;
 
