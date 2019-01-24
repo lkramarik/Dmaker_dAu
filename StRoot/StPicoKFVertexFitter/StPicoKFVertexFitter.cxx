@@ -20,8 +20,8 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* const picoDst
     std::sort(tracksToRemove.begin(),tracksToRemove.end());
 
     vector<int> goodTracks;
-    StPicoEvent mPicoEvent = picoDst->event();
-    TVector3 mPrimVtx = mPicoEvent->primaryVertex();
+//    StPicoEvent mPicoEvent = picoDst->event();
+    TVector3 mPrimVtx = picoDst->event()->primaryVertex();
 
     // make a list of good tracks to be used in the KFVertex fit
     for (unsigned int iTrk = 0; iTrk < picoDst->numberOfTracks(); ++iTrk) {
@@ -29,8 +29,8 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* const picoDst
         if (! gTrack) continue;
         if(std::binary_search(tracksToRemove.begin(), tracksToRemove.end(), iTrk)) continue;
 //        if(!gTrack->isPrimary()) continue;
-        if(!abs(gTrack->gDCAz(mPrimVtx))<3) continue;
-        if(!abs(gTrack->gDCAxy(mPrimVtx))<1.5) continue;
+        if(!abs(gTrack->gDCAz(mPrimVtx.z()))<3) continue;
+        if(!abs(gTrack->gDCAxy(mPrimVtx.x(),mPrimVtx.y()))<1.5) continue;
         goodTracks.push_back(iTrk);
     }
 
