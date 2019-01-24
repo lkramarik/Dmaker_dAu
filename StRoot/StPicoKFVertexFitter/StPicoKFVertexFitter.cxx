@@ -36,21 +36,21 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
     for (size_t iTrk = 0; iTrk < tracksToUse.size(); ++iTrk) {
         StPicoTrack* gTrack = (StPicoTrack*)picoDst->track(tracksToUse[iTrk]);
 //        StDcaGeometry dcaG = gTrack->dcaGeometry();
+//        const StDcaGeometry dcaG = cov->dcaGeometry();
 
         StPicoTrackCovMatrix *cov = picoDst->trackCovMatrix(tracksToUse[iTrk]);
-//        const StDcaGeometry dcaG = cov->dcaGeometry();
-        StDcaGeometry dcaG = new StDcaGeometry();
+        StDcaGeometry* dcaG = new StDcaGeometry();
         dcaG->set(cov->params(),cov->sigmas());
         Double_t xyzp[6], CovXyzp[21];
-        dcaG.GetXYZ(xyzp, CovXyzp);
+        dcaG->GetXYZ(xyzp, CovXyzp);
         MTrack track;
         track.SetParameters(xyzp);
         track.SetCovarianceMatrix(CovXyzp);
         track.SetNDF(1);
         track.SetID(gTrack->id());
-        track.SetCharge(dcaG.charge());
+        track.SetCharge(dcaG->charge());
 
-        Int_t pdg = dcaG.charge() > 0 ? 211 : -211; // assume all tracks are pions.
+        Int_t pdg = dcaG->charge() > 0 ? 211 : -211; // assume all tracks are pions.
 
         particles[iTrk] = new KFParticle(track, pdg);
     }

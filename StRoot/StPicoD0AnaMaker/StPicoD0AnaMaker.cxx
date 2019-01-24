@@ -5,6 +5,7 @@
 #include "StPicoHFMaker/StHFCuts.h"
 #include "phys_constants.h"
 #include "StPicoD0AnaMaker.h"
+#include "StPicoKFVertexFitter.h"
 ClassImp(StPicoD0AnaMaker)
 
 // _________________________________________________________
@@ -175,6 +176,12 @@ int StPicoD0AnaMaker::createCandidates() {
         if (mHFCuts->isGoodKaon(trk)) mIdxPicoKaons.push_back(iTrack);
 //        if (isProton(trk)) mIdxPicoProtons.push_back(iTrack); // isProton method to be implemented by daughter class
     }
+
+    StPicoKFVertexFitter kfVertexFitter;
+    TVector3 kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
+    cout<<kfVertex.x()<<" "<<kfVertex.y()<<" "<<kfVertex.z()<<endl;
+    cout<<mPrimVtx.x()<<" "<<mPrimVtx.y()<<" "<<mPrimVtx.z()<<endl;
+    cout<<" "<<endl;
 
     for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
         StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
