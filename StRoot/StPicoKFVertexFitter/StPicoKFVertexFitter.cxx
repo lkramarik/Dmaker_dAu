@@ -28,10 +28,10 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* const picoDst
         StPicoTrack* gTrack = (StPicoTrack*)picoDst->track(iTrk);
         if (! gTrack) continue;
         if(std::binary_search(tracksToRemove.begin(), tracksToRemove.end(), iTrk)) continue;
-//        if(!gTrack->isPrimary()) continue;
-//        cout<<gTrack->gDCAz(Vtx.z())<<endl;
-//        if(abs(gTrack->gDCAz(Vtx.z()))>3) continue;
-//        if(abs(gTrack->gDCAxy(Vtx.x(),Vtx.y()))>1.5) continue;
+        if(!gTrack->isPrimary()) continue;
+        cout<<gTrack->gDCAz(Vtx.z())<<endl;
+        if(abs(gTrack->gDCAz(Vtx.z()))>3) continue;
+        if(abs(gTrack->gDCAxy(Vtx.x(),Vtx.y()))>1.5) continue;
         goodTracks.push_back(iTrk);
     }
 
@@ -44,8 +44,6 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
 
     for (size_t iTrk = 0; iTrk < tracksToUse.size(); ++iTrk) {
         StPicoTrack* gTrack = (StPicoTrack*)picoDst->track(tracksToUse[iTrk]);
-//        StDcaGeometry dcaG = gTrack->dcaGeometry();
-
         StPicoTrackCovMatrix *cov = picoDst->trackCovMatrix(tracksToUse[iTrk]);
         const StDcaGeometry dcaG = cov->dcaGeometry();
 
@@ -71,7 +69,7 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
     TArrayC Flag(tracksToUse.size());
     KFVertex aVertex;
 //    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), TMath::Sqrt(StAnneling::Chi2Cut() / 2)); //original
-    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), 3.5); //ok
+    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), 3.); //ok
 
     // clean up
     for(size_t iTrk = 0; iTrk < tracksToUse.size(); ++iTrk) delete particles[iTrk];
