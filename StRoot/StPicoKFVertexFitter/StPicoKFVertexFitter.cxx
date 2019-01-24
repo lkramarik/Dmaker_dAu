@@ -41,14 +41,19 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
         StPicoTrackCovMatrix *cov = picoDst->trackCovMatrix(tracksToUse[iTrk]);
         StDcaGeometry* dcaG = new StDcaGeometry();
         dcaG->set(cov->params(),cov->sigmas());
-        Double_t xyzp[6], CovXyzp[21];
-        dcaG->GetXYZ(xyzp, CovXyzp);
-        MTrack track;
-        track.SetParameters(xyzp);
-        track.SetCovarianceMatrix(CovXyzp);
-        track.SetNDF(1);
-        track.SetID(gTrack->id());
-        track.SetCharge(dcaG->charge());
+
+        Double_t xyzp[6], CovXyzp[21]; //ok
+        dcaG->GetXYZ(xyzp, CovXyzp); //ok
+
+        Int_t q = 1; if (gTrack->charge() < 0) q = -1; //ok
+
+//        MTrack track;
+        KFPTrack track;
+        track.SetParameters(xyzp); //ok
+        track.SetCovarianceMatrix(CovXyzp); //ok
+        track.SetNDF(1); //ok
+        track.SetID(gTrack->id()); //ok
+        track.SetCharge(q); //ok
 
         Int_t pdg = dcaG->charge() > 0 ? 211 : -211; // assume all tracks are pions.
 
