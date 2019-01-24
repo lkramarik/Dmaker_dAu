@@ -9,6 +9,7 @@
 #include "StEvent/StGlobalTrack.h"
 #include "StPicoEvent/StPicoTrack.h"
 #include "StPicoEvent/StPicoTrackCovMatrix.h"
+#include "KFPTrack.h"
 
 using namespace std;
 
