@@ -9,8 +9,8 @@
 #include "StEvent/StGlobalTrack.h"
 #include "StPicoEvent/StPicoTrack.h"
 #include "StPicoTrackCovMatrix/StPicoTrackCovMatrix.h"
-#include "KFPTrackVector.h"
-#include "KFParticle.h"
+//#include "KFPTrackVector.h"
+//#include "KFParticle.h"
 //#include "KFPTrack.h"
 
 using namespace std;
@@ -54,7 +54,7 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
         Int_t q = 1; if (gTrack->charge() < 0) q = -1; //ok
 
         MTrack track;
-        KFPTrack track1;
+//        KFPTrack track1;
         track.SetParameters(xyzp); //ok
         track.SetCovarianceMatrix(CovXyzp); //ok
         track.SetNDF(1); //ok
