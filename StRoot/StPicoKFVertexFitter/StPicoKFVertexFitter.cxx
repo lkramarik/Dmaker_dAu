@@ -9,6 +9,8 @@
 #include "StEvent/StGlobalTrack.h"
 #include "StPicoEvent/StPicoTrack.h"
 #include "StPicoTrackCovMatrix/StPicoTrackCovMatrix.h"
+#include "KFPTrackVector.h"
+#include "KFParticle.h"
 //#include "KFPTrack.h"
 
 using namespace std;
@@ -24,6 +26,7 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* const picoDst
         StPicoTrack* gTrack = (StPicoTrack*)picoDst->track(iTrk);
         if (! gTrack) continue;
         if(std::binary_search(tracksToRemove.begin(), tracksToRemove.end(), iTrk)) continue;
+        if(!gTrack->isPrimary()) continue;
         goodTracks.push_back(iTrk);
     }
 
@@ -47,7 +50,7 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
         Int_t q = 1; if (gTrack->charge() < 0) q = -1; //ok
 
         MTrack track;
-//        KFPTrack track;
+        KFPTrack track1;
         track.SetParameters(xyzp); //ok
         track.SetCovarianceMatrix(CovXyzp); //ok
         track.SetNDF(1); //ok
@@ -62,6 +65,7 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
     TArrayC Flag(tracksToUse.size());
     KFVertex aVertex;
 //    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), TMath::Sqrt(StAnneling::Chi2Cut() / 2)); //original
+    aVertex.SetConstructMethod(1);
     aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), 3.5); //ok
 
     // clean up
