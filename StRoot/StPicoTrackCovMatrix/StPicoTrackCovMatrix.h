@@ -3,7 +3,7 @@
 
 /// ROOT headers
 #include <TObject.h>
-#include "StPicoDst.h"
+#include "StPicoEvent/StPicoDst.h"
 #include "StEvent/StDcaGeometry.h"
 
 //_________________
