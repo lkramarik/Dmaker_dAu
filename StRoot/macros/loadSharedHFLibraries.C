@@ -31,7 +31,7 @@ void loadSharedHFLibraries() {
   gSystem->Load("StSvtDbMaker");
   gSystem->Load("StiMaker");
   gSystem->Load("StPicoKFVertexFitter");
-  gSystem->Load("StPicoTrackCovMatrix");
+//  gSystem->Load("StPicoTrackCovMatrix");
   // ---
   cout << " loading of shared HF libraries are done" << endl;
  }
