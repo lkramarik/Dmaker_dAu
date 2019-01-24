@@ -62,7 +62,7 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
     TArrayC Flag(tracksToUse.size());
     KFVertex aVertex;
 //    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), TMath::Sqrt(StAnneling::Chi2Cut() / 2)); //original
-    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), 3.5)); //ok
+    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), 3.5); //ok
 
     // clean up
     for(size_t iTrk = 0; iTrk < tracksToUse.size(); ++iTrk) delete particles[iTrk];
