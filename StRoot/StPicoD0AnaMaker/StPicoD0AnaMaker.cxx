@@ -5,7 +5,7 @@
 #include "StPicoHFMaker/StHFCuts.h"
 #include "phys_constants.h"
 #include "StPicoD0AnaMaker.h"
-#include "StPicoKFVertexFitter.h"
+#include "StPicoKFVertexFitter/StPicoKFVertexFitter.h"
 ClassImp(StPicoD0AnaMaker)
 
 // _________________________________________________________
