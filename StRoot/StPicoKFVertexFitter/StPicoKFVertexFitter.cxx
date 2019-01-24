@@ -48,8 +48,8 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
 
         Int_t q = 1; if (gTrack->charge() < 0) q = -1; //ok
 
-//        MTrack track;
-        KFPTrack track;
+        MTrack track;
+//        KFPTrack track;
         track.SetParameters(xyzp); //ok
         track.SetCovarianceMatrix(CovXyzp); //ok
         track.SetNDF(1); //ok
