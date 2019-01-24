@@ -50,7 +50,7 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
         dcaG.GetXYZ(xyzp, CovXyzp); //ok
         Int_t q = 1;
         Int_t pdg = 211;
-        if (dca.charge() < 0) {
+        if (dcaG.charge() < 0) {
             q=-1;
             pdg=-211;
         }
@@ -68,7 +68,7 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
     TArrayC Flag(tracksToUse.size());
     KFVertex aVertex;
 //    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), TMath::Sqrt(StAnneling::Chi2Cut() / 2)); //original
-//    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), 2.); //ok
+//    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), 3.5); //in makzym stuffs
     aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), StAnneling::Chi2Cut()); //ok
 
     // clean up
