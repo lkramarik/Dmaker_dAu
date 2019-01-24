@@ -38,13 +38,12 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
 //        StDcaGeometry dcaG = gTrack->dcaGeometry();
 
         StPicoTrackCovMatrix *cov = picoDst->trackCovMatrix(tracksToUse[iTrk]);
-        const StDcaGeometry dcaG = cov->dcaGeometry();
-
-        Double_t xyzp[6], CovXyzp[21];
-        dcaG.GetXYZ(xyzp, CovXyzp);
+//        const StDcaGeometry dcaG = cov->dcaGeometry();
+//        Double_t xyzp[6], CovXyzp[21];
+//        dcaG.GetXYZ(xyzp, CovXyzp);
         MTrack track;
-        track.SetParameters(xyzp);
-        track.SetCovarianceMatrix(CovXyzp);
+//        track.SetParameters(xyzp);
+        track.SetCovarianceMatrix(cov);
         track.SetNDF(1);
         track.SetID(gTrack->id());
         track.SetCharge(dcaG.charge());
