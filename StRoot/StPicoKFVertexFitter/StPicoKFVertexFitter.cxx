@@ -41,9 +41,6 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
         StPicoTrackCovMatrix *cov = picoDst->trackCovMatrix(tracksToUse[iTrk]);
         const StDcaGeometry dcaG = cov->dcaGeometry();
 
-//        StDcaGeometry* dcaG = new StDcaGeometry();
-//        dcaG->set(cov->params(),cov->sigmas());
-
         Double_t xyzp[6], CovXyzp[21]; //ok
         dcaG.GetXYZ(xyzp, CovXyzp); //ok
 
@@ -64,7 +61,8 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
 
     TArrayC Flag(tracksToUse.size());
     KFVertex aVertex;
-    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), TMath::Sqrt(StAnneling::Chi2Cut() / 2)); //ok
+//    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), TMath::Sqrt(StAnneling::Chi2Cut() / 2)); //original
+    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), 3.5)); //ok
 
     // clean up
     for(size_t iTrk = 0; iTrk < tracksToUse.size(); ++iTrk) delete particles[iTrk];
