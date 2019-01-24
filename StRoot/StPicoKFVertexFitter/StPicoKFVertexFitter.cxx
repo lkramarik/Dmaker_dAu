@@ -29,8 +29,8 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* const picoDst
         if (! gTrack) continue;
         if(std::binary_search(tracksToRemove.begin(), tracksToRemove.end(), iTrk)) continue;
         if(!gTrack->isPrimary()) continue;
-//        if(abs(gTrack->gDCAz(Vtx.z()))>3) continue;
-//        if(abs(gTrack->gDCAxy(Vtx.x(),Vtx.y()))>1.5) continue;
+        if(abs(gTrack->gDCAz(Vtx.z()))>3) continue;
+        if(abs(gTrack->gDCAxy(Vtx.x(),Vtx.y()))>1.5) continue;
         goodTracks.push_back(iTrk);
     }
 
@@ -48,9 +48,12 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
 
         Double_t xyzp[6], CovXyzp[21]; //ok
         dcaG.GetXYZ(xyzp, CovXyzp); //ok
-
-        Int_t q = 1; if (gTrack->charge() < 0) q = -1; //ok
-
+        Int_t q = 1;
+        Int_t pdg = 211;
+        if (dca.charge() < 0) {
+            q=-1;
+            pdg=-211;
+        }
         MTrack track;
 //        KFPTrack track1;
         track.SetParameters(xyzp); //ok
@@ -59,10 +62,7 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
         track.SetID(gTrack->id()); //ok
         track.SetCharge(q); //ok
 
-//        Int_t pdg = dcaG.charge() > 0 ? 211 : -211; // assume all tracks are pions.
-//
-        particles[iTrk] = new KFParticle(track, 211);
-//        particles[iTrk] = new KFParticle(track, pdg);
+        particles[iTrk] = new KFParticle(track, pdg);
     }
 
     TArrayC Flag(tracksToUse.size());
@@ -83,6 +83,8 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
     return kfVertex;
 
 }
+//primV->setVertexFinderId(KFVertexFinder);
+
 
 //StDcaGeometry &StPicoKFVertexFitter::dcaGeometry(StPicoTrackCovMatrix *cov) const {
 //    static StDcaGeometry a;
