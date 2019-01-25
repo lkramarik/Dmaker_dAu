@@ -72,9 +72,6 @@ int StPicoQAMaker::InitHF() {
     mOutList->Add(new TH2D("h_QA_ZDC_rate_TOF_HFT", "ZDC_rate_TOF_HFTVsRunIndex", 250, 0, 250, RunNumberVector.size() + 1, -1, RunNumberVector.size())); //check binning and range
     mOutList->Add(new TH2D("h_QA_BBC_rate_TOF_HFT", "BBC_rate_TOF_HFTVsRunIndex", 2000, 0, 2000, RunNumberVector.size() + 1, -1, RunNumberVector.size())); //check binning and range
 
-    mOutList->Add(new TH2D("h_QA_ZDC_rate_TOF_HFT_0406", "ZDC_rate_TOF_HFT_0406VsRunIndex", 250, 0, 250, RunNumberVector.size() + 1, -1, RunNumberVector.size())); //check binning and range
-    mOutList->Add(new TH2D("h_QA_BBC_rate_TOF_HFT_0406", "BBC_rate_TOF_HFT_0406VsRunIndex", 2000, 0, 2000, RunNumberVector.size() + 1, -1, RunNumberVector.size())); //check binning and range
-
     mOutList->Add(new TH2D("h_QA_ZDC_rate_TOF_HFT_1012", "ZDC_rate_TOF_HFT_1012VsRunIndex", 250, 0, 250, RunNumberVector.size() + 1, -1, RunNumberVector.size())); //check binning and range
     mOutList->Add(new TH2D("h_QA_BBC_rate_TOF_HFT_1012", "BBC_rate_TOF_HFT_1012VsRunIndex", 2000, 0, 2000, RunNumberVector.size() + 1, -1, RunNumberVector.size())); //check binning and range
 
@@ -309,9 +306,6 @@ int StPicoQAMaker::MakeHF() {
 
     TH2D *h_QA_ZDC_rate_TOF_HFT = static_cast<TH2D *>(mOutList->FindObject("h_QA_ZDC_rate_TOF_HFT"));
     TH2D *h_QA_BBC_rate_TOF_HFT = static_cast<TH2D *>(mOutList->FindObject("h_QA_BBC_rate_TOF_HFT"));
-
-    TH2D *h_QA_ZDC_rate_TOF_HFT_0406 = static_cast<TH2D *>(mOutList->FindObject("h_QA_ZDC_rate_TOF_HFT_0406"));
-    TH2D *h_QA_BBC_rate_TOF_HFT_0406 = static_cast<TH2D *>(mOutList->FindObject("h_QA_BBC_rate_TOF_HFT_0406"));
 
     TH2D *h_QA_ZDC_rate_TOF_HFT_1012 = static_cast<TH2D *>(mOutList->FindObject("h_QA_ZDC_rate_TOF_HFT_1012"));
     TH2D *h_QA_BBC_rate_TOF_HFT_1012 = static_cast<TH2D *>(mOutList->FindObject("h_QA_BBC_rate_TOF_HFT_1012"));
@@ -553,8 +547,6 @@ int StPicoQAMaker::MakeHF() {
                 h_QA_BBC_rate_TOF_HFT->Fill(mPicoDst->event()->BBCx() / 1000., RunIndex);
                 if (pT_QA>0.4 && pT_QA<0.6) {
                     nTrkHftTof0406+=1;
-                    h_QA_ZDC_rate_TOF_HFT_0406->Fill(mPicoDst->event()->ZDCx() / 1000., RunIndex);
-                    h_QA_BBC_rate_TOF_HFT_0406->Fill(mPicoDst->event()->BBCx() / 1000., RunIndex);
                 }
                 if (pT_QA>1.0 && pT_QA<1.2) {
                     nTrkHftTof1012+=1;
