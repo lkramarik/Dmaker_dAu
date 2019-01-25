@@ -62,8 +62,6 @@ void runQAAnaMakerLocal(
   float maxMass         = 2.6;
   float pairDcaMax      = 99.9;
 
-  hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass, pairDcaMax);
- 
   //Single track pt
   hfCuts->setCutPtRange(0.15,50.0,StHFCuts::kPion); //0.2 , 50.0
   hfCuts->setCutPtRange(0.15,50.0,StHFCuts::kKaon); //0.2, 50.0

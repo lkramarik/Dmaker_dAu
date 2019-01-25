@@ -466,12 +466,13 @@ int StPicoQAMaker::MakeHF() {
 
     h_QA_Vz->Fill(vertex_z_QA, RunIndex);
     h_QA_VzmVzVPD->Fill(fabs(vertex_z_QA - mPicoDst->event()->vzVpd()), RunIndex);
-
+    cout<<"ok1"<<endl;
     StPicoKFVertexFitter kfVertexFitter;
     TVector3 kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
     h_QA_Vx_position->Fill(kfVertex.x(), pVtx.x());
     h_QA_Vy_position->Fill(kfVertex.y(), pVtx.y());
     h_QA_Vz_position->Fill(kfVertex.z(), pVtx.z());
+    cout<<"ok2"<<endl;
 
     Int_t nPions = 0;
     Int_t nPionsTOFMatching = 0;
