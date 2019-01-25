@@ -45,9 +45,9 @@ int StPicoQAMaker::InitHF() {
     mOutList->Add(new TH2D("h_QA_Vz", "Vz_vs_RunIndex", 200, -10, 10, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
     mOutList->Add(new TH2D("h_QA_VzmVzVPD", "Vz-VzVPD_vs_RunIndex", 100, -10, 10, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
 
-    mOutList->Add(new TH2D("h_QA_Vz_position", "VzDef_vs_VzKF", 1200, -6, 6, 1200, -6, 6));
-    mOutList->Add(new TH2D("h_QA_Vx_position", "VxDef_vs_VxKF", 1200, -6, 6, 1200, -6, 6));
-    mOutList->Add(new TH2D("h_QA_Vy_position", "VyDef_vs_VyKF", 1200, -6, 6, 1200, -6, 6));
+    mOutList->Add(new TH2D("h_QA_Vz_position", "VzDef_vs_VzKF", 120, -6, 6, 120, -6, 6));
+    mOutList->Add(new TH2D("h_QA_Vx_position", "VxDef_vs_VxKF", 120, -6, 6, 120, -6, 6));
+    mOutList->Add(new TH2D("h_QA_Vy_position", "VyDef_vs_VyKF", 120, -6, 6, 120, -6, 6));
 
 
     mOutList->Add(new TH2D("h_QA_ZDC_rate", "ZDC_rateVsRunIndex", 250, 0, 250, RunNumberVector.size() + 1, -1, RunNumberVector.size())); //check binning and range
