@@ -70,7 +70,6 @@ void runQAAnaMaker(
     hfCuts->setCutDcaMin(0.001,StHFCuts::kKaon);
 
     StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
-
     StPicoQAMaker* PicoQAMaker = new StPicoQAMaker("picoQAMaker", picoDstMaker, outputFile);
     PicoQAMaker->setHFBaseCuts(hfCuts);
 

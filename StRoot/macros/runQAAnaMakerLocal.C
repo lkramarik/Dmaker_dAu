@@ -11,7 +11,6 @@
 #include <iostream>
 #include <ctime>
 #include <cstdio>
-#include "StPicoD0AnaMaker/StPicoD0AnaMaker.h"
 #include "StPicoQAMaker/StPicoQAMaker.h"
 
 using namespace std;
@@ -26,20 +25,18 @@ void runQAAnaMakerLocal(
       cout<<"Environment Star Library does not match the requested library. Exiting..."<<endl;
       exit(1);
   }
-  
-  Int_t nEvents = 1000000;
 
   StChain *chain = new StChain();
-
   TString sInputFile(inputFile);
 
   if (!sInputFile.Contains(".list") && !sInputFile.Contains("picoDst.root")) {
     cout << "No input list or picoDst root file provided! Exiting..." << endl;
     exit(1);
   }
+  cout<<"event stuff set"<<endl;
+
 
   StHFCuts* hfCuts = new StHFCuts("hfBaseCuts");
-  cout<<"event stuff set"<<endl;
 
   hfCuts->setBadRunListFileName(badRunListFileName);
 
