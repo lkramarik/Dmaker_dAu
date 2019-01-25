@@ -53,21 +53,8 @@ void runQAAnaMaker(
 //    hfCuts->addTriggerId(530202); //BHT2-VPD-30
 //    hfCuts->addTriggerId(530213); //BHT3
 
-    hfCuts->setCutPrimaryDCAtoVtxMax(10);
     hfCuts->setCutVzMax(6);
     hfCuts->setCutVzVpdVzMax(6.);
-    hfCuts->setCutNHitsFitMin(15);
-    hfCuts->setCutRequireHFT(true);
-    hfCuts->setHybridTof(true);
-
-    hfCuts->setCutTPCNSigmaPion(3.0);
-    hfCuts->setCutTPCNSigmaKaon(2.0);
-    hfCuts->setCutTOFDeltaOneOverBetaKaon(0.03);
-    hfCuts->setCutTOFDeltaOneOverBetaPion(0.03);
-    hfCuts->setCutPtMin(0.15);
-
-    hfCuts->setCutDcaMin(0.001,StHFCuts::kPion);
-    hfCuts->setCutDcaMin(0.001,StHFCuts::kKaon);
 
     StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
     StPicoQAMaker* PicoQAMaker = new StPicoQAMaker("picoQAMaker", picoDstMaker, outputFile);
