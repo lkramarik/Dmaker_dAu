@@ -5,6 +5,8 @@
 #include "StPicoHFMaker/StHFCuts.h"
 #include "phys_constants.h"
 #include "StPicoQAMaker.h"
+#include "StPicoKFVertexFitter/StPicoKFVertexFitter.h"
+
 ClassImp(StPicoQAMaker)
 
 // _________________________________________________________
@@ -42,6 +44,11 @@ int StPicoQAMaker::InitHF() {
 
     mOutList->Add(new TH2D("h_QA_Vz", "Vz_vs_RunIndex", 200, -10, 10, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
     mOutList->Add(new TH2D("h_QA_VzmVzVPD", "Vz-VzVPD_vs_RunIndex", 100, -10, 10, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
+
+    mOutList->Add(new TH2D("h_QA_Vz_position", "VzDef_vs_VzKF", 120000, -6, 6, 120000, -6, 6));
+    mOutList->Add(new TH2D("h_QA_Vx_position", "VxDef_vs_VxKF", 120000, -6, 6, 120000, -6, 6));
+    mOutList->Add(new TH2D("h_QA_Vy_position", "VyDef_vs_VyKF", 120000, -6, 6, 120000, -6, 6));
+
 
     mOutList->Add(new TH2D("h_QA_ZDC_rate", "ZDC_rateVsRunIndex", 250, 0, 250, RunNumberVector.size() + 1, -1, RunNumberVector.size())); //check binning and range
     mOutList->Add(new TH2D("h_QA_BBC_rate", "BBC_rateVsRunIndex", 2000, 0, 2000, RunNumberVector.size() + 1, -1, RunNumberVector.size())); //check binning and range
@@ -275,6 +282,10 @@ int StPicoQAMaker::MakeHF() {
 
     TH2F *h_mh1gRefmultCor = static_cast<TH2F *>(mOutList->FindObject("h_mh1gRefmultCor"));
     TH2D *h_QA_Vz = static_cast<TH2D *>(mOutList->FindObject("h_QA_Vz"));
+    TH2D *h_QA_Vz_position = static_cast<TH2D *>(mOutList->FindObject("h_QA_Vz_position"));
+    TH2D *h_QA_Vx_position = static_cast<TH2D *>(mOutList->FindObject("h_QA_Vx_position"));
+    TH2D *h_QA_Vy_position = static_cast<TH2D *>(mOutList->FindObject("h_QA_Vy_position"));
+
     TH2D *h_QA_VzmVzVPD = static_cast<TH2D *>(mOutList->FindObject("h_QA_VzmVzVPD"));
 
     TH2D *h_QA_ZDC_rate = static_cast<TH2D *>(mOutList->FindObject("h_QA_ZDC_rate"));
@@ -455,6 +466,12 @@ int StPicoQAMaker::MakeHF() {
 
     h_QA_Vz->Fill(vertex_z_QA, RunIndex);
     h_QA_VzmVzVPD->Fill(fabs(vertex_z_QA - mPicoDst->event()->vzVpd()), RunIndex);
+
+    StPicoKFVertexFitter kfVertexFitter;
+    TVector3 kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
+    h_QA_Vx_position->Fill(kfVertex.x(), pVtx.x());
+    h_QA_Vy_position->Fill(kfVertex.y(), pVtx.y());
+    h_QA_Vz_position->Fill(kfVertex.z(), pVtx.z());
 
     Int_t nPions = 0;
     Int_t nPionsTOFMatching = 0;
