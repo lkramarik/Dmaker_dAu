@@ -15,6 +15,11 @@
 
 using namespace std;
 
+class StChain;
+class StPicoDstMaker;
+class StPicoQAMaker;
+class StMaker;
+
 void runQAAnaMakerLocal(
 			const Char_t *inputFile="./picoLists/runs_local_test.list",
 			const Char_t *outputFile="outputLocal",

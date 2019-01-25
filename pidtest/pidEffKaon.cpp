@@ -31,14 +31,14 @@
 
 void pidEffKaon() {
 //    gSystem->Load("FitPID");
-    bool tofPid = false;
+    bool tofPid = true;
     gROOT->ProcessLine(".L FitPID.c++");
     gSystem->Exec("rm rootFiles/nSigma_KK_1.root rootFiles/nSigma_KK_2.root");
     gSystem->Exec("rm rootFiles/nSigma_KK_ana_1.root rootFiles/nSigma_KK_ana_2.root");
     gSystem->Exec("rm rootFiles/nSigma_KK_ana.root rootFiles/nSigma_KK.root");
     gSystem->Exec("rm rootFiles/mass_KK.root");
 
-    TString input = "/media/lukas/376AD6A434B7392F/work/pid/ntp.picoPhiAnaMaker.1501.root";
+    TString input = "/media/lukas/376AD6A434B7392F/work/pid/ntp.noHft.picoPhiAnaMaker.2401.root";
 
 //    Float_t ptBins[] = {2.2, 2.5, 3};
     Float_t ptBins[] = {0.2, 0.5, 1, 1.2, 1.4, 1.7, 2.3, 3, 4}; //kaon
@@ -87,7 +87,7 @@ void pidEffKaon() {
     tpc2="pi2_nSigma<3";
 
     cut = Form("pair_mass>%.3f && pair_mass<%.3f", massMin, massMax);
-    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && pair_cosTheta>0.85 && pi2_pt>0.15", ptPairMin, ptPairMax);
+    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && pair_cosTheta>0.85 && pi2_pt>0.15 && nTofTracks>0", ptPairMin, ptPairMax);
 //    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && pair_cosTheta>0.6 && dcaDaughters<0.3 && pair_dcaToPv<0.3", ptPairMin, ptPairMax);
 //    cutPair = Form("pair_pt>%.3f && pair_pt<%.3f && pi2_pt>1 && fabs(pi2_nSigma)<2.", ptPairMin, ptPairMax);
 //    cutPair = Form("pair_pt>%.3f && pair_pt<%.3f", ptPairMin, ptPairMax);
