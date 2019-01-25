@@ -181,7 +181,10 @@ int StPicoD0AnaMaker::createCandidates() {
     TVector3 kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
     cout<<kfVertex.x()<<" "<<kfVertex.y()<<" "<<kfVertex.z()<<endl;
     cout<<mPrimVtx.x()<<" "<<mPrimVtx.y()<<" "<<mPrimVtx.z()<<endl;
+    if(mPicoEvent->mNBTOFMatch()>0) cout<<kfVertex.z()<<" "<<mPicoEvent->vzVpd()<<endl;
     cout<<" "<<endl;
+
+
 
     for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
         StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);

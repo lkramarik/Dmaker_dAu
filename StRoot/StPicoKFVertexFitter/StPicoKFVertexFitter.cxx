@@ -85,6 +85,8 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
 }
 //primV->setVertexFinderId(KFVertexFinder);
 
+//picoDst PicoVtxMode:PicoVtxVpdOrDefault TpcVpdVzDiffCut:6 PicoCovMtxMode:PicoCovMtxWrite
+
 
 //StDcaGeometry &StPicoKFVertexFitter::dcaGeometry(StPicoTrackCovMatrix *cov) const {
 //    static StDcaGeometry a;
