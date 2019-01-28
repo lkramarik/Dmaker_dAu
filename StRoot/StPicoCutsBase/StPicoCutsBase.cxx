@@ -461,7 +461,7 @@ float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk,
   return beta;
 }
 
-float StPicoCutsBase::tofPathLength(const TVector3* beginPoint, const TVector3* endPoint, const float curvature){
+float StPicoCutsBase::tofPathLength(const TVector3* beginPoint, const TVector3* endPoint, float curvature){
   float xdif =  endPoint->x() - beginPoint->x();
   float ydif =  endPoint->y() - beginPoint->y();
 
