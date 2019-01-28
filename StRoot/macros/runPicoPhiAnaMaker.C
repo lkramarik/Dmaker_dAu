@@ -41,7 +41,7 @@ void runPicoPhiAnaMaker(
     hfCuts->setBadRunListFileName(badRunListFileName);
 
     hfCuts->setCutVzMax(6.);
-    hfCuts->setCutVzVpdVzMax(3.);
+    hfCuts->setCutVzVpdVzMax(6.);
     hfCuts->addTriggerId(530003); //VPD-5
 
     hfCuts->setCutNHitsFitMin(15); //default is 20

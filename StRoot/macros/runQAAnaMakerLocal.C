@@ -11,10 +11,14 @@
 #include <iostream>
 #include <ctime>
 #include <cstdio>
-#include "StPicoD0AnaMaker/StPicoD0AnaMaker.h"
 #include "StPicoQAMaker/StPicoQAMaker.h"
 
 using namespace std;
+
+class StChain;
+class StPicoDstMaker;
+class StPicoQAMaker;
+class StMaker;
 
 void runQAAnaMakerLocal(
 			const Char_t *inputFile="./picoLists/runs_local_test.list",
@@ -26,20 +30,18 @@ void runQAAnaMakerLocal(
       cout<<"Environment Star Library does not match the requested library. Exiting..."<<endl;
       exit(1);
   }
-  
-  Int_t nEvents = 1000000;
-
+  Int_t nEvents = 2000000;
   StChain *chain = new StChain();
-
   TString sInputFile(inputFile);
 
   if (!sInputFile.Contains(".list") && !sInputFile.Contains("picoDst.root")) {
     cout << "No input list or picoDst root file provided! Exiting..." << endl;
     exit(1);
   }
+  cout<<"event stuff set"<<endl;
+
 
   StHFCuts* hfCuts = new StHFCuts("hfBaseCuts");
-  cout<<"event stuff set"<<endl;
 
   hfCuts->setBadRunListFileName(badRunListFileName);
 
@@ -62,8 +64,6 @@ void runQAAnaMakerLocal(
   float maxMass         = 2.6;
   float pairDcaMax      = 99.9;
 
-  hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass, pairDcaMax);
- 
   //Single track pt
   hfCuts->setCutPtRange(0.15,50.0,StHFCuts::kPion); //0.2 , 50.0
   hfCuts->setCutPtRange(0.15,50.0,StHFCuts::kKaon); //0.2, 50.0

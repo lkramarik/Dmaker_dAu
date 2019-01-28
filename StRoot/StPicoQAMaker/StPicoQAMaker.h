@@ -42,7 +42,7 @@ public:
     virtual Int_t FinishHF();
 
 private:
-    TNtuple *ntp_event;
+//    TNtuple *ntp_event;
 
     int RunId;
     std::vector<int> RunNumberVector;

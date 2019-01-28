@@ -5,6 +5,7 @@
 #include "StPicoHFMaker/StHFCuts.h"
 #include "phys_constants.h"
 #include "StPicoD0AnaMaker.h"
+#include "StPicoKFVertexFitter/StPicoKFVertexFitter.h"
 ClassImp(StPicoD0AnaMaker)
 
 // _________________________________________________________
@@ -166,32 +167,26 @@ int StPicoD0AnaMaker::MakeHF() {
 
 // _________________________________________________________
 int StPicoD0AnaMaker::createCandidates() {
-
     UInt_t nTracks = mPicoDst->numberOfTracks();
     for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
         StPicoTrack* trk = mPicoDst->track(iTrack);
         if (abs(trk->gMom().PseudoRapidity())>1) continue;
         if (mHFCuts->isGoodPion(trk)) mIdxPicoPions.push_back(iTrack);
         if (mHFCuts->isGoodKaon(trk)) mIdxPicoKaons.push_back(iTrack);
-//        if (isProton(trk)) mIdxPicoProtons.push_back(iTrack); // isProton method to be implemented by daughter class
     }
+
+//    StPicoKFVertexFitter kfVertexFitter;
+//    TVector3 kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
+//    cout<<kfVertex.x()<<" "<<kfVertex.y()<<" "<<kfVertex.z()<<endl;
+//    cout<<mPrimVtx.x()<<" "<<mPrimVtx.y()<<" "<<mPrimVtx.z()<<endl;
+//    if(mPicoEvent->nBTOFMatch()>0) cout<<kfVertex.z()<<" "<<mPicoEvent->vzVpd()<<endl;
+//    cout<<" "<<endl;
 
     for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
         StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
         for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
             StPicoTrack const *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
             StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
-
-//    for(unsigned int i=0;i<mPicoDst->numberOfTracks();i++)  {
-//        StPicoTrack const* pion1 = mPicoDst->track(i);
-//        if (!mHFCuts -> isGoodPion(pion1)) continue;
-//
-//        for(unsigned  int j=0;j<mPicoDst->numberOfTracks();j++)  {
-//            StPicoTrack const* kaon = mPicoDst->track(j);
-//            if (pion1->id() == kaon->id()) continue;
-//
-//            if (!mHFCuts -> isGoodKaon(kaon)) continue;
-//            StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), i, j, mPrimVtx, mBField, kTRUE);
 
             if (!mHFCuts->isGoodSecondaryVertexPair(pair)) continue;
 

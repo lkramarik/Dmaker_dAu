@@ -251,9 +251,9 @@ void FitPID::peakMassFit(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t mass
     mMean = funLS->GetParameter(3);
     mMeanE = funLS->GetParError(3);
 
-    TLine *left = new TLine(mMean - 1*mSigma, hToFit->GetMaximum(), mMean - 1*mSigma, hToFit->GetMinimum());
+    TLine *left = new TLine(mMean - 2*mSigma, hToFit->GetMaximum(), mMean - 2*mSigma, hToFit->GetMinimum());
     left->SetLineColor(46);
-    TLine *right = new TLine(mMean + 1*mSigma, hToFit->GetMaximum(), mMean + 1*mSigma, hToFit->GetMinimum());
+    TLine *right = new TLine(mMean + 2*mSigma, hToFit->GetMaximum(), mMean + 2*mSigma, hToFit->GetMinimum());
     right->SetLineColor(46);
 
     hToFit->Draw();
