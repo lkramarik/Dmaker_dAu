@@ -148,7 +148,7 @@ public:
 
     void setHybridTof(bool t);
 
-    float tofPathLength(const TVector3* beginPoint, const TVector3* endPoint, const float curvature){
+    float tofPathLength(const TVector3* beginPoint, const TVector3* endPoint, const float curvature);
 
     // -- calculate beta of track -- basic calculation
     float getTofBetaBase(StPicoTrack const* const trk) const;
