@@ -314,12 +314,15 @@ bool StPicoCutsBase::isTOFHadron(StPicoTrack const *trk, float const & tofBeta, 
 
 // _________________________________________________________
 bool StPicoCutsBase::isTOFmatched(StPicoTrack const *trk) const {
+    /*OLD
     int tofIndex = trk->bTofPidTraitsIndex();
+    trk->isTofTrack();
     bool TofMatch = kFALSE;
     StPicoBTofPidTraits* tofPidTraits;
     if (tofIndex >= 0)  tofPidTraits = mPicoDst->btofPidTraits(tofIndex);
     if (tofIndex >= 0 && tofPidTraits && tofPidTraits->btofMatchFlag() > 0)  TofMatch = kTRUE;
-    return TofMatch;
+     */
+    return trk->isTofTrack();
 }
 
 // _________________________________________________________
@@ -355,7 +358,7 @@ StPicoBTofPidTraits* StPicoCutsBase::hasTofPid(StPicoTrack const * const trk) co
 
 // _________________________________________________________
 float StPicoCutsBase::getTofBetaBase(StPicoTrack const * const trk) const {
-  int index2tof = trk->bTofPidTraitsIndex();
+  int index2tof = trk->bTofPidTraitsIndex(); //if smaller than 0 => not TOF track
   float beta = std::numeric_limits<float>::quiet_NaN();
 
   if(index2tof >= 0) {

@@ -481,7 +481,8 @@ int StPicoQAMaker::MakeHF() {
         StPicoTrack const *trk = mPicoDst->track(iTrack);
         if (!trk) continue;
         float pT_QA = trk->gPt();
-        if (pT_QA < 0.15) continue;
+        if (pT_QA < 0.2) continue;
+//        if (pT_QA < 0.15) continue;
         float Beta = mHFCuts->getTofBetaBase(trk);
 
         h_QA_nHitsFit->Fill(trk->nHitsFit(), RunIndex);
