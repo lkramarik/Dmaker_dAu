@@ -364,6 +364,17 @@ float StPicoCutsBase::getTofBetaBase(StPicoTrack const * const trk) const {
   if(index2tof >= 0) {
     StPicoBTofPidTraits *tofPid = mPicoDst->btofPidTraits(index2tof);
     if(tofPid)  beta = tofPid->btofBeta();
+
+    if (beta < 1e-4) {
+      TVector3 const btofHitPos = tofPid->btofHitPos();
+      StPicoPhysicalHelix helix = trk->helix(mPicoDst->event()->bField());
+
+      float L = tofPathLength(&mPrimVtx, &btofHitPos, helix.curvature());
+      float tof = tofPid->btof();
+      if (tof > 0) beta = L / (tof * (C_C_LIGHT / 1.e9));
+      else beta = std::numeric_limits<float>::quiet_NaN();
+    }
+
   }
 
   return beta;
@@ -450,3 +461,19 @@ float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk,
   return beta;
 }
 
+float StPicoCutsBase::tofPathLength(const TVector3* beginPoint, const TVector3* endPoint, const float curvature){
+  float xdif =  endPoint->x() - beginPoint->x();
+  float ydif =  endPoint->y() - beginPoint->y();
+
+  float C = sqrt(xdif*xdif + ydif*ydif);
+  float s_perp = C;
+  if (curvature){
+    float R = 1/curvature;
+    s_perp = 2*R * asin(C/(2*R));
+  }
+
+  float s_z = fabs(endPoint->z() - beginPoint->z());
+  float value = sqrt(s_perp*s_perp + s_z*s_z);
+
+  return(value);
+}
