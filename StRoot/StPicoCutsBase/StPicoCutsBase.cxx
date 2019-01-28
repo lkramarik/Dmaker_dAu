@@ -374,7 +374,6 @@ float StPicoCutsBase::getTofBetaBase(StPicoTrack const * const trk) const {
       if (tof > 0) beta = L / (tof * (C_C_LIGHT / 1.e9));
       else beta = std::numeric_limits<float>::quiet_NaN();
     }
-
   }
 
   return beta;
@@ -461,6 +460,7 @@ float StPicoCutsBase::getTofBeta(StPicoTrack const * const trk,
   return beta;
 }
 
+// _________________________________________________________
 float StPicoCutsBase::tofPathLength(const TVector3* beginPoint, const TVector3* endPoint, float curvature) const {
   float xdif =  endPoint->x() - beginPoint->x();
   float ydif =  endPoint->y() - beginPoint->y();
@@ -475,5 +475,5 @@ float StPicoCutsBase::tofPathLength(const TVector3* beginPoint, const TVector3* 
   float s_z = fabs(endPoint->z() - beginPoint->z());
   float value = sqrt(s_perp*s_perp + s_z*s_z);
 
-  return(value);
+  return value;
 }
