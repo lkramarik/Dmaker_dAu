@@ -59,7 +59,7 @@ int StPicoPiPiMaker::createCandidates() {
     for(unsigned int k = 0; k < mPicoDst->numberOfTracks(); ++k) {
         StPicoTrack const *trkTest = mPicoDst->track(k);
         if (mHFCuts->isTOFmatched(trkTest)) nTofTracks += 1;
-        if (trk->isHFTTrack()) nHftTracks += 1;
+        if (trkTest->isHFTTrack()) nHftTracks += 1;
         if (abs(trkTest->gMom().PseudoRapidity())>1) continue;
         if (mHFCuts->isGoodPion(trkTest)) mIdxPicoPions.push_back(k);
     }
