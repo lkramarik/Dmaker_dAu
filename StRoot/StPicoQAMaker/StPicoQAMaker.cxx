@@ -495,9 +495,9 @@ int StPicoQAMaker::MakeHF() {
 
     StPicoKFVertexFitter kfVertexFitter;
     KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
-    h_QA_Vx_position->Fill(kfVertex.x(), pVtx.x());
-    h_QA_Vy_position->Fill(kfVertex.y(), pVtx.y());
-    h_QA_Vz_position->Fill(kfVertex.z(), pVtx.z());
+    h_QA_Vx_position->Fill(kfVertex.GetX(), pVtx.x());
+    h_QA_Vy_position->Fill(kfVertex.GetY(), pVtx.y());
+    h_QA_Vz_position->Fill(kfVertex.GetZ(), pVtx.z());
 
 
 
