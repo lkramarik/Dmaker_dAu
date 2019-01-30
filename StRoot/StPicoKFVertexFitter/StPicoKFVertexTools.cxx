@@ -12,18 +12,20 @@ ClassImp(StPicoKFVertexTools)
 StPicoKFVertexTools::StPicoKFVertexTools(char const* name, StPicoDstMaker* picoMaker, char const* outputBaseFileName) :
         StPicoHFMaker(name, picoMaker, outputBaseFileName),
         mOutFileBaseName(outputBaseFileName){
-    // constructor
 }
 
 // _________________________________________________________
 StPicoKFVertexTools::~StPicoKFVertexTools() {
-    // destructor
 }
 
 // _________________________________________________________
 int StPicoKFVertexTools::InitHF() {
     mOutFileBaseName = mOutFileBaseName.ReplaceAll(".root", "");
-    ntp_vertex = new TNtuple("ntp_vertex","ntp_vertex","runId:picoDst_vx:picoDst_vy:picoDst_vz:picoDst_vxErr:picoDst_vyErr:picoDst_vzErr:KF_vx:KF_vy:KF_vz:KF_vxErr:KF_vyErr:KF_vzErr");
+    ntp_vertex = new TNtuple("ntp_vertex","ntp_vertex","runId:"
+                                                       "picoDst_vx:picoDst_vy:picoDst_vz:"
+                                                       "picoDst_vxErr:picoDst_vyErr:picoDst_vzErr:"
+                                                       "KF_vx:KF_vy:KF_vz:"
+                                                       "KF_vxErr:KF_vyErr:KF_vzErr");
     return kStOK;
 }
 
@@ -39,21 +41,32 @@ int StPicoKFVertexTools::FinishHF() {
 }
 // _________________________________________________________
 int StPicoKFVertexTools::MakeHF() {
-    Float_t runId, picoDst_vx, picoDst_vy, picoDst_vz, picoDst_vxErr, picoDst_vyErr, picoDst_vzErr, KF_vx, KF_vy, KF_vz, KF_vxErr, KF_vyErr, KF_vzErr;
-
     StPicoKFVertexFitter kfVertexFitter;
     KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
-    cout<<kfVertex.GetX()<<" "<<kfVertex.GetY()<<" "<<kfVertex.GetZ()<<endl;
-    cout<<mPrimVtx.x()<<" "<<mPrimVtx.y()<<" "<<mPrimVtx.z()<<endl;
-    cout<<" "<<endl;
 
     const int nNtVars=ntp_vertex->GetNvar();
-    cout<<nNtVars<<endl;
-    //    Float_t ntVar[];
-//
-//    runId=mPicoEvent->runId();
-//    picoDst_vx=mPrimVtx.x();
-//    picoDst_vy=mPrimVtx.y();
+    Float_t ntVar[nNtVars];
+    int ii=0;
+
+    ntVar[ii++]=mPicoEvent->runId();
+
+    ntVar[ii++]=mPrimVtx.x();
+    ntVar[ii++]=mPrimVtx.y();
+    ntVar[ii++]=mPrimVtx.z();
+
+    ntVar[ii++]=(mPicoEvent->primaryVertexError()).x();
+    ntVar[ii++]=(mPicoEvent->primaryVertexError()).y();
+    ntVar[ii++]=(mPicoEvent->primaryVertexError()).z();
+
+    ntVar[ii++]=kfVertex.GetX();
+    ntVar[ii++]=kfVertex.GetY();
+    ntVar[ii++]=kfVertex.GetZ();
+
+    ntVar[ii++]=kfVertex.GetErrX();
+    ntVar[ii++]=kfVertex.GetErrY();
+    ntVar[ii++]=kfVertex.GetErrZ();
+
+    ntp_vertex->Fill(ntVar);
 
     return kStOK;
 }
