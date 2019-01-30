@@ -95,9 +95,6 @@ void runPicoD0AnaMakerLocal(
 //  StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile);
 //  picoMixedEventMaker->setBufferSize(3);
 
-  StPicoKFVertexTools* PicoVertex = new StPicoKFVertexTools("PicoVertex", picoDstMaker, outputFile);
-    PicoVertex->setHFBaseCuts(hfCuts);
-
 //  StPicoD0V2AnaMaker* PicoD0V2AnaMaker = new StPicoD0V2AnaMaker("picoD0V2AnaMaker", picoDstMaker, outputFile);
 //  PicoD0V2AnaMaker->setHFBaseCuts(hfCuts);
 
