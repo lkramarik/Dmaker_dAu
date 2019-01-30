@@ -63,7 +63,7 @@ bool StHFCuts::isClosePair(StHFPair const & pair) const {
   //    using secondary vertex cuts
   return ( std::cos(pair.pointingAngle()) > mSecondaryPairCosThetaMin &&
 	   pair.decayLength() > mSecondaryPairDecayLengthMin && pair.decayLength() < mSecondaryPairDecayLengthMax &&
-	   pair.dcaDaughters() < mSecondaryPairDcaDaughtersMax);
+	   pair.dcaDaughters() < mSecondaryPairDcaDaughtersMax);inputFiles
 }
 
 // _________________________________________________________

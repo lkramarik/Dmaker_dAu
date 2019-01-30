@@ -18,6 +18,8 @@
 
 #include <vector>
 #include "TVector3.h"
+#include "KFVertex.h"
+
 //#include "StEvent/StDcaGeometry.h"
 
 class StPicoDst;
@@ -30,16 +32,16 @@ public:
 
 //    StDcaGeometry &dcaGeometry() const;
 
-    TVector3 primaryVertexRefit(StPicoDst const*) const;
+    KFVertex primaryVertexRefit(StPicoDst const*) const;
 
-    TVector3 primaryVertexRefit(StPicoDst const*,
+    KFVertex primaryVertexRefit(StPicoDst const*,
                                       std::vector<int>& tracksToRemove) const;
 
-    TVector3 primaryVertexRefitUsingTracks(StPicoDst const*,
+    KFVertex primaryVertexRefitUsingTracks(StPicoDst const*,
                                                  std::vector<int>& tracksToUse) const;
 };
 
-inline TVector3 StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* picoDst) const
+inline KFVertex StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* picoDst) const
 {
     std::vector<int> v;
     return primaryVertexRefit(picoDst,v);

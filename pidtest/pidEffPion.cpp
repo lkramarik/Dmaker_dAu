@@ -37,8 +37,8 @@ void pidEffPion() {
     gSystem->Exec("rm rootFiles/mass_pipi.root");
 
 //    TString input = "ntp.picoK0sAnaMaker.root";
-    TString inputMass = "/media/lukas/376AD6A434B7392F/work/pid/ntp.noHft.picoK0sAnaMaker.2401.root";
-    TString input = "/media/lukas/376AD6A434B7392F/work/pid/ntp.noHft.picoK0sAnaMaker.2401.small.root";
+    TString inputMass = "/media/lukas/376AD6A434B7392F/work/pid/ntp.picoK0sAnaMaker.2901.root";
+    TString input = "/media/lukas/376AD6A434B7392F/work/pid/ntp.picoK0sAnaMaker.2901.small.root";
 
 //    TString input = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/K0s_last/production/ntp.picoK0sAnaMaker.root";
 //    TString input = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/workDir/Phi_large/production/ntp.picoPhiAnaMaker.root";
@@ -77,11 +77,12 @@ void pidEffPion() {
     ptPairMin = 0.5;
     ptPairMax = 10;
     Float_t height = 40000;
-    fitmass->setOutputFileName("mass_" + pairName + ".root");
+    fitmass->setOutputFileName("rootFiles/mass_" + pairName + ".root");
     fitmass->setHeight(1000000);
     cut = Form("pair_mass>%.3f && pair_mass<%.3f", massMin, massMax);
 //    cutPair = Form("pair_pt>%.3f && pair_pt<%.3f && pair_decayL<4", ptPairMin, ptPairMax);
-    cutPair = Form("pair_pt>%.3f && pair_pt<%.3f && nTofTracks>0", ptPairMin, ptPairMax);
+//    cutPair = Form("pair_pt>%.3f && pair_pt<%.3f && nTofTracks>0", ptPairMin, ptPairMax);
+    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f", ptPairMin, ptPairMax);
     TH1F *signal = (TH1F*) fitmass->projectSubtractBckg(inputMass, 50, massMin, massMax, ptPairMin, ptPairMax, pair, cut + cutPair, "pair_mass", "Mass_{%s} (GeV/c^{2})");
 
 

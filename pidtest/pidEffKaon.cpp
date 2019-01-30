@@ -88,7 +88,7 @@ void pidEffKaon() {
     tpc2="pi2_nSigma<3";
 
     cut = Form("pair_mass>%.3f && pair_mass<%.3f", massMin, massMax);
-    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && pair_cosTheta>0.85 && pi2_pt>0.15 && nTofTracks>0 && bbcRate<800", ptPairMin, ptPairMax);
+    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && pair_cosTheta>0.85 && pi2_pt>0.15", ptPairMin, ptPairMax);
 //    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && pair_cosTheta>0.6 && dcaDaughters<0.3 && pair_dcaToPv<0.3", ptPairMin, ptPairMax);
 //    cutPair = Form("pair_pt>%.3f && pair_pt<%.3f && pi2_pt>1 && fabs(pi2_nSigma)<2.", ptPairMin, ptPairMax);
 //    cutPair = Form("pair_pt>%.3f && pair_pt<%.3f", ptPairMin, ptPairMax);
@@ -141,14 +141,14 @@ void pidEffKaon() {
 //        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta<3", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]); //TOF matching
         cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]); // hybrid TOF
         if (tofPid) hSigmaSignalAna1 = (TH1F*) pidAna1->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair+tof1, "pi1_nSigma", "Kaon n#sigma^{TPC}");
-        else TH1F *hSigmaSignalAna1 = (TH1F*) pidAna1->projectSubtractBckg(input, 50, -0.07, 0.07, ptBins[i], ptBins[i+1], pair, cut+cutPair+tof1, "pi1_TOFinvbeta", "Kaon #delta1/#beta{TOF}");
+        else TH1F *hSigmaSignalAna1 = (TH1F*) pidAna1->projectSubtractBckg(input, 50, -0.07, 0.07, ptBins[i], ptBins[i+1], pair, cut+cutPair+tpc1, "pi1_TOFinvbeta", "Kaon #delta1/#beta_{TOF}");
 //
         FitPID *pidAna2 = new FitPID();
         pidAna2->setOutputFileName("rootFiles/nSigma_"+pairName+"_ana_2.root");
         cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%f && pi2_pt<%f", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
 //        cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%f && pi2_pt<%f && pi2_TOFinvbeta>0", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
         if (tofPid) hSigmaSignalAna2 = (TH1F*) pidAna2->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair+tof2, "pi2_nSigma", "Kaon n#sigma^{TPC}");
-        else TH1F *hSigmaSignalAna2 = (TH1F*) pidAna2->projectSubtractBckg(input, 50, -0.07, 0.07, ptBins[i], ptBins[i+1], pair, cut+cutPair+tof2, "pi2_TOFinvbeta", "Kaon #delta1/#beta{TOF}");
+        else TH1F *hSigmaSignalAna2 = (TH1F*) pidAna2->projectSubtractBckg(input, 50, -0.07, 0.07, ptBins[i], ptBins[i+1], pair, cut+cutPair+tpc2, "pi2_TOFinvbeta", "Kaon #delta1/#beta_{TOF}");
 //
         hSigmaSignalAna1->Add(hSigmaSignalAna2);
         pidAna1->setHeight(height);
@@ -189,7 +189,8 @@ void pidEffKaon() {
     gMean->SetMarkerSize(0.9);
     gMean->SetMarkerColor(kBlack);
     gMean->SetLineColor(kBlack);
-    gMean->GetYaxis()->SetTitle("kaon #delta1/#beta mean [#delta1/#beta]");
+    if (tofPid) gMean->GetYaxis()->SetTitle("K n#sigma mean [n#sigma]");
+    else gMean->GetYaxis()->SetTitle("kaon #delta1/#beta mean [#delta1/#beta]");
     gMean->GetYaxis()->SetTitleOffset(1.1);
     gMean->GetXaxis()->SetTitle("p_{T} (GeV/c)");
     gMean->SetTitle("");
@@ -202,7 +203,7 @@ void pidEffKaon() {
     gSigmas->SetMarkerSize(0.9);
     gSigmas->SetMarkerColor(kBlack);
     gSigmas->SetLineColor(kBlack);
-    if (tofPid) gSigmas->GetYaxis()->SetTitle("n#sigma_K sigma [n#sigma]");
+    if (tofPid) gSigmas->GetYaxis()->SetTitle("K n#sigma sigma [n#sigma]");
     else gSigmas->GetYaxis()->SetTitle("kaon #delta1/#beta sigma [#delta1/#beta]");
     gSigmas->GetYaxis()->SetTitleOffset(1.1);
     gSigmas->GetXaxis()->SetTitle("p_{T} (GeV/c)");

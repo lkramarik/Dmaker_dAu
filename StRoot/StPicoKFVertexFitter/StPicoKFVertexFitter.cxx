@@ -1,5 +1,6 @@
 #include <algorithm>
 #include "StarRoot/MTrack.h"
+#include "StarRoot/KFVertex.h"
 #include "StiMaker/StKFVerticesCollection.h"
 #include "StEvent/StDcaGeometry.h"
 #include "StPicoKFVertexFitter.h"
@@ -15,7 +16,7 @@
 
 using namespace std;
 
-TVector3 StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* const picoDst, std::vector<int>& tracksToRemove) const {
+KFVertex StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* const picoDst, std::vector<int>& tracksToRemove) const {
     // just in case it is not sorted
     std::sort(tracksToRemove.begin(),tracksToRemove.end());
 
@@ -28,7 +29,7 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* const picoDst
         StPicoTrack* gTrack = (StPicoTrack*)picoDst->track(iTrk);
         if (! gTrack) continue;
         if(std::binary_search(tracksToRemove.begin(), tracksToRemove.end(), iTrk)) continue;
-        if(!gTrack->isPrimary()) continue;
+//        if(!gTrack->isPrimary()) continue; //no
         if(abs(gTrack->gDCAz(Vtx.z()))>3) continue;
         if(abs(gTrack->gDCAxy(Vtx.x(),Vtx.y()))>1.5) continue;
         goodTracks.push_back(iTrk);
@@ -37,7 +38,7 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* const picoDst
     return primaryVertexRefitUsingTracks(picoDst,goodTracks);
 }
 
-TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* const picoDst, std::vector<int>& tracksToUse) const {
+KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* const picoDst, std::vector<int>& tracksToUse) const {
     // fill an array of KFParticles
     KFParticle* particles[tracksToUse.size()];
 
@@ -80,33 +81,12 @@ TVector3 StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
         kfVertex.SetXYZ(aVertex.GetX(), aVertex.GetY(), aVertex.GetZ());
     }
 
-    return kfVertex;
-
+    return aVertex;
 }
+
+
+
+
+
 //primV->setVertexFinderId(KFVertexFinder);
-
 //picoDst PicoVtxMode:PicoVtxVpdOrDefault TpcVpdVzDiffCut:6 PicoCovMtxMode:PicoCovMtxWrite
-
-
-//StDcaGeometry &StPicoKFVertexFitter::dcaGeometry(StPicoTrackCovMatrix *cov) const {
-//    static StDcaGeometry a;
-//    Float_t errMatrix[15];
-//    Float16_t* mSigma=cov->sigmas();
-//    Int_t ii = 0;
-//    for (int i = 0; i < 5; i++) {
-//        errMatrix[ii] = mSigma[i]*mSigma[i];
-//        for (int j = 0; j < i; j++) {
-//            Int_t ij = ii - i - 1 + j + 1;
-//            Int_t ij1 = ij - i;
-//            errMatrix[ij] = mCorr[ij1]*mSigma[i]*mSigma[j];
-//        }
-//        ii += i+2;
-//    }
-//    a.set(params(), errMatrix);
-//    return *&a;
-//}
-
-//michal
-//    Int_t q = 1; if (gTrack->charge() < 0) q = -1;
-//    KFPTrack track;
-//    if( !GetTrack(dcaG, track, q, index) ) continue;
