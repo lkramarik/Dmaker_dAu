@@ -493,12 +493,11 @@ int StPicoQAMaker::MakeHF() {
     h_QA_Vz->Fill(vertex_z_QA, RunIndex);
     h_QA_VzmVzVPD->Fill(fabs(vertex_z_QA - mPicoDst->event()->vzVpd()), RunIndex);
 
-    StPicoKFVertexFitter kfVertexFitter;
-    KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
-    h_QA_Vx_position->Fill(kfVertex.GetX(), pVtx.x());
-    h_QA_Vy_position->Fill(kfVertex.GetY(), pVtx.y());
-    h_QA_Vz_position->Fill(kfVertex.GetZ(), pVtx.z());
-
+//    StPicoKFVertexFitter kfVertexFitter;
+//    KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
+//    h_QA_Vx_position->Fill(kfVertex.GetX(), pVtx.x());
+//    h_QA_Vy_position->Fill(kfVertex.GetY(), pVtx.y());
+//    h_QA_Vz_position->Fill(kfVertex.GetZ(), pVtx.z());
 
 
     Int_t nPions = 0;
