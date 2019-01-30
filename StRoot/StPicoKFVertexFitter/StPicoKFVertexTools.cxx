@@ -45,7 +45,6 @@ int StPicoKFVertexTools::MakeHF() {
     KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
     cout<<kfVertex.GetX()<<" "<<kfVertex.GetY()<<" "<<kfVertex.GetZ()<<endl;
     cout<<mPrimVtx.x()<<" "<<mPrimVtx.y()<<" "<<mPrimVtx.z()<<endl;
-    if(mPicoEvent->nBTOFMatch()>0) cout<<kfVertex.z()<<" "<<mPicoEvent->vzVpd()<<endl;
     cout<<" "<<endl;
 
     const int nNtVars=ntp_vertex->GetNvar();
