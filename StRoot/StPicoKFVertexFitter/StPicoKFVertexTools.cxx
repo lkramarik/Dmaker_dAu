@@ -48,7 +48,7 @@ int StPicoKFVertexTools::MakeHF() {
     if(mPicoEvent->nBTOFMatch()>0) cout<<kfVertex.z()<<" "<<mPicoEvent->vzVpd()<<endl;
     cout<<" "<<endl;
 
-    const int ntp_vertex->GetNvar();
+    const int nNtVars=ntp_vertex->GetNvar();
     cout<<ntp_vertex<<endl;
     //    Float_t ntVar[];
 //
