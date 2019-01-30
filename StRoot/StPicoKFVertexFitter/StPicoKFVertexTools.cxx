@@ -42,7 +42,7 @@ int StPicoKFVertexTools::MakeHF() {
     Float_t runId, picoDst_vx, picoDst_vy, picoDst_vz, picoDst_vxErr, picoDst_vyErr, picoDst_vzErr, KF_vx, KF_vy, KF_vz, KF_vxErr, KF_vyErr, KF_vzErr;
 
     StPicoKFVertexFitter kfVertexFitter;
-    TVector3 kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
+    KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
     cout<<kfVertex.GetX()<<" "<<kfVertex.GetY()<<" "<<kfVertex.GetZ()<<endl;
     cout<<mPrimVtx.x()<<" "<<mPrimVtx.y()<<" "<<mPrimVtx.z()<<endl;
     if(mPicoEvent->nBTOFMatch()>0) cout<<kfVertex.z()<<" "<<mPicoEvent->vzVpd()<<endl;
