@@ -48,7 +48,7 @@ int StPicoKFVertexTools::MakeHF() {
     cout<<" "<<endl;
 
     const int nNtVars=ntp_vertex->GetNvar();
-    cout<<ntp_vertex<<endl;
+    cout<<nNtVars<<endl;
     //    Float_t ntVar[];
 //
 //    runId=mPicoEvent->runId();

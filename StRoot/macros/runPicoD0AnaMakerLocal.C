@@ -44,7 +44,6 @@ void runPicoD0AnaMakerLocal(
   StHFCuts* hfCuts = new StHFCuts("hfBaseCuts");
   cout<<"event stuff set"<<endl;
   // ---------------------------------------------------
-  // -- Set Base cuts for HF analysis
 
   // -- File name of bad run list
    hfCuts->setBadRunListFileName(badRunListFileName); 
@@ -97,6 +96,7 @@ void runPicoD0AnaMakerLocal(
 //  picoMixedEventMaker->setBufferSize(3);
 
   StPicoKFVertexTools* PicoVertex = new StPicoKFVertexTools("PicoVertex", picoDstMaker, outputFile);
+    PicoVertex->setHFBaseCuts(hfCuts);
 
 //  StPicoD0V2AnaMaker* PicoD0V2AnaMaker = new StPicoD0V2AnaMaker("picoD0V2AnaMaker", picoDstMaker, outputFile);
 //  PicoD0V2AnaMaker->setHFBaseCuts(hfCuts);
