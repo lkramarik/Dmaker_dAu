@@ -21,7 +21,6 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* const picoDst
     std::sort(tracksToRemove.begin(),tracksToRemove.end());
 
     vector<int> goodTracks;
-//    StPicoEvent mPicoEvent = picoDst->event();
     TVector3 Vtx = picoDst->event()->primaryVertex();
 
     // make a list of good tracks to be used in the KFVertex fit
@@ -30,8 +29,6 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* const picoDst
         if (! gTrack) continue;
         if(std::binary_search(tracksToRemove.begin(), tracksToRemove.end(), iTrk)) continue;
 //        if(!gTrack->isPrimary()) continue; //no
-        if(abs(gTrack->gDCAz(Vtx.z()))>3) continue;
-        if(abs(gTrack->gDCAxy(Vtx.x(),Vtx.y()))>1.5) continue;
         goodTracks.push_back(iTrk);
     }
 
@@ -69,8 +66,8 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
     TArrayC Flag(tracksToUse.size());
     KFVertex aVertex;
 //    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), TMath::Sqrt(StAnneling::Chi2Cut() / 2)); //original
-//    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), 3.5); //in makzym stuffs
-    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), StAnneling::Chi2Cut()); //ok
+    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), 3.5); //in makzym stuffs
+//    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), StAnneling::Chi2Cut()); //ok
 
     // clean up
     for(size_t iTrk = 0; iTrk < tracksToUse.size(); ++iTrk) delete particles[iTrk];

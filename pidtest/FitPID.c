@@ -124,7 +124,7 @@ TH1F* FitPID::subtractBckg(TH1F* hS, TH1F* hB, TString nameSubtr, TFile* outputF
     return hSig;
 }
 
-void FitPID::peakFit(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin, Float_t massMax, TString pair, Float_t ptmin, Float_t ptmax, TString varName){
+void FitPID::peakFit(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin, Float_t massMax, TString pair, Float_t ptmin, Float_t ptmax, TString varName, Float_t nSigmaLine){
     TF1 *funLS = new TF1("funLS","pol1(0)+gaus(2)", massMin, massMax);
     funLS->SetParameters(1.,1.,mHeight,mean,sigma);
     funLS->SetLineColor(2);
@@ -153,9 +153,9 @@ void FitPID::peakFit(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin,
     mMean = funLS->GetParameter(3);
     mMeanE = funLS->GetParError(3);
 
-    TLine *left = new TLine(mMean - 1*mSigma, hToFit->GetMaximum(), mMean - 1*mSigma, hToFit->GetMinimum());
+    TLine *left = new TLine(mMean - nSigmaLine*mSigma, hToFit->GetMaximum(), mMean - nSigmaLine*mSigma, hToFit->GetMinimum());
     left->SetLineColor(46);
-    TLine *right = new TLine(mMean + 1*mSigma, hToFit->GetMaximum(), mMean + 1*mSigma, hToFit->GetMinimum());
+    TLine *right = new TLine(mMean + nSigmaLine*mSigma, hToFit->GetMaximum(), mMean + nSigmaLine*mSigma, hToFit->GetMinimum());
     right->SetLineColor(46);
 
     hToFit->Draw();

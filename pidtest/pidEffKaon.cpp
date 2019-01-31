@@ -42,7 +42,9 @@ void pidEffKaon() {
     TString input = "/media/lukas/376AD6A434B7392F/work/pid/ntp.picoPhiAnaMaker.2901.root";
 
 //    Float_t ptBins[] = {2.2, 2.5, 3};
-    Float_t ptBins[] = {0.2, 0.5, 1, 1.2, 1.4, 1.7, 2.3, 3, 4}; //kaon
+//    Float_t ptBins[] = {0.2, 0.5, 1, 1.2, 1.4, 1.7, 2.3, 3, 4}; //kaon
+    Float_t ptBins[] = {0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 1.05, 1.2, 1.4, 1.7, 2.3, 3, 4}; //kaon
+
 //    Float_t ptBins[] = {0.2, 0.35, 0.5, 0.65, 0.8, 0.95, 1.1, 1.25, 1.4, 1.6, 1.8, 2, 2.2, 2.5, 3, 4}; //kaon
     const int nBins = sizeof(ptBins) / sizeof(Float_t);
     cout << nBins << endl;
@@ -73,7 +75,7 @@ void pidEffKaon() {
     fitmass->setOutputFileName("rootFiles/mass_" + pairName + ".root");
     fitmass->setHeight(15000);
 
-    bool hybridTof=false;
+    bool hybridTof=true;
 
     if (hybridTof) {
         tof1="pi1_TOFinvbeta<0.03 || pi1_TOFinvbeta>93";
@@ -88,7 +90,7 @@ void pidEffKaon() {
     tpc2="pi2_nSigma<3";
 
     cut = Form("pair_mass>%.3f && pair_mass<%.3f", massMin, massMax);
-    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && pair_cosTheta>0.85 && pi2_pt>0.15", ptPairMin, ptPairMax);
+    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && pair_cosTheta>0.85 && pi2_pt>0.15 && bbcRate<950 && nTofTracks>0", ptPairMin, ptPairMax);
 //    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && pair_cosTheta>0.6 && dcaDaughters<0.3 && pair_dcaToPv<0.3", ptPairMin, ptPairMax);
 //    cutPair = Form("pair_pt>%.3f && pair_pt<%.3f && pi2_pt>1 && fabs(pi2_nSigma)<2.", ptPairMin, ptPairMax);
 //    cutPair = Form("pair_pt>%.3f && pair_pt<%.3f", ptPairMin, ptPairMax);
@@ -116,12 +118,12 @@ void pidEffKaon() {
 
         hSigmaSignal1->Add(hSigmaSignal2);
         pid1->setHeight(height);
-//        TH1F *hSigmaSignalRes = (TH1F*) pid1->peakFit(hSigmaSignal1, 0, 1, -5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma");
+//        TH1F *hSigmaSignalRes = (TH1F*) pid1->peakFit(hSigmaSignal1, 0, 1, -5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma", 1);
         if (tofPid) {
-            if (i==1) pid1->peakFit(hSigmaSignal1, 0, 1, -1.5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma");
-            else         pid1->peakFit(hSigmaSignal1, 0, 1, -5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma");
+            if (i==1) pid1->peakFit(hSigmaSignal1, 0, 1, -1.5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma", 1);
+            else         pid1->peakFit(hSigmaSignal1, 0, 1, -5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma", 1);
         } else {
-            pid1->peakFit(hSigmaSignal1, 0, 0.02, -0.07, 0.07, pair, ptBins[i], ptBins[i + 1], "1overBeta");
+            pid1->peakFit(hSigmaSignal1, 0, 0.02, -0.07, 0.07, pair, ptBins[i], ptBins[i + 1], "1overBeta", 1);
         }
 
         binWidth[i] = (ptBins[i + 1] - ptBins[i]) / 2;

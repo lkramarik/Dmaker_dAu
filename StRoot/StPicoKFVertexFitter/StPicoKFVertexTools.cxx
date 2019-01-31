@@ -21,11 +21,12 @@ StPicoKFVertexTools::~StPicoKFVertexTools() {
 // _________________________________________________________
 int StPicoKFVertexTools::InitHF() {
     mOutFileBaseName = mOutFileBaseName.ReplaceAll(".root", "");
-    ntp_vertex = new TNtuple("ntp_vertex","ntp_vertex","runId:"
-                                                       "picoDst_vx:picoDst_vy:picoDst_vz:"
-                                                       "picoDst_vxErr:picoDst_vyErr:picoDst_vzErr:"
-                                                       "KF_vx:KF_vy:KF_vz:"
-                                                       "KF_vxErr:KF_vyErr:KF_vzErr");
+    ntp_vertex = new TNtuple("ntp_vertex","ntp_vertex","runId:refMult:nGlobTracks:"
+                                                       "picoDstVx:picoDstVy:picoDstVz:"
+                                                       "picoDstVErrX:picoDstVErrY:picoDstVErrZ:"
+                                                       "KFVx:KFVy:KFVz:"
+                                                       "KFVErrX:KFErrY:KFVErrZ:"
+                                                       "diffX:diffY:diffZ");
     return kStOK;
 }
 
@@ -44,30 +45,42 @@ int StPicoKFVertexTools::MakeHF() {
     StPicoKFVertexFitter kfVertexFitter;
     KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
 
-    const int nNtVars=ntp_vertex->GetNvar();
-    Float_t ntVar[nNtVars];
-    int ii=0;
+    bool goodEvent=true;
 
-    ntVar[ii++]=mPicoEvent->runId();
+    if (!(mPicoEvent->numberOfPxlInnerHits()>0 && mPicoEvent->numberOfPxlOuterHits()>0)) goodEvent=false;
+    if (!(mPicoEvent->BBCx()<950000)) goodEvent=false;
 
-    ntVar[ii++]=mPrimVtx.x();
-    ntVar[ii++]=mPrimVtx.y();
-    ntVar[ii++]=mPrimVtx.z();
+    if (goodEvent) {
+        const int nNtVars = ntp_vertex->GetNvar();
+        Float_t ntVar[nNtVars];
+        int ii = 0;
 
-    ntVar[ii++]=(mPicoEvent->primaryVertexError()).x();
-    ntVar[ii++]=(mPicoEvent->primaryVertexError()).y();
-    ntVar[ii++]=(mPicoEvent->primaryVertexError()).z();
+        ntVar[ii++] = mPicoEvent->runId();
+        ntVar[ii++] = mPicoEvent->refMult();
+        ntVar[ii++] = mPicoEvent->numberOfGlobalTracks();
 
-    ntVar[ii++]=kfVertex.GetX();
-    ntVar[ii++]=kfVertex.GetY();
-    ntVar[ii++]=kfVertex.GetZ();
+        ntVar[ii++] = mPrimVtx.x();
+        ntVar[ii++] = mPrimVtx.y();
+        ntVar[ii++] = mPrimVtx.z();
 
-    ntVar[ii++]=kfVertex.GetErrX();
-    ntVar[ii++]=kfVertex.GetErrY();
-    ntVar[ii++]=kfVertex.GetErrZ();
+        ntVar[ii++] = (mPicoEvent->primaryVertexError()).x();
+        ntVar[ii++] = (mPicoEvent->primaryVertexError()).y();
+        ntVar[ii++] = (mPicoEvent->primaryVertexError()).z();
 
-    ntp_vertex->Fill(ntVar);
+        ntVar[ii++] = kfVertex.GetX();
+        ntVar[ii++] = kfVertex.GetY();
+        ntVar[ii++] = kfVertex.GetZ();
 
+        ntVar[ii++] = kfVertex.GetErrX();
+        ntVar[ii++] = kfVertex.GetErrY();
+        ntVar[ii++] = kfVertex.GetErrZ();
+
+        ntVar[ii++] = mPrimVtx.x()-kfVertex.GetX();
+        ntVar[ii++] = mPrimVtx.y()-kfVertex.GetY();
+        ntVar[ii++] = mPrimVtx.z()-kfVertex.GetZ();
+
+        ntp_vertex->Fill(ntVar);
+    }
     return kStOK;
 }
 
