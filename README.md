@@ -6,27 +6,28 @@ starver SL18f
 cons
 ```
 
-Run analysis locally on one picoDst with:
+Run D0 analysis locally on few picoDsts with:
 ```sh
 root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runPicoD0AnaMakerLocal.C++
 ```
-
-Mixed-event background pairs of kaons and pions:```sh root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runPicoMixedEvent.C++
+Mixed-event background pairs of kaons and pions:
+```sh 
+root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runPicoMixedEvent.C++
 ```
+K0s recontruction (PID efficiency studies):
 ```sh
-starver SL18f
 root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runPicoK0sAnaMakerLocal.C++
 ```
+Phi recontruction (PID efficiency studies):
 ```sh
-starver SL18f
 root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runPicoPhiAnaMakerLocal.C++
 ```
+QA of picoDst data:
 ```sh
-starver SL18f
 root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runQAAnaMakerLocal.C++
 ```
+Primary vertex refitting:
 ```sh
-starver SL18f
 root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runPicoVertexLocal.C++
 ```
 
