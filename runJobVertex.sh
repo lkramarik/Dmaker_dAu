@@ -1,6 +1,6 @@
 #!/bin/bash
 cd workDir
-productionId=`date +%F_%H-%M`_PiPi
+productionId=`date +%F_%H-%M`_PV
 analyzer="lkramarik"
 
 mkdir $productionId
