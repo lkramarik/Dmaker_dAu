@@ -22,7 +22,6 @@ void loadSharedHFLibraries() {
   gSystem->Load("StPicoKKMaker");
   gSystem->Load("StPicoQAMaker");
   gSystem->Load("StPicoMixedEventMaker");
-  gSystem->Load("StPicoKFVertexTools");
   // KFVertexFitter dependancies
   gSystem->Load("StTpcDb");
   gSystem->Load("StDbUtilities");
