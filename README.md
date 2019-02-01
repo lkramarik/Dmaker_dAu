@@ -8,12 +8,10 @@ cons
 
 Run analysis locally on one picoDst with:
 ```sh
-starver SL18f
 root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runPicoD0AnaMakerLocal.C++
 ```
-```sh
-starver SL18f
-root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runPicoMixedEvent.C++
+
+Mixed-event background pairs of kaons and pions:```sh root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runPicoMixedEvent.C++
 ```
 ```sh
 starver SL18f
