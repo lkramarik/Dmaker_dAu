@@ -75,7 +75,7 @@ void pidEffKaon() {
     fitmass->setOutputFileName("rootFiles/mass_" + pairName + ".root");
     fitmass->setHeight(15000);
 
-    bool hybridTof=true;
+    bool hybridTof=false;
 
     if (hybridTof) {
         tof1="pi1_TOFinvbeta<0.03 || pi1_TOFinvbeta>93";
@@ -90,7 +90,9 @@ void pidEffKaon() {
     tpc2="pi2_nSigma<3";
 
     cut = Form("pair_mass>%.3f && pair_mass<%.3f", massMin, massMax);
-    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && pair_cosTheta>0.85 && pi2_pt>0.15 && bbcRate<950 && nTofTracks>0", ptPairMin, ptPairMax);
+    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && pair_cosTheta>0.85 && pi2_pt>0.15 && bbcRate<950 && nTofTracks>0 && abs(pi2_nsigma)<2 && abs(pi2_TOFinvbeta)<0.03", ptPairMin, ptPairMax);
+//    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && pair_cosTheta>0.85 && pi2_pt>0.15 && bbcRate<950 && nTofTracks>0", ptPairMin, ptPairMax);
+
 //    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && pair_cosTheta>0.6 && dcaDaughters<0.3 && pair_dcaToPv<0.3", ptPairMin, ptPairMax);
 //    cutPair = Form("pair_pt>%.3f && pair_pt<%.3f && pi2_pt>1 && fabs(pi2_nSigma)<2.", ptPairMin, ptPairMax);
 //    cutPair = Form("pair_pt>%.3f && pair_pt<%.3f", ptPairMin, ptPairMax);
@@ -110,6 +112,7 @@ void pidEffKaon() {
         if (tofPid) hSigmaSignal1 = (TH1F *) pid1->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i + 1], pair, cut + cutPair, "pi1_nSigma", "Kaon n#sigma^{TPC}");
         else hSigmaSignal1 = (TH1F *) pid1->projectSubtractBckg(input, 50, -0.07, 0.07, ptBins[i], ptBins[i + 1], pair, cut + cutPair, "pi1_TOFinvbeta", "Kaon #delta1/#beta{TOF}");
 
+        /* CLEAN 2
         FitPID *pid2 = new FitPID();
         pid2->setOutputFileName("rootFiles/nSigma_" + pairName + "_2.root");
         cut = Form("pair_mass>%f && pair_mass<%f && pi2_pt>%.3f && pi2_pt<%.3f", massMean - 2*massSigma, massMean + 2*massSigma, ptBins[i], ptBins[i+1]);
@@ -117,6 +120,8 @@ void pidEffKaon() {
         else hSigmaSignal2 = (TH1F *) pid2->projectSubtractBckg(input, 50, -0.07, 0.07, ptBins[i], ptBins[i + 1], pair, cut + cutPair, "pi2_TOFinvbeta", "Kaon #delta1/#beta{TOF}");
 
         hSigmaSignal1->Add(hSigmaSignal2);
+        */
+
         pid1->setHeight(height);
 //        TH1F *hSigmaSignalRes = (TH1F*) pid1->peakFit(hSigmaSignal1, 0, 1, -5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma", 1);
         if (tofPid) {
@@ -140,11 +145,11 @@ void pidEffKaon() {
         //tof pions after my PID cut:
         FitPID *pidAna1 = new FitPID();
         pidAna1->setOutputFileName("rootFiles/nSigma_"+pairName+"_ana_1.root");
-//        cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f && pi1_TOFinvbeta<3", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]); //TOF matching
         cut=Form("pair_mass>%f && pair_mass<%f && pi1_pt>%f && pi1_pt<%f", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]); // hybrid TOF
         if (tofPid) hSigmaSignalAna1 = (TH1F*) pidAna1->projectSubtractBckg(input, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+cutPair+tof1, "pi1_nSigma", "Kaon n#sigma^{TPC}");
         else TH1F *hSigmaSignalAna1 = (TH1F*) pidAna1->projectSubtractBckg(input, 50, -0.07, 0.07, ptBins[i], ptBins[i+1], pair, cut+cutPair+tpc1, "pi1_TOFinvbeta", "Kaon #delta1/#beta_{TOF}");
-//
+
+        /* ANA 2
         FitPID *pidAna2 = new FitPID();
         pidAna2->setOutputFileName("rootFiles/nSigma_"+pairName+"_ana_2.root");
         cut=Form("pair_mass>%f && pair_mass<%f && pi2_pt>%f && pi2_pt<%f", massMean-2*massSigma, massMean+2*massSigma, ptBins[i], ptBins[i+1]);
@@ -153,6 +158,8 @@ void pidEffKaon() {
         else TH1F *hSigmaSignalAna2 = (TH1F*) pidAna2->projectSubtractBckg(input, 50, -0.07, 0.07, ptBins[i], ptBins[i+1], pair, cut+cutPair+tpc2, "pi2_TOFinvbeta", "Kaon #delta1/#beta_{TOF}");
 //
         hSigmaSignalAna1->Add(hSigmaSignalAna2);
+        */
+
         pidAna1->setHeight(height);
 
         Double_t integralAna = hSigmaSignalAna1->IntegralAndError(hSigmaSignalAna1->FindBin(pid1->getMean() - 1*pid1->getSigma()), hSigmaSignalAna1->FindBin(pid1->getMean() + 1*pid1->getSigma()), errorAna, ""); //number of it without PID cut
