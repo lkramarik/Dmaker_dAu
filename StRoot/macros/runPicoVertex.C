@@ -18,7 +18,7 @@
 
 using namespace std;
 
-void runPicoD0AnaMaker(
+void runPicoVertex(
     const char*  inputFile,
     const Char_t *outputFile,  
     const Char_t *badRunListFileName) {
