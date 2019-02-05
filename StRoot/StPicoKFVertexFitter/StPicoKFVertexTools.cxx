@@ -25,8 +25,7 @@ int StPicoKFVertexTools::InitHF() {
                                                        "picoDstVx:picoDstVy:picoDstVz:"
                                                        "picoDstVErrX:picoDstVErrY:picoDstVErrZ:"
                                                        "KFVx:KFVy:KFVz:"
-                                                       "KFVErrX:KFErrY:KFVErrZ:"
-                                                       "diffX:diffY:diffZ");
+                                                       "KFVErrX:KFErrY:KFVErrZ");
     return kStOK;
 }
 
@@ -74,10 +73,6 @@ int StPicoKFVertexTools::MakeHF() {
         ntVar[ii++] = kfVertex.GetErrX();
         ntVar[ii++] = kfVertex.GetErrY();
         ntVar[ii++] = kfVertex.GetErrZ();
-
-        ntVar[ii++] = mPrimVtx.x()-kfVertex.GetX();
-        ntVar[ii++] = mPrimVtx.y()-kfVertex.GetY();
-        ntVar[ii++] = mPrimVtx.z()-kfVertex.GetZ();
 
         ntp_vertex->Fill(ntVar);
     }

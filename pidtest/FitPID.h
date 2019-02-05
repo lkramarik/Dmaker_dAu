@@ -51,6 +51,7 @@ public:
     float getSigma();
     float getHeight();
 
+    void makeTuple(TString, TCut);
     void setMean(float);
     void setSigma(float);
     void setHeight(float);

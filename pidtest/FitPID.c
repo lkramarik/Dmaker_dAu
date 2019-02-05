@@ -268,3 +268,39 @@ void FitPID::peakMassFit(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t mass
     c->SaveAs(Form("./img/%s/fit/%s_%.3f_%.3f.png", pair.Data(), varName.Data(), ptmin, ptmax));
     c->Close();
 }
+
+void FitPID::makeTuple(TString input, TCut cuts){
+    TFile* data = new TFile(input ,"r");
+    TNtuple* ntp[2] = {(TNtuple*)data -> Get("ntp_background"), (TNtuple*)data -> Get("ntp_signal")};
+    TString outVars = "pi1_pt:pi1_nSigma:pi1_TOFinvbeta";
+    TFile *fileOut = new TFile("small."+input, "RECREATE");
+
+    TNtuple* ntpOut[2] = {new TNtuple("ntp_background1","ntp_background1",outVars), new TNtuple("ntp_signal1","ntp_signal1",outVars)};
+
+    Float_t pi1_pt, pi1_nSigma, pi1_TOFinvbeta, pi2_pt, pi2_nSigma, pi2_TOFinvbeta;
+
+    for (int j = 0; j < 2; ++j) {
+        ntp[j]->SetBranchAddress("pi1_pt", &pi1_pt);
+        ntp[j]->SetBranchAddress("pi1_nSigma", &pi1_nSigma);
+        ntp[j]->SetBranchAddress("pi1_TOFinvbeta", &pi1_TOFinvbeta);
+
+        ntp[j]->SetBranchAddress("pi2_pt", &pi2_pt);
+        ntp[j]->SetBranchAddress("pi2_nSigma", &pi2_nSigma);
+        ntp[j]->SetBranchAddress("pi2_TOFinvbeta", &pi2_TOFinvbeta);
+
+        ntp[j]->Draw(">>elist",cuts);
+        TEventList *elist = (TEventList*)gDirectory->Get("elist");
+        ntp[j]->SetEventList(elist);
+
+        for (int i = 0; i < ntp[j]->GetEntries(); ++i) {
+            ntp[j]->GetEntry(i);
+            ntpOut[j]->Fill(pi1_pt, pi1_nSigma, pi1_TOFinvbeta);
+            ntpOut[j]->Fill(pi2_pt, pi2_nSigma, pi2_TOFinvbeta);
+        }
+    }
+    fileOut->cd();
+    ntpOut[0]->Write(ntpOut[0]->GetName(), TObject::kOverwrite);
+    ntpOut[1]->Write(ntpOut[1]->GetName(), TObject::kOverwrite);
+
+
+}
