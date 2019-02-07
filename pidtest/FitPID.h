@@ -39,8 +39,8 @@ public:
     TString mOutputFileName;
     TH1F* hSig = new TH1F();
 
-    TH1F* projectSubtractBckg(TString, Int_t, Float_t, Float_t, Float_t, Float_t, TString, TCut, TString, TString);
-    TH1F* subtractBckg(TH1F*, TH1F*, TString, TFile*, TString);
+    TH1F* projectSubtractBckg(TString, Int_t, Float_t, Float_t, Float_t, Float_t, TString, TCut, TString, TString, bool);
+    TH1F* subtractBckg(TH1F*, TH1F*, TString, TFile*, TString, bool);
     void peakFit(TH1F*, Float_t, Float_t, Float_t, Float_t, TString, Float_t, Float_t, TString, Float_t);
     TH1F* peakFitResSub(TH1F*, Float_t, Float_t, Float_t, Float_t, TString, Float_t, Float_t, TString);
     void peakMassFit(TH1F*, Float_t, Float_t, Float_t, Float_t, TString, Float_t, Float_t, TString);
@@ -51,7 +51,7 @@ public:
     float getSigma();
     float getHeight();
 
-    void makeTuple(TString, TCut);
+    void makeTuple(TString, TCut, bool);
     void setMean(float);
     void setSigma(float);
     void setHeight(float);
