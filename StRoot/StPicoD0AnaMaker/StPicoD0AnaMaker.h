@@ -33,7 +33,6 @@ class StPicoTrack;
 class StPicoHFEvent;
 
 class StHFPair;
-class StHFTriplet;
 class StHFCuts;
 
 class StPicoD0AnaMaker : public StPicoHFMaker

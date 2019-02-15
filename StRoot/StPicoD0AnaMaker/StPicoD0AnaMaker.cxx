@@ -168,6 +168,9 @@ int StPicoD0AnaMaker::MakeHF() {
 // _________________________________________________________
 int StPicoD0AnaMaker::createCandidates() {
     UInt_t nTracks = mPicoDst->numberOfTracks();
+
+    cout<<nTracks<<" "<<mPicoEvent->numberOfGlobalTracks()<<" "<<mPicoEvent->refMult()<<endl;
+
     for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
         StPicoTrack* trk = mPicoDst->track(iTrack);
         if (abs(trk->gMom().PseudoRapidity())>1) continue;
@@ -195,7 +198,7 @@ int StPicoD0AnaMaker::createCandidates() {
 
             int ii=0;
             float ntVar[25];
-            ntVar[ii++] = mPicoDst->event()->refMult();
+            ntVar[ii++] = mPicoEvent->refMult();
             ntVar[ii++] = mPicoEvent->runId();
             ntVar[ii++] = mPicoEvent->eventId();
 
