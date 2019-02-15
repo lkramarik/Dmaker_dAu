@@ -41,7 +41,7 @@ public:
     virtual Int_t MakeHF();
     virtual void  ClearHF(Option_t *opt);
     virtual Int_t FinishHF();
-    virtual double DCA(StPicoTrack const*, StThreeVectorF const &) const;
+    virtual double DCA(StPicoTrack const*, TVector3 const &) const;
     int createQA();
 
    void histoInit(TString fileBaseName,bool fillQaHists=true);
