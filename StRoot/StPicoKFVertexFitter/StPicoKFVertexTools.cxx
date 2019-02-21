@@ -41,15 +41,23 @@ int StPicoKFVertexTools::FinishHF() {
 }
 // _________________________________________________________
 int StPicoKFVertexTools::MakeHF() {
-    StPicoKFVertexFitter kfVertexFitter;
-    KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
+
+    int nHftTracks=0;
+    for (unsigned int iTrk = 0; iTrk < picoDst->numberOfTracks(); ++iTrk) {
+        StPicoTrack* gTrack = (StPicoTrack*)picoDst->track(iTrk);
+        if (!gTrack) continue;
+        if (gTrack->isHFTTrack()) nHftTracks++;
+    }
 
     bool goodEvent=true;
-
+    if (!(nHftTracks>1)) goodEvent=false;
     if (!(mPicoEvent->numberOfPxlInnerHits()>0 && mPicoEvent->numberOfPxlOuterHits()>0)) goodEvent=false;
     if (!(mPicoEvent->BBCx()<950000)) goodEvent=false;
 
     if (goodEvent) {
+        StPicoKFVertexFitter kfVertexFitter;
+        KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
+
         const int nNtVars = ntp_vertex->GetNvar();
         Float_t ntVar[nNtVars];
         int ii = 0;
