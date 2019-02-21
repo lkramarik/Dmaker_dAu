@@ -27,6 +27,11 @@ root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runPicoPhiAnaM
 starver SL18f
 root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runQAAnaMakerLocal.C++
 ```
+```sh
+starver SL18f
+root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runSimInputsMakerLocal.C++
+```
+
 Actual file list is loaded from:
 ```sh
 picoLists/runs_path_all.list
