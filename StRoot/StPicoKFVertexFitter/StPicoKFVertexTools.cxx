@@ -25,7 +25,7 @@ int StPicoKFVertexTools::InitHF() {
                                                        "picoDstVx:picoDstVy:picoDstVz:"
                                                        "picoDstVErrX:picoDstVErrY:picoDstVErrZ:"
                                                        "KFVx:KFVy:KFVz:"
-                                                       "KFVErrX:KFErrY:KFVErrZ");
+                                                       "KFVErrX:KFVErrY:KFVErrZ");
     return kStOK;
 }
 
