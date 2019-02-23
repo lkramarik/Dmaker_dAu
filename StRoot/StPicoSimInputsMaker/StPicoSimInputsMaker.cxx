@@ -68,20 +68,26 @@ int StPicoSimInputsMaker::createQA(){
         StPicoPhysicalHelix helix = trk->helix(mBField);
         TVector3 momentum = trk->gMom(mPrimVtx, mBField);
 
-        if (!(mHFCuts->isGoodTrack(trk))) continue; //nHitsFit, pT, max DCA, hft (must be non-HFT
+        if (!(mHFCuts->isGoodTrack(trk))) continue; //nHitsFit, pT, max DCA, hft (must be non-HFT)
         if (!(fabs(momentum.PseudoRapidity()) < 1.0)) continue;
 
         bool goodPion = false;
         bool goodKaon = false;
 
-        if (mHFCuts->isGoodPion(trk)) goodPion = true;
-        if (mHFCuts->isGoodKaon(trk)) goodKaon = true;
+        bool tofPion = false;
+        bool tofKaon = false;
 
-        bool tofPion = true;
-        bool tofKaon = true;
+        bool tpcPion = false;
+        bool tpcKaon = false;
 
-        if(!(mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kPion))) tofPion = false;
-        if(!(mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon))) tofKaon = false;
+        if(mHFCuts->isGoodPion(trk)) tpcPion = true;
+        if(mHFCuts->isGoodKaon(trk)) tpcKaon = true;
+
+        if(mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kPion)) tofPion = true;
+        if(mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon)) tofKaon = true;
+
+        goodPion = (tofPion && tpcPion);
+        goodKaon = (tofKaon && tpcKaon);
 
         TVector3 dcaPoint = trk->origin();
         float dca = (mPrimVtx - trk->origin()).Mag();
@@ -93,7 +99,6 @@ int StPicoSimInputsMaker::createQA(){
 //        cout<<"eta is "<<EtaIndex<<endl;
         int PhiIndex = getPhiIndexRatio(momentum.Phi());
         if ((EtaIndex==-1) || (PhiIndex==-1)) continue;
-
 
         if (trk->isHFTTrack()) {
             for (int i = 0; i < 3; ++i) {
@@ -108,7 +113,6 @@ int StPicoSimInputsMaker::createQA(){
                 }
             }
         }
-
 
         if (trk->isHFTTrack() && (goodPion || goodKaon) && vars::dcaHists){
             addDcaPtCent(dca, dcaXy, dcaZ, goodPion, goodKaon, momentum.Perp(), multiplicity, EtaIndex, PhiIndex, mPrimVtx.z(), ZdcIndex);

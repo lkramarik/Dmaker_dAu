@@ -75,6 +75,7 @@ int StPicoKKMaker::createCandidates() {
 //            if (!mHFCuts->isClosePair(pair)) continue;
             if (!mHFCuts->isGoodSecondaryVertexPair(pair)) continue;
 
+
             bool isPhi = false;
             if (kaon1->charge()+kaon2->charge() == 0) isPhi = true;
 
