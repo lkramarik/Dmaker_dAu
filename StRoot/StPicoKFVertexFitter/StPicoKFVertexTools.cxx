@@ -43,7 +43,7 @@ int StPicoKFVertexTools::FinishHF() {
 int StPicoKFVertexTools::MakeHF() {
 
     int nHftTracks=0;
-    for (unsigned int iTrk = 0; iTrk < picoDst->numberOfTracks(); ++iTrk) {
+    for (unsigned int iTrk = 0; iTrk < mPicoDst->numberOfTracks(); ++iTrk) {
         StPicoTrack* gTrack = (StPicoTrack*)picoDst->track(iTrk);
         if (!gTrack) continue;
         if (gTrack->isHFTTrack()) nHftTracks++;
