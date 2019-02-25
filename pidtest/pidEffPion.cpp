@@ -31,7 +31,7 @@
 void pidEffPion() {
 //    gSystem->Load("FitPID");
     bool tofPid = true;
-    bool plotPart2 = true;
+    bool plotPart2 = false;
     gROOT->ProcessLine(".L FitPID.c++");
 
     gSystem->Exec("rm rootFiles/nSigma_pipi_1.root rootFiles/nSigma_pipi_2.root");
@@ -87,12 +87,25 @@ void pidEffPion() {
     fitmass->setOutputFileName("rootFiles/mass_" + pairName + ".root");
     fitmass->setHeight(1000000);
     cut = Form("pair_mass>%.3f && pair_mass<%.3f", massMin, massMax);
+
+    int bbc=950;
+    int nTof=0;
+    float nsigma=3;
+    float tofInvBeta=0.03;
+    float ptTrackCut=0.5;
+
+    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<%i && nTofTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbc, nTof, nsigma, tofInvBeta, ptTrackCut);
+
+
 //    cutPair = Form("pair_pt>%.3f && pair_pt<%.3f && pair_decayL<4", ptPairMin, ptPairMax);
 //    cutPair = Form("pair_pt>%.3f && pair_pt<%.3f && nTofTracks>0", ptPairMin, ptPairMax);
 //    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<800 && nTofTracks>0", ptPairMin, ptPairMax);
 
 //    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<500 && nTofTracks>0 && abs(pi2_nSigma)<2 && abs(pi2_TOFinvbeta)<0.03 && pi2_pt>0.5", ptPairMin, ptPairMax);
-    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<500 && nTofTracks>0 && abs(pi2_nSigma)<1 && abs(pi2_TOFinvbeta)<0.02 && pi2_pt>0.5", ptPairMin, ptPairMax);
+//    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<950 && nTofTracks>0 && abs(pi2_nSigma)<2 && abs(pi2_TOFinvbeta)<0.03 && pi2_pt>0.5", ptPairMin, ptPairMax);
+
+
+    TString dirName=Form("bbc%i_nTof%i_nsigma%.1f_tof%.2f_pt%.1f",bbc, nTof, nsigma, tofInvBeta, ptTrackCut);
 
     TH1F *signal = (TH1F*) fitmass->projectSubtractBckg(inputMass, 50, massMin, massMax, ptPairMin, ptPairMax, pair, cut + cutPair, "pair_mass", "Mass_{%s} (GeV/c^{2})", true);
     fitmass->peakFit(signal, mean, sigma, massMin, massMax, pair, ptPairMin, ptPairMax, "mass", 2);
@@ -202,6 +215,17 @@ void pidEffPion() {
     gMean->Write("mean");
     gSigmas->Write("sigma");
     resOut->Close();
+
+    gSystem->Exec(Form("mkdir %s", dirName.Data()));
+    gSystem->Exec(Form("cp -r img %s/", dirName.Data()));
+    gSystem->Exec(Form("cp -r rootFiles %s/", dirName.Data()));
+    gSystem->Exec(Form("cp -r pidEffPion.cpp %s/", dirName.Data()));
+
+//    gSystem->Exec(Form("mkdir %s", dirName);
+//    gSystem->Exec(Form("cp -r img %s/", dirName);
+//    gSystem->Exec(Form("cp -r rootFiles %s/", dirName);
+//    gSystem->Exec(Form("cp -r pidEffPion.cpp %s/", dirName);
+
 
 //    gSystem->Exec("hadd -k -f rootFiles/nSigma_pipi.root rootFiles/nSigma_pipi_1.root rootFiles/nSigma_pipi_2.root");
 //    gSystem->Exec("hadd -k -f rootFiles/nSigma_pipi_ana.root rootFiles/nSigma_pipi_ana_1.root rootFiles/nSigma_pipi_ana_2.root");

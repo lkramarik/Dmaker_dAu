@@ -28,7 +28,7 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* const picoDst
         StPicoTrack* gTrack = (StPicoTrack*)picoDst->track(iTrk);
         if (! gTrack) continue;
         if(std::binary_search(tracksToRemove.begin(), tracksToRemove.end(), iTrk)) continue;
-//        if(!gTrack->isPrimary()) continue; //no
+        if(!gTrack->isPrimary()) continue; //no
         goodTracks.push_back(iTrk);
     }
 
