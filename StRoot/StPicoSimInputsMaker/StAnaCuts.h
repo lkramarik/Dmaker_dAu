@@ -54,8 +54,8 @@ namespace vars {
     const int m_nCentsRatio = 10; //not using
     float const m_CentEdgeRatio[m_nCentsRatio + 1] = { -1.5, -0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5}; //not using
 
-    const int m_nmultEdge = 7;
-    float const m_multEdge[m_nmultEdge+1] = {0, 4, 8, 12, 16, 20, 24, 200};
+    const int m_nmultEdge = 0; //7
+    float const m_multEdge[m_nmultEdge+1] = {0, 200};
 
     const int m_nPtsRatio = 15;
     float const m_PtEdgeRatio[m_nPtsRatio + 1] =
