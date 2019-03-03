@@ -18,8 +18,8 @@ namespace vars {
     const int m_nZdc = 5;
     float const m_zdcEdge[m_nZdc+1] = {0,50,90,130,170,210};
 
-    const int m_nZdcDCA = 5;
-    float const m_zdcEdgeDCA[m_nZdcDCA+1] = {0,50,90,130,170,210};
+    const int m_nZdcDCA = 3;
+    float const m_zdcEdgeDCA[m_nZdcDCA+1] = {0,90,170,210};
 
     const int m_nParticles = 2;
     const TString m_ParticleName[m_nParticles] = {"Pion", "Kaon"};
