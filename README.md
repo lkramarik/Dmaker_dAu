@@ -30,7 +30,10 @@ Primary vertex refitting:
 ```sh
 root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runPicoVertexLocal.C++
 ```
-
+Simulation inputs:
+```sh
+root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runSimInputsMakerLocal.C++
+```
 
 Actual file list is loaded from:
 ```sh
