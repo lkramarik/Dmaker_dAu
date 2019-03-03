@@ -175,7 +175,7 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
                 for (int iVz = 0; iVz < vars::m_nVzsDca; iVz++) {
                     for (int iZdc = 0; iZdc < vars::m_nZdcDCA; iZdc++) {
                         for (int iCent = 0; iCent < vars::m_nmultEdge; iCent++) {
-                            cout<<Form("mh3DcaXyZPt_p%d_eta%d_vz%d_z%d_m%d", iParticle, iEta, iVz, iZdc, iCent)<<endl;
+//                            cout<<Form("mh3DcaXyZPt_p%d_eta%d_vz%d_z%d_m%d", iParticle, iEta, iVz, iZdc, iCent)<<endl;
                             mh3DcaXyZPtCentPartEtaVzPhi[iParticle][iEta][iVz][iZdc][iCent] = new TH3F(Form("mh3DcaXyZPt_p%d_eta%d_vz%d_z%d_m%d", iParticle, iEta, iVz, iZdc, iCent), Form("mh3DcaXyZPt_p%d_eta%d_vz%d_z%d_m%d", iParticle, iEta, iVz, iZdc, iCent),
                                                                                                       vars::m_nPtsDca, vars::m_PtEdgeDca, vars::m_nDcasDca, vars::m_DcaEdgeDca, vars::m_nDcasDca, vars::m_DcaEdgeDca);
                         }
