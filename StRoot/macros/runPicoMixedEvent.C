@@ -42,12 +42,12 @@ void runPicoMixedEvent(
 
   hfCuts->setBadRunListFileName(badRunListFileName);
   hfCuts->setCutVzMax(6.);
-  hfCuts->setCutVzVpdVzMax(3.);
+  hfCuts->setCutVzVpdVzMax(6.);
   hfCuts->addTriggerId(530003); //VPD-5
 
   hfCuts->setCutNHitsFitMin(15);
   hfCuts->setCutRequireHFT(true);
-  hfCuts->setHybridTof(false);
+  hfCuts->setHybridTof(true);
 
   // kaonPion pair cuts
   float dcaDaughtersMax = 0.2;  // maximum
@@ -65,12 +65,12 @@ void runPicoMixedEvent(
   hfCuts->setCutPtRange(0.15,50.0,StHFCuts::kKaon);
   //TPC setters
   hfCuts->setCutTPCNSigmaPion(3.0); //3
-  hfCuts->setCutTPCNSigmaKaon(2.0); //3
+  hfCuts->setCutTPCNSigmaKaon(3.0); //3
   //TOF setters, need to set pt range as well
   hfCuts->setCutTOFDeltaOneOverBeta(0.03, StHFCuts::kKaon); // v podstate 5 sigma; nastavene = f * (sigmaTOF), sigma TOF je 0.013
-  hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kKaon);
-  hfCuts->setCutTOFDeltaOneOverBeta(0.06, StHFCuts::kPion); // v podstate 6 sigma
-  hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kPion); 
+  hfCuts->setCutPtotRangeHybridTOF(0.15,50.0,StHFCuts::kKaon);
+  hfCuts->setCutTOFDeltaOneOverBeta(0.03, StHFCuts::kPion); // v podstate 6 sigma
+  hfCuts->setCutPtotRangeHybridTOF(0.15,50.0,StHFCuts::kPion);
 
   StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
   StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile, inputFile);
