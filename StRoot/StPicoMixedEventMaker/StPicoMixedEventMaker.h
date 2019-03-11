@@ -37,8 +37,7 @@ class StPicoEventMixer;
 class StPicoMixedEventMaker : public StMaker 
 {
   public:
-  StPicoMixedEventMaker(char const* name, StPicoDstMaker* picoMaker, StHFCuts* hfCuts,
-			char const* outputBaseFileName);
+  	StPicoMixedEventMaker(char const* name, StPicoDstMaker* picoMaker, StHFCuts* hfCuts, char const* outputBaseFileName);
     ~StPicoMixedEventMaker();
     Int_t Init();
     Int_t Make();
