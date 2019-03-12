@@ -40,8 +40,8 @@ void pidEffPion() {
     gSystem->Exec("rm rootFiles/mass_pipi.root");
 
 //    TString input = "ntp.picoK0sAnaMaker.root";
-    TString inputMass = "/media/lukas/376AD6A434B7392F/work/pid/ntp.picoK0sAnaMaker.2901.root";
-    TString input = "/media/lukas/376AD6A434B7392F/work/pid/ntp.picoK0sAnaMaker.2901.small.root";
+    TString input = "/media/lukas/376AD6A434B7392F/work/pid/ntp.picoK0sAnaMaker.1103.root";
+//    TString input = "/media/lukas/376AD6A434B7392F/work/pid/ntp.picoK0sAnaMaker.2901.small.root";
     TString inputCut = input+".cutted.root";
 
     Float_t ptBins[] = {0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.2, 2.5, 3, 4}; //pion
@@ -90,11 +90,12 @@ void pidEffPion() {
 
     int bbc=950;
     int nTof=0;
-    float nsigma=3;
+    float nsigma=2;
     float tofInvBeta=0.03;
     float ptTrackCut=0.5;
 
-    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<%i && nTofTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbc, nTof, nsigma, tofInvBeta, ptTrackCut);
+    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<%i && nHftTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbc, nTof, nsigma, tofInvBeta, ptTrackCut);
+//    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<%i && nTofTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbc, nTof, nsigma, tofInvBeta, ptTrackCut);
 
 
 //    cutPair = Form("pair_pt>%.3f && pair_pt<%.3f && pair_decayL<4", ptPairMin, ptPairMax);
@@ -105,9 +106,9 @@ void pidEffPion() {
 //    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<950 && nTofTracks>0 && abs(pi2_nSigma)<2 && abs(pi2_TOFinvbeta)<0.03 && pi2_pt>0.5", ptPairMin, ptPairMax);
 
 
-    TString dirName=Form("bbc%i_nTof%i_nsigma%.1f_tof%.2f_pt%.1f",bbc, nTof, nsigma, tofInvBeta, ptTrackCut);
+    TString dirName=Form("bbc%i_nHft%i_nsigma%.1f_tof%.2f_pt%.1f",bbc, nTof, nsigma, tofInvBeta, ptTrackCut);
 
-    TH1F *signal = (TH1F*) fitmass->projectSubtractBckg(inputMass, 50, massMin, massMax, ptPairMin, ptPairMax, pair, cut + cutPair, "pair_mass", "Mass_{%s} (GeV/c^{2})", true);
+    TH1F *signal = (TH1F*) fitmass->projectSubtractBckg(input, 50, massMin, massMax, ptPairMin, ptPairMax, pair, cut + cutPair, "pair_mass", "Mass_{%s} (GeV/c^{2})", true);
     fitmass->peakFit(signal, mean, sigma, massMin, massMax, pair, ptPairMin, ptPairMax, "mass", 2);
     massMean = fitmass->getMean();
     massSigma = fitmass->getSigma();

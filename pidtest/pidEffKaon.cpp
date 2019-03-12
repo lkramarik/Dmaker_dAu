@@ -31,7 +31,7 @@
 void pidEffKaon() {
 //    gSystem->Load("FitPID");
     bool tofPid = true;
-    bool plotPart2 = true;
+    bool plotPart2 = false;
     gROOT->ProcessLine(".L FitPID.c++");
     gSystem->Exec("rm rootFiles/nSigma_KK_1.root rootFiles/nSigma_KK_2.root");
     gSystem->Exec("rm rootFiles/nSigma_KK_ana_1.root rootFiles/nSigma_KK_ana_2.root");
@@ -39,7 +39,7 @@ void pidEffKaon() {
     gSystem->Exec("rm rootFiles/mass_KK.root");
 
 //    TString input = "/media/lukas/376AD6A434B7392F/work/pid/ntp.noHft.picoPhiAnaMaker.2401.root";
-    TString input = "/media/lukas/376AD6A434B7392F/work/pid/ntp.picoPhiAnaMaker.2901.root";
+    TString input = "/media/lukas/376AD6A434B7392F/work/pid/ntp.picoPhiAnaMaker.3001.root";
     TString inputCut = input+".cutted.root";
 
     Float_t ptBins[] = {0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 1.05, 1.2, 1.4, 1.7, 2.3, 3, 4}; //kaon
@@ -89,13 +89,17 @@ void pidEffKaon() {
     tpc2="abs(pi2_nSigma<2)";
 
     cut = Form("pair_mass>%.3f && pair_mass<%.3f", massMin, massMax);
-//    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && pair_cosTheta>0.85 && pi2_pt>0.15 && bbcRate<500 && nTofTracks>0 && abs(pi2_nSigma)<2 && abs(pi2_TOFinvbeta)<0.03", ptPairMin, ptPairMax);
-    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && pair_cosTheta>0.85 && pi2_pt>0.15 && bbcRate<500 && nTofTracks>0", ptPairMin, ptPairMax);
 
-//    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && pair_cosTheta>0.6 && dcaDaughters<0.3 && pair_dcaToPv<0.3", ptPairMin, ptPairMax);
-//    cutPair = Form("pair_pt>%.3f && pair_pt<%.3f && pi2_pt>1 && fabs(pi2_nSigma)<2.", ptPairMin, ptPairMax);
-//    cutPair = Form("pair_pt>%.3f && pair_pt<%.3f", ptPairMin, ptPairMax);
+    int bbc=950;
+    int nTof=0;
+    float nsigma=2;
+    float tofInvBeta=0.03;
+    float ptTrackCut=0.5;
 
+//    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<%i && nTofTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbc, nTof, nsigma, tofInvBeta, ptTrackCut);
+    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<%i && nHftTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbc, nTof, nsigma, tofInvBeta, ptTrackCut);
+    TString dirName=Form("bbc%i_nHft%i_nsigma%.1f_tof%.2f_pt%.1f",bbc, nTof, nsigma, tofInvBeta, ptTrackCut);
+//    TString dirName=Form("bbc%i_nTof%i_nsigma%.1f_tof%.2f_pt%.1f",bbc, nTof, nsigma, tofInvBeta, ptTrackCut);
 
     TH1F *signal = (TH1F*) fitmass->projectSubtractBckg(input, 50, massMin, massMax, ptPairMin, ptPairMax, pair, cut + cutPair, "pair_mass", "Mass_{%s} (GeV/c^{2})", true);
     fitmass->peakMassFit(signal, mean, sigma, massMin, massMax, pair, ptPairMin, ptPairMax, "mass");
@@ -209,6 +213,11 @@ void pidEffKaon() {
     gMean->Write("mean");
     gSigmas->Write("sigma");
     resOut->Close();
+
+    gSystem->Exec(Form("mkdir %s", dirName.Data()));
+    gSystem->Exec(Form("cp -r img %s/", dirName.Data()));
+    gSystem->Exec(Form("cp -r rootFiles %s/", dirName.Data()));
+    gSystem->Exec(Form("cp -r pidEffKaon.cpp %s/", dirName.Data()));
 
 //    gSystem->Exec("hadd -k -f rootFiles/nSigma_KK.root rootFiles/nSigma_KK_1.root rootFiles/nSigma_KK_2.root");
 //    gSystem->Exec("hadd -k -f rootFiles/nSigma_KK_ana.root rootFiles/nSigma_KK_ana_1.root rootFiles/nSigma_KK_ana_2.root");
