@@ -21,7 +21,7 @@ StPicoKFVertexTools::~StPicoKFVertexTools() {
 // _________________________________________________________
 int StPicoKFVertexTools::InitHF() {
     mOutFileBaseName = mOutFileBaseName.ReplaceAll(".root", "");
-    ntp_vertex = new TNtuple("ntp_vertex","ntp_vertex","runId:refMult:nGlobTracks:"
+    ntp_vertex = new TNtuple("ntp_vertex","ntp_vertex","runId:refMult:nGlobTracks:nHftTracks"
                                                        "picoDstVx:picoDstVy:picoDstVz:"
                                                        "picoDstVErrX:picoDstVErrY:picoDstVErrZ:"
                                                        "KFVx:KFVy:KFVz:"
@@ -65,6 +65,7 @@ int StPicoKFVertexTools::MakeHF() {
         ntVar[ii++] = mPicoEvent->runId();
         ntVar[ii++] = mPicoEvent->refMult();
         ntVar[ii++] = mPicoEvent->numberOfGlobalTracks();
+        ntVar[ii++] = nHftTracks;
 
         ntVar[ii++] = mPrimVtx.x();
         ntVar[ii++] = mPrimVtx.y();
