@@ -39,11 +39,11 @@ public:
     TString mOutputFileName;
     TH1F* hSig = new TH1F();
 
-    TH1F* projectSubtractBckg(TString, Int_t, Float_t, Float_t, Float_t, Float_t, TString, TCut, TString, TString, bool);
+    TH1F* projectSubtractBckg(TString, TString, Int_t, Float_t, Float_t, Float_t, Float_t, TString, TCut, TString, TString, bool);
     TH1F* subtractBckg(TH1F*, TH1F*, TString, TFile*, TString, bool);
-    void peakFit(TH1F*, Float_t, Float_t, Float_t, Float_t, TString, Float_t, Float_t, TString, Float_t);
+    void peakFit(TString, TH1F*, Float_t, Float_t, Float_t, Float_t, TString, Float_t, Float_t, TString, Float_t);
     TH1F* peakFitResSub(TH1F*, Float_t, Float_t, Float_t, Float_t, TString, Float_t, Float_t, TString);
-    void peakMassFit(TH1F*, Float_t, Float_t, Float_t, Float_t, TString, Float_t, Float_t, TString);
+    void peakMassFit(TString, TH1F*, Float_t, Float_t, Float_t, Float_t, TString, Float_t, Float_t, TString);
     void setOutputFileName(TString);
     float getMeanError();
     float getMean();

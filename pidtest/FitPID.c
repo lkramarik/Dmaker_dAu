@@ -38,7 +38,7 @@ FitPID::~FitPID() {
     // destructor
 
 }
-TH1F* FitPID::projectSubtractBckg(TString input, Int_t nBins, Float_t massMin, Float_t massMax, Float_t ptmin, Float_t ptmax, TString pair, TCut setCut, TString variable, TString varName, bool save){
+TH1F* FitPID::projectSubtractBckg(TString dirName, TString input, Int_t nBins, Float_t massMin, Float_t massMax, Float_t ptmin, Float_t ptmax, TString pair, TCut setCut, TString variable, TString varName, bool save){
     std::vector<TCut> mCuts;
     mCuts.push_back(setCut);
     TFile* data = new TFile(input ,"r");
@@ -81,7 +81,7 @@ TH1F* FitPID::projectSubtractBckg(TString input, Int_t nBins, Float_t massMin, F
 
     ntpS -> Project(nameSig, variable, setCuts);
     ntpB -> Project(nameBack, variable, setCuts);
-    TString imgSave = Form("./img/%s/%s_%.3f_%.3f.png", pairShort.Data(), variable.Data(), ptmin, ptmax);
+    TString imgSave = Form("./%s/img/%s/%s_%.3f_%.3f.png", dirName.Data(), pairShort.Data(), variable.Data(), ptmin, ptmax);
 
     TH1F* hSig = subtractBckg(hS,hB,nameSubtr,dataRes,imgSave,save);
 
@@ -125,7 +125,7 @@ TH1F* FitPID::subtractBckg(TH1F* hS, TH1F* hB, TString nameSubtr, TFile* outputF
     return hSig;
 }
 
-void FitPID::peakFit(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin, Float_t massMax, TString pair, Float_t ptmin, Float_t ptmax, TString varName, Float_t nSigmaLine){
+void FitPID::peakFit(TString dirName, TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin, Float_t massMax, TString pair, Float_t ptmin, Float_t ptmax, TString varName, Float_t nSigmaLine){
     TF1 *funLS = new TF1("funLS","pol1(0)+gaus(2)", massMin, massMax);
     funLS->SetParameters(1.,1.,mHeight,mean,sigma);
     funLS->SetLineColor(2);
@@ -169,7 +169,7 @@ void FitPID::peakFit(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin,
     mMean = funLS->GetParameter(3);
     mMeanE = funLS->GetParError(3);
     pair.ReplaceAll("#","");
-    c->SaveAs(Form("./img/%s/fit/%s_%.3f_%.3f.png", pair.Data(), varName.Data(), ptmin, ptmax));
+    c->SaveAs(Form("./%s/img/%s/fit/%s_%.3f_%.3f.png", dirName.Data(), pair.Data(), varName.Data(), ptmin, ptmax));
     c->Close();
 }
 
@@ -223,7 +223,7 @@ TH1F* FitPID::peakFitResSub(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t m
 
 
 
-void FitPID::peakMassFit(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin, Float_t massMax, TString pair, Float_t ptmin, Float_t ptmax, TString varName){
+void FitPID::peakMassFit(TString dirName, TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin, Float_t massMax, TString pair, Float_t ptmin, Float_t ptmax, TString varName){
     TF1 *funLS = new TF1("funLS","pol1(0)+gaus(2)", massMin, massMax);
     funLS->SetParameters(1.,1.,mHeight,mean,sigma);
     funLS->SetLineColor(2);
@@ -266,7 +266,7 @@ void FitPID::peakMassFit(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t mass
     mMean = funLS->GetParameter(3);
     mMeanE = funLS->GetParError(3);
     pair.ReplaceAll("#","");
-    c->SaveAs(Form("./img/%s/fit/%s_%.3f_%.3f.png", pair.Data(), varName.Data(), ptmin, ptmax));
+    c->SaveAs(Form("./%s/img/%s/fit/%s_%.3f_%.3f.png", dirName.Data(), pair.Data(), varName.Data(), ptmin, ptmax));
     c->Close();
 }
 
