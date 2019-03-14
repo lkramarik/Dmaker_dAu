@@ -5,6 +5,7 @@
 #include "StPicoHFMaker/StHFCuts.h"
 #include "phys_constants.h"
 #include "StPicoKFVertexTools.h"
+#include "StiMaker/StKFVerticesCollection.h"
 #include "StPicoKFVertexFitter.h"
 ClassImp(StPicoKFVertexTools)
 
