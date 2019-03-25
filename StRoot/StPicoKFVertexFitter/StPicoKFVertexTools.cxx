@@ -54,6 +54,7 @@ int StPicoKFVertexTools::MakeHF() {
     int nD0=0;
 
     // k and pi arrays:
+    UInt_t nTracks = mPicoDst->numberOfTracks();
     for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
         StPicoTrack* trk = mPicoDst->track(iTrack);
         if (trk->isHFTTrack()) nHftTracks++;
