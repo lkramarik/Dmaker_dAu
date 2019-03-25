@@ -47,6 +47,9 @@ int StPicoKFVertexTools::FinishHF() {
 int StPicoKFVertexTools::MakeHF() {
     TH1F *hMassUS = static_cast<TH1F*>(mOutList->FindObject("hMassUS"));
 
+    std::vector<unsigned short> mIdxPicoPions;
+    std::vector<unsigned short> mIdxPicoKaons;
+
     int nHftTracks=0;
     int nD0=0;
 
@@ -59,7 +62,7 @@ int StPicoKFVertexTools::MakeHF() {
         if (mHFCuts->isGoodKaon(trk)) mIdxPicoKaons.push_back(iTrack);
     }
 
-    std::vector<int>& tracksToRemove;
+    std::vector<int> tracksToRemove;
 
     //pair reconstruction
     for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
