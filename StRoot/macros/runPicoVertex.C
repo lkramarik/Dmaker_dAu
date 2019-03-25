@@ -44,6 +44,25 @@ void runPicoVertex(
     hfCuts->setCutVzMax(6);
     hfCuts->setCutVzVpdVzMax(6.);
 
+    hfCuts->setCutPrimaryDCAtoVtxMax(10);
+    hfCuts->setCutNHitsFitMin(15);
+    hfCuts->setCutRequireHFT(true);
+    hfCuts->setHybridTof(true);
+
+    hfCuts->setCutTPCNSigmaPion(3.0);
+    hfCuts->setCutTPCNSigmaKaon(2.0);
+    hfCuts->setCutTOFDeltaOneOverBetaKaon(0.03);
+    hfCuts->setCutTOFDeltaOneOverBetaPion(0.03);
+    hfCuts->setCutPtMin(0.15);
+
+    hfCuts->setCutDcaMin(0.001,StHFCuts::kPion);
+    hfCuts->setCutDcaMin(0.001,StHFCuts::kKaon);
+
+//   setCutSecondaryPairPtBin(      ptmin,  ptmax,  dcaDaughtersMax,  decayLengthMin,  cosThetaMin,  pairDcaMax, pionDca, kaonDca);
+    hfCuts->setCutSecondaryPairPtBin(1,      2,              0.016,          0.012,         0.5,      0.005,    0.009, 0.007);
+    hfCuts->setCutSecondaryPairPtBin(2,      3,              0.016,          0.003,         0.5,      0.0065,   0.009, 0.01);
+    hfCuts->setCutSecondaryPairPtBin(3,      5,              0.018,          0.009,         0.5,      0.0064,   0.0064, 0.0076);
+
     StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
     StPicoKFVertexTools* PicoVertex = new StPicoKFVertexTools("PicoVertex", picoDstMaker, outputFile);
     PicoVertex->setHFBaseCuts(hfCuts);

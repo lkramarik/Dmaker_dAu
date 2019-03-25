@@ -22,7 +22,10 @@ StPicoKFVertexTools::~StPicoKFVertexTools() {
 // _________________________________________________________
 int StPicoKFVertexTools::InitHF() {
     mOutFileBaseName = mOutFileBaseName.ReplaceAll(".root", "");
-    ntp_vertex = new TNtuple("ntp_vertex","ntp_vertex","runId:refMult:nGlobTracks:nHftTracks:StAnnelingChi2Cut:"
+
+    mOutList->Add(new TH2F("hMassUS","hMassUS", 2000, 0.7, 2.7));
+
+    ntp_vertex = new TNtuple("ntp_vertex","ntp_vertex","runId:refMult:nGlobTracks:nHftTracks:nD0:StAnnelingChi2Cut:"
                                                        "picoDstVx:picoDstVy:picoDstVz:"
                                                        "picoDstVErrX:picoDstVErrY:picoDstVErrZ:"
                                                        "KFVx:KFVy:KFVz:"
@@ -44,20 +47,53 @@ int StPicoKFVertexTools::FinishHF() {
 int StPicoKFVertexTools::MakeHF() {
 
     int nHftTracks=0;
-    for (unsigned int iTrk = 0; iTrk < mPicoDst->numberOfTracks(); ++iTrk) {
-        StPicoTrack* gTrack = (StPicoTrack*)mPicoDst->track(iTrk);
-        if (!gTrack) continue;
-        if (gTrack->isHFTTrack()) nHftTracks++;
+    int nD0=0;
+
+    // k and pi arrays:
+    for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
+        StPicoTrack* trk = mPicoDst->track(iTrack);
+        if (trk->isHFTTrack()) nHftTracks++;
+        if (abs(trk->gMom().PseudoRapidity())>1) continue;
+        if (mHFCuts->isGoodPion(trk)) mIdxPicoPions.push_back(iTrack);
+        if (mHFCuts->isGoodKaon(trk)) mIdxPicoKaons.push_back(iTrack);
     }
 
-    bool goodEvent=true;
-    if (!(nHftTracks>1)) goodEvent=false;
-    if (!(mPicoEvent->numberOfPxlInnerHits()>0 && mPicoEvent->numberOfPxlOuterHits()>0)) goodEvent=false;
-    if (!(mPicoEvent->BBCx()<950000)) goodEvent=false;
+    std::vector<int>& tracksToRemove;
 
-    if (goodEvent) {
+    //pair reconstruction
+    for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
+        StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
+
+        for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
+            StPicoTrack const *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
+
+            if((kaon->charge() + pion1->charge() != 0) ) continue;
+
+            StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion), mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1], mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
+
+            if ((pair->m()<1.7) || (pair->m()>2)) continue;
+
+            if (mHFCuts->isGoodSecondaryVertexPairPtBin(pair)) {
+                nD0+=1;
+                tracksToRemove.push_back(mIdxPicoPions[idxPion1]);
+                tracksToRemove.push_back(mIdxPicoKaons[idxKaon]);
+                hMass->Fill(pair->m());
+            }
+        }
+    }
+
+
+
+    bool goodEvent=true;
+
+//    if (!(nHftTracks>1)) goodEvent=false;
+//    if (!(mPicoEvent->numberOfPxlInnerHits()>0 && mPicoEvent->numberOfPxlOuterHits()>0)) goodEvent=false;
+//    if (!(mPicoEvent->BBCx()<950000)) goodEvent=false;
+
+    if (nD0>0) {
         StPicoKFVertexFitter kfVertexFitter;
-        KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
+        KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst, tracksToRemove);
+//        KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
 
         const int nNtVars = ntp_vertex->GetNvar();
         Float_t ntVar[nNtVars];
@@ -67,6 +103,7 @@ int StPicoKFVertexTools::MakeHF() {
         ntVar[ii++] = mPicoEvent->refMult();
         ntVar[ii++] = mPicoEvent->numberOfGlobalTracks();
         ntVar[ii++] = nHftTracks;
+        ntVar[ii++] = nD0;
         ntVar[ii++] = StAnneling::Chi2Cut();
 
         ntVar[ii++] = mPrimVtx.x();
@@ -87,6 +124,11 @@ int StPicoKFVertexTools::MakeHF() {
 
         ntp_vertex->Fill(ntVar);
     }
+
+    mIdxPicoPions.clear();
+    mIdxPicoKaons.clear();
+    tracksToRemove.clear();
+
     return kStOK;
 }
 
