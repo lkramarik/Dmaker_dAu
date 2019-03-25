@@ -23,7 +23,7 @@ StPicoKFVertexTools::~StPicoKFVertexTools() {
 int StPicoKFVertexTools::InitHF() {
     mOutFileBaseName = mOutFileBaseName.ReplaceAll(".root", "");
 
-    mOutList->Add(new TH2F("hMassUS","hMassUS", 2000, 0.7, 2.7));
+    mOutList->Add(new TH1F("hMassUS","hMassUS", 500, 1.6, 2.1));
 
     ntp_vertex = new TNtuple("ntp_vertex","ntp_vertex","runId:refMult:nGlobTracks:nHftTracks:nD0:StAnnelingChi2Cut:"
                                                        "picoDstVx:picoDstVy:picoDstVz:"
@@ -45,6 +45,7 @@ int StPicoKFVertexTools::FinishHF() {
 }
 // _________________________________________________________
 int StPicoKFVertexTools::MakeHF() {
+    TH1F *hMassUS = static_cast<TH1F*>(mOutList->FindObject("hMassUS"));
 
     int nHftTracks=0;
     int nD0=0;
@@ -77,7 +78,7 @@ int StPicoKFVertexTools::MakeHF() {
                 nD0+=1;
                 tracksToRemove.push_back(mIdxPicoPions[idxPion1]);
                 tracksToRemove.push_back(mIdxPicoKaons[idxKaon]);
-                hMass->Fill(pair->m());
+                hMassUS->Fill(pair->m());
             }
         }
     }
