@@ -34,7 +34,6 @@ void runPicoVertexLocal(
   Int_t nEvents = 1000000;
 
   StChain *chain = new StChain();
-
   TString sInputFile(inputFile);
 
   if (!sInputFile.Contains(".list") && !sInputFile.Contains("picoDst.root")) {
@@ -93,4 +92,3 @@ void runPicoVertexLocal(
   cout << "Time needed " << duration << " s" << endl;
   delete chain;
 }
-
