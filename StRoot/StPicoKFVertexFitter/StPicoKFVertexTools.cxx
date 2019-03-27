@@ -24,6 +24,7 @@ int StPicoKFVertexTools::InitHF() {
     mOutFileBaseName = mOutFileBaseName.ReplaceAll(".root", "");
 
     mOutList->Add(new TH1F("hMassUS","hMassUS", 500, 1.6, 2.1));
+    mOutList->Add(new TH1F("hMassUSRefit","hMassUSRefit", 500, 1.6, 2.1));
 
     ntp_vertex = new TNtuple("ntp_vertex","ntp_vertex","runId:refMult:nGlobTracks:nHftTracks:nD0:StAnnelingChi2Cut:"
                                                        "picoDstVx:picoDstVy:picoDstVz:"
@@ -46,6 +47,7 @@ int StPicoKFVertexTools::FinishHF() {
 // _________________________________________________________
 int StPicoKFVertexTools::MakeHF() {
     TH1F *hMassUS = static_cast<TH1F*>(mOutList->FindObject("hMassUS"));
+    TH1F *hMassUSRefit = static_cast<TH1F*>(mOutList->FindObject("hMassUSRefit"));
 
     std::vector<unsigned short> mIdxPicoPions;
     std::vector<unsigned short> mIdxPicoKaons;
@@ -128,8 +130,34 @@ int StPicoKFVertexTools::MakeHF() {
         ntVar[ii++] = kfVertex.GetErrZ();
 
         ntp_vertex->Fill(ntVar);
-    }
 
+
+        TVector3 newKFVertex(-999., -999., -999.);
+
+        if (kfVertex.GetX()) {
+            newKFVertex.SetXYZ(kfVertex.GetX(), kfVertex.GetY(), kfVertex.GetZ());
+        }
+
+
+
+        //pair reconstruction with new KF vertex
+        for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
+            StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
+
+            for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
+                StPicoTrack const *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
+                if ((kaon->charge() + pion1->charge() != 0)) continue;
+
+                StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion), mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1], mIdxPicoKaons[idxKaon], newKFVertex, mBField, kTRUE);
+                if ((pair->m() < 1.7) || (pair->m() > 2)) continue;
+                if (mHFCuts->isGoodSecondaryVertexPairPtBin(pair)) {
+                    hMassUSRefit->Fill(pair->m());
+                }
+            }
+        }
+
+
+    }
     mIdxPicoPions.clear();
     mIdxPicoKaons.clear();
     tracksToRemove.clear();
