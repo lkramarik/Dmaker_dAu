@@ -107,11 +107,11 @@ int StPicoKFVertexTools::MakeHF() {
     if (!(mPrimVtx.y()<1.5)) goodEvent=false;
     if (!(mPrimVtx.Mag()<2)) goodEvent=false;
 
-//    if (goodEvent) {
-    if (nD0>-1) {
+    if (goodEvent) {
+//    if (nD0>-1) {
         StPicoKFVertexFitter kfVertexFitter;
-        KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst, tracksToRemove);
-//        KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
+//        KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst, tracksToRemove);
+        KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
 
         const int nNtVars = ntp_vertex->GetNvar();
         Float_t ntVar[nNtVars];
@@ -207,7 +207,6 @@ void makeKFReso(std::vector<int>&  primaryTracks) {
                 testDca[l] += test->gDCAz(mPrimVtx.z());
             }
             testDca[l] = testDca[l] / (3*setOfTracks[l].size());
-            cout << testDca[l] << endl;
         }
     } while (abs(testDca[0]-testDca[1]) > 0.025 || testNumber < 150);
 
