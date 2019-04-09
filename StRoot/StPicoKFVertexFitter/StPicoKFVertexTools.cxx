@@ -190,7 +190,9 @@ int StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks) {
     do {
         testNumber++;
         std::random_shuffle(std::begin(primaryTracks), std::end(primaryTracks));
-
+        for (int k = 0; k < nTestedRefits; ++k) {
+            setOfTracks[k].clear();
+        }
         for (unsigned int i = 0; i < primaryTracks.size() / 2; ++i) {
             setOfTracks[0].push_back(primaryTracks[i]);
         }
@@ -199,7 +201,7 @@ int StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks) {
             setOfTracks[1].push_back(primaryTracks[j]);
         }
 
-        if (abs(setOfTracks[0].size()-setOfTracks[1].size())>2) cout<<"Fuck."<<endl;
+        if (abs(setOfTracks[0].size()-setOfTracks[1].size())>1) cout<<"Fuck."<<endl;
 
         for (int l = 0; l < nTestedRefits; ++l) {
             for (unsigned int i = 0; i < setOfTracks[l].size(); ++i) {
@@ -210,6 +212,7 @@ int StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks) {
             }
             testDca[l] = testDca[l] / (3*setOfTracks[l].size());
         }
+
     } while (abs(testDca[0]-testDca[1]) > 0.025 || testNumber < 150);
 
     StPicoKFVertexFitter kfVertexFitterSet[nTestedRefits];
