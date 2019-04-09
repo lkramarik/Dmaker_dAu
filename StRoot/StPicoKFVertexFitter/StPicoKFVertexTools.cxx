@@ -51,6 +51,7 @@ int StPicoKFVertexTools::MakeHF() {
 
     std::vector<unsigned short> mIdxPicoPions;
     std::vector<unsigned short> mIdxPicoKaons;
+    std::vector<unsigned short> primaryTracks;
 
     int nHftTracks=0;
     int nD0=0;
@@ -59,6 +60,7 @@ int StPicoKFVertexTools::MakeHF() {
     UInt_t nTracks = mPicoDst->numberOfTracks();
     for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
         StPicoTrack* trk = mPicoDst->track(iTrack);
+        if (trk->isPrimary()) primaryTracks.push_back(iTrk);
         if (trk->isHFTTrack()) nHftTracks++;
         if (abs(trk->gMom().PseudoRapidity())>1) continue;
         if (mHFCuts->isGoodPion(trk)) mIdxPicoPions.push_back(iTrack);
@@ -97,7 +99,7 @@ int StPicoKFVertexTools::MakeHF() {
 //    if (!(mPicoEvent->numberOfPxlInnerHits()>0 && mPicoEvent->numberOfPxlOuterHits()>0)) goodEvent=false;
 //    if (!(mPicoEvent->BBCx()<950000)) goodEvent=false;
 
-    if (nD0>0) {
+    if (nD0>-1) {
         StPicoKFVertexFitter kfVertexFitter;
         KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst, tracksToRemove);
 //        KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
@@ -132,13 +134,50 @@ int StPicoKFVertexTools::MakeHF() {
         ntp_vertex->Fill(ntVar);
 
 
+
+
+
+        //making 2 vertices and comparing:
+
+        const int nTestedRefits = 2;
+        std::vector<int> setOfTracks[nTestedRefits];
+        Float_t testDca[nTestedRefits] = {0, 0};
+
+        do {
+            std::random_shuffle(std::begin(primaryTracks), std::end(primaryTracks));
+
+            for (int i = 0; i < primaryTracks.size() / (int) 2; ++i) {
+                setOfTracks[0].push_back(goodTracks[i]);
+            }
+
+            for (int j = primaryTracks.size() / (int) 2; j < primaryTracks.size(); ++j) {
+                setOfTracks[1].push_back(goodTracks[j]);
+            }
+
+            for (int l = 0; l < nTestedRefits; ++l) {
+                for (int i = 0; i < setOfTracks[l].size(); ++i) {
+                    StPicoTrack const *test = mPicoDst->track(setOfTracks[l][i]);
+                    testDca[l] += test->gDCA(mPrimVtx);
+                }
+                testDca[l] = testDca[l] / setOfTracks[l].size();
+                cout << testDca[l] << endl;
+            }
+        } while (testDca[0]>0.1 && testDca[1]>0.1);
+
+
+        StPicoKFVertexFitter kfVertexFitterSet[nTestedRefits];
+        KFVertex kfVertexSet[nTestedRefits];
+
+        for (int k = 0; k < nTestedRefits; ++k) {
+            kfVertexSet[k] = kfVertexFitterSet[k].primaryVertexRefitUsingTracks(mPicoDst, setOfTracks[k]);
+        }
+
+        //////////////////////////////////////////////////////////
         TVector3 newKFVertex(-999., -999., -999.);
 
         if (kfVertex.GetX()) {
             newKFVertex.SetXYZ(kfVertex.GetX(), kfVertex.GetY(), kfVertex.GetZ());
         }
-
-
 
         //pair reconstruction with new KF vertex
         for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
@@ -155,9 +194,11 @@ int StPicoKFVertexTools::MakeHF() {
                 }
             }
         }
-
+        ///////////////////////////////////////////////////////////////
 
     }
+
+
     mIdxPicoPions.clear();
     mIdxPicoKaons.clear();
     tracksToRemove.clear();

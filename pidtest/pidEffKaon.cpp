@@ -30,7 +30,7 @@
 
 void pidEffKaon() {
 //    gSystem->Load("FitPID");
-    bool tofPid = false;
+    bool tofPid = true;
     bool plotPart2 = false;
     gROOT->ProcessLine(".L FitPID.c++");
     gSystem->Exec("rm rootFiles/nSigma_KK_1.root rootFiles/nSigma_KK_2.root");
@@ -71,7 +71,7 @@ void pidEffKaon() {
     TH1F *hSigmaSignalAna1 = new TH1F();
     TH1F *hSigmaSignalAna2 = new TH1F();
 
-    bool hybridTof=true;
+    bool hybridTof=false;
 
     if (hybridTof) {
         tof1="pi1_TOFinvbeta<0.03 || pi1_TOFinvbeta>93";
@@ -87,15 +87,16 @@ void pidEffKaon() {
 
     cut = Form("pair_mass>%.3f && pair_mass<%.3f", massMin, massMax);
 
-    int bbc=950;
+    int bbc=800;
     int nTof=0;
     float nsigma=3;
     float tofInvBeta=0.03;
     float ptTrackCut=0.5;
 
-//    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<%i && nTofTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbc, nTof, nsigma, tofInvBeta, ptTrackCut);
-    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<%i && nHftTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbc, nTof, nsigma, tofInvBeta, ptTrackCut);
-    TString dirName=Form("tpc_bbc%i_nHft%i_nsigma%.1f_tof%.2f_pt%.1f",bbc, nTof, nsigma, tofInvBeta, ptTrackCut);
+    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<%i && nTofTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbc, nTof, nsigma, tofInvBeta, ptTrackCut);
+//    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<%i && nHftTracks>%i && abs(pi2_nSigma)<%.1f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbc, nTof, nsigma, ptTrackCut);
+//    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<%i && nHftTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbc, nTof, nsigma, tofInvBeta, ptTrackCut);
+    TString dirName=Form("bbc%i_nHft%i_nsigma%.1f_tof%.2f_pt%.1f",bbc, nTof, nsigma, tofInvBeta, ptTrackCut);
 
 //no cut on the second particle
 //    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<%i && nHftTracks>%i", ptPairMin, ptPairMax, bbc, nTof);
