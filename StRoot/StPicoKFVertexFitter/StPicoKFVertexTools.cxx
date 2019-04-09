@@ -242,8 +242,8 @@ int StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks) {
 
     ntp_KFReso->Fill(ntVarKF);
 
-    setOfTracks[0].clear;
-    setOfTracks[1].clear;
+    setOfTracks[0].clear();
+    setOfTracks[1].clear();
 
     return 0;
 }
