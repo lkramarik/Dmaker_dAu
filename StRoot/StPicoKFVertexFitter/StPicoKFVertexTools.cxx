@@ -163,7 +163,7 @@ int StPicoKFVertexTools::MakeHF() {
                     testDca[l] = testDca[l] / setOfTracks[l].size();
                     cout << testDca[l] << endl;
                 }
-            } while (testDca[0] > 0.1 && testDca[1] > 0.1);
+            } while (testDca[0] > 0.6 && testDca[1] > 0.6);
 
 
             StPicoKFVertexFitter kfVertexFitterSet[nTestedRefits];
