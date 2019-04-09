@@ -50,7 +50,7 @@ private:
     TNtuple *ntp_KFReso;
     TString mOutFileBaseName;
     TFile* mOutFile;
-    void makeKFReso(std::vector<int>&);
+    int makeKFReso(std::vector<int>&);
 
     ClassDef(StPicoKFVertexTools, 1) //set to 1
 
