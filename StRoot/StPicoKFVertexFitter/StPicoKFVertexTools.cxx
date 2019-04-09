@@ -199,6 +199,8 @@ int StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks) {
             setOfTracks[1].push_back(primaryTracks[j]);
         }
 
+        if (abs(setOfTracks[0].size()-setOfTracks[1].size())>1) cout<<"Fuck."<<endl;
+
         for (int l = 0; l < nTestedRefits; ++l) {
             for (unsigned int i = 0; i < setOfTracks[l].size(); ++i) {
                 StPicoTrack const *test = mPicoDst->track(setOfTracks[l][i]);
