@@ -138,62 +138,64 @@ int StPicoKFVertexTools::MakeHF() {
 
 
         //making 2 vertices and comparing:
+        if (primaryTracks.size()>10) {
 
-        const int nTestedRefits = 2;
-        std::vector<int> setOfTracks[nTestedRefits];
-        Float_t testDca[nTestedRefits] = {0, 0};
+            const int nTestedRefits = 2;
+            std::vector<int> setOfTracks[nTestedRefits];
+            Float_t testDca[nTestedRefits] = {0, 0};
 
-        do {
-            std::random_shuffle(std::begin(primaryTracks), std::end(primaryTracks));
+            do {
+                std::random_shuffle(std::begin(primaryTracks), std::end(primaryTracks));
 
-            for (unsigned int i = 0; i < primaryTracks.size() /2; ++i) {
-                setOfTracks[0].push_back(primaryTracks[i]);
-            }
-
-            for (unsigned int j = primaryTracks.size() /2; j < primaryTracks.size(); ++j) {
-                setOfTracks[1].push_back(primaryTracks[j]);
-            }
-
-            for (int l = 0; l < nTestedRefits; ++l) {
-                for (unsigned int i = 0; i < setOfTracks[l].size(); ++i) {
-                    StPicoTrack const *test = mPicoDst->track(setOfTracks[l][i]);
-                    testDca[l] += test->gDCA(mPrimVtx.x(), mPrimVtx.y(), mPrimVtx.z());
+                for (unsigned int i = 0; i < primaryTracks.size() / 2; ++i) {
+                    setOfTracks[0].push_back(primaryTracks[i]);
                 }
-                testDca[l] = testDca[l] / setOfTracks[l].size();
-                cout << testDca[l] << endl;
+
+                for (unsigned int j = primaryTracks.size() / 2; j < primaryTracks.size(); ++j) {
+                    setOfTracks[1].push_back(primaryTracks[j]);
+                }
+
+                for (int l = 0; l < nTestedRefits; ++l) {
+                    for (unsigned int i = 0; i < setOfTracks[l].size(); ++i) {
+                        StPicoTrack const *test = mPicoDst->track(setOfTracks[l][i]);
+                        testDca[l] += test->gDCA(mPrimVtx.x(), mPrimVtx.y(), mPrimVtx.z());
+                    }
+                    testDca[l] = testDca[l] / setOfTracks[l].size();
+                    cout << testDca[l] << endl;
+                }
+            } while (testDca[0] > 0.1 && testDca[1] > 0.1);
+
+
+            StPicoKFVertexFitter kfVertexFitterSet[nTestedRefits];
+            KFVertex kfVertexSet[nTestedRefits];
+
+            for (int k = 0; k < nTestedRefits; ++k) {
+                kfVertexSet[k] = kfVertexFitterSet[k].primaryVertexRefitUsingTracks(mPicoDst, setOfTracks[k]);
             }
-        } while (testDca[0]>0.1 && testDca[1]>0.1);
-
-
-        StPicoKFVertexFitter kfVertexFitterSet[nTestedRefits];
-        KFVertex kfVertexSet[nTestedRefits];
-
-        for (int k = 0; k < nTestedRefits; ++k) {
-            kfVertexSet[k] = kfVertexFitterSet[k].primaryVertexRefitUsingTracks(mPicoDst, setOfTracks[k]);
         }
 
         //////////////////////////////////////////////////////////
-        TVector3 newKFVertex(-999., -999., -999.);
-
-        if (kfVertex.GetX()) {
-            newKFVertex.SetXYZ(kfVertex.GetX(), kfVertex.GetY(), kfVertex.GetZ());
-        }
-
-        //pair reconstruction with new KF vertex
-        for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
-            StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
-
-            for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
-                StPicoTrack const *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
-                if ((kaon->charge() + pion1->charge() != 0)) continue;
-
-                StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion), mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1], mIdxPicoKaons[idxKaon], newKFVertex, mBField, kTRUE);
-                if ((pair->m() < 1.7) || (pair->m() > 2)) continue;
-                if (mHFCuts->isGoodSecondaryVertexPairPtBin(pair)) {
-                    hMassUSRefit->Fill(pair->m());
-                }
-            }
-        }
+//        TVector3 newKFVertex(-999., -999., -999.);
+//
+//        if (kfVertex.GetX()) {
+//            newKFVertex.SetXYZ(kfVertex.GetX(), kfVertex.GetY(), kfVertex.GetZ());
+//        }
+//
+//        //pair reconstruction with new KF vertex
+//        for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
+//            StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
+//
+//            for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
+//                StPicoTrack const *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
+//                if ((kaon->charge() + pion1->charge() != 0)) continue;
+//
+//                StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion), mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1], mIdxPicoKaons[idxKaon], newKFVertex, mBField, kTRUE);
+//                if ((pair->m() < 1.7) || (pair->m() > 2)) continue;
+//                if (mHFCuts->isGoodSecondaryVertexPairPtBin(pair)) {
+//                    hMassUSRefit->Fill(pair->m());
+//                }
+//            }
+//        }
         ///////////////////////////////////////////////////////////////
 
     }
