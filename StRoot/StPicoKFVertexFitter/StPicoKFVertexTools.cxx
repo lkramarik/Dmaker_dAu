@@ -182,7 +182,7 @@ int StPicoKFVertexTools::MakeHF() {
     return kStOK;
 }
 // _____________________________________________________________________________
-int makeKFReso(std::vector<int>&  primaryTracks) {
+int StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks) {
     const int nTestedRefits = 2;
     std::vector<int> setOfTracks[nTestedRefits];
     Float_t testDca[nTestedRefits] = {0, 0};
@@ -245,5 +245,5 @@ int makeKFReso(std::vector<int>&  primaryTracks) {
     setOfTracks[0].clear;
     setOfTracks[1].clear;
 
-    return 0;   
+    return 0;
 }
