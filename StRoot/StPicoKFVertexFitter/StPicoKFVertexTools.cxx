@@ -60,7 +60,7 @@ int StPicoKFVertexTools::MakeHF() {
     UInt_t nTracks = mPicoDst->numberOfTracks();
     for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
         StPicoTrack* trk = mPicoDst->track(iTrack);
-        if (trk->isPrimary()) primaryTracks.push_back(iTrk);
+        if (trk->isPrimary()) primaryTracks.push_back(iTrack);
         if (trk->isHFTTrack()) nHftTracks++;
         if (abs(trk->gMom().PseudoRapidity())>1) continue;
         if (mHFCuts->isGoodPion(trk)) mIdxPicoPions.push_back(iTrack);
@@ -146,18 +146,18 @@ int StPicoKFVertexTools::MakeHF() {
         do {
             std::random_shuffle(std::begin(primaryTracks), std::end(primaryTracks));
 
-            for (int i = 0; i < primaryTracks.size() / (int) 2; ++i) {
-                setOfTracks[0].push_back(goodTracks[i]);
+            for (unsigned int i = 0; i < primaryTracks.size() /2; ++i) {
+                setOfTracks[0].push_back(primaryTracks[i]);
             }
 
-            for (int j = primaryTracks.size() / (int) 2; j < primaryTracks.size(); ++j) {
-                setOfTracks[1].push_back(goodTracks[j]);
+            for (unsigned int j = primaryTracks.size() /2; j < primaryTracks.size(); ++j) {
+                setOfTracks[1].push_back(primaryTracks[j]);
             }
 
             for (int l = 0; l < nTestedRefits; ++l) {
-                for (int i = 0; i < setOfTracks[l].size(); ++i) {
+                for (unsigned int i = 0; i < setOfTracks[l].size(); ++i) {
                     StPicoTrack const *test = mPicoDst->track(setOfTracks[l][i]);
-                    testDca[l] += test->gDCA(mPrimVtx);
+                    testDca[l] += test->gDCA(mPrimVtx.x(), mPrimVtx.y(), mPrimVtx.z());
                 }
                 testDca[l] = testDca[l] / setOfTracks[l].size();
                 cout << testDca[l] << endl;
