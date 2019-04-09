@@ -42,11 +42,13 @@ public:
     virtual Int_t MakeHF();
     virtual void  ClearHF(Option_t *opt);
     virtual Int_t FinishHF();
+    virtual void makeKFReso(std::vector<int>&);
 
 protected:
 
 private:
     TNtuple *ntp_vertex;
+    TNtuple *ntp_KFReso;
     TString mOutFileBaseName;
     TFile* mOutFile;
     ClassDef(StPicoKFVertexTools, 1) //set to 1

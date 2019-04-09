@@ -31,6 +31,11 @@ int StPicoKFVertexTools::InitHF() {
                                                        "picoDstVErrX:picoDstVErrY:picoDstVErrZ:"
                                                        "KFVx:KFVy:KFVz:"
                                                        "KFVErrX:KFVErrY:KFVErrZ");
+
+    ntp_KFReso = new TNtuple("ntp_KFReso","ntp_KFReso","KF1x:KF1y:KF1z:"
+                                                       "KF2x:KF2y:KF2z:"
+                                                       "KFdiffx:KFdiffy:KFdiffz:"
+                                                       "KFdiff:nPrimTracks");
     return kStOK;
 }
 
@@ -42,6 +47,7 @@ void StPicoKFVertexTools::ClearHF(Option_t *opt="") {
 // _________________________________________________________
 int StPicoKFVertexTools::FinishHF() {
     ntp_vertex -> Write(ntp_vertex->GetName(), TObject::kOverwrite);
+    ntp_KFReso -> Write(ntp_KFReso->GetName(), TObject::kOverwrite);
     return kStOK;
 }
 // _________________________________________________________
@@ -67,38 +73,41 @@ int StPicoKFVertexTools::MakeHF() {
         if (mHFCuts->isGoodKaon(trk)) mIdxPicoKaons.push_back(iTrack);
     }
 
-    std::vector<int> tracksToRemove;
-
-    //pair reconstruction
-    for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
-        StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
-
-        for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
-            StPicoTrack const *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
-
-            if((kaon->charge() + pion1->charge() != 0) ) continue;
-
-            StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion), mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1], mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
-
-            if ((pair->m()<1.7) || (pair->m()>2)) continue;
-
-            if (mHFCuts->isGoodSecondaryVertexPairPtBin(pair)) {
-                nD0+=1;
-                tracksToRemove.push_back(mIdxPicoPions[idxPion1]);
-                tracksToRemove.push_back(mIdxPicoKaons[idxKaon]);
-                hMassUS->Fill(pair->m());
-            }
-        }
-    }
+//    std::vector<int> tracksToRemove;
+//
+//    //pair reconstruction
+//    for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
+//        StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
+//
+//        for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
+//            StPicoTrack const *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
+//
+//            if((kaon->charge() + pion1->charge() != 0) ) continue;
+//
+//            StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion), mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1], mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
+//
+//            if ((pair->m()<1.7) || (pair->m()>2)) continue;
+//
+//            if (mHFCuts->isGoodSecondaryVertexPairPtBin(pair)) {
+//                nD0+=1;
+//                tracksToRemove.push_back(mIdxPicoPions[idxPion1]);
+//                tracksToRemove.push_back(mIdxPicoKaons[idxKaon]);
+//                hMassUS->Fill(pair->m());
+//            }
+//        }
+//    }
 
 
 
     bool goodEvent=true;
 
-//    if (!(nHftTracks>1)) goodEvent=false;
-//    if (!(mPicoEvent->numberOfPxlInnerHits()>0 && mPicoEvent->numberOfPxlOuterHits()>0)) goodEvent=false;
-//    if (!(mPicoEvent->BBCx()<950000)) goodEvent=false;
+    if (!(nHftTracks>1)) goodEvent=false;
+    if (!(mPicoEvent->BBCx()<950000)) goodEvent=false;
+    if (!(mPrimVtx.x()<1.5)) goodEvent=false;
+    if (!(mPrimVtx.y()<1.5)) goodEvent=false;
+    if (!(mPrimVtx.Mag()<2)) goodEvent=false;
 
+//    if (goodEvent) {
     if (nD0>-1) {
         StPicoKFVertexFitter kfVertexFitter;
         KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst, tracksToRemove);
@@ -133,47 +142,9 @@ int StPicoKFVertexTools::MakeHF() {
 
         ntp_vertex->Fill(ntVar);
 
-
-
-
-
         //making 2 vertices and comparing:
         if (primaryTracks.size()>10) {
-
-            const int nTestedRefits = 2;
-            std::vector<int> setOfTracks[nTestedRefits];
-            Float_t testDca[nTestedRefits] = {0, 0};
-
-            do {
-                std::random_shuffle(std::begin(primaryTracks), std::end(primaryTracks));
-
-                for (unsigned int i = 0; i < primaryTracks.size() / 2; ++i) {
-                    setOfTracks[0].push_back(primaryTracks[i]);
-                }
-
-                for (unsigned int j = primaryTracks.size() / 2; j < primaryTracks.size(); ++j) {
-                    setOfTracks[1].push_back(primaryTracks[j]);
-                }
-
-                for (int l = 0; l < nTestedRefits; ++l) {
-                    for (unsigned int i = 0; i < setOfTracks[l].size(); ++i) {
-                        StPicoTrack const *test = mPicoDst->track(setOfTracks[l][i]);
-                        testDca[l] += test->gDCAx(mPrimVtx.x());
-                        testDca[l] += test->gDCAy(mPrimVtx.y());
-                        testDca[l] += test->gDCAz(mPrimVtx.z());
-                    }
-                    testDca[l] = testDca[l] / (3*setOfTracks[l].size());
-                    cout << testDca[l] << endl;
-                }
-            } while (abs(testDca[0]-testDca[1]) > 0.02);
-
-
-            StPicoKFVertexFitter kfVertexFitterSet[nTestedRefits];
-            KFVertex kfVertexSet[nTestedRefits];
-
-            for (int k = 0; k < nTestedRefits; ++k) {
-                kfVertexSet[k] = kfVertexFitterSet[k].primaryVertexRefitUsingTracks(mPicoDst, setOfTracks[k]);
-            }
+            makeKFReso(primaryTracks);
         }
 
         //////////////////////////////////////////////////////////
@@ -206,7 +177,72 @@ int StPicoKFVertexTools::MakeHF() {
     mIdxPicoPions.clear();
     mIdxPicoKaons.clear();
     tracksToRemove.clear();
+    primaryTracks.clear();
 
     return kStOK;
 }
 
+void makeKFReso(std::vector<int>&  primaryTracks) {
+    const int nTestedRefits = 2;
+    std::vector<int> setOfTracks[nTestedRefits];
+    Float_t testDca[nTestedRefits] = {0, 0};
+    int testNumber = 0;
+    do {
+        testNumber++;
+        std::random_shuffle(std::begin(primaryTracks), std::end(primaryTracks));
+
+        for (unsigned int i = 0; i < primaryTracks.size() / 2; ++i) {
+            setOfTracks[0].push_back(primaryTracks[i]);
+        }
+
+        for (unsigned int j = primaryTracks.size() / 2; j < primaryTracks.size(); ++j) {
+            setOfTracks[1].push_back(primaryTracks[j]);
+        }
+
+        for (int l = 0; l < nTestedRefits; ++l) {
+            for (unsigned int i = 0; i < setOfTracks[l].size(); ++i) {
+                StPicoTrack const *test = mPicoDst->track(setOfTracks[l][i]);
+                testDca[l] += test->gDCAx(mPrimVtx.x());
+                testDca[l] += test->gDCAy(mPrimVtx.y());
+                testDca[l] += test->gDCAz(mPrimVtx.z());
+            }
+            testDca[l] = testDca[l] / (3*setOfTracks[l].size());
+            cout << testDca[l] << endl;
+        }
+    } while (abs(testDca[0]-testDca[1]) > 0.025 || testNumber < 150);
+
+    StPicoKFVertexFitter kfVertexFitterSet[nTestedRefits];
+    KFVertex kfVertexSet[nTestedRefits];
+
+    for (int k = 0; k < nTestedRefits; ++k) {
+        kfVertexSet[k] = kfVertexFitterSet[k].primaryVertexRefitUsingTracks(mPicoDst, setOfTracks[k]);
+    }
+
+    const int nNtVars = ntp_KFReso->GetNvar();
+    Float_t ntVarKF[nNtVars];
+    int ii = 0;
+
+    ntVarKF[ii++] = kfVertexSet[0].GetX();
+    ntVarKF[ii++] = kfVertexSet[0].GetY();
+    ntVarKF[ii++] = kfVertexSet[0].GetZ();
+
+    ntVarKF[ii++] = kfVertexSet[1].GetX();
+    ntVarKF[ii++] = kfVertexSet[1].GetY();
+    ntVarKF[ii++] = kfVertexSet[1].GetZ();
+
+    float diffX = kfVertexSet[0].GetX()-kfVertexSet[1].GetX();
+    float diffY = kfVertexSet[0].GetY()-kfVertexSet[1].GetY();
+    float diffZ = kfVertexSet[0].GetZ()-kfVertexSet[1].GetZ();
+
+    ntVarKF[ii++] = diffX;
+    ntVarKF[ii++] = diffY;
+    ntVarKF[ii++] = diffZ;
+
+    ntVarKF[ii++] = sqrt(diffX*diffX + diffY*diffY + diffZ*diffZ);
+    ntVarKF[ii++] = primaryTracks.size();
+
+    ntp_KFReso->Fill(ntVarKF);
+
+    setOfTracks[0].clear;
+    setOfTracks[1].clear;
+}
