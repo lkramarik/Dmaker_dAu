@@ -57,7 +57,7 @@ int StPicoKFVertexTools::MakeHF() {
 
     std::vector<unsigned short> mIdxPicoPions;
     std::vector<unsigned short> mIdxPicoKaons;
-    std::vector<unsigned short> primaryTracks;
+    std::vector<int> primaryTracks;
 
     int nHftTracks=0;
     int nD0=0;
@@ -176,7 +176,7 @@ int StPicoKFVertexTools::MakeHF() {
 
     mIdxPicoPions.clear();
     mIdxPicoKaons.clear();
-    tracksToRemove.clear();
+//    tracksToRemove.clear();
     primaryTracks.clear();
 
     return kStOK;
