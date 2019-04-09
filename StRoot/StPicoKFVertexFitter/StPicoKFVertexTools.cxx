@@ -158,9 +158,11 @@ int StPicoKFVertexTools::MakeHF() {
                 for (int l = 0; l < nTestedRefits; ++l) {
                     for (unsigned int i = 0; i < setOfTracks[l].size(); ++i) {
                         StPicoTrack const *test = mPicoDst->track(setOfTracks[l][i]);
-                        testDca[l] += test->gDCA(mPrimVtx.x(), mPrimVtx.y(), mPrimVtx.z());
+                        testDca[l] += test->gDCAx(mPrimVtx.x());
+                        testDca[l] += test->gDCAy(mPrimVtx.y());
+                        testDca[l] += test->gDCAz(mPrimVtx.z());
                     }
-                    testDca[l] = testDca[l] / setOfTracks[l].size();
+                    testDca[l] = testDca[l] / (3*setOfTracks[l].size());
                     cout << testDca[l] << endl;
                 }
             } while (testDca[0] > 0.6 && testDca[1] > 0.6);
