@@ -143,8 +143,8 @@ int StPicoKFVertexTools::MakeHF() {
         ntp_vertex->Fill(ntVar);
 
         //making 2 vertices and comparing:
-        if (primaryTracks.size()>10) {
-            makeKFReso(primaryTracks);
+        if (primaryTracks.size()>17) {
+            makeKFReso(primaryTracks, nHftTracks);
         }
 
         //////////////////////////////////////////////////////////
@@ -182,7 +182,7 @@ int StPicoKFVertexTools::MakeHF() {
     return kStOK;
 }
 // _____________________________________________________________________________
-int StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks) {
+int StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftTracks) {
     const int nTestedRefits = 2;
     std::vector<int> setOfTracks[nTestedRefits];
     Float_t testDca[nTestedRefits] = {0, 0};
@@ -242,6 +242,7 @@ int StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks) {
 
     ntVarKF[ii++] = sqrt(diffX*diffX + diffY*diffY + diffZ*diffZ);
     ntVarKF[ii++] = primaryTracks.size();
+    ntVarKF[ii++] = nHftTracks;
 
     ntp_KFReso->Fill(ntVarKF);
 
