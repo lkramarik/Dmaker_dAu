@@ -103,9 +103,9 @@ int StPicoKFVertexTools::MakeHF() {
 
     if (!(nHftTracks>1)) goodEvent=false;
     if (!(mPicoEvent->BBCx()<950000)) goodEvent=false;
-    if (!(mPrimVtx.x()<1.5)) goodEvent=false;
-    if (!(mPrimVtx.y()<1.5)) goodEvent=false;
-    if (!(mPrimVtx.Mag()<2)) goodEvent=false;
+    if (!(mPrimVtx.x()<1)) goodEvent=false;
+    if (!(mPrimVtx.y()<1)) goodEvent=false;
+    if (!(mPrimVtx.Perp()<1)) goodEvent=false;
 
     if (goodEvent) {
 //    if (nD0>-1) {
@@ -211,7 +211,7 @@ int StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks) {
             testDca[l] = testDca[l] / (3*setOfTracks[l].size());
         }
 
-    } while (abs(testDca[0]-testDca[1]) > 0.025 || testNumber < 150);
+    } while (abs(testDca[0]-testDca[1]) > 0.025 || testNumber < 100);
 
     StPicoKFVertexFitter kfVertexFitterSet[nTestedRefits];
     KFVertex kfVertexSet[nTestedRefits];
