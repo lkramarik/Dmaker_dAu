@@ -31,6 +31,7 @@ class StPicoDstMaker;
 class StPicoEvent;
 class StPicoTrack;
 class StPicoHFEvent;
+class StPicoHFMaker;
 
 class StPicoKFVertexTools : public StPicoHFMaker
 {
