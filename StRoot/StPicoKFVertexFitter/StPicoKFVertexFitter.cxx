@@ -70,32 +70,32 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
 
 
 //Yuri
-    KFVertex     Vertex;
-    const Double_t par[6] = {VGlob.x(),VGlob.y(),VGlob.z(), 0, 0, 1000};
-    const Double_t cov[21] = {1,
-                              0, 1,
-                              0, 0, 100,
-                              0, 0,   0, 100,
-                              0, 0,   0,   0, 100,
-                              0, 0,   0,   0,   0, 100};
-
-    static Double_t Chi2Cut = 10; // Cut on how well particle match to vertex
-
-    Vertex.Create(par,cov, 0, 0);
-    Vertex.SetId(ivx+1);
-
-    UInt_t N = particles.size();
-    if (N < 3) continue;
-    TArrayC Flag(N);
-    KFParticle **parts = new KFParticle*[N];
-
-    for (UInt_t i = 0; i < N; i++) {
-        parts[i] = &particles[i];
-    }
-
-    Vertex.ConstructPrimaryVertex((const KFParticle **) parts, N, (Bool_t*) Flag.GetArray(), Chi2Cut/2);
-    PrPP(Vertex);
-    delete [] parts;
+//    KFVertex     Vertex;
+//    const Double_t par[6] = {VGlob.x(),VGlob.y(),VGlob.z(), 0, 0, 1000};
+//    const Double_t cov[21] = {1,
+//                              0, 1,
+//                              0, 0, 100,
+//                              0, 0,   0, 100,
+//                              0, 0,   0,   0, 100,
+//                              0, 0,   0,   0,   0, 100};
+//
+//    static Double_t Chi2Cut = 10; // Cut on how well particle match to vertex
+//
+//    Vertex.Create(par,cov, 0, 0);
+//    Vertex.SetId(ivx+1);
+//
+//    UInt_t N = particles.size();
+//    if (N < 3) continue;
+//    TArrayC Flag(N);
+//    KFParticle **parts = new KFParticle*[N];
+//
+//    for (UInt_t i = 0; i < N; i++) {
+//        parts[i] = &particles[i];
+//    }
+//
+//    Vertex.ConstructPrimaryVertex((const KFParticle **) parts, N, (Bool_t*) Flag.GetArray(), Chi2Cut/2);
+//    PrPP(Vertex);
+//    delete [] parts;
 //Yuri end
 
 

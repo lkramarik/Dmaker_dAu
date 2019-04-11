@@ -110,7 +110,7 @@ int StPicoKFVertexTools::MakeHF() {
     if (goodEvent) {
 //    if (nD0>-1) {
 //        compareFitters(nD0, nHftTracks);
-        
+
         //making 2 vertices and comparing:
         if (primaryTracks.size()>17) {
             makeKFReso(primaryTracks, nHftTracks);
