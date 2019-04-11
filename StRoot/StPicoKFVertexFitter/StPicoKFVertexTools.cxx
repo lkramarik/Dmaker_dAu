@@ -32,10 +32,10 @@ int StPicoKFVertexTools::InitHF() {
                                                        "KFVx:KFVy:KFVz:"
                                                        "KFVErrX:KFVErrY:KFVErrZ");
 
-    ntp_KFReso = new TNtuple("ntp_KFReso","ntp_KFReso","KF1x:KF1y:KF1z:"
-                                                       "KF2x:KF2y:KF2z:"
-                                                       "KFdiffx:KFdiffy:KFdiffz:"
-                                                       "KFdiff:nPrimTracks");
+//    ntp_KFReso = new TNtuple("ntp_KFReso","ntp_KFReso","KF1x:KF1y:KF1z:"
+//                                                       "KF2x:KF2y:KF2z:"
+//                                                       "KFdiffx:KFdiffy:KFdiffz:"
+//                                                       "KFdiff:nPrimTracks");
     return kStOK;
 }
 
@@ -47,7 +47,7 @@ void StPicoKFVertexTools::ClearHF(Option_t *opt="") {
 // _________________________________________________________
 int StPicoKFVertexTools::FinishHF() {
     ntp_vertex -> Write(ntp_vertex->GetName(), TObject::kOverwrite);
-    ntp_KFReso -> Write(ntp_KFReso->GetName(), TObject::kOverwrite);
+//    ntp_KFReso -> Write(ntp_KFReso->GetName(), TObject::kOverwrite);
     return kStOK;
 }
 // _________________________________________________________
@@ -182,8 +182,14 @@ int StPicoKFVertexTools::MakeHF() {
     return kStOK;
 }
 // _____________________________________________________________________________
-int StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftTracks) {
+void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftTracks) {
     const int nTestedRefits = 2;
+
+    ntp_KFReso = new TNtuple("ntp_KFReso","ntp_KFReso","KF1x:KF1y:KF1z:"
+                                                       "KF2x:KF2y:KF2z:"
+                                                       "KFdiffx:KFdiffy:KFdiffz:"
+                                                       "KFdiff:nPrimTracks");
+
     std::vector<int> setOfTracks[nTestedRefits];
     Float_t testDca[nTestedRefits] = {0, 0};
     int testNumber = 0;
@@ -249,5 +255,9 @@ int StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftTr
     setOfTracks[0].clear();
     setOfTracks[1].clear();
 
-    return 0;
+    mOutputFileList->cd();
+    ntp_KFReso -> Write(ntp_KFReso->GetName(), TObject::kOverwrite);
+
+
+//    return 0;
 }
