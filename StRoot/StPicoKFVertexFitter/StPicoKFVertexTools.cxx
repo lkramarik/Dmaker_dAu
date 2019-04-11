@@ -46,8 +46,8 @@ void StPicoKFVertexTools::ClearHF(Option_t *opt="") {
 
 // _________________________________________________________
 int StPicoKFVertexTools::FinishHF() {
-    if(ntp_vertex->GetEntriesFast()>0) ntp_vertex -> Write(ntp_vertex->GetName(), TObject::kOverwrite);
-    if(ntp_KFReso->GetEntriesFast()>0) ntp_KFReso -> Write(ntp_KFReso->GetName(), TObject::kOverwrite);
+    ntp_vertex -> Write(ntp_vertex->GetName(), TObject::kOverwrite);
+    ntp_KFReso -> Write(ntp_KFReso->GetName(), TObject::kOverwrite);
     return kStOK;
 }
 // _________________________________________________________
@@ -109,7 +109,8 @@ int StPicoKFVertexTools::MakeHF() {
 
     if (goodEvent) {
 //    if (nD0>-1) {
-        compareFitters(nD0, nHftTracks);
+//        compareFitters(nD0, nHftTracks);
+        
         //making 2 vertices and comparing:
         if (primaryTracks.size()>17) {
             makeKFReso(primaryTracks, nHftTracks);

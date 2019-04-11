@@ -53,7 +53,6 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
             pdg=-211;
         }
         MTrack track;
-//        KFPTrack track1;
         track.SetParameters(xyzp); //ok
         track.SetCovarianceMatrix(CovXyzp); //ok
         track.SetNDF(1); //ok
@@ -68,6 +67,46 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
     aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), TMath::Sqrt(StAnneling::Chi2Cut()/2)); //original
 //    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), 3.5); //in makzym stuffs
 //    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), StAnneling::Chi2Cut()); //ok
+
+
+//Yuri
+    KFVertex     Vertex;
+    const Double_t par[6] = {VGlob.x(),VGlob.y(),VGlob.z(), 0, 0, 1000};
+    const Double_t cov[21] = {1,
+                              0, 1,
+                              0, 0, 100,
+                              0, 0,   0, 100,
+                              0, 0,   0,   0, 100,
+                              0, 0,   0,   0,   0, 100};
+
+    static Double_t Chi2Cut = 10; // Cut on how well particle match to vertex
+
+    Vertex.Create(par,cov, 0, 0);
+    Vertex.SetId(ivx+1);
+
+    UInt_t N = particles.size();
+    if (N < 3) continue;
+    TArrayC Flag(N);
+    KFParticle **parts = new KFParticle*[N];
+
+    for (UInt_t i = 0; i < N; i++) {
+        parts[i] = &particles[i];
+    }
+
+    Vertex.ConstructPrimaryVertex((const KFParticle **) parts, N, (Bool_t*) Flag.GetArray(), Chi2Cut/2);
+    PrPP(Vertex);
+    delete [] parts;
+//Yuri end
+
+
+}
+
+
+
+
+
+
+
 
     // clean up
     for(size_t iTrk = 0; iTrk < tracksToUse.size(); ++iTrk) delete particles[iTrk];
