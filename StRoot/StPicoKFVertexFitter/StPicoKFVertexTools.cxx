@@ -109,7 +109,7 @@ int StPicoKFVertexTools::MakeHF() {
 
     if (goodEvent) {
 //    if (nD0>-1) {
-        compareFitters();
+        compareFitters(nD0, nHftTracks);
         //making 2 vertices and comparing:
         if (primaryTracks.size()>17) {
             makeKFReso(primaryTracks, nHftTracks);
@@ -152,7 +152,7 @@ int StPicoKFVertexTools::MakeHF() {
 }
 
 // _____________________________________________________________________________
-void StPicoKFVertexTools::compareFitters() {
+void StPicoKFVertexTools::compareFitters(int nD0, int nHftTracks) {
     StPicoKFVertexFitter kfVertexFitter;
     KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
 

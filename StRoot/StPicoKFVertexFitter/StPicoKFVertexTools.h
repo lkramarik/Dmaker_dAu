@@ -52,7 +52,7 @@ private:
     TString mOutFileBaseName;
     TFile* mOutFile;
     void makeKFReso(std::vector<int>&, int);
-    void compareFitters()
+    void compareFitters(int, int);
 
     ClassDef(StPicoKFVertexTools, 1) //set to 1
 
