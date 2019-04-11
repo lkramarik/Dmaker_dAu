@@ -32,10 +32,10 @@ int StPicoKFVertexTools::InitHF() {
                                                        "KFVx:KFVy:KFVz:"
                                                        "KFVErrX:KFVErrY:KFVErrZ");
 
-//    ntp_KFReso = new TNtuple("ntp_KFReso","ntp_KFReso","KF1x:KF1y:KF1z:"
-//                                                       "KF2x:KF2y:KF2z:"
-//                                                       "KFdiffx:KFdiffy:KFdiffz:"
-//                                                       "KFdiff:nPrimTracks");
+    ntp_KFReso = new TNtuple("ntp_KFReso","ntp_KFReso","KF1x:KF1y:KF1z:"
+                                                       "KF2x:KF2y:KF2z:"
+                                                       "KFdiffx:KFdiffy:KFdiffz:"
+                                                       "KFdiff:nPrimTracks");
     return kStOK;
 }
 
@@ -46,8 +46,8 @@ void StPicoKFVertexTools::ClearHF(Option_t *opt="") {
 
 // _________________________________________________________
 int StPicoKFVertexTools::FinishHF() {
-    ntp_vertex -> Write(ntp_vertex->GetName(), TObject::kOverwrite);
-//    ntp_KFReso -> Write(ntp_KFReso->GetName(), TObject::kOverwrite);
+    if(ntp_vertex->GetEntriesFast()>0) ntp_vertex -> Write(ntp_vertex->GetName(), TObject::kOverwrite);
+    if(ntp_KFReso->GetEntriesFast()>0) ntp_KFReso -> Write(ntp_KFReso->GetName(), TObject::kOverwrite);
     return kStOK;
 }
 // _________________________________________________________
@@ -109,43 +109,12 @@ int StPicoKFVertexTools::MakeHF() {
 
     if (goodEvent) {
 //    if (nD0>-1) {
-        StPicoKFVertexFitter kfVertexFitter;
-//        KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst, tracksToRemove);
-        KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
-
-        const int nNtVars = ntp_vertex->GetNvar();
-        Float_t ntVar[nNtVars];
-        int ii = 0;
-
-        ntVar[ii++] = mPicoEvent->runId();
-        ntVar[ii++] = mPicoEvent->refMult();
-        ntVar[ii++] = mPicoEvent->numberOfGlobalTracks();
-        ntVar[ii++] = nHftTracks;
-        ntVar[ii++] = nD0;
-        ntVar[ii++] = StAnneling::Chi2Cut();
-
-        ntVar[ii++] = mPrimVtx.x();
-        ntVar[ii++] = mPrimVtx.y();
-        ntVar[ii++] = mPrimVtx.z();
-
-        ntVar[ii++] = (mPicoEvent->primaryVertexError()).x();
-        ntVar[ii++] = (mPicoEvent->primaryVertexError()).y();
-        ntVar[ii++] = (mPicoEvent->primaryVertexError()).z();
-
-        ntVar[ii++] = kfVertex.GetX();
-        ntVar[ii++] = kfVertex.GetY();
-        ntVar[ii++] = kfVertex.GetZ();
-
-        ntVar[ii++] = kfVertex.GetErrX();
-        ntVar[ii++] = kfVertex.GetErrY();
-        ntVar[ii++] = kfVertex.GetErrZ();
-
-        ntp_vertex->Fill(ntVar);
-
+        compareFitters();
         //making 2 vertices and comparing:
         if (primaryTracks.size()>17) {
             makeKFReso(primaryTracks, nHftTracks);
         }
+//        KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst, tracksToRemove);
 
         //////////////////////////////////////////////////////////
 //        TVector3 newKFVertex(-999., -999., -999.);
@@ -181,14 +150,45 @@ int StPicoKFVertexTools::MakeHF() {
 
     return kStOK;
 }
+
+// _____________________________________________________________________________
+void StPicoKFVertexTools::compareFitters() {
+    StPicoKFVertexFitter kfVertexFitter;
+    KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
+
+    const int nNtVars = ntp_vertex->GetNvar();
+    Float_t ntVar[nNtVars];
+    int ii = 0;
+
+    ntVar[ii++] = mPicoEvent->runId();
+    ntVar[ii++] = mPicoEvent->refMult();
+    ntVar[ii++] = mPicoEvent->numberOfGlobalTracks();
+    ntVar[ii++] = nHftTracks;
+    ntVar[ii++] = nD0;
+    ntVar[ii++] = StAnneling::Chi2Cut();
+
+    ntVar[ii++] = mPrimVtx.x();
+    ntVar[ii++] = mPrimVtx.y();
+    ntVar[ii++] = mPrimVtx.z();
+
+    ntVar[ii++] = (mPicoEvent->primaryVertexError()).x();
+    ntVar[ii++] = (mPicoEvent->primaryVertexError()).y();
+    ntVar[ii++] = (mPicoEvent->primaryVertexError()).z();
+
+    ntVar[ii++] = kfVertex.GetX();
+    ntVar[ii++] = kfVertex.GetY();
+    ntVar[ii++] = kfVertex.GetZ();
+
+    ntVar[ii++] = kfVertex.GetErrX();
+    ntVar[ii++] = kfVertex.GetErrY();
+    ntVar[ii++] = kfVertex.GetErrZ();
+
+    ntp_vertex->Fill(ntVar);
+}
+
 // _____________________________________________________________________________
 void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftTracks) {
     const int nTestedRefits = 2;
-
-    ntp_KFReso = new TNtuple("ntp_KFReso","ntp_KFReso","KF1x:KF1y:KF1z:"
-                                                       "KF2x:KF2y:KF2z:"
-                                                       "KFdiffx:KFdiffy:KFdiffz:"
-                                                       "KFdiff:nPrimTracks");
 
     std::vector<int> setOfTracks[nTestedRefits];
     Float_t testDca[nTestedRefits] = {0, 0};
@@ -254,10 +254,4 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
 
     setOfTracks[0].clear();
     setOfTracks[1].clear();
-
-    mOutputFileList->cd();
-    ntp_KFReso -> Write(ntp_KFReso->GetName(), TObject::kOverwrite);
-
-
-//    return 0;
 }

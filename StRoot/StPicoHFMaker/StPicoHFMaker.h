@@ -57,12 +57,12 @@ class StPicoHFMaker : public StMaker
     float           mBField;
     TVector3        mPrimVtx;
     TList          *mOutList;
-    TFile*          mOutputFileList;     // ptr to file saving the list of histograms
 
 private:
     void  resetEvent();
     bool  setupEvent();
-    
+    TFile*          mOutputFileList;     // ptr to file saving the list of histograms
+
     void  initializeEventStats();
     void  fillEventStats(int *aEventStat);
 
