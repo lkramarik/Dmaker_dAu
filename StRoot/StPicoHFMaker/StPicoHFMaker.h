@@ -46,6 +46,7 @@ class StPicoHFMaker : public StMaker
     Int_t Make();
     void  Clear(Option_t *opt="");
     Int_t Finish();
+    TFile*          mOutputFileList;     // ptr to file saving the list of histograms
 
   protected:
     StPicoDst      *mPicoDst;
@@ -67,7 +68,6 @@ class StPicoHFMaker : public StMaker
 
     TString         mOutputFileBaseName; // base name for output files
     TFile*          mOutputFileTree;     // ptr to file saving the HFtree
-    TFile*          mOutputFileList;     // ptr to file saving the list of histograms
     ClassDef(StPicoHFMaker, 0)
 };
 
