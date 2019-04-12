@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<job fileListSyntax="xrootd" minFilesPerProcess="10" maxFilesPerProcess="15" simulateSubmission="false">
+<job fileListSyntax="xrootd" minFilesPerProcess="50" maxFilesPerProcess="55" simulateSubmission="false">
   <stdout URL="file:&basePath;/jobs/log/$JOBID.out"/>
   <stderr URL="file:&basePath;/jobs/err/$JOBID.err"/>
 
-  <input URL="filelist:&basePath;/&listOfFiles;" />
+  <input URL="catalog:star.bnl.gov?trgsetupname=dAu200_production_2016,production=P17id,library=SL18f,filename~st_physics,filetype~picoDst,storage=local -keys 'path,filename' -delim / -limit 0" />
 
   <Generator>
     <Location>./report/</Location>
@@ -13,7 +13,6 @@
 
   <command>
     starver SL18f
-    cons
     root -q -b -l StRoot/macros/loadSharedHFLibraries.C StRoot/macros/&rootMacro;++\(\"$FILELIST\",\"&prodId;_$JOBINDEX\",\"picoList_bad.list\"\) &gt;&amp; ${JOBID}.log
   </command>
 

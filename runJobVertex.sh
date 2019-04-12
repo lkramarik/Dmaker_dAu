@@ -3,6 +3,8 @@ cd workDir
 productionId=`date +%F_%H-%M`_PV
 analyzer="lkramarik"
 
+starver SL18f
+cons
 mkdir $productionId
 cd $productionId
 #copylist
