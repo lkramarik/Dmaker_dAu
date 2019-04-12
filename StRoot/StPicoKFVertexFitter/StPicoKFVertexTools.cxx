@@ -153,7 +153,7 @@ int StPicoKFVertexTools::MakeHF() {
 //    tracksToRemove.clear();
     primaryTracks.clear();
     primaryTracks.shrink_to_fit();
-    gObjectTable->Print()
+    gObjectTable->Print();
     return kStOK;
 }
 
