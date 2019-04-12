@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<job fileListSyntax="xrootd" minFilesPerProcess="50" maxFilesPerProcess="55" simulateSubmission="false">
+<job fileListSyntax="xrootd" minFilesPerProcess="80" maxFilesPerProcess="85" simulateSubmission="false">
   <stdout URL="file:&basePath;/jobs/log/$JOBID.out"/>
   <stderr URL="file:&basePath;/jobs/err/$JOBID.err"/>
 
-  <input URL="catalog:star.bnl.gov?trgsetupname=dAu200_production_2016,production=P17id,library=SL18f,filename~st_physics,filetype~picoDst,storage=local -keys 'path,filename' -delim / -limit 0" />
+  <input URL="catalog:star.bnl.gov?trgsetupname=dAu200_production_2016,production=P17id,library=SL18f,filename~st_physics,filetype~picoDst,storage!=hpss" preferStorage="local" nFiles="all"/>
 
   <Generator>
     <Location>./report/</Location>
