@@ -19,7 +19,7 @@ ClassImp(StPicoCutsBase)
 
 // _________________________________________________________
 StPicoCutsBase::StPicoCutsBase() : TNamed("PicoCutsBase", "PicoCutsBase"), 
-  mTOFCorr(new StV0TofCorrection), mPicoDst(NULL), mEventStatMax(5), mTOFResolution(0.013),
+  mTOFCorr(new StV0TofCorrection), mPicoDst(NULL), mEventStatMax(6), mTOFResolution(0.013),
   mBadRunListFileName("picoList_bad.list"), mVzMax(6.), mVzVpdVzMax(3.), 
   mNHitsFitMin(15), mRequireHFT(true), mNHitsFitnHitsMax(0.), mPrimaryDCAtoVtxMax(6.0), mPtMin(0.2), mHybridTof(false) {
 
@@ -172,12 +172,17 @@ bool StPicoCutsBase::isGoodEvent(StPicoDst const * const picoDst, int *aEventCut
   // -- 4 Vertex z - vertex_z(vpd) outside cut window
   ++iCut;
   if (fabs(picoEvent->primaryVertex().z() - picoEvent->vzVpd()) >= mVzVpdVzMax) aEventCuts[iCut] = 1;
-  
+
+  ++iCut;
+
+  //if the event is wrong, the array member is 1 (eccept [0])
   // -- is rejected
   bool isGoodEvent = true;
-  for (unsigned int ii = 0; ii < mEventStatMax; ++ii) {
+  for (unsigned int ii = 0; ii < mEventStatMax-1; ++ii) {
     if (aEventCuts[ii]) isGoodEvent = false;
   }
+
+  if(!isGoodEvent) aEventCuts[mEventStatMax-1]=1;
 
   return isGoodEvent;
 }

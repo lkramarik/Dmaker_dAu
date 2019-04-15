@@ -169,8 +169,6 @@ int StPicoD0AnaMaker::MakeHF() {
 int StPicoD0AnaMaker::createCandidates() {
     UInt_t nTracks = mPicoDst->numberOfTracks();
 
-    cout<<nTracks<<" "<<mPicoEvent->numberOfGlobalTracks()<<" "<<mPicoEvent->refMult()<<endl;
-
     for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
         StPicoTrack* trk = mPicoDst->track(iTrack);
         if (abs(trk->gMom().PseudoRapidity())>1) continue;
