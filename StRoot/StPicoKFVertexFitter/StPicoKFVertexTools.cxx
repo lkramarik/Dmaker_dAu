@@ -35,7 +35,7 @@ int StPicoKFVertexTools::InitHF() {
     ntp_KFReso = new TNtuple("ntp_KFReso","ntp_KFReso","KF1x:KF1y:KF1z:"
                                                        "KF2x:KF2y:KF2z:"
                                                        "KFdiffx:KFdiffy:KFdiffz:"
-                                                       "KFdiff:nPrimTracks");
+                                                       "KFdiff:nPrimTracks:nHftTracks");
     return kStOK;
 }
 
