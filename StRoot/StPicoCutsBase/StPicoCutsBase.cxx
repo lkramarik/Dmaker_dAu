@@ -54,7 +54,7 @@ StPicoCutsBase::StPicoCutsBase() : TNamed("PicoCutsBase", "PicoCutsBase"),
 
 // _________________________________________________________
 StPicoCutsBase::StPicoCutsBase(const Char_t *name) : TNamed(name, name), 
-  mTOFCorr(new StV0TofCorrection), mPicoDst(NULL), mEventStatMax(5), mTOFResolution(0.013),
+  mTOFCorr(new StV0TofCorrection), mPicoDst(NULL), mEventStatMax(6), mTOFResolution(0.013),
   mBadRunListFileName("picoList_bad_MB.list"), mVzMax(6.), mVzVpdVzMax(3.),
   mNHitsFitMin(15), mRequireHFT(true), mNHitsFitnHitsMax(0.), mPrimaryDCAtoVtxMax(6.0), mPtMin(0.2), mHybridTof(false) {
   // -- constructor
