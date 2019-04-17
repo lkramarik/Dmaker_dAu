@@ -197,6 +197,7 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
 
     std::vector<int> setOfTracks[nTestedRefits];
     Float_t testDca[nTestedRefits] = {0, 0};
+    Float_t testChi2[nTestedRefits] = {0, 0};
     int testNumber = 0;
     StPicoTrack *test = new StPicoTrack();
 
@@ -222,11 +223,13 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
                 testDca[l] += test->gDCAx(mPrimVtx.x());
                 testDca[l] += test->gDCAy(mPrimVtx.y());
                 testDca[l] += test->gDCAz(mPrimVtx.z());
+                testChi2[l] += test->chi2();
             }
             testDca[l] = testDca[l] / (3*setOfTracks[l].size());
+            testChi2[l] = testChi2[l] / setOfTracks[l].size();
         }
 
-    } while (abs(testDca[0]-testDca[1]) > 0.025 || testNumber < 100);
+    } while (abs(testDca[0]-testDca[1]) > 0.025 || abs(testChi2[0]-testChi2[1]) > 1 || testNumber < 100);
 
     StPicoKFVertexFitter kfVertexFitterSet[nTestedRefits];
     KFVertex kfVertexSet[nTestedRefits];
