@@ -229,7 +229,7 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
             testChi2[l] = testChi2[l] / setOfTracks[l].size();
         }
 
-        cout<<abs(testDca[0]-testDca[1])<<" "<<abs(testChi2[0]-testChi2[1])<<endl;
+        cout<<abs(testDca[0]-testDca[1])<<endl;
     } while (abs(testDca[0]-testDca[1]) > 0.025 || abs(testChi2[0]-testChi2[1]) > 1 || testNumber < 100);
 
     StPicoKFVertexFitter kfVertexFitterSet[nTestedRefits];
@@ -238,7 +238,7 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
     for (int k = 0; k < nTestedRefits; ++k) {
         kfVertexSet[k] = kfVertexFitterSet[k].primaryVertexRefitUsingTracks(mPicoDst, setOfTracks[k]);
     }
-
+    cout<<" "<<endl;
     const int nNtVars = ntp_KFReso->GetNvar();
     Float_t ntVarKF[nNtVars];
     int ii = 0;
