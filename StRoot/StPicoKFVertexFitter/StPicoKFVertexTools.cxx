@@ -204,7 +204,6 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
         for (int k = 0; k < nTestedRefits; ++k) {
             setOfTracks[k].clear();
             setOfTracks[k].shrink_to_fit();
-
         }
         for (unsigned int i = 0; i < primaryTracks.size() / 2; ++i) {
             setOfTracks[0].push_back(primaryTracks[i]);
@@ -214,10 +213,12 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
             setOfTracks[1].push_back(primaryTracks[j]);
         }
 
+        StPicoTrack *test = new StPicoTrack();
+
         for (int l = 0; l < nTestedRefits; ++l) {
             testDca[l]=0;
             for (unsigned int i = 0; i < setOfTracks[l].size(); ++i) {
-                StPicoTrack const *test = mPicoDst->track(setOfTracks[l][i]);
+                test = mPicoDst->track(setOfTracks[l][i]);
                 testDca[l] += test->gDCAx(mPrimVtx.x());
                 testDca[l] += test->gDCAy(mPrimVtx.y());
                 testDca[l] += test->gDCAz(mPrimVtx.z());
@@ -226,6 +227,8 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
         }
 
     } while (abs(testDca[0]-testDca[1]) > 0.025 || testNumber < 100);
+
+    delete test;
 
     StPicoKFVertexFitter kfVertexFitterSet[nTestedRefits];
     KFVertex kfVertexSet[nTestedRefits];

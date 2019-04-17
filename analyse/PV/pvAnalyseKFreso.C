@@ -10,7 +10,8 @@
 using namespace std;
 
 void pvAnalyseKFreso() {
-    TString input = "ntp.vertexKF.small.1204.root";
+//    TString input = "ntp.vertexKF.small.1204.root";
+    TString input = "ntp.KFVertexReso.1704.root";
     TFile *data = new TFile(input, "r");
     TNtuple *ntp = (TNtuple *) data->Get("ntp_KFReso");
     TFile *fOut = new TFile("res.KFreso.prim30." + input, "recreate");
@@ -25,24 +26,44 @@ void pvAnalyseKFreso() {
     Float_t limsMin[] = {0, -1, -1, -1};
     Float_t limsMax[] = {1, 1, 1, 1};
 
-
+    int nPrimMin = 30;
 //    TString detCuts = "nPrimTracks>0 && nHftTracks>1.5 && abs(picoDstVx)<0.5 && abs(picoDstVy)<0.5";
-    TString detCuts = "nPrimTracks>30";
+    TString detCuts = Form("nPrimTracks>%i && ", nPrimMin);
 //    TString detCuts = "nPrimTracks>30 && nHftTracks>2";
 
     TString hisName, varName;
     TCut cut1, cut2;
-
+    TCanvas *c = new TCanvas("c1", "c1", 900, 1200);
+    c->SetGrid();
     for (int j = 0; j < 4; ++j) { //variable to project
         varName = Form("KFdiff%s", var[j].Data());
         hVar = new TH1F(varName, varName, 1000, limsMin[j], limsMax[j]);
         ntp->Project(varName, varName, detCuts);
         hVar->Rebin(2);
+        hVar->SetStats(0);
+        hVar->SetTitle("");
         hVar->Scale(1/hVar->GetEntries());
+        hVar->SetFillColor(46);
+        hVar->SetFillStyle(3004);
+        hVar->SetLineColor(46);
         fOut->cd();
         hVar->GetXaxis()->SetTitle(Form("#Delta%s(KF1,KF2) [cm]", var[j].Data()));
+        hVar->GetYaxis()->SetTitleOffset(0.8);
         hVar->GetYaxis()->SetTitle("1/N");
+
+        c->SetLogy();
+        hVar->Draw("HIST");
+        c->SaveAs(varName + ".png");
         hVar->Write();
+        c->Clear();
+        hVar->GetXaxis()->SetRangeUser(limsMin[j]/3, limsMax[j]/3);
+
+//        TCanvas *c = new TCanvas("c1", "c1", 900, 1200);
+        c->SetLogy();
+        hVar->Draw("HIST");
+        c->SaveAs(varName + ".zoom.png");
+        c->Clear();
+
         hVar->Reset();
     }
 
