@@ -13,7 +13,7 @@
 #include <ctime>
 #include <cstdio>
 #include "StPicoD0AnaMaker/StPicoD0AnaMaker.h"
-#include "StPicoKFVertexFitter/StPicoKFVertexTools.h"
+#include "StPicoKFVertexTools/StPicoKFVertexTools.h"
 #include "StPicoTrackCovMatrix/StPicoTrackCovMatrix.h"
 
 using namespace std;
