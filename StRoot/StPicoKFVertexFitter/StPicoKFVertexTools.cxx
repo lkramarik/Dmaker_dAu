@@ -112,7 +112,7 @@ int StPicoKFVertexTools::MakeHF() {
 //        compareFitters(nD0, nHftTracks);
 
         //making 2 vertices and comparing:
-        if (primaryTracks.size()>17) {
+        if (primaryTracks.size()>10) {
             makeKFReso(primaryTracks, nHftTracks);
         }
 //        KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst, tracksToRemove);
@@ -197,7 +197,6 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
 
     std::vector<int> setOfTracks[nTestedRefits];
     Float_t testDca[nTestedRefits] = {0, 0};
-    Float_t testChi2[nTestedRefits] = {0, 0};
     int testNumber = 0;
     StPicoTrack *test = new StPicoTrack();
 
@@ -207,6 +206,7 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
         for (int k = 0; k < nTestedRefits; ++k) {
             setOfTracks[k].clear();
             setOfTracks[k].shrink_to_fit();
+            cout<<setOfTracks[k].size()<<endl;
         }
         for (unsigned int i = 0; i < primaryTracks.size() / 2; ++i) {
             setOfTracks[0].push_back(primaryTracks[i]);
@@ -223,14 +223,10 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
                 testDca[l] += test->gDCAx(mPrimVtx.x());
                 testDca[l] += test->gDCAy(mPrimVtx.y());
                 testDca[l] += test->gDCAz(mPrimVtx.z());
-                testChi2[l] += test->chi2();
             }
             testDca[l] = testDca[l] / (3*setOfTracks[l].size());
-            testChi2[l] = testChi2[l] / setOfTracks[l].size();
         }
-
-        cout<<abs(testDca[0]-testDca[1])<<endl;
-    } while (abs(testDca[0]-testDca[1]) > 0.025 || abs(testChi2[0]-testChi2[1]) > 1 || testNumber < 100);
+    } while (abs(testDca[0]-testDca[1]) > 0.025 || testNumber < 100);
 
     StPicoKFVertexFitter kfVertexFitterSet[nTestedRefits];
     KFVertex kfVertexSet[nTestedRefits];
@@ -238,7 +234,6 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
     for (int k = 0; k < nTestedRefits; ++k) {
         kfVertexSet[k] = kfVertexFitterSet[k].primaryVertexRefitUsingTracks(mPicoDst, setOfTracks[k]);
     }
-    cout<<" "<<endl;
     const int nNtVars = ntp_KFReso->GetNvar();
     Float_t ntVarKF[nNtVars];
     int ii = 0;
