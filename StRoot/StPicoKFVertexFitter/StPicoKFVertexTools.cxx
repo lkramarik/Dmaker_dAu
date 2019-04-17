@@ -198,6 +198,8 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
     std::vector<int> setOfTracks[nTestedRefits];
     Float_t testDca[nTestedRefits] = {0, 0};
     int testNumber = 0;
+    StPicoTrack *test = new StPicoTrack();
+    
     do {
         testNumber++;
         std::random_shuffle(std::begin(primaryTracks), std::end(primaryTracks));
@@ -213,7 +215,6 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
             setOfTracks[1].push_back(primaryTracks[j]);
         }
 
-        StPicoTrack *test = new StPicoTrack();
 
         for (int l = 0; l < nTestedRefits; ++l) {
             testDca[l]=0;
