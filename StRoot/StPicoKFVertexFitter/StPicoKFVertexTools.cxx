@@ -198,8 +198,8 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
     std::vector<int> setOfTracks[nTestedRefits];
     Float_t testDca[nTestedRefits] = {0, 0};
     int testNumber = 0;
-    StPicoTrack *test = new StPicoTrack();
-    
+//    StPicoTrack *test = new StPicoTrack();
+
     do {
         testNumber++;
         std::random_shuffle(std::begin(primaryTracks), std::end(primaryTracks));
@@ -215,21 +215,18 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
             setOfTracks[1].push_back(primaryTracks[j]);
         }
 
-
         for (int l = 0; l < nTestedRefits; ++l) {
             testDca[l]=0;
             for (unsigned int i = 0; i < setOfTracks[l].size(); ++i) {
-                test = mPicoDst->track(setOfTracks[l][i]);
-                testDca[l] += test->gDCAx(mPrimVtx.x());
-                testDca[l] += test->gDCAy(mPrimVtx.y());
-                testDca[l] += test->gDCAz(mPrimVtx.z());
+//                test = mPicoDst->track(setOfTracks[l][i]);
+                testDca[l] += mPicoDst->track(setOfTracks[l][i])->test->gDCAx(mPrimVtx.x());
+                testDca[l] += mPicoDst->track(setOfTracks[l][i])->test->gDCAy(mPrimVtx.y());
+                testDca[l] += mPicoDst->track(setOfTracks[l][i])->test->gDCAz(mPrimVtx.z());
             }
             testDca[l] = testDca[l] / (3*setOfTracks[l].size());
         }
 
     } while (abs(testDca[0]-testDca[1]) > 0.025 || testNumber < 100);
-
-    delete test;
 
     StPicoKFVertexFitter kfVertexFitterSet[nTestedRefits];
     KFVertex kfVertexSet[nTestedRefits];
