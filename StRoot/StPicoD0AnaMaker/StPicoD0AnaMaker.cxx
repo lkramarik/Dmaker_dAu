@@ -87,12 +87,6 @@ int StPicoD0AnaMaker::MakeHF() {
     createCandidates();
 //    analyzeCandidates();
 
-    TH2F *hEtaVsPhi_positives = static_cast<TH2F*>(mOutList->FindObject("hEtaVsPhi_positives"));
-    TH2F *hEtaVsPhi_negatives = static_cast<TH2F*>(mOutList->FindObject("hEtaVsPhi_negatives"));
-
-    TH2F *hEtaVsPhi_positives_D0 = static_cast<TH2F*>(mOutList->FindObject("hEtaVsPhi_positives_D0"));
-    TH2F *hEtaVsPhi_negatives_D0 = static_cast<TH2F*>(mOutList->FindObject("hEtaVsPhi_negatives_D0"));
-
 //    TH2F *h_pTOF = static_cast<TH2F*>(mOutList->FindObject("h_pTOF"));
 //
 //    TH2F *h_piTOF_20 = static_cast<TH2F*>(mOutList->FindObject("h_piTOF_20"));
@@ -174,6 +168,12 @@ int StPicoD0AnaMaker::MakeHF() {
 
 // _________________________________________________________
 int StPicoD0AnaMaker::createCandidates() {
+    TH2F *hEtaVsPhi_positives = static_cast<TH2F*>(mOutList->FindObject("hEtaVsPhi_positives"));
+    TH2F *hEtaVsPhi_negatives = static_cast<TH2F*>(mOutList->FindObject("hEtaVsPhi_negatives"));
+
+    TH2F *hEtaVsPhi_positives_D0 = static_cast<TH2F*>(mOutList->FindObject("hEtaVsPhi_positives_D0"));
+    TH2F *hEtaVsPhi_negatives_D0 = static_cast<TH2F*>(mOutList->FindObject("hEtaVsPhi_negatives_D0"));
+
     UInt_t nTracks = mPicoDst->numberOfTracks();
     Int_t nD0 = 0;
 
