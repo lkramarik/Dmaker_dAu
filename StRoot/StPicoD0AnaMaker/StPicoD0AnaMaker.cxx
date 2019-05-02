@@ -47,8 +47,11 @@ int StPicoD0AnaMaker::InitHF() {
 //    mOutList->Add(new TH2F("h_kTOFbeta","h_kTOFbeta",500,0,10, 300, 0, 1));
 //    mOutList->Add(new TH2F("h_pTOFbeta","h_pTOFbeta",500,0,10, 300, 0, 1));
 //
-//    mOutList->Add(new TH2F("h_pinsigma","h_pinsigma",1000,0,10, 99, -5, 5));
-//    mOutList->Add(new TH2F("h_knsigma","h_knsigma",1000,0,10, 99, -5, 5));
+    mOutList->Add(new TH2F("hEtaVsPhi_positives","hEtaVsPhi_positives", 65, 0, 6.5, 100, -2.5, 2.5));
+    mOutList->Add(new TH2F("hEtaVsPhi_negatives","hEtaVsPhi_negatives", 65, 0, 6.5, 100, -2.5, 2.5));
+
+    mOutList->Add(new TH2F("hEtaVsPhi_positives_D0","hEtaVsPhi_positives_D0", 65, 0, 6.5, 100, -2.5, 2.5));
+    mOutList->Add(new TH2F("hEtaVsPhi_negatives_D0","hEtaVsPhi_negatives_D0", 65, 0, 6.5, 100, -2.5, 2.5));
 //    mOutList->Add(new TH2F("h_pnsigma","h_pnsigma",1000,0,10, 99, -5, 5));
 //
 //    mOutList->Add(new TH2F("h_dedx","h_dedx", 1000, 0, 10, 1000, 0, 10));
@@ -84,8 +87,12 @@ int StPicoD0AnaMaker::MakeHF() {
     createCandidates();
 //    analyzeCandidates();
 
-//    TH2F *h_piTOF = static_cast<TH2F*>(mOutList->FindObject("h_piTOF"));
-//    TH2F *h_kTOF = static_cast<TH2F*>(mOutList->FindObject("h_kTOF"));
+    TH2F *hEtaVsPhi_positives = static_cast<TH2F*>(mOutList->FindObject("hEtaVsPhi_positives"));
+    TH2F *hEtaVsPhi_negatives = static_cast<TH2F*>(mOutList->FindObject("hEtaVsPhi_negatives"));
+
+    TH2F *hEtaVsPhi_positives_D0 = static_cast<TH2F*>(mOutList->FindObject("hEtaVsPhi_positives_D0"));
+    TH2F *hEtaVsPhi_negatives_D0 = static_cast<TH2F*>(mOutList->FindObject("hEtaVsPhi_negatives_D0"));
+
 //    TH2F *h_pTOF = static_cast<TH2F*>(mOutList->FindObject("h_pTOF"));
 //
 //    TH2F *h_piTOF_20 = static_cast<TH2F*>(mOutList->FindObject("h_piTOF_20"));
@@ -168,9 +175,16 @@ int StPicoD0AnaMaker::MakeHF() {
 // _________________________________________________________
 int StPicoD0AnaMaker::createCandidates() {
     UInt_t nTracks = mPicoDst->numberOfTracks();
+    Int_t nD0 = 0;
 
     for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
         StPicoTrack* trk = mPicoDst->track(iTrack);
+
+        if (trk->nHitsFit()>15) {
+            if (trk->charge()>0) hEtaVsPhi_positives->Fill(trk->gMom().Phi(), trk->gMom().PseudoRapidity());
+            if (trk->charge()<0) hEtaVsPhi_negatives->Fill(trk->gMom().Phi(), trk->gMom().PseudoRapidity());
+        }
+
         if (abs(trk->gMom().PseudoRapidity())>1) continue;
         if (mHFCuts->isGoodPion(trk)) mIdxPicoPions.push_back(iTrack);
         if (mHFCuts->isGoodKaon(trk)) mIdxPicoKaons.push_back(iTrack);
@@ -190,6 +204,8 @@ int StPicoD0AnaMaker::createCandidates() {
             StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
 
             if (!mHFCuts->isGoodSecondaryVertexPair(pair)) continue;
+            nD0++;
+
 
             bool isD0 = false;
             if((kaon->charge() + pion1->charge() == 0) ) isD0=true;
@@ -237,6 +253,16 @@ int StPicoD0AnaMaker::createCandidates() {
     } // for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1)
     mIdxPicoPions.clear();
     mIdxPicoKaons.clear();
+
+    if (nD0>0) {
+        for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
+            StPicoTrack* trk = mPicoDst->track(iTrack);
+            if (trk->nHitsFit()>15) {
+                if (trk->charge()>0) hEtaVsPhi_positives_D0->Fill(trk->gMom().Phi(), trk->gMom().PseudoRapidity());
+                if (trk->charge()<0) hEtaVsPhi_negatives_D0->Fill(trk->gMom().Phi(), trk->gMom().PseudoRapidity());
+            }
+        }
+    }
 
     return kStOK;
 }
