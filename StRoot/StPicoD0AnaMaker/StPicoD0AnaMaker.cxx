@@ -47,11 +47,11 @@ int StPicoD0AnaMaker::InitHF() {
 //    mOutList->Add(new TH2F("h_kTOFbeta","h_kTOFbeta",500,0,10, 300, 0, 1));
 //    mOutList->Add(new TH2F("h_pTOFbeta","h_pTOFbeta",500,0,10, 300, 0, 1));
 //
-    mOutList->Add(new TH2F("hEtaVsPhi_positives","hEtaVsPhi_positives", 65, 0, 6.5, 100, -2.5, 2.5));
-    mOutList->Add(new TH2F("hEtaVsPhi_negatives","hEtaVsPhi_negatives", 65, 0, 6.5, 100, -2.5, 2.5));
+    mOutList->Add(new TH2F("hEtaVsPhi_positives","hEtaVsPhi_positives", 70, -3.5, 3.5, 100, -2.5, 2.5));
+    mOutList->Add(new TH2F("hEtaVsPhi_negatives","hEtaVsPhi_negatives", 70, -3.5, 3.5, 100, -2.5, 2.5));
 
-    mOutList->Add(new TH2F("hEtaVsPhi_positives_D0","hEtaVsPhi_positives_D0", 65, 0, 6.5, 100, -2.5, 2.5));
-    mOutList->Add(new TH2F("hEtaVsPhi_negatives_D0","hEtaVsPhi_negatives_D0", 65, 0, 6.5, 100, -2.5, 2.5));
+    mOutList->Add(new TH2F("hEtaVsPhi_positives_D0","hEtaVsPhi_positives_D0", 70, -3.5, 3.5, 100, -2.5, 2.5));
+    mOutList->Add(new TH2F("hEtaVsPhi_negatives_D0","hEtaVsPhi_negatives_D0", 70, -3.5, 3.5, 100, -2.5, 2.5));
 //    mOutList->Add(new TH2F("h_pnsigma","h_pnsigma",1000,0,10, 99, -5, 5));
 //
 //    mOutList->Add(new TH2F("h_dedx","h_dedx", 1000, 0, 10, 1000, 0, 10));
