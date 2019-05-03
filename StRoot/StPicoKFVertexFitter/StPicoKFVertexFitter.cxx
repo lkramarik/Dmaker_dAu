@@ -9,7 +9,7 @@
 #include "StPicoEvent/StPicoEvent.h"
 #include "StEvent/StGlobalTrack.h"
 #include "StPicoEvent/StPicoTrack.h"
-#include "StPicoTrackCovMatrix/StPicoTrackCovMatrix.h"
+#include "StPicoEvent/StPicoTrackCovMatrix.h"
 //#include "KFPTrackVector.h"
 //#include "KFParticle.h"
 //#include "KFPTrack.h"
@@ -44,12 +44,28 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
         StPicoTrack* gTrack = (StPicoTrack*)picoDst->track(tracksToUse[iTrk]);
         StPicoTrackCovMatrix *cov = picoDst->trackCovMatrix(tracksToUse[iTrk]);
 
-        const StDcaGeometry dcaG = cov->dcaGeometry();
+//        const StDcaGeometry dcaG = cov->dcaGeometry();
         Double_t xyzp[6], CovXyzp[21]; //ok
-        dcaG.GetXYZ(xyzp, CovXyzp); //ok
-        Int_t q = 1;
+//        dcaG.GetXYZ(xyzp, CovXyzp); //ok
+	
+	Float_t* p = cov->params();
+	for (int ii = 0; ii < 6; ++ii){
+		xyzp[ii]=*p;
+		cout<<p<<endl;
+		p++;
+	}        
+//			Float_t* pCov = cov->
+//        for (int kk = 0; kk < 21; ++kk){
+//                CovXyzp[ii]=*p;
+//               cout<<p<<endl;
+//                p++;
+//        }
+
+
+
+	Int_t q = 1;
         Int_t pdg = 211;
-        if (dcaG.charge() < 0) {
+        if (gTrack->charge() < 0) {
             q=-1;
             pdg=-211;
         }
@@ -65,15 +81,15 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
 
     TArrayC Flag(tracksToUse.size());
     KFVertex aVertex;
-    const Double_t par[6] = {Vtx.x(),Vtx.y(),Vtx.z(), 0, 0, 1000};
-    const Double_t cov[21] = {1,
+    const Double_t parVertex[6] = {Vtx.x(),Vtx.y(),Vtx.z(), 0, 0, 1000};
+    const Double_t covVertex[21] = {1,
                               0, 1,
                               0, 0, 100,
                               0, 0,   0, 100,
                               0, 0,   0,   0, 100,
                               0, 0,   0,   0,   0, 100};
 
-    aVertex.Create(par,cov, 0, 0);
+    aVertex.Create(parVertex,covVertex, 0, 0);
 
     aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), 5); //Yuri
 //    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), TMath::Sqrt(StAnneling::Chi2Cut()/2)); //original
@@ -123,3 +139,6 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
 
     return aVertex;
 }
+
+
+
