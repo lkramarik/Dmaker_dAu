@@ -126,7 +126,7 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
 }
 
 //________________________________________________________________________________
-StDcaGeometry StPicoKFVertexFitter::dcaGeometry(StPicoTrackCovMatrix *cov) {
+StDcaGeometry StPicoKFVertexFitter::dcaGeometry(StPicoTrackCovMatrix const* cov) {
     static StDcaGeometry a;
     Float_t errMatrix[15];
     Float_t mSigma[5];
