@@ -19,6 +19,8 @@
 #include <vector>
 #include "TVector3.h"
 #include "KFVertex.h"
+#include "StEvent/StDcaGeometry.h"
+
 
 //#include "StEvent/StDcaGeometry.h"
 
