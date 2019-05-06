@@ -44,7 +44,7 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
         StPicoTrack* gTrack = (StPicoTrack*)picoDst->track(tracksToUse[iTrk]);
         StPicoTrackCovMatrix *cov = picoDst->trackCovMatrix(tracksToUse[iTrk]);
 
-        const StDcaGeometry dcaG = dcaGeometry(cov);
+        StDcaGeometry dcaG = dcaGeometry(cov);
         Double_t xyzp[6], CovXyzp[21];
         dcaG.GetXYZ(xyzp, CovXyzp);
 
@@ -132,14 +132,14 @@ StDcaGeometry StPicoKFVertexFitter::dcaGeometry(StPicoTrackCovMatrix *cov) {
     Float_t mSigma[5];
     Float_t mCorr[10];
 
-    Float_t* sig = cov->sigmas();
+    const Float_t* sig = cov->sigmas();
     for (int ii = 0; ii < 5; ++ii){
         mSigma[ii]=*sig;
         cout<<sig<<endl;
         sig++;
     }
 
-    Float_t* corr = cov->correlations();
+    const Float_t* corr = cov->correlations();
     for (int ii = 0; ii < 10; ++ii){
         mCorr[ii]=*corr;
         cout<<corr<<endl;
