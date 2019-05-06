@@ -1,7 +1,7 @@
-    #include "TSystem.h"
+#include "TSystem.h"
 
 #ifndef __CINT__
-#include "StMuDSTMaker/COMMON/macros/loadSharedLibraries.C"
+//#include "StMuDSTMaker/COMMON/macros/loadSharedLibraries.C"
 #endif
 
 extern TSystem* gSystem;
@@ -33,7 +33,6 @@ void loadSharedHFLibraries() {
   gSystem->Load("StiMaker");
   gSystem->Load("StPicoKFVertexFitter");
   gSystem->Load("StPicoKFVertexTools");
-  gSystem->Load("StPicoTrackCovMatrix");
   // ---
   cout << " loading of shared HF libraries are done" << endl;
  }
