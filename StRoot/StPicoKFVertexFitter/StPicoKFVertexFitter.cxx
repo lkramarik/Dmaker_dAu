@@ -44,37 +44,22 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
         StPicoTrack* gTrack = (StPicoTrack*)picoDst->track(tracksToUse[iTrk]);
         StPicoTrackCovMatrix *cov = picoDst->trackCovMatrix(tracksToUse[iTrk]);
 
-//        const StDcaGeometry dcaG = cov->dcaGeometry();
-        Double_t xyzp[6], CovXyzp[21]; //ok
-//        dcaG.GetXYZ(xyzp, CovXyzp); //ok
-	
-	Float_t* p = cov->params();
-	for (int ii = 0; ii < 6; ++ii){
-		xyzp[ii]=*p;
-		cout<<p<<endl;
-		p++;
-	}        
-//			Float_t* pCov = cov->
-//        for (int kk = 0; kk < 21; ++kk){
-//                CovXyzp[ii]=*p;
-//               cout<<p<<endl;
-//                p++;
-//        }
+        const StDcaGeometry dcaG = dcaGeometry(cov);
+        Double_t xyzp[6], CovXyzp[21];
+        dcaG.GetXYZ(xyzp, CovXyzp);
 
-
-
-	Int_t q = 1;
+	    Int_t q = 1;
         Int_t pdg = 211;
         if (gTrack->charge() < 0) {
             q=-1;
             pdg=-211;
         }
         MTrack track;
-        track.SetParameters(xyzp); //ok
-        track.SetCovarianceMatrix(CovXyzp); //ok
-        track.SetNDF(1); //ok
-        track.SetID(gTrack->id()); //ok
-        track.SetCharge(q); //ok
+        track.SetParameters(xyzp);
+        track.SetCovarianceMatrix(CovXyzp);
+        track.SetNDF(1);
+        track.SetID(gTrack->id());
+        track.SetCharge(q);
 
         particles[iTrk] = new KFParticle(track, pdg);
     }
@@ -140,5 +125,38 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
     return aVertex;
 }
 
+//________________________________________________________________________________
+StDcaGeometry StPicoKFVertexFitter::dcaGeometry(StPicoTrackCovMatrix *cov) {
+    static StDcaGeometry a;
+    Float_t errMatrix[15];
+    Float_t mSigma[5];
+    Float_t mCorr[10];
 
+    Float_t* sig = cov->sigmas();
+    for (int ii = 0; ii < 5; ++ii){
+        mSigma[ii]=*sig;
+        cout<<sig<<endl;
+        sig++;
+    }
 
+    Float_t* corr = cov->correlations();
+    for (int ii = 0; ii < 10; ++ii){
+        mCorr[ii]=*corr;
+        cout<<corr<<endl;
+        corr++;
+    }
+
+    Int_t ii = 0;
+    for (int i = 0; i < 5; i++) {
+        errMatrix[ii] = mSigma[i]*mSigma[i];
+        for (int j = 0; j < i; j++) {
+            Int_t ij = ii - i - 1 + j + 1;
+            Int_t ij1 = ij - i;
+            errMatrix[ij] = mCorr[ij1]*mSigma[i]*mSigma[j];
+        }
+        ii += i+2;
+    }
+
+    a.set(cov->params(), errMatrix);
+    return *&a;
+}

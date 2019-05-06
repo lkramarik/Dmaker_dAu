@@ -39,7 +39,12 @@ public:
 
     KFVertex primaryVertexRefitUsingTracks(StPicoDst const*,
                                                  std::vector<int>& tracksToUse) const;
-};
+
+protected:
+    StDcaGeometry dcaGeometry(StPicoTrackCovMatrix *cov) {
+
+
+    };
 
 inline KFVertex StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* picoDst) const
 {
