@@ -69,11 +69,11 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
     KFVertex aVertex;
     const Double_t parVertex[6] = {Vtx.x(),Vtx.y(),Vtx.z(), 0, 0, 1000};
     const Double_t covVertex[21] = {1,
-                              0, 1,
-                              0, 0, 100,
-                              0, 0,   0, 100,
-                              0, 0,   0,   0, 100,
-                              0, 0,   0,   0,   0, 100};
+                                    0, 1,
+                                    0, 0, 100,
+                                    0, 0,   0, 100,
+                                    0, 0,   0,   0, 100,
+                                    0, 0,   0,   0,   0, 100};
 
     aVertex.Create(parVertex,covVertex, 0, 0);
 
@@ -85,14 +85,6 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
 
 //Yuri
 //    KFVertex     Vertex;
-//    const Double_t par[6] = {VGlob.x(),VGlob.y(),VGlob.z(), 0, 0, 1000};
-//    const Double_t cov[21] = {1,
-//                              0, 1,
-//                              0, 0, 100,
-//                              0, 0,   0, 100,
-//                              0, 0,   0,   0, 100,
-//                              0, 0,   0,   0,   0, 100};
-//
 //    static Double_t Chi2Cut = 10; // Cut on how well particle match to vertex
 //
 //    Vertex.Create(par,cov, 0, 0);
@@ -136,14 +128,12 @@ StDcaGeometry StPicoKFVertexFitter::dcaGeometry(StPicoTrackCovMatrix const* cov)
     const Float_t* sig = cov->sigmas();
     for (int ii = 0; ii < 5; ++ii){
         mSigma[ii]=*sig;
-        cout<<sig<<" "<<mSigma[ii]<<endl;
         sig++;
     }
 
     const Float_t* corr = cov->correlations();
     for (int ii = 0; ii < 10; ++ii){
         mCorr[ii]=*corr;
-        cout<<corr<<endl;
         corr++;
     }
 
