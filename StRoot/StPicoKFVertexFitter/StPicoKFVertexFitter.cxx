@@ -35,6 +35,7 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* const picoDst
     return primaryVertexRefitUsingTracks(picoDst,goodTracks);
 }
 
+//________________________________________________________________________________
 KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* const picoDst, std::vector<int>& tracksToUse) const {
     // fill an array of KFParticles
     KFParticle* particles[tracksToUse.size()];
@@ -126,7 +127,7 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
 }
 
 //________________________________________________________________________________
-StDcaGeometry StPicoKFVertexFitter::dcaGeometry(StPicoTrackCovMatrix const* cov) {
+StDcaGeometry StPicoKFVertexFitter::dcaGeometry(StPicoTrackCovMatrix const* cov) const {
     static StDcaGeometry a;
     Float_t errMatrix[15];
     Float_t mSigma[5];
