@@ -36,17 +36,15 @@ public:
 
     KFVertex primaryVertexRefit(StPicoDst const*) const;
 
-    KFVertex primaryVertexRefit(StPicoDst const*,
-                                      std::vector<int>& tracksToRemove) const;
+    KFVertex primaryVertexRefit(StPicoDst const*, std::vector<int>&) const;
 
-    KFVertex primaryVertexRefitUsingTracks(StPicoDst const*,
-                                                 std::vector<int>& tracksToUse) const;
+    KFVertex primaryVertexRefitUsingTracks(StPicoDst const*, std::vector<int>&) const;
 
-protected:
-    StDcaGeometry dcaGeometry(StPicoTrackCovMatrix*);
+private:
+    StDcaGeometry dcaGeometry(StPicoTrackCovMatrix const*);
 };
 
-inline KFVertex StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* picoDst) const
+inline KFVertex StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const*) const
 {
     std::vector<int> v;
     return primaryVertexRefit(picoDst,v);
