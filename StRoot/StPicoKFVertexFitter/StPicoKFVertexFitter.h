@@ -44,7 +44,7 @@ private:
     StDcaGeometry dcaGeometry(StPicoTrackCovMatrix const*);
 };
 
-inline KFVertex StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const*) const
+inline KFVertex StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* picoDst) const
 {
     std::vector<int> v;
     return primaryVertexRefit(picoDst,v);
