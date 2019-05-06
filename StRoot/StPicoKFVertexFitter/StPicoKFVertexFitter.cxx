@@ -136,7 +136,7 @@ StDcaGeometry StPicoKFVertexFitter::dcaGeometry(StPicoTrackCovMatrix const* cov)
     const Float_t* sig = cov->sigmas();
     for (int ii = 0; ii < 5; ++ii){
         mSigma[ii]=*sig;
-        cout<<sig<<endl;
+        cout<<sig<<" "<<mSigma[ii]<<endl;
         sig++;
     }
 
