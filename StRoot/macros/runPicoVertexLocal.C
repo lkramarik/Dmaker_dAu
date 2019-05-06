@@ -16,7 +16,6 @@
 #include "StPicoD0V2AnaMaker/StPicoD0V2AnaMaker.h"
 #include "StPicoQAMaker/StPicoQAMaker.h"
 #include "StPicoKFVertexTools/StPicoKFVertexTools.h"
-#include "StPicoTrackCovMatrix/StPicoTrackCovMatrix.h"
 
 using namespace std;
 
