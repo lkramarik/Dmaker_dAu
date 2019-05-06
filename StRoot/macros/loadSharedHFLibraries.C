@@ -1,7 +1,7 @@
 #include "TSystem.h"
 
 #ifndef __CINT__
-//#include "StMuDSTMaker/COMMON/macros/loadSharedLibraries.C"
+#include "StMuDSTMaker/COMMON/macros/loadSharedLibraries.C"
 #endif
 
 extern TSystem* gSystem;
