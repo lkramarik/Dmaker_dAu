@@ -20,7 +20,7 @@
 #include "TVector3.h"
 #include "KFVertex.h"
 #include "StEvent/StDcaGeometry.h"
-
+#include "StPicoEvent//StPicoTrackCovMatrix.h"
 
 //#include "StEvent/StDcaGeometry.h"
 
@@ -43,7 +43,7 @@ public:
                                                  std::vector<int>& tracksToUse) const;
 
 protected:
-    StDcaGeometry dcaGeometry(StPicoTrackCovMatrix *cov);
+    StDcaGeometry dcaGeometry(StPicoTrackCovMatrix*);
 };
 
 inline KFVertex StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* picoDst) const
