@@ -225,7 +225,7 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
             }
             testDca[l] = testDca[l] / (3*setOfTracks[l].size());
         }
-    } while (abs(testDca[0]-testDca[1]) > 0.025 || testNumber < 5);
+    } while (abs(testDca[0]-testDca[1]) > 0.025 || testNumber < 1);
 
     StPicoKFVertexFitter kfVertexFitterSet[nTestedRefits];
     KFVertex kfVertexSet[nTestedRefits];
