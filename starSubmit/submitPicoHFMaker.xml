@@ -3,7 +3,9 @@
   <stdout URL="file:&basePath;/jobs/log/$JOBID.out"/>
   <stderr URL="file:&basePath;/jobs/err/$JOBID.err"/>
 
-  <input URL="filelist:&basePath;/&listOfFiles;" />
+  <!-- <input URL="filelist:&basePath;/&listOfFiles;" /> -->
+
+  <input URL="catalog:star.bnl.gov?trgsetupname=dAu200_production_2016,filetype=daq_reco_picoDst,storage!=hpss,filename~st_physics" nFiles="520" preferStorage="local"/>
 
   <Generator>
     <Location>./report/</Location>
