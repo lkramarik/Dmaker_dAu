@@ -206,7 +206,6 @@ int StPicoD0AnaMaker::createCandidates() {
             if (!mHFCuts->isGoodSecondaryVertexPair(pair)) continue;
             nD0++;
 
-
             bool isD0 = false;
             if((kaon->charge() + pion1->charge() == 0) ) isD0=true;
 
