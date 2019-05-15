@@ -241,14 +241,14 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
     cout<<"ok1"<<endl;
     StPicoKFVertexFitter kfVertexFitterSet[nTestedRefits];
     KFVertex kfVertexSet[nTestedRefits];
-
+    cout<"refit"<<endl;
     for (int k = 0; k < nTestedRefits; ++k) {
         kfVertexSet[k] = kfVertexFitterSet[k].primaryVertexRefitUsingTracks(mPicoDst, setOfTracks[k]);
     }
     const int nNtVars = ntp_KFReso->GetNvar();
     Float_t ntVarKF[nNtVars];
     int ii = 0;
-
+    cout<<"ok2"<<endl;
     ntVarKF[ii++] = kfVertexSet[0].GetX();
     ntVarKF[ii++] = kfVertexSet[0].GetY();
     ntVarKF[ii++] = kfVertexSet[0].GetZ();
@@ -264,9 +264,10 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
     ntVarKF[ii++] = diffX;
     ntVarKF[ii++] = diffY;
     ntVarKF[ii++] = diffZ;
+    cout<<"ok3"<<endl;
 
     ntVarKF[ii++] = sqrt(diffX*diffX + diffY*diffY + diffZ*diffZ);
-    ntVarKF[ii++] = primaryTracks.size();
+    ntVarKF[ii++] = nPrimTracks;
     ntVarKF[ii++] = nHftTracks;
 
     ntp_KFReso->Fill(ntVarKF);
