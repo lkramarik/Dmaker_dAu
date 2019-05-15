@@ -10,8 +10,8 @@
 using namespace std;
 
 void pvAnalyseKFreso() {
-//    TString input = "ntp.vertexKF.small.1204.root";
-    TString input = "ntp.KFVertexReso.1704.root";
+    TString input = "ntp.vertexKF.small.1204.root";
+//    TString input = "ntp.KFVertexReso.1704.root";
     TFile *data = new TFile(input, "r");
     TNtuple *ntp = (TNtuple *) data->Get("ntp_KFReso");
     TFile *fOut = new TFile("res.KFreso.prim30." + input, "recreate");
@@ -27,9 +27,10 @@ void pvAnalyseKFreso() {
     Float_t limsMax[] = {1, 1, 1, 1};
 
     int nPrimMin = 30;
+    int nHftMin = 1;
 //    TString detCuts = "nPrimTracks>0 && nHftTracks>1.5 && abs(picoDstVx)<0.5 && abs(picoDstVy)<0.5";
-    TString detCuts = Form("nPrimTracks>%i && ", nPrimMin);
-//    TString detCuts = "nPrimTracks>30 && nHftTracks>2";
+//    TString detCuts = Form("nPrimTracks>%i &&  nHftTracks>%i", nPrimMin, nHftMin);
+    TString detCuts = Form("nPrimTracks>%i", nPrimMin);
 
     TString hisName, varName;
     TCut cut1, cut2;
