@@ -26,6 +26,12 @@ QA of picoDst data:
 ```sh
 root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runQAAnaMakerLocal.C++
 ```
+<<<<<<< HEAD
+=======
+```sh
+starver SL18f
+```
+>>>>>>> 37d80dcca140c3f34b1a0ef165f6a46cdab765bd
 Primary vertex refitting:
 ```sh
 root -l -b -q StRoot/macros/loadSharedHFLibraries.C StRoot/macros/runPicoVertexLocal.C++
