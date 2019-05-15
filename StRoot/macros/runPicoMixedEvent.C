@@ -16,9 +16,9 @@
 using namespace std;
 
 void runPicoMixedEvent(
-			const Char_t *inputFile="/gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoLists/runs_local_test.list",	
+			const Char_t *inputFile="./picoLists/runs_local_test.list",
 			const Char_t *outputFile="outputLocal",
-			const Char_t *badRunListFileName = "/gpfs01/star/pwg/lkramarik/Dmaker_dAu/picoLists/picoList_bad.list") {
+			const Char_t *badRunListFileName = "./picoLists/picoList_bad.list") {
 
   string SL_version = "SL18f";
   string env_SL = getenv ("STAR");
@@ -42,46 +42,40 @@ void runPicoMixedEvent(
 
   hfCuts->setBadRunListFileName(badRunListFileName);
   hfCuts->setCutVzMax(6.);
-  hfCuts->setCutVzVpdVzMax(3.);
+  hfCuts->setCutVzVpdVzMax(6.);
   hfCuts->addTriggerId(530003); //VPD-5
 
   hfCuts->setCutNHitsFitMin(15);
   hfCuts->setCutRequireHFT(true);
-  hfCuts->setHybridTof(false);
+  hfCuts->setHybridTof(true);
 
   // kaonPion pair cuts
   float dcaDaughtersMax = 0.2;  // maximum
   float decayLengthMin  = 0.000; // minimum
   float decayLengthMax  = 999999; //std::numeric_limits<float>::max();
   float cosThetaMin     = -20.;   // minimum
-  float minMass         = 0.6;
-  float maxMass         = 2.6;
+  float minMass         = 1.1;
+  float maxMass         = 2.1;
   float pairDcaMax      = 99.9;
 
   hfCuts->setCutSecondaryPair(dcaDaughtersMax, decayLengthMin, decayLengthMax, cosThetaMin, minMass, maxMass, pairDcaMax);
- 
-  //Single track pt
-  hfCuts->setCutPtRange(0.15,50.0,StHFCuts::kPion);
-  hfCuts->setCutPtRange(0.15,50.0,StHFCuts::kKaon);
-  //TPC setters
-  hfCuts->setCutTPCNSigmaPion(3.0); //3
-  hfCuts->setCutTPCNSigmaKaon(2.0); //3
-  //TOF setters, need to set pt range as well
-  hfCuts->setCutTOFDeltaOneOverBeta(0.03, StHFCuts::kKaon); // v podstate 5 sigma; nastavene = f * (sigmaTOF), sigma TOF je 0.013
-  hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kKaon);
-  hfCuts->setCutTOFDeltaOneOverBeta(0.06, StHFCuts::kPion); // v podstate 6 sigma
-  hfCuts->setCutPtotRangeHybridTOF(0.2,50.0,StHFCuts::kPion); 
+
+  hfCuts->setCutTPCNSigmaPion(3.0);
+  hfCuts->setCutTPCNSigmaKaon(2.0);
+  hfCuts->setCutTOFDeltaOneOverBetaKaon(0.03);
+  hfCuts->setCutTOFDeltaOneOverBetaPion(0.03);
+  hfCuts->setCutPtMin(0.15);
 
   StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
-  StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile, inputFile);
+  StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile);
   picoMixedEventMaker->setBufferSize(3);
 
   clock_t start = clock(); // getting starting time
   chain->Init();
-  
-  cout << " Total entries = " << picoDstMaker->chain()->GetEntries() << endl;
+  Int_t nEvents = picoDstMaker->chain()->GetEntries();
+  cout << " Total entries = " << nEvents << endl;
 
-  for (Int_t i=0; i<2000; i++) {
+  for (Int_t i=0; i<nEvents; ++i) {
 //    if(i%10==0)       cout << "Working on eventNumber " << i << endl;
 //    cout << "Working on eventNumber " << i << endl;
     chain->Clear();

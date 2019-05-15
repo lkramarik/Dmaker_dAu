@@ -110,6 +110,23 @@ int StPicoQAMaker::InitHF() {
     mOutList->Add(new TH1I("h_QA_nEvents", "Number_of_eventsvsRunIndex", RunNumberVector.size() + 1, -1, RunNumberVector.size())); //number of events in run
 
     mOutList->Add(new TH2D("h_QA_nTracks", "Number_of_tracksvsRunIndex", 200, 0, 200, RunNumberVector.size() + 1, -1, RunNumberVector.size()));    //total nuber of tracks in event (no cuts)
+
+    mOutList->Add(new TH2D("h_QA_nTracks_HFT_TOF_0406", "Number_of_tracksvsRunIndex", 200, 0, 200, RunNumberVector.size() + 1, -1, RunNumberVector.size()));    //total nuber of tracks in event (no cuts)
+    mOutList->Add(new TH2D("h_QA_nTracks_HFT_TOF_1012", "Number_of_tracksvsRunIndex", 200, 0, 200, RunNumberVector.size() + 1, -1, RunNumberVector.size()));    //total nuber of tracks in event (no cuts)
+    mOutList->Add(new TH2D("h_QA_nTracks_HFT_TOF_3040", "Number_of_tracksvsRunIndex", 200, 0, 200, RunNumberVector.size() + 1, -1, RunNumberVector.size()));    //total nuber of tracks in event (no cuts)
+
+    mOutList->Add(new TH2D("h_QA_nTracks_HFT_0406", "Number_of_tracksvsRunIndex", 200, 0, 200, RunNumberVector.size() + 1, -1, RunNumberVector.size()));    //total nuber of tracks in event (no cuts)
+    mOutList->Add(new TH2D("h_QA_nTracks_HFT_1012", "Number_of_tracksvsRunIndex", 200, 0, 200, RunNumberVector.size() + 1, -1, RunNumberVector.size()));    //total nuber of tracks in event (no cuts)
+    mOutList->Add(new TH2D("h_QA_nTracks_HFT_3040", "Number_of_tracksvsRunIndex", 200, 0, 200, RunNumberVector.size() + 1, -1, RunNumberVector.size()));    //total nuber of tracks in event (no cuts)
+
+    mOutList->Add(new TH2D("h_QA_nTracks_TOF_0406", "Number_of_tracksvsRunIndex", 200, 0, 200, RunNumberVector.size() + 1, -1, RunNumberVector.size()));    //total nuber of tracks in event (no cuts)
+    mOutList->Add(new TH2D("h_QA_nTracks_TOF_1012", "Number_of_tracksvsRunIndex", 200, 0, 200, RunNumberVector.size() + 1, -1, RunNumberVector.size()));    //total nuber of tracks in event (no cuts)
+    mOutList->Add(new TH2D("h_QA_nTracks_TOF_3040", "Number_of_tracksvsRunIndex", 200, 0, 200, RunNumberVector.size() + 1, -1, RunNumberVector.size()));    //total nuber of tracks in event (no cuts)
+
+    mOutList->Add(new TH2D("h_QA_nTracks_0406", "Number_of_tracksvsRunIndex", 200, 0, 200, RunNumberVector.size() + 1, -1, RunNumberVector.size()));    //total nuber of tracks in event (no cuts)
+    mOutList->Add(new TH2D("h_QA_nTracks_1012", "Number_of_tracksvsRunIndex", 200, 0, 200, RunNumberVector.size() + 1, -1, RunNumberVector.size()));    //total nuber of tracks in event (no cuts)
+    mOutList->Add(new TH2D("h_QA_nTracks_3040", "Number_of_tracksvsRunIndex", 200, 0, 200, RunNumberVector.size() + 1, -1, RunNumberVector.size()));    //total nuber of tracks in event (no cuts)
+
     mOutList->Add(new TH2D("h_QA_nTracks_TPC", "Number_of_TPC_tracksvsRunIndex", 200, 0, 200, RunNumberVector.size() + 1, -1, RunNumberVector.size())); //number of TPC tracks in run (heve to pass TPC cuts)
     mOutList->Add(new TH2D("h_QA_nTracks_HFT", "Number_of_HFT_tracksvsRunIndex", 200, 0, 200, RunNumberVector.size() + 1, -1, RunNumberVector.size())); //number of HFT tracks (have to pass track->isHFTTrack())
     mOutList->Add(new TH2D("h_QA_nTracks_HFT_TOF", "Number_of_HFT_TOF_tracksvsRunIndex", 200, 0, 200, RunNumberVector.size() + 1, -1, RunNumberVector.size())); //number of HFT tracks (have to pass track->isHFTTrack())
@@ -369,6 +386,21 @@ int StPicoQAMaker::MakeHF() {
     TH2D *h_QA_nTracks_HFT_etaCut_SSD = static_cast<TH2D *>(mOutList->FindObject("h_QA_nTracks_HFT_etaCut_SSD"));
     TH2D *h_QA_nTracks_HFT_etaCut_IST_or_SSD = static_cast<TH2D *>(mOutList->FindObject("h_QA_nTracks_HFT_etaCut_IST_or_SSD"));
 
+    TH2D *h_QA_nTracks_HFT_TOF_0406 = static_cast<TH2D *>(mOutList->FindObject("h_QA_nTracks_HFT_TOF_0406"));
+    TH2D *h_QA_nTracks_HFT_TOF_1012 = static_cast<TH2D *>(mOutList->FindObject("h_QA_nTracks_HFT_TOF_1012"));
+    TH2D *h_QA_nTracks_HFT_TOF_3040 = static_cast<TH2D *>(mOutList->FindObject("h_QA_nTracks_HFT_TOF_3040"));
+
+    TH2D *h_QA_nTracks_HFT_0406 = static_cast<TH2D *>(mOutList->FindObject("h_QA_nTracks_HFT_0406"));
+    TH2D *h_QA_nTracks_HFT_1012 = static_cast<TH2D *>(mOutList->FindObject("h_QA_nTracks_HFT_1012"));
+    TH2D *h_QA_nTracks_HFT_3040 = static_cast<TH2D *>(mOutList->FindObject("h_QA_nTracks_HFT_3040"));
+
+    TH2D *h_QA_nTracks_TOF_0406 = static_cast<TH2D *>(mOutList->FindObject("h_QA_nTracks_TOF_0406"));
+    TH2D *h_QA_nTracks_TOF_1012 = static_cast<TH2D *>(mOutList->FindObject("h_QA_nTracks_TOF_1012"));
+    TH2D *h_QA_nTracks_TOF_3040 = static_cast<TH2D *>(mOutList->FindObject("h_QA_nTracks_TOF_3040"));
+
+    TH2D *h_QA_nTracks_0406 = static_cast<TH2D *>(mOutList->FindObject("h_QA_nTracks_0406"));
+    TH2D *h_QA_nTracks_1012 = static_cast<TH2D *>(mOutList->FindObject("h_QA_nTracks_1012"));
+    TH2D *h_QA_nTracks_3040 = static_cast<TH2D *>(mOutList->FindObject("h_QA_nTracks_3040"));
 
     TH2D *h_QA_nTracks_HFT_TOF = static_cast<TH2D *>(mOutList->FindObject("h_QA_nTracks_HFT_TOF"));
     TH2D *h_QA_pT_HFT_TOF = static_cast<TH2D *>(mOutList->FindObject("h_QA_pT_HFT_TOF"));
@@ -456,15 +488,17 @@ int StPicoQAMaker::MakeHF() {
     float vertex_x_QA = pVtx.x();
     float vertex_y_QA = pVtx.y();
     float vertex_z_QA = pVtx.z();
-    float nTrk=0, nTrk0406=0, nTrk1012=0, nTrk3040=0, nTrkHftTof=0, nTrkHftTof0406=0, nTrkHftTof1012=0, nTrkHftTof3040=0, nTrkHft=0, nTrkHft0406=0, nTrkHft1012=0, nTrkHft3040=0, nTrkTof=0;
+    float nTrk=0, nTrk0406=0, nTrk1012=0, nTrk3040=0, nTrkHftTof=0, nTrkHftTof0406=0, nTrkHftTof1012=0, nTrkHftTof3040=0, nTrkHft=0, nTrkHft0406=0, nTrkHft1012=0, nTrkHft3040=0, nTrkTof=0, nTrkTof0406=0, nTrkTof1012=0, nTrkTof3040=0;
 
     h_QA_Vz->Fill(vertex_z_QA, RunIndex);
     h_QA_VzmVzVPD->Fill(fabs(vertex_z_QA - mPicoDst->event()->vzVpd()), RunIndex);
-    StPicoKFVertexFitter kfVertexFitter;
-    TVector3 kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
-    h_QA_Vx_position->Fill(kfVertex.x(), pVtx.x());
-    h_QA_Vy_position->Fill(kfVertex.y(), pVtx.y());
-    h_QA_Vz_position->Fill(kfVertex.z(), pVtx.z());
+
+//    StPicoKFVertexFitter kfVertexFitter;
+//    KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
+//    h_QA_Vx_position->Fill(kfVertex.GetX(), pVtx.x());
+//    h_QA_Vy_position->Fill(kfVertex.GetY(), pVtx.y());
+//    h_QA_Vz_position->Fill(kfVertex.GetZ(), pVtx.z());
+
 
     Int_t nPions = 0;
     Int_t nPionsTOFMatching = 0;
@@ -481,8 +515,7 @@ int StPicoQAMaker::MakeHF() {
         StPicoTrack const *trk = mPicoDst->track(iTrack);
         if (!trk) continue;
         float pT_QA = trk->gPt();
-        if (pT_QA < 0.2) continue;
-//        if (pT_QA < 0.15) continue;
+        if (pT_QA < 0.15) continue;
         float Beta = mHFCuts->getTofBetaBase(trk);
 
         h_QA_nHitsFit->Fill(trk->nHitsFit(), RunIndex);
@@ -509,23 +542,27 @@ int StPicoQAMaker::MakeHF() {
         if (abs(dca_QA) > 1.5) continue;
         nTrk+=1;
 
+        if (pT_QA>0.4 && pT_QA<0.6) nTrk0406+=1;
+        if (pT_QA>1.0 && pT_QA<1.2) nTrk1012+=1;
+        if (pT_QA>3 && pT_QA<4) nTrk3040+=1;
+
         float phi_QA = momentum.Phi();
         if (mHFCuts->isTOFmatched(trk)) {
             nTrkTof+=1;
             h_QA_ZDC_rate_pileUp_TOF->Fill(mPicoDst->event()->ZDCx() / 1000., RunIndex);
             h_QA_BBC_rate_pileUp_TOF->Fill(mPicoDst->event()->BBCx() / 1000., RunIndex);
             if (pT_QA>0.4 && pT_QA<0.6) {
-                nTrk0406+=1;
+                nTrkTof0406+=1;
                 h_QA_ZDC_rate_TOF_0406->Fill(mPicoDst->event()->ZDCx() / 1000., RunIndex);
                 h_QA_BBC_rate_TOF_0406->Fill(mPicoDst->event()->BBCx() / 1000., RunIndex);
             }
             if (pT_QA>1.0 && pT_QA<1.2) {
-                nTrk1012+=1;
+                nTrkTof1012+=1;
                 h_QA_ZDC_rate_TOF_1012->Fill(mPicoDst->event()->ZDCx() / 1000., RunIndex);
                 h_QA_BBC_rate_TOF_1012->Fill(mPicoDst->event()->BBCx() / 1000., RunIndex);
             }
             if (pT_QA>3 && pT_QA<4) {
-                nTrk3040+=1;
+                nTrkTof3040+=1;
                 h_QA_ZDC_rate_TOF_3040->Fill(mPicoDst->event()->ZDCx() / 1000., RunIndex);
                 h_QA_BBC_rate_TOF_3040->Fill(mPicoDst->event()->BBCx() / 1000., RunIndex);
             }
@@ -581,6 +618,10 @@ int StPicoQAMaker::MakeHF() {
 
         //---------------FILL HFT QA INFORMATION-------------------------------------------------------
         if (trk->isHFTTrack()) {
+            if (pT_QA>0.4 && pT_QA<0.6) nTrkHft0406+=1;
+            if (pT_QA>1.0 && pT_QA<1.2) nTrkHft1012+=1;
+            if (pT_QA>3 && pT_QA<4) nTrkHft3040+=1;
+
             //Fill all HFT histograms here
             nTrkHft+=1;
             h_QA_pT_HFT->Fill(pT_QA, RunIndex);
@@ -715,6 +756,22 @@ int StPicoQAMaker::MakeHF() {
     h_QA_nTracks_TOF->Fill(nTrkTof, RunIndex);
     h_QA_nTracks_HFT->Fill(nTrkHft, RunIndex);
     h_QA_nTracks_HFT_TOF->Fill(nTrkHftTof, RunIndex);
+
+    h_QA_nTracks_TOF_0406->Fill(nTrkTof0406, RunIndex);
+    h_QA_nTracks_TOF_1012->Fill(nTrkTof1012, RunIndex);
+    h_QA_nTracks_TOF_3040->Fill(nTrkTof3040, RunIndex);
+
+    h_QA_nTracks_HFT_0406->Fill(nTrkHft0406, RunIndex);
+    h_QA_nTracks_HFT_1012->Fill(nTrkHft1012, RunIndex);
+    h_QA_nTracks_HFT_3040->Fill(nTrkHft3040, RunIndex);
+
+    h_QA_nTracks_HFT_TOF_0406->Fill(nTrkHftTof0406, RunIndex);
+    h_QA_nTracks_HFT_TOF_1012->Fill(nTrkHftTof1012, RunIndex);
+    h_QA_nTracks_HFT_TOF_3040->Fill(nTrkHftTof3040, RunIndex);
+
+    h_QA_nTracks_0406->Fill(nTrk0406, RunIndex);
+    h_QA_nTracks_1012->Fill(nTrk1012, RunIndex);
+    h_QA_nTracks_3040->Fill(nTrk3040, RunIndex);
 
     h_QA_BBC_rate_kaons->Fill(mPicoDst->event()->BBCx()/1000., nKaons);
     h_QA_BBC_rate_pions->Fill(mPicoDst->event()->BBCx()/1000., nPions);

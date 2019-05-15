@@ -26,8 +26,7 @@ static const int m_nmultEdge = 1;
 static float constexpr m_multEdge[m_nmultEdge+1] = {0, 2000};
 
 // _________________________________________________________
-StPicoMixedEventMaker::StPicoMixedEventMaker(char const* name, StPicoDstMaker* picoMaker, StHFCuts* hfCuts,
-                                             char const* outputBaseFileName) :
+StPicoMixedEventMaker::StPicoMixedEventMaker(char const* name, StPicoDstMaker* picoMaker, StHFCuts* hfCuts, char const* outputBaseFileName) :
         StMaker(name),
         mPicoDst(NULL),
         mPicoDstMaker(picoMaker),

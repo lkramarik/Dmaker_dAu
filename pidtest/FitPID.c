@@ -12,6 +12,7 @@
 #include "TLatex.h"
 #include "TF1.h"
 #include "TCut.h"
+#include "TEventList.h"
 #include "TFile.h"
 #include "TGraphErrors.h"
 #include "TMultiGraph.h"
@@ -37,7 +38,7 @@ FitPID::~FitPID() {
     // destructor
 
 }
-TH1F* FitPID::projectSubtractBckg(TString input, Int_t nBins, Float_t massMin, Float_t massMax, Float_t ptmin, Float_t ptmax, TString pair, TCut setCut, TString variable, TString varName){
+TH1F* FitPID::projectSubtractBckg(TString dirName, TString input, Int_t nBins, Float_t massMin, Float_t massMax, Float_t ptmin, Float_t ptmax, TString pair, TCut setCut, TString variable, TString varName, bool save){
     std::vector<TCut> mCuts;
     mCuts.push_back(setCut);
     TFile* data = new TFile(input ,"r");
@@ -80,9 +81,9 @@ TH1F* FitPID::projectSubtractBckg(TString input, Int_t nBins, Float_t massMin, F
 
     ntpS -> Project(nameSig, variable, setCuts);
     ntpB -> Project(nameBack, variable, setCuts);
-    TString imgSave = Form("./img/%s/%s_%.3f_%.3f.png", pairShort.Data(), variable.Data(), ptmin, ptmax);
+    TString imgSave = Form("./%s/img/%s/%s_%.3f_%.3f.png", dirName.Data(), pairShort.Data(), variable.Data(), ptmin, ptmax);
 
-    TH1F* hSig = subtractBckg(hS,hB,nameSubtr,dataRes,imgSave);
+    TH1F* hSig = subtractBckg(hS,hB,nameSubtr,dataRes,imgSave,save);
 
     TList *listOut = new TList();
     listOut->Add(hS);
@@ -95,7 +96,7 @@ TH1F* FitPID::projectSubtractBckg(TString input, Int_t nBins, Float_t massMin, F
     return hSig;
 }
 
-TH1F* FitPID::subtractBckg(TH1F* hS, TH1F* hB, TString nameSubtr, TFile* outputF, TString imgSave) {
+TH1F* FitPID::subtractBckg(TH1F* hS, TH1F* hB, TString nameSubtr, TFile* outputF, TString imgSave, bool save) {
     outputF->cd();
     TH1F* hSig = (TH1F*)hS->Clone(nameSubtr);
     hSig->SetDirectory(0);
@@ -119,12 +120,12 @@ TH1F* FitPID::subtractBckg(TH1F* hS, TH1F* hB, TString nameSubtr, TFile* outputF
     hS->Draw();
     hB->Draw("same");
     legend->Draw("same");
-    c->SaveAs(imgSave);
+    if (save) c->SaveAs(imgSave);
     c->Close();
     return hSig;
 }
 
-void FitPID::peakFit(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin, Float_t massMax, TString pair, Float_t ptmin, Float_t ptmax, TString varName){
+void FitPID::peakFit(TString dirName, TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin, Float_t massMax, TString pair, Float_t ptmin, Float_t ptmax, TString varName, Float_t nSigmaLine){
     TF1 *funLS = new TF1("funLS","pol1(0)+gaus(2)", massMin, massMax);
     funLS->SetParameters(1.,1.,mHeight,mean,sigma);
     funLS->SetLineColor(2);
@@ -153,9 +154,9 @@ void FitPID::peakFit(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin,
     mMean = funLS->GetParameter(3);
     mMeanE = funLS->GetParError(3);
 
-    TLine *left = new TLine(mMean - 1*mSigma, hToFit->GetMaximum(), mMean - 1*mSigma, hToFit->GetMinimum());
+    TLine *left = new TLine(mMean - nSigmaLine*mSigma, hToFit->GetMaximum(), mMean - nSigmaLine*mSigma, hToFit->GetMinimum());
     left->SetLineColor(46);
-    TLine *right = new TLine(mMean + 1*mSigma, hToFit->GetMaximum(), mMean + 1*mSigma, hToFit->GetMinimum());
+    TLine *right = new TLine(mMean + nSigmaLine*mSigma, hToFit->GetMaximum(), mMean + nSigmaLine*mSigma, hToFit->GetMinimum());
     right->SetLineColor(46);
 
     hToFit->Draw();
@@ -168,7 +169,7 @@ void FitPID::peakFit(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin,
     mMean = funLS->GetParameter(3);
     mMeanE = funLS->GetParError(3);
     pair.ReplaceAll("#","");
-    c->SaveAs(Form("./img/%s/fit/%s_%.3f_%.3f.png", pair.Data(), varName.Data(), ptmin, ptmax));
+    c->SaveAs(Form("./%s/img/%s/fit/%s_%.3f_%.3f.png", dirName.Data(), pair.Data(), varName.Data(), ptmin, ptmax));
     c->Close();
 }
 
@@ -222,7 +223,7 @@ TH1F* FitPID::peakFitResSub(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t m
 
 
 
-void FitPID::peakMassFit(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin, Float_t massMax, TString pair, Float_t ptmin, Float_t ptmax, TString varName){
+void FitPID::peakMassFit(TString dirName, TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin, Float_t massMax, TString pair, Float_t ptmin, Float_t ptmax, TString varName){
     TF1 *funLS = new TF1("funLS","pol1(0)+gaus(2)", massMin, massMax);
     funLS->SetParameters(1.,1.,mHeight,mean,sigma);
     funLS->SetLineColor(2);
@@ -265,6 +266,47 @@ void FitPID::peakMassFit(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t mass
     mMean = funLS->GetParameter(3);
     mMeanE = funLS->GetParError(3);
     pair.ReplaceAll("#","");
-    c->SaveAs(Form("./img/%s/fit/%s_%.3f_%.3f.png", pair.Data(), varName.Data(), ptmin, ptmax));
+    c->SaveAs(Form("./%s/img/%s/fit/%s_%.3f_%.3f.png", dirName.Data(), pair.Data(), varName.Data(), ptmin, ptmax));
     c->Close();
+}
+
+void FitPID::makeTuple(TString input, TCut cuts, bool plot2Part){
+    TFile* data = new TFile(input ,"r");
+    TNtuple* ntp[2] = {(TNtuple*)data -> Get("ntp_background"), (TNtuple*)data -> Get("ntp_signal")};
+    TString outVars = "pi1_pt:pi1_nSigma:pi1_TOFinvbeta:bbcRate:nTofTracks";
+    TFile *fileOut = new TFile(input+".cutted.root", "RECREATE");
+
+    TNtuple* ntpOut[2] = {new TNtuple("ntp_background","ntp_background",outVars), new TNtuple("ntp_signal","ntp_signal",outVars)};
+
+    Float_t pi1_pt, pi1_nSigma, pi1_TOFinvbeta, pi2_pt, pi2_nSigma, pi2_TOFinvbeta, bbcRate, nTofTracks;
+    Long64_t indexCut;
+    for (int j = 0; j < 2; ++j) {
+        ntp[j]->Draw(">>elist",cuts);
+        TEventList *elist = (TEventList*)gDirectory->Get("elist");
+        ntp[j]->SetBranchAddress("pi1_pt", &pi1_pt);
+        ntp[j]->SetBranchAddress("pi1_nSigma", &pi1_nSigma);
+        ntp[j]->SetBranchAddress("pi1_TOFinvbeta", &pi1_TOFinvbeta);
+
+        ntp[j]->SetBranchAddress("pi2_pt", &pi2_pt);
+        ntp[j]->SetBranchAddress("pi2_nSigma", &pi2_nSigma);
+        ntp[j]->SetBranchAddress("pi2_TOFinvbeta", &pi2_TOFinvbeta);
+
+        ntp[j]->SetBranchAddress("bbcRate", &bbcRate);
+        ntp[j]->SetBranchAddress("nTofTracks", &nTofTracks);
+
+        ntp[j]->SetEventList(elist);
+        cout<<elist->GetN()<<endl;
+
+        for (int i = 0; i < elist->GetN(); ++i) {
+            indexCut = elist->GetEntry(i);
+            ntp[j]->GetEntry(indexCut);
+            ntpOut[j]->Fill(pi1_pt, pi1_nSigma, pi1_TOFinvbeta, bbcRate, nTofTracks);
+            if(plot2Part) ntpOut[j]->Fill(pi2_pt, pi2_nSigma, pi2_TOFinvbeta, bbcRate, nTofTracks);
+        }
+    }
+    fileOut->cd();
+    ntpOut[0]->Write(ntpOut[0]->GetName(), TObject::kOverwrite);
+    ntpOut[1]->Write(ntpOut[1]->GetName(), TObject::kOverwrite);
+    fileOut->Close();
+    data->Close();
 }

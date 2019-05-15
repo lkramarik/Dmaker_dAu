@@ -58,16 +58,15 @@ class StPicoHFMaker : public StMaker
     TVector3        mPrimVtx;
     TList          *mOutList;
 
-  private:
+private:
     void  resetEvent();
     bool  setupEvent();
-    
+    TFile*          mOutputFileList;     // ptr to file saving the list of histograms
+
     void  initializeEventStats();
     void  fillEventStats(int *aEventStat);
 
     TString         mOutputFileBaseName; // base name for output files
-    TFile*          mOutputFileTree;     // ptr to file saving the HFtree
-    TFile*          mOutputFileList;     // ptr to file saving the list of histograms
     ClassDef(StPicoHFMaker, 0)
 };
 

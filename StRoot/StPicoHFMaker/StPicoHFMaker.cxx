@@ -26,7 +26,7 @@ StPicoHFMaker::StPicoHFMaker(char const* name, StPicoDstMaker* picoMaker,
         StMaker(name), mPicoDst(NULL), mHFCuts(NULL), mPicoHFEvent(NULL), mBField(0.), mOutList(NULL),
         mOutputFileBaseName(outputBaseFileName),
         mPicoDstMaker(picoMaker), mPicoEvent(NULL),
-        mOutputFileTree(NULL), mOutputFileList(NULL) {
+        mOutputFileList(NULL) {
   // -- constructor
 }
 

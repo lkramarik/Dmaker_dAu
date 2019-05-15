@@ -56,6 +56,9 @@ void runQAAnaMaker(
     hfCuts->setCutVzMax(6);
     hfCuts->setCutVzVpdVzMax(6.);
 
+    hfCuts->setCutTOFDeltaOneOverBeta(0.03, StHFCuts::kPion); // v podstate 5 sigma; nastavene = f * (sigmaTOF), sigma TOF je 0.013
+    hfCuts->setCutTOFDeltaOneOverBeta(0.03, StHFCuts::kKaon); // v podstate 5 sigma; nastavene = f * (sigmaTOF), sigma TOF je 0.013
+
     StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
     StPicoQAMaker* PicoQAMaker = new StPicoQAMaker("picoQAMaker", picoDstMaker, outputFile);
     PicoQAMaker->setHFBaseCuts(hfCuts);
