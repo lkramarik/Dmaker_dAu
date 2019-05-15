@@ -275,6 +275,4 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
     setOfTracks[0].shrink_to_fit();
     setOfTracks[1].clear();
     setOfTracks[1].shrink_to_fit();
-
-    delete test;
 }
