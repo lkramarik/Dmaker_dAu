@@ -52,6 +52,13 @@ int StPicoKFVertexTools::FinishHF() {
 }
 // _________________________________________________________
 int StPicoKFVertexTools::MakeHF() {
+    bool goodEvent=true;
+
+    if (!(mPicoEvent->BBCx()<950000)) return kStOK;
+    if (!(mPrimVtx.x()<1)) return kStOK;
+    if (!(mPrimVtx.y()<1)) return kStOK;
+    if (!(mPrimVtx.Perp()<1)) return kStOK;
+
     TH1F *hMassUS = static_cast<TH1F*>(mOutList->FindObject("hMassUS"));
     TH1F *hMassUSRefit = static_cast<TH1F*>(mOutList->FindObject("hMassUSRefit"));
 
@@ -72,6 +79,8 @@ int StPicoKFVertexTools::MakeHF() {
         if (mHFCuts->isGoodPion(trk)) mIdxPicoPions.push_back(iTrack);
         if (mHFCuts->isGoodKaon(trk)) mIdxPicoKaons.push_back(iTrack);
     }
+
+    if (!(nHftTracks>1)) return kStOK;
 
 //    std::vector<int> tracksToRemove;
 //
@@ -99,13 +108,7 @@ int StPicoKFVertexTools::MakeHF() {
 
 
 
-    bool goodEvent=true;
 
-    if (!(nHftTracks>1)) goodEvent=false;
-    if (!(mPicoEvent->BBCx()<950000)) goodEvent=false;
-    if (!(mPrimVtx.x()<1)) goodEvent=false;
-    if (!(mPrimVtx.y()<1)) goodEvent=false;
-    if (!(mPrimVtx.Perp()<1)) goodEvent=false;
 
     if (goodEvent) {
 //    if (nD0>-1) {
@@ -196,6 +199,11 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
     const int nTestedRefits = 2;
 
     std::vector<int> setOfTracks[nTestedRefits];
+
+    for (int m = 0; m < nTestedRefits; ++m) {
+        setOfTracks[m].resize(1+primaryTracks.size()/2,-999);
+    }
+
     Float_t testDca[nTestedRefits] = {0, 0};
     int testNumber = 0;
     StPicoTrack *test = new StPicoTrack();
@@ -203,21 +211,24 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
     do {
         testNumber++;
         std::random_shuffle(std::begin(primaryTracks), std::end(primaryTracks));
-        for (int k = 0; k < nTestedRefits; ++k) {
-            setOfTracks[k].clear();
-            setOfTracks[k].shrink_to_fit();
-        }
+//        for (int k = 0; k < nTestedRefits; ++k) {
+//            setOfTracks[k].clear();
+//            setOfTracks[k].shrink_to_fit();
+//        }
         for (unsigned int i = 0; i < primaryTracks.size() / 2; ++i) {
-            setOfTracks[0].push_back(primaryTracks[i]);
+            setOfTracks[0][i] = primaryTracks[i];
+        }
+        cout<<i<<endl;
+        for (unsigned int j = primaryTracks.size() / 2; j < primaryTracks.size(); ++j) {
+            setOfTracks[1][j-i-1] = primaryTracks[j];
         }
 
-        for (unsigned int j = primaryTracks.size() / 2; j < primaryTracks.size(); ++j) {
-            setOfTracks[1].push_back(primaryTracks[j]);
-        }
+        cout<<setOfTracks[1].size()<<endl;
 
         for (int l = 0; l < nTestedRefits; ++l) {
             testDca[l]=0;
             for (unsigned int i = 0; i < setOfTracks[l].size(); ++i) {
+                if (setOfTracks[l][i]<0) continue;
                 test = mPicoDst->track(setOfTracks[l][i]);
                 testDca[l] += test->gDCAx(mPrimVtx.x());
                 testDca[l] += test->gDCAy(mPrimVtx.y());
@@ -263,4 +274,6 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
     setOfTracks[0].shrink_to_fit();
     setOfTracks[1].clear();
     setOfTracks[1].shrink_to_fit();
+
+    delete test;
 }
