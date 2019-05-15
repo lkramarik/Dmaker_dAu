@@ -240,7 +240,7 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
     } while (abs(testDca[0]-testDca[1]) > 0.025 && testNumber < 1);
 
     for (int n = 0; n < nTestedRefits; ++n) {
-        setOfTracks.erase(std::remove(setOfTracks.begin(), setOfTracks.end(), -999), setOfTracks.end());
+        setOfTracks[n].erase(std::remove(setOfTracks[n].begin(), setOfTracks[n].end(), -999), setOfTracks[n].end());
     }
 
     cout<<"ok1"<<endl;
