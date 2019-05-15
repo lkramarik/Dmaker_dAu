@@ -223,8 +223,6 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
             setOfTracks[1][j-nPrimTracks/2] = primaryTracks[j];
         }
 
-        cout<<setOfTracks[1].size()<<endl;
-
         for (int l = 0; l < nTestedRefits; ++l) {
             testDca[l]=0;
             for (unsigned int i = 0; i < setOfTracks[l].size(); ++i) {
@@ -236,24 +234,20 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
             }
             testDca[l] = testDca[l] / (3*setOfTracks[l].size());
         }
-        cout<<testNumber<<endl;
-    } while (abs(testDca[0]-testDca[1]) > 0.025 && testNumber < 1);
+    } while (abs(testDca[0]-testDca[1]) > 0.025 && testNumber < 20); //-> one of this is false, do..while ends.
 
     for (int n = 0; n < nTestedRefits; ++n) {
         setOfTracks[n].erase(std::remove(setOfTracks[n].begin(), setOfTracks[n].end(), -999), setOfTracks[n].end());
     }
 
-    cout<<"ok1"<<endl;
     StPicoKFVertexFitter kfVertexFitterSet[nTestedRefits];
     KFVertex kfVertexSet[nTestedRefits];
-    cout<<"refit"<<endl;
     for (int k = 0; k < nTestedRefits; ++k) {
         kfVertexSet[k] = kfVertexFitterSet[k].primaryVertexRefitUsingTracks(mPicoDst, setOfTracks[k]);
     }
     const int nNtVars = ntp_KFReso->GetNvar();
     Float_t ntVarKF[nNtVars];
     int ii = 0;
-    cout<<"ok2"<<endl;
     ntVarKF[ii++] = kfVertexSet[0].GetX();
     ntVarKF[ii++] = kfVertexSet[0].GetY();
     ntVarKF[ii++] = kfVertexSet[0].GetZ();
@@ -269,7 +263,6 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
     ntVarKF[ii++] = diffX;
     ntVarKF[ii++] = diffY;
     ntVarKF[ii++] = diffZ;
-    cout<<"ok3"<<endl;
 
     ntVarKF[ii++] = sqrt(diffX*diffX + diffY*diffY + diffZ*diffZ);
     ntVarKF[ii++] = nPrimTracks;
