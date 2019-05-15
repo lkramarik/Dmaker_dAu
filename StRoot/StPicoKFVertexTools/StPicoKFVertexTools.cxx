@@ -197,7 +197,7 @@ void StPicoKFVertexTools::compareFitters(int nD0, int nHftTracks) {
 // _____________________________________________________________________________
 void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftTracks) {
     const int nTestedRefits = 2;
-    const int nPrimTracks = primaryTracks.size();
+    const unsigned int nPrimTracks = primaryTracks.size();
     std::vector<int> setOfTracks[nTestedRefits];
 
     for (int m = 0; m < nTestedRefits; ++m) {
@@ -220,7 +220,7 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
         }
 
         for (unsigned int j = nPrimTracks/2; j < nPrimTracks; ++j) {
-            setOfTracks[1][j-1-nPrimTracks/2] = primaryTracks[j];
+            setOfTracks[1][j-nPrimTracks/2] = primaryTracks[j];
         }
 
         cout<<setOfTracks[1].size()<<endl;
@@ -238,6 +238,7 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
         }
     } while (abs(testDca[0]-testDca[1]) > 0.025 || testNumber < 1);
 
+    cout<<"ok1"<<endl;
     StPicoKFVertexFitter kfVertexFitterSet[nTestedRefits];
     KFVertex kfVertexSet[nTestedRefits];
 
