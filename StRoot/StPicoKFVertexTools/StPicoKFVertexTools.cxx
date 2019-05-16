@@ -55,9 +55,9 @@ int StPicoKFVertexTools::MakeHF() {
     bool goodEvent=true;
 
     if (!(mPicoEvent->BBCx()<950000)) return kStOK;
-    if (!(mPrimVtx.x()<1)) return kStOK;
-    if (!(mPrimVtx.y()<1)) return kStOK;
-    if (!(mPrimVtx.Perp()<1)) return kStOK;
+    if (!(mPrimVtx.x()<0.5)) return kStOK;
+    if (!(mPrimVtx.y()<0.5)) return kStOK;
+    if (!(mPrimVtx.Perp()<0.5)) return kStOK;
 
     TH1F *hMassUS = static_cast<TH1F*>(mOutList->FindObject("hMassUS"));
     TH1F *hMassUSRefit = static_cast<TH1F*>(mOutList->FindObject("hMassUSRefit"));

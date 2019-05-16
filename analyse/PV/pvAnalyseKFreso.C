@@ -6,11 +6,12 @@
 #include "TNtuple.h"
 #include "TFile.h"
 #include <iostream>
+#include "TSystem.h"
 
 using namespace std;
 
 void pvAnalyseKFreso() {
-    TString input = "ntp.vertexKF.small.1204.root";
+    TString input = "ntp.KFVertexReso.1605.root";
 //    TString input = "ntp.KFVertexReso.1704.root";
     TFile *data = new TFile(input, "r");
     TNtuple *ntp = (TNtuple *) data->Get("ntp_KFReso");
@@ -26,11 +27,14 @@ void pvAnalyseKFreso() {
     Float_t limsMin[] = {0, -1, -1, -1};
     Float_t limsMax[] = {1, 1, 1, 1};
 
-    int nPrimMin = 30;
-    int nHftMin = 1;
+    int nPrimMin = 50;
+    int nHftMin = 10;
 //    TString detCuts = "nPrimTracks>0 && nHftTracks>1.5 && abs(picoDstVx)<0.5 && abs(picoDstVy)<0.5";
-//    TString detCuts = Form("nPrimTracks>%i &&  nHftTracks>%i", nPrimMin, nHftMin);
-    TString detCuts = Form("nPrimTracks>%i", nPrimMin);
+    TString detCuts = Form("nPrimTracks>%i && nHftTracks>%i", nPrimMin, nHftMin);
+    TString folder = Form("nPrimMin%i_nHftMin%i/", nPrimMin, nHftMin);
+    gSystem->Exec(Form("mkdir %s", folder.Data()));
+
+//    TString detCuts = Form("nPrimTracks>%i", nPrimMin);
 
     TString hisName, varName;
     TCut cut1, cut2;
@@ -42,7 +46,7 @@ void pvAnalyseKFreso() {
         ntp->Project(varName, varName, detCuts);
         hVar->Rebin(2);
         hVar->SetStats(0);
-        hVar->SetTitle("");
+        hVar->SetTitle(detCuts);
         hVar->Scale(1/hVar->GetEntries());
         hVar->SetFillColor(46);
         hVar->SetFillStyle(3004);
@@ -62,7 +66,7 @@ void pvAnalyseKFreso() {
 //        TCanvas *c = new TCanvas("c1", "c1", 900, 1200);
         c->SetLogy();
         hVar->Draw("HIST");
-        c->SaveAs(varName + ".zoom.png");
+        c->SaveAs(folder + varName + ".zoom.png");
         c->Clear();
 
         hVar->Reset();
