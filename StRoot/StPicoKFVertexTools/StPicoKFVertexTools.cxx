@@ -26,7 +26,7 @@ int StPicoKFVertexTools::InitHF() {
     mOutList->Add(new TH1F("hMassUS","hMassUS", 500, 1.6, 2.1));
     mOutList->Add(new TH1F("hMassUSRefit","hMassUSRefit", 500, 1.6, 2.1));
 
-    ntp_vertex = new TNtuple("ntp_vertex","ntp_vertex","runId:refMult:nGlobTracks:nHftTracks:nD0:StAnnelingChi2Cut:"
+    ntp_vertex = new TNtuple("ntp_vertex","ntp_vertex","runId:refMult:grefMult:nGlobTracks:nHftTracks:nD0:StAnnelingChi2Cut:"
                                                        "picoDstVx:picoDstVy:picoDstVz:"
                                                        "picoDstVErrX:picoDstVErrY:picoDstVErrZ:"
                                                        "KFVx:KFVy:KFVz:"
@@ -35,7 +35,7 @@ int StPicoKFVertexTools::InitHF() {
     ntp_KFReso = new TNtuple("ntp_KFReso","ntp_KFReso","KF1x:KF1y:KF1z:"
                                                        "KF2x:KF2y:KF2z:"
                                                        "KFdiffx:KFdiffy:KFdiffz:"
-                                                       "KFdiff:nPrimTracks:nHftTracks");
+                                                       "KFdiff:nPrimTracks:nHftTracks:grefMult");
     return kStOK;
 }
 
@@ -65,6 +65,7 @@ int StPicoKFVertexTools::MakeHF() {
     std::vector<unsigned short> mIdxPicoPions;
     std::vector<unsigned short> mIdxPicoKaons;
     std::vector<int> primaryTracks;
+    std::vector<int> globalTracks;
 
     int nHftTracks=0;
     int nD0=0;
@@ -73,6 +74,7 @@ int StPicoKFVertexTools::MakeHF() {
     UInt_t nTracks = mPicoDst->numberOfTracks();
     for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
         StPicoTrack* trk = mPicoDst->track(iTrack);
+        globalTracks.push_back(iTrack);
         if (trk->isPrimary()) primaryTracks.push_back(iTrack);
         if (trk->isHFTTrack()) nHftTracks++;
         if (abs(trk->gMom().PseudoRapidity())>1) continue;
@@ -112,11 +114,12 @@ int StPicoKFVertexTools::MakeHF() {
 
     if (goodEvent) {
 //    if (nD0>-1) {
-//        compareFitters(nD0, nHftTracks);
+        compareFitters(nD0, nHftTracks);
 
         //making 2 vertices and comparing:
         if (primaryTracks.size()>10) {
-            makeKFReso(primaryTracks, nHftTracks);
+//            makeKFReso(primaryTracks, nHftTracks);
+            makeKFReso(globalTracks, nHftTracks);
         }
 //        KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst, tracksToRemove);
 
@@ -156,6 +159,9 @@ int StPicoKFVertexTools::MakeHF() {
 //    tracksToRemove.clear();
     primaryTracks.clear();
     primaryTracks.shrink_to_fit();
+
+    globalTracks.clear();
+    globalTracks.shrink_to_fit();
     return kStOK;
 }
 
@@ -170,6 +176,7 @@ void StPicoKFVertexTools::compareFitters(int nD0, int nHftTracks) {
 
     ntVar[ii++] = mPicoEvent->runId();
     ntVar[ii++] = mPicoEvent->refMult();
+    ntVar[ii++] = mPicoEvent->grefMult();
     ntVar[ii++] = mPicoEvent->numberOfGlobalTracks();
     ntVar[ii++] = nHftTracks;
     ntVar[ii++] = nD0;
@@ -267,6 +274,7 @@ void StPicoKFVertexTools::makeKFReso(std::vector<int>&  primaryTracks, int nHftT
     ntVarKF[ii++] = sqrt(diffX*diffX + diffY*diffY + diffZ*diffZ);
     ntVarKF[ii++] = nPrimTracks;
     ntVarKF[ii++] = nHftTracks;
+    ntVarKF[ii++] = mPicoEvent->grefMult();
 
     ntp_KFReso->Fill(ntVarKF);
 

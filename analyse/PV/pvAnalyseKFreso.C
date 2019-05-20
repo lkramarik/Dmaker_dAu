@@ -24,13 +24,14 @@ void pvAnalyseKFreso() {
 
     TString var[] = {"", "x", "y", "z"};
 
-    Float_t limsMin[] = {0, -1, -1, -1};
+    Float_t limsMin[] = {-1, -1, -1, -1};
     Float_t limsMax[] = {1, 1, 1, 1};
 
-    int nPrimMin = 50;
+    int nPrimMin = 20;
     int nHftMin = 10;
 //    TString detCuts = "nPrimTracks>0 && nHftTracks>1.5 && abs(picoDstVx)<0.5 && abs(picoDstVy)<0.5";
     TString detCuts = Form("nPrimTracks>%i && nHftTracks>%i", nPrimMin, nHftMin);
+//    TString detCuts = Form("nPrimTracks>%i && nHftTracks>%i", nPrimMin, nHftMin);
     TString folder = Form("nPrimMin%i_nHftMin%i/", nPrimMin, nHftMin);
     gSystem->Exec(Form("mkdir %s", folder.Data()));
 
@@ -42,10 +43,10 @@ void pvAnalyseKFreso() {
     c->SetGrid();
     for (int j = 0; j < 4; ++j) { //variable to project
         varName = Form("KFdiff%s", var[j].Data());
-        hVar = new TH1F(varName, varName, 1000, limsMin[j], limsMax[j]);
-        ntp->Project(varName, varName, detCuts);
+        hVar = new TH1F(var[j], var[j], 1000, limsMin[j], limsMax[j]);
+        ntp->Project(var[j], varName, detCuts);
         hVar->Rebin(2);
-        hVar->SetStats(0);
+//        hVar->SetStats(0);
         hVar->SetTitle(detCuts);
         hVar->Scale(1/hVar->GetEntries());
         hVar->SetFillColor(46);
@@ -56,9 +57,11 @@ void pvAnalyseKFreso() {
         hVar->GetYaxis()->SetTitleOffset(0.8);
         hVar->GetYaxis()->SetTitle("1/N");
 
+        hVar->Fit("gaus");
+
         c->SetLogy();
         hVar->Draw("HIST");
-        c->SaveAs(varName + ".png");
+        c->SaveAs(folder + var[j] + ".png");
         hVar->Write();
         c->Clear();
         hVar->GetXaxis()->SetRangeUser(limsMin[j]/3, limsMax[j]/3);
@@ -66,7 +69,7 @@ void pvAnalyseKFreso() {
 //        TCanvas *c = new TCanvas("c1", "c1", 900, 1200);
         c->SetLogy();
         hVar->Draw("HIST");
-        c->SaveAs(folder + varName + ".zoom.png");
+        c->SaveAs(folder + var[j] + ".zoom.png");
         c->Clear();
 
         hVar->Reset();
