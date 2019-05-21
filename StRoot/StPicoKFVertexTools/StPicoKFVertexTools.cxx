@@ -114,7 +114,7 @@ int StPicoKFVertexTools::MakeHF() {
 
     if (goodEvent) {
 //    if (nD0>-1) {
-        compareFitters(nD0, nHftTracks);
+//        compareFitters(nD0, nHftTracks);
 
         //making 2 vertices and comparing:
 //        if (primaryTracks.size()>10) {

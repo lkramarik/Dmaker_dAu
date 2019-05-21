@@ -24,11 +24,11 @@ void pvAnalyseKFreso() {
 
     TString var[] = {"", "x", "y", "z"};
 
-    Float_t limsMin[] = {-1, -1, -1, -1};
+    Float_t limsMin[] = {0, -1, -1, -1};
     Float_t limsMax[] = {1, 1, 1, 1};
 
-    int nPrimMin = 20;
-    int nHftMin = 10;
+    int nPrimMin = 10;
+    int nHftMin = 2;
 //    TString detCuts = "nPrimTracks>0 && nHftTracks>1.5 && abs(picoDstVx)<0.5 && abs(picoDstVy)<0.5";
     TString detCuts = Form("nPrimTracks>%i && nHftTracks>%i", nPrimMin, nHftMin);
 //    TString detCuts = Form("nPrimTracks>%i && nHftTracks>%i", nPrimMin, nHftMin);
@@ -57,18 +57,19 @@ void pvAnalyseKFreso() {
         hVar->GetYaxis()->SetTitleOffset(0.8);
         hVar->GetYaxis()->SetTitle("1/N");
 
-        hVar->Fit("gaus");
+        if (j!=0) hVar->Fit("gaus", "", "", -0.03, 0.03);
 
         c->SetLogy();
-        hVar->Draw("HIST");
+        hVar->Draw();
+//        hVar->Draw("HIST");
         c->SaveAs(folder + var[j] + ".png");
         hVar->Write();
         c->Clear();
-        hVar->GetXaxis()->SetRangeUser(limsMin[j]/3, limsMax[j]/3);
+        hVar->GetXaxis()->SetRangeUser(-0.05, 0.05);
 
 //        TCanvas *c = new TCanvas("c1", "c1", 900, 1200);
         c->SetLogy();
-        hVar->Draw("HIST");
+        hVar->Draw();
         c->SaveAs(folder + var[j] + ".zoom.png");
         c->Clear();
 
