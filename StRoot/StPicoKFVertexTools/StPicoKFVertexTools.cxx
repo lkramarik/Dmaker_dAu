@@ -64,7 +64,7 @@ int StPicoKFVertexTools::MakeHF() {
     TH1F *hMassUS = static_cast<TH1F*>(mOutList->FindObject("hMassUS"));
     TH1F *hMassUSRefit = static_cast<TH1F*>(mOutList->FindObject("hMassUSRefit"));
 
-    TH2F *hPicoPosition = static_cast<TH1F*>(mOutList->FindObject("hPicoPosition"));
+    TH2F *hPicoPosition = static_cast<TH2F*>(mOutList->FindObject("hPicoPosition"));
     hPicoPosition->Fill(mPrimVtx.x(), mPrimVtx.y());
 
     std::vector<unsigned short> mIdxPicoPions;
