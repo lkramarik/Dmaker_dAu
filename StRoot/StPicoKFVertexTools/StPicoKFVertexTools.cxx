@@ -25,6 +25,7 @@ int StPicoKFVertexTools::InitHF() {
 
     mOutList->Add(new TH1F("hMassUS","hMassUS", 500, 1.6, 2.1));
     mOutList->Add(new TH1F("hMassUSRefit","hMassUSRefit", 500, 1.6, 2.1));
+    mOutList->Add(new TH2F("hPicoPosition","hPicoPosition", 400, -1, 1, 400, 1, 1));
 
     ntp_vertex = new TNtuple("ntp_vertex","ntp_vertex","runId:refMult:grefMult:nGlobTracks:nHftTracks:nD0:StAnnelingChi2Cut:"
                                                        "picoDstVx:picoDstVy:picoDstVz:"
@@ -55,12 +56,16 @@ int StPicoKFVertexTools::MakeHF() {
     bool goodEvent=true;
 
     if (!(mPicoEvent->BBCx()<950000)) return kStOK;
-    if (!(mPrimVtx.x()<0.5)) return kStOK;
-    if (!(mPrimVtx.y()<0.5)) return kStOK;
-    if (!(mPrimVtx.Perp()<0.5)) return kStOK;
+    if (!(mPrimVtx.x()>-0.28)) return kStOK;
+    if (!(mPrimVtx.x()<-0.13)) return kStOK;
+    if (!(mPrimVtx.y()>-0.28)) return kStOK;
+    if (!(mPrimVtx.y()<-0.13)) return kStOK;
 
     TH1F *hMassUS = static_cast<TH1F*>(mOutList->FindObject("hMassUS"));
     TH1F *hMassUSRefit = static_cast<TH1F*>(mOutList->FindObject("hMassUSRefit"));
+
+    TH2F *hPicoPosition = static_cast<TH1F*>(mOutList->FindObject("hPicoPosition"));
+    hPicoPosition->Fill(mPrimVtx.x(), mPrimVtx.y());
 
     std::vector<unsigned short> mIdxPicoPions;
     std::vector<unsigned short> mIdxPicoKaons;
