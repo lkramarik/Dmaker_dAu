@@ -83,15 +83,12 @@ int StPicoKFVertexTools::MakeHF() {
     for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
         StPicoTrack* trk = mPicoDst->track(iTrack);
         globalTracks.push_back(iTrack);
-        if (trk->isPrimary()) primaryTracks.push_back(iTrack);
+//        if (trk->isPrimary()) primaryTracks.push_back(iTrack);
         if (trk->isHFTTrack()) nHftTracks++;
         if (abs(trk->gMom().PseudoRapidity())>1) continue;
 //        if (mHFCuts->isGoodPion(trk)) mIdxPicoPions.push_back(iTrack);
 //        if (mHFCuts->isGoodKaon(trk)) mIdxPicoKaons.push_back(iTrack);
     }
-
-    cout<<globalTracks.size()<<endl;
-    cout<<primaryTracks.size()<<endl;
 
     if (!(nHftTracks>1)) return kStOK;
 
@@ -129,8 +126,8 @@ int StPicoKFVertexTools::MakeHF() {
 
         //making 2 vertices and comparing:
 //        if (primaryTracks.size()>10) {
-            makeKFReso(primaryTracks, nHftTracks);
-//            makeKFReso(globalTracks, nHftTracks);
+//            makeKFReso(primaryTracks, nHftTracks);
+            makeKFReso(globalTracks, nHftTracks);
 //        }
 //        KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst, tracksToRemove);
 
