@@ -83,7 +83,7 @@ int StPicoKFVertexTools::MakeHF() {
     for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
         StPicoTrack* trk = mPicoDst->track(iTrack);
         globalTracks.push_back(iTrack);
-//        if (trk->isPrimary()) primaryTracks.push_back(iTrack);
+        if (trk->isPrimary()) primaryTracks.push_back(iTrack);
         if (trk->isHFTTrack()) nHftTracks++;
         if (abs(trk->gMom().PseudoRapidity())>1) continue;
 //        if (mHFCuts->isGoodPion(trk)) mIdxPicoPions.push_back(iTrack);
