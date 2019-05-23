@@ -90,6 +90,8 @@ int StPicoKFVertexTools::MakeHF() {
 //        if (mHFCuts->isGoodKaon(trk)) mIdxPicoKaons.push_back(iTrack);
     }
 
+    cout<<globalTracks.size()<<endl;
+
     if (!(nHftTracks>1)) return kStOK;
 
 //    std::vector<int> tracksToRemove;
