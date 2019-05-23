@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-  <job fileListSyntax="xrootd" minFilesPerProcess="45" maxFilesPerProcess="55" simulateSubmission="false">
+  <job fileListSyntax="xrootd" minFilesPerProcess="45" maxFilesPerProcess="55" eventsPerHour="10000">
     <stdout URL="file:&basePath;/jobs/log/$JOBID.out"/>
     <stderr URL="file:&basePath;/jobs/err/$JOBID.err"/>
 

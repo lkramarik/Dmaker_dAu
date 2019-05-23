@@ -126,8 +126,8 @@ int StPicoKFVertexTools::MakeHF() {
 
         //making 2 vertices and comparing:
 //        if (primaryTracks.size()>10) {
-//            makeKFReso(primaryTracks, nHftTracks);
-            makeKFReso(globalTracks, nHftTracks);
+            makeKFReso(primaryTracks, nHftTracks);
+//            makeKFReso(globalTracks, nHftTracks);
 //        }
 //        KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst, tracksToRemove);
 
