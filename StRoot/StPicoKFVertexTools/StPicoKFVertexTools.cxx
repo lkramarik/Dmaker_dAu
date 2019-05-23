@@ -91,6 +91,7 @@ int StPicoKFVertexTools::MakeHF() {
     }
 
     cout<<globalTracks.size()<<endl;
+    cout<<primaryTracks.size()<<endl;
 
     if (!(nHftTracks>1)) return kStOK;
 
