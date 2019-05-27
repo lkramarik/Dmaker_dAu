@@ -174,11 +174,16 @@ int StPicoD0AnaMaker::createCandidates() {
     TH2F *hEtaVsPhi_positives_D0 = static_cast<TH2F*>(mOutList->FindObject("hEtaVsPhi_positives_D0"));
     TH2F *hEtaVsPhi_negatives_D0 = static_cast<TH2F*>(mOutList->FindObject("hEtaVsPhi_negatives_D0"));
 
+    std::vector<int> tracksToRemove;
+
     UInt_t nTracks = mPicoDst->numberOfTracks();
     Int_t nD0 = 0;
-
+    float dca;
     for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
         StPicoTrack* trk = mPicoDst->track(iTrack);
+
+        dca = (mPrimVtx - trk->origin()).Mag();
+        if (dca>0.009)  tracksToRemove.push_back(iTrack);
 
         if (trk->nHitsFit()>15) {
             if (trk->charge()>0) hEtaVsPhi_positives->Fill(trk->gMom().Phi(), trk->gMom().PseudoRapidity());
@@ -190,18 +195,15 @@ int StPicoD0AnaMaker::createCandidates() {
         if (mHFCuts->isGoodKaon(trk)) mIdxPicoKaons.push_back(iTrack);
     }
 
-//    StPicoKFVertexFitter kfVertexFitter;
-//    TVector3 kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
-//    cout<<kfVertex.x()<<" "<<kfVertex.y()<<" "<<kfVertex.z()<<endl;
-//    cout<<mPrimVtx.x()<<" "<<mPrimVtx.y()<<" "<<mPrimVtx.z()<<endl;
-//    if(mPicoEvent->nBTOFMatch()>0) cout<<kfVertex.z()<<" "<<mPicoEvent->vzVpd()<<endl;
-//    cout<<" "<<endl;
+    StPicoKFVertexFitter kfVertexFitter;
+    TVector3 kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst, tracksToRemove);
 
     for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
         StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
         for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
             StPicoTrack const *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
-            StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
+//            StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
+            StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], kfVertex, mBField, kTRUE);
 
             if (!mHFCuts->isGoodSecondaryVertexPair(pair)) continue;
             nD0++;
@@ -270,6 +272,15 @@ int StPicoD0AnaMaker::createCandidates() {
             }
         }
     }
+
+    mIdxPicoPions.clear();
+    mIdxPicoPions.shrink_to_fit();
+
+    mIdxPicoKaons.clear();
+    mIdxPicoKaons.shrink_to_fit();
+
+    tracksToRemove.clear();
+    tracksToRemove.shrink_to_fit();
 
     return kStOK;
 }
