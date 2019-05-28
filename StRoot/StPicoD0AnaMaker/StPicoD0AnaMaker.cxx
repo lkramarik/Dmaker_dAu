@@ -276,7 +276,6 @@ int StPicoD0AnaMaker::createCandidates() {
     mIdxPicoKaons.clear();
 
     if (nD0>0) {
-        cout<<tracksToRemove.size()<<endl;
         hNTracksRemoved->Fill(tracksToRemove.size());
         hNTracksPrimary->Fill(nPrimary);
         hNTracksDiffRemovedPrimary->Fill(nPrimary-tracksToRemove.size());
