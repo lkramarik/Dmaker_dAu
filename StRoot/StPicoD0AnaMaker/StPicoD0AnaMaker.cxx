@@ -52,6 +52,8 @@ int StPicoD0AnaMaker::InitHF() {
 
     mOutList->Add(new TH2F("hEtaVsPhi_positives_D0","hEtaVsPhi_positives_D0", 70, -3.5, 3.5, 100, -2.5, 2.5));
     mOutList->Add(new TH2F("hEtaVsPhi_negatives_D0","hEtaVsPhi_negatives_D0", 70, -3.5, 3.5, 100, -2.5, 2.5));
+
+    mOutList->Add(new TH1F("hNTracksRemoved","hNTracksRemoved", 100, -0.001, 99.999));
 //    mOutList->Add(new TH2F("h_pnsigma","h_pnsigma",1000,0,10, 99, -5, 5));
 //
 //    mOutList->Add(new TH2F("h_dedx","h_dedx", 1000, 0, 10, 1000, 0, 10));
@@ -174,6 +176,8 @@ int StPicoD0AnaMaker::createCandidates() {
     TH2F *hEtaVsPhi_positives_D0 = static_cast<TH2F*>(mOutList->FindObject("hEtaVsPhi_positives_D0"));
     TH2F *hEtaVsPhi_negatives_D0 = static_cast<TH2F*>(mOutList->FindObject("hEtaVsPhi_negatives_D0"));
 
+    TH1F *hNTracksRemoved = static_cast<TH1F*>(mOutList->FindObject("hNTracksRemoved"));
+
     std::vector<int> tracksToRemove;
 
     UInt_t nTracks = mPicoDst->numberOfTracks();
@@ -269,6 +273,7 @@ int StPicoD0AnaMaker::createCandidates() {
     mIdxPicoKaons.clear();
 
     if (nD0>0) {
+        hNTracksRemoved->Fill(tracksToRemove.size());
         for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
             StPicoTrack* trk = mPicoDst->track(iTrack);
             if (trk->nHitsFit()>15) {
