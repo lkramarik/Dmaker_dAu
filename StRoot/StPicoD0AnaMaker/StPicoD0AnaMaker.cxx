@@ -53,7 +53,9 @@ int StPicoD0AnaMaker::InitHF() {
     mOutList->Add(new TH2F("hEtaVsPhi_positives_D0","hEtaVsPhi_positives_D0", 70, -3.5, 3.5, 100, -2.5, 2.5));
     mOutList->Add(new TH2F("hEtaVsPhi_negatives_D0","hEtaVsPhi_negatives_D0", 70, -3.5, 3.5, 100, -2.5, 2.5));
 
-    mOutList->Add(new TH1F("hNTracksRemoved","hNTracksRemoved", 100, -0.001, 99.999));
+    mOutList->Add(new TH1F("hNTracksRemoved","hNTracksRemoved", 200, -0.001, 199.999));
+    mOutList->Add(new TH1F("hNTracksPrimary","hNTracksPrimary", 200, -0.001, 199.999));
+    mOutList->Add(new TH1F("hNTracksDiffRemovedPrimary","hNTracksDiffRemovedPrimary", 200, -0.001, 199.999));
 //    mOutList->Add(new TH2F("h_pnsigma","h_pnsigma",1000,0,10, 99, -5, 5));
 //
 //    mOutList->Add(new TH2F("h_dedx","h_dedx", 1000, 0, 10, 1000, 0, 10));
@@ -177,17 +179,19 @@ int StPicoD0AnaMaker::createCandidates() {
     TH2F *hEtaVsPhi_negatives_D0 = static_cast<TH2F*>(mOutList->FindObject("hEtaVsPhi_negatives_D0"));
 
     TH1F *hNTracksRemoved = static_cast<TH1F*>(mOutList->FindObject("hNTracksRemoved"));
+    TH1F *hNTracksPrimary = static_cast<TH1F*>(mOutList->FindObject("hNTracksPrimary"));
+    TH1F *hNTracksDiffRemovedPrimary = static_cast<TH1F*>(mOutList->FindObject("hNTracksDiffRemovedPrimary"));
 
     std::vector<int> tracksToRemove;
 
     UInt_t nTracks = mPicoDst->numberOfTracks();
-    Int_t nD0 = 0;
+    Int_t nD0 = 0, nPrimary = 0;
     float dca;
     for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
         StPicoTrack* trk = mPicoDst->track(iTrack);
         dca = (mPrimVtx - trk->origin()).Mag();
         if (dca>0.015 && trk->isPrimary())  tracksToRemove.push_back(iTrack);
-
+        if (trk->isPrimary())  nPrimary++;
         if (trk->nHitsFit()>15) {
             if (trk->charge()>0) hEtaVsPhi_positives->Fill(trk->gMom().Phi(), trk->gMom().PseudoRapidity());
             if (trk->charge()<0) hEtaVsPhi_negatives->Fill(trk->gMom().Phi(), trk->gMom().PseudoRapidity());
@@ -274,6 +278,8 @@ int StPicoD0AnaMaker::createCandidates() {
     if (nD0>0) {
         cout<<tracksToRemove.size()<<endl;
         hNTracksRemoved->Fill(tracksToRemove.size());
+        hNTracksPrimary->Fill(nPrimary);
+        hNTracksDiffRemovedPrimary->Fill(nPrimary-tracksToRemove.size());
         for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
             StPicoTrack* trk = mPicoDst->track(iTrack);
             if (trk->nHitsFit()>15) {
