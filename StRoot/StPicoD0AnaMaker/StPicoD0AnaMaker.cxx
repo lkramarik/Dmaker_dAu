@@ -190,7 +190,8 @@ int StPicoD0AnaMaker::createCandidates() {
     for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
         StPicoTrack* trk = mPicoDst->track(iTrack);
         dca = (mPrimVtx - trk->origin()).Mag();
-        if (dca>0.015 && trk->isPrimary())  tracksToRemove.push_back(iTrack);
+//        if (dca>0.009 && trk->isPrimary())  tracksToRemove.push_back(iTrack);
+        if (dca>0.009)  tracksToRemove.push_back(iTrack);
         if (trk->isPrimary())  nPrimary++;
         if (trk->nHitsFit()>15) {
             if (trk->charge()>0) hEtaVsPhi_positives->Fill(trk->gMom().Phi(), trk->gMom().PseudoRapidity());
