@@ -1,0 +1,15 @@
+#!/bin/bash
+#rm runs_path_toCopy.list
+rm runs_path_tempo
+#a="root://"
+a="root://xrdstar.rcf.bnl.gov:1095/"
+
+cat runs_path_all.list  | while read line
+do
+ echo $a${line} >>  runs_path_tempo 
+
+done
+cp runs_path_tempo runs_path_all.list
+#cp runs_tempo.list runs_path_local_$a
+#rm runs_tempo.list
+
