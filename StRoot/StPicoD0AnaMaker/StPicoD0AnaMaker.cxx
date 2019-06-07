@@ -58,10 +58,10 @@ int StPicoD0AnaMaker::InitHF() {
 
     mOutList->Add(new TH2F("hD0VsRemoved","hD0VsRemoved", 100, -0.01, 99.99, 100, -0.01, 99.99));
 
-    mOutList->Add(new TH1F("hNTracksRemoved","hNTracksRemoved", 200, -0.001, 199.999));
+    mOutList->Add(new TH1F("hNTracksRemoved","hNTracksRemoved", 2000, -0.001, 1999.999));
     mOutList->Add(new TH1F("hNTracksPrimary","hNTracksPrimary", 200, -0.001, 199.999));
     mOutList->Add(new TH1F("hNTracksDiffRemovedPrimary","hNTracksDiffRemovedPrimary", 200, -0.001, 199.999));
-    mOutList->Add(new TH1F("hNTracksUsedForPv","hNTracksUsedForPv", 200, -0.001, 199.999));
+    mOutList->Add(new TH1F("hNTracksDiffRemovedGlobal","hNTracksDiffRemovedGlobal", 200, -0.001, 199.999));
 
     mOutList->Add(new TH1F("hRemovedPairMass","hRemovedPairMass", 300, 1.7, 2.0));
 
@@ -196,8 +196,8 @@ int StPicoD0AnaMaker::createCandidates() {
 
     TH1F *hNTracksRemoved = static_cast<TH1F*>(mOutList->FindObject("hNTracksRemoved"));
     TH1F *hNTracksPrimary = static_cast<TH1F*>(mOutList->FindObject("hNTracksPrimary"));
-    TH1F *hNTracksUsedForPv = static_cast<TH1F*>(mOutList->FindObject("hNTracksUsedForPv"));
     TH1F *hNTracksDiffRemovedPrimary = static_cast<TH1F*>(mOutList->FindObject("hNTracksDiffRemovedPrimary"));
+    TH1F *hNTracksDiffRemovedGlobal = static_cast<TH1F*>(mOutList->FindObject("hNTracksDiffRemovedGlobal"));
 
     TH1F *hRemovedPairMass = static_cast<TH1F*>(mOutList->FindObject("hRemovedPairMass"));
 
@@ -323,7 +323,7 @@ int StPicoD0AnaMaker::createCandidates() {
         hNTracksRemoved->Fill(tracksToRemove.size());
         hNTracksPrimary->Fill(nPrimary);
         hNTracksDiffRemovedPrimary->Fill(nPrimary-tracksToRemove.size());
-        hNTracksUsedForPv->Fill(nTracks-tracksToRemove.size());
+        hNTracksDiffRemovedGlobal->Fill(nTracks-tracksToRemove.size());
         for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
             StPicoTrack* trk = mPicoDst->track(iTrack);
             if (trk->nHitsFit()>15) {
