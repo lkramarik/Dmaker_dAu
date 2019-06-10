@@ -228,6 +228,7 @@ int StPicoD0AnaMaker::createCandidates() {
 
     bool isRemovedtrack=false;
     //let's check, what will be removed
+    /*
     for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
         StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
         for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
@@ -241,12 +242,13 @@ int StPicoD0AnaMaker::createCandidates() {
             }
         }
     }
+    */
 
     //Make new vertex and evaluate stuff:
     StPicoKFVertexFitter kfVertexFitter;
     KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst, tracksToRemove);
-    TVector3 newKFVertex(-999., -999., -999.);
 
+    TVector3 newKFVertex(-999., -999., -999.);
     if (kfVertex.GetX()) {
         newKFVertex.SetXYZ(kfVertex.GetX(), kfVertex.GetY(), kfVertex.GetZ());
         hPVDiffX->Fill(mPrimVtx.x()-newKFVertex.x());
