@@ -26,7 +26,7 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* const picoDst
     // make a list of good tracks to be used in the KFVertex fit
     for (unsigned int iTrk = 0; iTrk < picoDst->numberOfTracks(); ++iTrk) {
         StPicoTrack* gTrack = (StPicoTrack*)picoDst->track(iTrk);
-//        if (!gTrack->isPrimary()) continue;
+        if (!gTrack->isPrimary()) continue;
         if (!gTrack) continue;
         if(std::binary_search(tracksToRemove.begin(), tracksToRemove.end(), iTrk)) continue;
         goodTracks.push_back(iTrk);
