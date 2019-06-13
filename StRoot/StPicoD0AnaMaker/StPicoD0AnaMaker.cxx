@@ -56,10 +56,10 @@ int StPicoD0AnaMaker::InitHF() {
     mOutList->Add(new TH2F("hEtaVsPhi_positives_D0","hEtaVsPhi_positives_D0", 70, -3.5, 3.5, 100, -2.5, 2.5));
     mOutList->Add(new TH2F("hEtaVsPhi_negatives_D0","hEtaVsPhi_negatives_D0", 70, -3.5, 3.5, 100, -2.5, 2.5));
 
-    mOutList->Add(new TH2F("hD0VsRemoved","hD0VsRemoved", 100, -0.01, 99.99, 100, -0.01, 99.99));
+    mOutList->Add(new TH2F("hD0VsRemoved","hD0VsRemoved", 100, -0.5, 99.5, 100, -0.5, 99.5));
 
-    mOutList->Add(new TH1F("hNTracksRemoved","hNTracksRemoved", 2000, -0.001, 1999.999));
-    mOutList->Add(new TH1F("hNTracksPrimary","hNTracksPrimary", 200, -0.001, 199.999));
+    mOutList->Add(new TH1F("hNTracksRemoved","hNTracksRemoved", 2000, -0.5, 1999.5));
+    mOutList->Add(new TH1F("hNTracksPrimary","hNTracksPrimary", 200, -0.5, 199.5));
     mOutList->Add(new TH1F("hNTracksDiffRemovedPrimary","hNTracksDiffRemovedPrimary", 200, -0.001, 199.999));
     mOutList->Add(new TH1F("hNTracksDiffRemovedGlobal","hNTracksDiffRemovedGlobal", 200, -0.001, 199.999));
 
@@ -69,9 +69,8 @@ int StPicoD0AnaMaker::InitHF() {
     mOutList->Add(new TH1F("hPVDiffY","hPVDiffY", 1000, -2.0, 2.0));
     mOutList->Add(new TH1F("hPVDiffZ","hPVDiffZ", 1000, -2.0, 2.0));
 
-    mOutList->Add(new TH1F("hRemovedPairMass","hRemovedPairMass", 300, 1.7, 2.0));
 //    mOutList->Add(new TH2F("h_pnsigma","h_pnsigma",1000,0,10, 99, -5, 5));
-//
+
 //    mOutList->Add(new TH2F("h_dedx","h_dedx", 1000, 0, 10, 1000, 0, 10));
 //h_tracktest
     mOutList->Add(new TH1D("h_tracktest","h_tracktest", 6, 0.5, 6.5));
@@ -186,6 +185,11 @@ int StPicoD0AnaMaker::MakeHF() {
 
 // _________________________________________________________
 int StPicoD0AnaMaker::createCandidates() {
+    //make it run faster:
+    if (!(mPicoEvent->BBCx()<950000)) return kStOK;
+    if (!(abs(mPrimVtx.x())<0.6)) return kStOK;
+    if (!(abs(mPrimVtx.y())<0.6)) return kStOK;
+
     TH2F *hEtaVsPhi_positives = static_cast<TH2F*>(mOutList->FindObject("hEtaVsPhi_positives"));
     TH2F *hEtaVsPhi_negatives = static_cast<TH2F*>(mOutList->FindObject("hEtaVsPhi_negatives"));
 
@@ -228,13 +232,13 @@ int StPicoD0AnaMaker::createCandidates() {
 
     bool isRemovedtrack=false;
     //let's check, what will be removed
-    /*
+
     for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
         StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
         for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
             StPicoTrack const *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
             StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
-            if (cos(pair->pointingAngle())>0.9 && pair->dcaDaughters()<0.007 && pair->m()>1.8 && pair->m()<1.9 && (kaon->charge()+pion1->charge()==0)) {
+            if (cos(pair->pointingAngle())>0.9 && pair->dcaDaughters()<0.007 && (kaon->charge()+pion1->charge()==0)) {
                 tracksToRemove.push_back(mIdxPicoPions[idxPion1]);
                 tracksToRemove.push_back(mIdxPicoKaons[idxKaon]);
                 hRemovedPairMass->Fill(pair->m());
@@ -242,7 +246,7 @@ int StPicoD0AnaMaker::createCandidates() {
             }
         }
     }
-    */
+
 
     //Make new vertex and evaluate stuff:
     StPicoKFVertexFitter kfVertexFitter;
