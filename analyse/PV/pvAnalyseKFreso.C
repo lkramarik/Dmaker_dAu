@@ -15,7 +15,8 @@ using namespace std;
 
 void pvAnalyseKFreso() {
 //    TString input = "ntp.KFVertex.global.2105.root";
-    TString input = "ntp.KFVertexReso.1605.root";
+    TString input = "ntp.PVrefit.global.root";
+//    TString input = "ntp.KFVertexReso.1605.root";
     TFile *data = new TFile(input, "r");
     TNtuple *ntp = (TNtuple *) data->Get("ntp_KFReso");
     TFile *fOut = new TFile("res.KFreso.prim30." + input, "recreate");

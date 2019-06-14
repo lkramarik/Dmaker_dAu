@@ -69,6 +69,10 @@ int StPicoD0AnaMaker::InitHF() {
     mOutList->Add(new TH1F("hPVDiffY","hPVDiffY", 1000, -2.0, 2.0));
     mOutList->Add(new TH1F("hPVDiffZ","hPVDiffZ", 1000, -2.0, 2.0));
 
+    mOutList->Add(new TH1F("hPVDiffXRemoved","hPVDiffXRemoved", 1000, -2.0, 2.0));
+    mOutList->Add(new TH1F("hPVDiffYRemoved","hPVDiffYRemoved", 1000, -2.0, 2.0));
+    mOutList->Add(new TH1F("hPVDiffZRemoved","hPVDiffZRemoved", 1000, -2.0, 2.0));
+
 //    mOutList->Add(new TH2F("h_pnsigma","h_pnsigma",1000,0,10, 99, -5, 5));
 
 //    mOutList->Add(new TH2F("h_dedx","h_dedx", 1000, 0, 10, 1000, 0, 10));
@@ -209,6 +213,10 @@ int StPicoD0AnaMaker::createCandidates() {
     TH1F *hPVDiffY = static_cast<TH1F*>(mOutList->FindObject("hPVDiffY"));
     TH1F *hPVDiffZ = static_cast<TH1F*>(mOutList->FindObject("hPVDiffZ"));
 
+    TH1F *hPVDiffXRemoved = static_cast<TH1F*>(mOutList->FindObject("hPVDiffXRemoved"));
+    TH1F *hPVDiffYRemoved = static_cast<TH1F*>(mOutList->FindObject("hPVDiffYRemoved"));
+    TH1F *hPVDiffZRemoved = static_cast<TH1F*>(mOutList->FindObject("hPVDiffZRemoved"));
+
     std::vector<int> tracksToRemove;
 
     UInt_t nTracks = mPicoDst->numberOfTracks();
@@ -258,6 +266,12 @@ int StPicoD0AnaMaker::createCandidates() {
         hPVDiffX->Fill(mPrimVtx.x()-newKFVertex.x());
         hPVDiffY->Fill(mPrimVtx.y()-newKFVertex.y());
         hPVDiffZ->Fill(mPrimVtx.z()-newKFVertex.z());
+
+        if (tracksToRemove.size()>0) {
+            hPVDiffXRemoved->Fill(mPrimVtx.x()-newKFVertex.x());
+            hPVDiffYRemoved->Fill(mPrimVtx.y()-newKFVertex.y());
+            hPVDiffZRemoved->Fill(mPrimVtx.z()-newKFVertex.z());
+        }
     }
 
     for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
