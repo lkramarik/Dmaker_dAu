@@ -187,8 +187,8 @@ int StPicoD0AnaMaker::MakeHF() {
 int StPicoD0AnaMaker::createCandidates() {
     //make it run faster:
     if (!(mPicoEvent->BBCx()<950000)) return kStOK;
-    if (!(abs(mPrimVtx.x())<0.6)) return kStOK;
-    if (!(abs(mPrimVtx.y())<0.6)) return kStOK;
+//    if (!(abs(mPrimVtx.x())<0.6)) return kStOK;
+//    if (!(abs(mPrimVtx.y())<0.6)) return kStOK;
 
     TH2F *hEtaVsPhi_positives = static_cast<TH2F*>(mOutList->FindObject("hEtaVsPhi_positives"));
     TH2F *hEtaVsPhi_negatives = static_cast<TH2F*>(mOutList->FindObject("hEtaVsPhi_negatives"));
