@@ -238,7 +238,7 @@ int StPicoD0AnaMaker::createCandidates() {
         for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
             StPicoTrack const *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
             StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
-            if (cos(pair->pointingAngle())>0.9 && pair->dcaDaughters()<0.007 && (kaon->charge()+pion1->charge()==0)) {
+            if (cos(pair->pointingAngle())>0.9 && pair->dcaDaughters()<0.007) {
                 tracksToRemove.push_back(mIdxPicoPions[idxPion1]);
                 tracksToRemove.push_back(mIdxPicoKaons[idxKaon]);
                 hRemovedPairMass->Fill(pair->m());
