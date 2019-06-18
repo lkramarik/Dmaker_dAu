@@ -255,12 +255,13 @@ int StPicoD0AnaMaker::createCandidates() {
         }
     }
 
+    TVector3 newKFVertex(mPrimVtx.x(), mPrimVtx.y(), mPrimVtx.z());
+
     if (isRemovedtrack) {
         //Make new vertex and evaluate stuff:
         StPicoKFVertexFitter kfVertexFitter;
         KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst, tracksToRemove);
 
-        TVector3 newKFVertex(-999., -999., -999.);
         if (kfVertex.GetX()) {
             newKFVertex.SetXYZ(kfVertex.GetX(), kfVertex.GetY(), kfVertex.GetZ());
             hPVDiffX->Fill(mPrimVtx.x() - newKFVertex.x());
@@ -280,8 +281,7 @@ int StPicoD0AnaMaker::createCandidates() {
         for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
             StPicoTrack const *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
 //            StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
-            if (isRemovedtrack) StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], newKFVertex, mBField, kTRUE);
-            else StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
+            StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], newKFVertex, mBField, kTRUE);
 
             if (!mHFCuts->isGoodSecondaryVertexPair(pair)) continue;
 
