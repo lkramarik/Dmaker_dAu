@@ -321,7 +321,7 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
     //removing according single track cuts
     if (singleTrack) {
         float dca;
-        for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
+        for (unsigned short iTrack = 0; iTrack < mPicoDst->numberOfTracks(); ++iTrack) {
             StPicoTrack* trk = mPicoDst->track(iTrack);
             dca = (mPrimVtx - trk->origin()).Mag();
             if (dca>0.012 && trk->isPrimary()) tracksToRemove.push_back(iTrack);
