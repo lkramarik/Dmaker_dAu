@@ -60,6 +60,7 @@ private:
     TNtuple *ntp_DMeson_Background;
 
     int mRunNumber;
+    Int_t nPrimary;
     TString mOutFileBaseName;
 
     TFile* mOutFile;

@@ -202,7 +202,8 @@ int StPicoD0AnaMaker::createCandidates() {
     TH1F *hNTracksDiffRemovedGlobal = static_cast<TH1F*>(mOutList->FindObject("hNTracksDiffRemovedGlobal"));
 
     UInt_t nTracks = mPicoDst->numberOfTracks();
-    Int_t nD0 = 0, nPrimary = 0;
+    Int_t nD0 = 0;
+    nPrimary = 0;
     for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
         StPicoTrack* trk = mPicoDst->track(iTrack);
         if (trk->isPrimary())  nPrimary++;
@@ -346,7 +347,6 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
     }
 
     TVector3 newKFVertex(mPrimVtx.x(), mPrimVtx.y(), mPrimVtx.z());
-
     if (isRemovedtrack || always) {
         //Make new vertex and evaluate stuff:
         StPicoKFVertexFitter kfVertexFitter;
