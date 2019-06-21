@@ -99,7 +99,7 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
   mParticle1Dca = (p1Helix.origin() - vtx).Mag();
   mParticle2Dca = (p2Helix.origin() - vtx).Mag();
 
-  if (mParticle1Dca<0 || mParticle2Dca>0) mParticle2Dca=9999;
+  if (mParticle1Dca<0 || mParticle2Dca<0) mParticle2Dca=9999;
 //  mParticle1Dca = (vtx - particle1->origin()).Mag();
 //  mParticle2Dca = (vtx - particle2->origin()).Mag();
 }
