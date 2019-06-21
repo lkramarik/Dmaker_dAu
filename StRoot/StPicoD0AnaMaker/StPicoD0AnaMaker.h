@@ -49,10 +49,12 @@ public:
 protected:
     std::vector<unsigned short> mIdxPicoPions;
     std::vector<unsigned short> mIdxPicoKaons;
+    std::vector<int> tracksToRemove;
 
 private:
     int createCandidates();
     int analyzeCandidates();
+    TVector3 refitVertex(bool);
 
     TNtuple *ntp_DMeson_Signal;
     TNtuple *ntp_DMeson_Background;

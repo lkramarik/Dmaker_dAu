@@ -53,9 +53,6 @@ int StPicoD0AnaMaker::InitHF() {
     mOutList->Add(new TH2F("hEtaVsPhi_negatives","hEtaVsPhi_negatives", 70, -3.5, 3.5, 100, -2.5, 2.5));
     mOutList->Add(new TH2F("hEtaVsPhi_negatives","hEtaVsPhi_negatives", 70, -3.5, 3.5, 100, -2.5, 2.5));
 
-    mOutList->Add(new TH2F("hEtaVsPhi_positives_D0","hEtaVsPhi_positives_D0", 70, -3.5, 3.5, 100, -2.5, 2.5));
-    mOutList->Add(new TH2F("hEtaVsPhi_negatives_D0","hEtaVsPhi_negatives_D0", 70, -3.5, 3.5, 100, -2.5, 2.5));
-
     mOutList->Add(new TH2F("hD0VsRemoved","hD0VsRemoved", 100, -0.5, 99.5, 100, -0.5, 99.5));
 
     mOutList->Add(new TH1F("hNTracksRemoved","hNTracksRemoved", 2000, -0.5, 1999.5));
@@ -197,9 +194,6 @@ int StPicoD0AnaMaker::createCandidates() {
     TH2F *hEtaVsPhi_positives = static_cast<TH2F*>(mOutList->FindObject("hEtaVsPhi_positives"));
     TH2F *hEtaVsPhi_negatives = static_cast<TH2F*>(mOutList->FindObject("hEtaVsPhi_negatives"));
 
-    TH2F *hEtaVsPhi_positives_D0 = static_cast<TH2F*>(mOutList->FindObject("hEtaVsPhi_positives_D0"));
-    TH2F *hEtaVsPhi_negatives_D0 = static_cast<TH2F*>(mOutList->FindObject("hEtaVsPhi_negatives_D0"));
-
     TH2F *hD0VsRemoved = static_cast<TH2F*>(mOutList->FindObject("hD0VsRemoved"));
 
     TH1F *hNTracksRemoved = static_cast<TH1F*>(mOutList->FindObject("hNTracksRemoved"));
@@ -207,26 +201,10 @@ int StPicoD0AnaMaker::createCandidates() {
     TH1F *hNTracksDiffRemovedPrimary = static_cast<TH1F*>(mOutList->FindObject("hNTracksDiffRemovedPrimary"));
     TH1F *hNTracksDiffRemovedGlobal = static_cast<TH1F*>(mOutList->FindObject("hNTracksDiffRemovedGlobal"));
 
-    TH1F *hRemovedPairMass = static_cast<TH1F*>(mOutList->FindObject("hRemovedPairMass"));
-
-    TH1F *hPVDiffX = static_cast<TH1F*>(mOutList->FindObject("hPVDiffX"));
-    TH1F *hPVDiffY = static_cast<TH1F*>(mOutList->FindObject("hPVDiffY"));
-    TH1F *hPVDiffZ = static_cast<TH1F*>(mOutList->FindObject("hPVDiffZ"));
-
-    TH1F *hPVDiffXRemoved = static_cast<TH1F*>(mOutList->FindObject("hPVDiffXRemoved"));
-    TH1F *hPVDiffYRemoved = static_cast<TH1F*>(mOutList->FindObject("hPVDiffYRemoved"));
-    TH1F *hPVDiffZRemoved = static_cast<TH1F*>(mOutList->FindObject("hPVDiffZRemoved"));
-
-    std::vector<int> tracksToRemove;
-
     UInt_t nTracks = mPicoDst->numberOfTracks();
     Int_t nD0 = 0, nPrimary = 0;
-    float dca;
     for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
         StPicoTrack* trk = mPicoDst->track(iTrack);
-//        dca = (mPrimVtx - trk->origin()).Mag();
-//        if (dca>0.009 && trk->isPrimary())  tracksToRemove.push_back(iTrack);
-//        if (dca>0.009)  tracksToRemove.push_back(iTrack);
         if (trk->isPrimary())  nPrimary++;
         if (trk->nHitsFit()>15) {
             if (trk->charge()>0) hEtaVsPhi_positives->Fill(trk->gMom().Phi(), trk->gMom().PseudoRapidity());
@@ -238,50 +216,14 @@ int StPicoD0AnaMaker::createCandidates() {
         if (mHFCuts->isGoodKaon(trk)) mIdxPicoKaons.push_back(iTrack);
     }
 
-    bool isRemovedtrack=false;
-    //let's check, what will be removed
+    TVector3 useVertex(mPrimVtx.x(), mPrimVtx.y(), mPrimVtx.z());
+    useVertex=refitVertex(true);
 
     for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
         StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
         for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
             StPicoTrack const *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
-            StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
-            if (cos(pair->pointingAngle())>0.9 && pair->dcaDaughters()<0.007) {
-                tracksToRemove.push_back(mIdxPicoPions[idxPion1]);
-                tracksToRemove.push_back(mIdxPicoKaons[idxKaon]);
-                hRemovedPairMass->Fill(pair->m());
-                isRemovedtrack=true;
-            }
-        }
-    }
-
-    TVector3 newKFVertex(mPrimVtx.x(), mPrimVtx.y(), mPrimVtx.z());
-
-    if (isRemovedtrack) {
-        //Make new vertex and evaluate stuff:
-        StPicoKFVertexFitter kfVertexFitter;
-        KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst, tracksToRemove);
-
-        if (kfVertex.GetX()) {
-            newKFVertex.SetXYZ(kfVertex.GetX(), kfVertex.GetY(), kfVertex.GetZ());
-            hPVDiffX->Fill(mPrimVtx.x() - newKFVertex.x());
-            hPVDiffY->Fill(mPrimVtx.y() - newKFVertex.y());
-            hPVDiffZ->Fill(mPrimVtx.z() - newKFVertex.z());
-
-            if (tracksToRemove.size() > 0) {
-                hPVDiffXRemoved->Fill(mPrimVtx.x() - newKFVertex.x());
-                hPVDiffYRemoved->Fill(mPrimVtx.y() - newKFVertex.y());
-                hPVDiffZRemoved->Fill(mPrimVtx.z() - newKFVertex.z());
-            }
-        }
-    }
-
-    for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
-        StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
-        for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
-            StPicoTrack const *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
-//            StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
-            StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], newKFVertex, mBField, kTRUE);
+            StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], useVertex, mBField, kTRUE);
 
             if (!mHFCuts->isGoodSecondaryVertexPair(pair)) continue;
 
@@ -338,21 +280,12 @@ int StPicoD0AnaMaker::createCandidates() {
 
         }  // for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon)
     } // for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1)
-    mIdxPicoPions.clear();
-    mIdxPicoKaons.clear();
 
     if (nD0>0) {
         hNTracksRemoved->Fill(tracksToRemove.size());
         hNTracksPrimary->Fill(nPrimary);
         hNTracksDiffRemovedPrimary->Fill(nPrimary-tracksToRemove.size());
         hNTracksDiffRemovedGlobal->Fill(nTracks-tracksToRemove.size());
-        for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
-            StPicoTrack* trk = mPicoDst->track(iTrack);
-            if (trk->nHitsFit()>15) {
-                if (trk->charge()>0) hEtaVsPhi_positives_D0->Fill(trk->gMom().Phi(), trk->gMom().PseudoRapidity());
-                if (trk->charge()<0) hEtaVsPhi_negatives_D0->Fill(trk->gMom().Phi(), trk->gMom().PseudoRapidity());
-            }
-        }
     }
 
     hD0VsRemoved->Fill(tracksToRemove.size(), nD0);
@@ -369,6 +302,74 @@ int StPicoD0AnaMaker::createCandidates() {
     return kStOK;
 }
 
+//____________________________________________________________________________________
+TVector3 StPicoD0AnaMaker::refitVertex(bool always){
+    bool pairRem=false;
+    bool singleTrack=!pairRem;
+
+    TH1F *hPVDiffX = static_cast<TH1F*>(mOutList->FindObject("hPVDiffX"));
+    TH1F *hPVDiffY = static_cast<TH1F*>(mOutList->FindObject("hPVDiffY"));
+    TH1F *hPVDiffZ = static_cast<TH1F*>(mOutList->FindObject("hPVDiffZ"));
+    TH1F *hPVDiffXRemoved = static_cast<TH1F*>(mOutList->FindObject("hPVDiffXRemoved"));
+    TH1F *hPVDiffYRemoved = static_cast<TH1F*>(mOutList->FindObject("hPVDiffYRemoved"));
+    TH1F *hPVDiffZRemoved = static_cast<TH1F*>(mOutList->FindObject("hPVDiffZRemoved"));
+
+    TH1F *hRemovedPairMass = static_cast<TH1F*>(mOutList->FindObject("hRemovedPairMass"));
+
+    bool isRemovedtrack=false;
+
+    //removing according single track cuts
+    if (singleTrack) {
+        float dca;
+        for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
+            StPicoTrack* trk = mPicoDst->track(iTrack);
+            dca = (mPrimVtx - trk->origin()).Mag();
+            if (dca>0.012 && trk->isPrimary()) tracksToRemove.push_back(iTrack);
+        }
+    }
+
+    //removing with pair cuts
+    if (pairRem) {
+        for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
+            StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
+            for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
+                StPicoTrack const *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
+                StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion), mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1], mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
+                if (cos(pair->pointingAngle()) > 0.9 && pair->dcaDaughters() < 0.007) {
+                    tracksToRemove.push_back(mIdxPicoPions[idxPion1]);
+                    tracksToRemove.push_back(mIdxPicoKaons[idxKaon]);
+                    hRemovedPairMass->Fill(pair->m());
+                    isRemovedtrack = true;
+                }
+            }
+        }
+    }
+
+    TVector3 newKFVertex(mPrimVtx.x(), mPrimVtx.y(), mPrimVtx.z());
+
+    if (isRemovedtrack || always) {
+        //Make new vertex and evaluate stuff:
+        StPicoKFVertexFitter kfVertexFitter;
+        KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst, tracksToRemove);
+
+        if (kfVertex.GetX()) {
+            newKFVertex.SetXYZ(kfVertex.GetX(), kfVertex.GetY(), kfVertex.GetZ());
+            hPVDiffX->Fill(mPrimVtx.x() - newKFVertex.x());
+            hPVDiffY->Fill(mPrimVtx.y() - newKFVertex.y());
+            hPVDiffZ->Fill(mPrimVtx.z() - newKFVertex.z());
+
+            if (tracksToRemove.size() > 0) {
+                hPVDiffXRemoved->Fill(mPrimVtx.x() - newKFVertex.x());
+                hPVDiffYRemoved->Fill(mPrimVtx.y() - newKFVertex.y());
+                hPVDiffZRemoved->Fill(mPrimVtx.z() - newKFVertex.z());
+            }
+        }
+    }
+
+    return newKFVertex;
+}
+
+//____________________________________________________________________________________
 int StPicoD0AnaMaker::analyzeCandidates() {
     TH1D *h_tracktest = static_cast<TH1D*>(mOutList->FindObject("h_tracktest"));
     TH1D *h_tracktest_TOF = static_cast<TH1D*>(mOutList->FindObject("h_tracktest_TOF"));
