@@ -4,6 +4,7 @@
 #include "StPicoEvent/StPicoPhysicalHelix.h"
 #include "StarClassLibrary/SystemOfUnits.h"
 #include "StPicoEvent/StPicoTrack.h"
+#include "StTypeDefs.h"
 
 ClassImp(StHFPair)
 
