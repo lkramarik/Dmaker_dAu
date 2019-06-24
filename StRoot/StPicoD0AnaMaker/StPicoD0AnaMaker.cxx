@@ -218,7 +218,7 @@ int StPicoD0AnaMaker::createCandidates() {
     }
 
     TVector3 useVertex(mPrimVtx.x(), mPrimVtx.y(), mPrimVtx.z());
-    useVertex=refitVertex(true);
+//    useVertex=refitVertex(true);
 
     for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
         StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
