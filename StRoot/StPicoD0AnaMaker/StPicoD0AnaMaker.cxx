@@ -221,6 +221,7 @@ int StPicoD0AnaMaker::createCandidates() {
     useVertex=refitVertex(true);
         if (tracksToRemove.size()==nPrimary) {
             cout<<useVertex.x()<<" "<<useVertex.y()<<" "<<useVertex.z()<<endl;
+            cout<<mPrimVtx.x()<<" "<<mPrimVtx.y()<<" "<<mPrimVtx.z()<<endl;
         }
 
     for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
