@@ -219,6 +219,9 @@ int StPicoD0AnaMaker::createCandidates() {
 
     TVector3 useVertex(mPrimVtx.x(), mPrimVtx.y(), mPrimVtx.z());
     useVertex=refitVertex(true);
+        if (tracksToRemove.size()==nPrimary) {
+            cout<<useVertex.x()<<" "<<useVertex.y()<<" "<<useVertex.z()<<endl;
+        }
 
     for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
         StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
@@ -305,7 +308,7 @@ int StPicoD0AnaMaker::createCandidates() {
 
 //____________________________________________________________________________________
 TVector3 StPicoD0AnaMaker::refitVertex(bool always){
-    bool pairRem=true;
+    bool pairRem=false;
     bool singleTrack=!pairRem;
 
     TH1F *hPVDiffX = static_cast<TH1F*>(mOutList->FindObject("hPVDiffX"));
@@ -325,7 +328,7 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
         for (unsigned short iTrack = 0; iTrack < mPicoDst->numberOfTracks(); ++iTrack) {
             StPicoTrack* trk = mPicoDst->track(iTrack);
             dca = (mPrimVtx - trk->origin()).Mag();
-            if (dca>0.012 && trk->isPrimary()) tracksToRemove.push_back(iTrack);
+            if (dca>0.007 && trk->isPrimary()) tracksToRemove.push_back(iTrack);
         }
     }
 
