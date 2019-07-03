@@ -219,10 +219,10 @@ int StPicoD0AnaMaker::createCandidates() {
 
     TVector3 useVertex(mPrimVtx.x(), mPrimVtx.y(), mPrimVtx.z());
     useVertex=refitVertex(true);
-        if (tracksToRemove.size()==nPrimary) {
-            cout<<useVertex.x()<<" "<<useVertex.y()<<" "<<useVertex.z()<<endl;
-            cout<<mPrimVtx.x()<<" "<<mPrimVtx.y()<<" "<<mPrimVtx.z()<<endl;
-        }
+//        if (tracksToRemove.size()==nPrimary) {
+//            cout<<useVertex.x()<<" "<<useVertex.y()<<" "<<useVertex.z()<<endl;
+//            cout<<mPrimVtx.x()<<" "<<mPrimVtx.y()<<" "<<mPrimVtx.z()<<endl;
+//        }
 
     for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
         StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
