@@ -59,6 +59,7 @@ int StPicoD0AnaMaker::InitHF() {
     mOutList->Add(new TH1F("hNTracksPrimary","hNTracksPrimary", 200, -0.5, 199.5));
     mOutList->Add(new TH1F("hNTracksDiffRemovedPrimary","hNTracksDiffRemovedPrimary", 200, -0.001, 199.999));
     mOutList->Add(new TH1F("hNTracksDiffRemovedGlobal","hNTracksDiffRemovedGlobal", 200, -0.001, 199.999));
+    mOutList->Add(new TH1F("hHotSpotDiffRemovedPrimary","hHotSpotDiffRemovedPrimary", 200, -0.001, 199.999));
 
     mOutList->Add(new TH1F("hRemovedPairMass","hRemovedPairMass", 300, 1.7, 2.0));
 
@@ -200,6 +201,7 @@ int StPicoD0AnaMaker::createCandidates() {
     TH1F *hNTracksPrimary = static_cast<TH1F*>(mOutList->FindObject("hNTracksPrimary"));
     TH1F *hNTracksDiffRemovedPrimary = static_cast<TH1F*>(mOutList->FindObject("hNTracksDiffRemovedPrimary"));
     TH1F *hNTracksDiffRemovedGlobal = static_cast<TH1F*>(mOutList->FindObject("hNTracksDiffRemovedGlobal"));
+    TH1F *hHotSpotDiffRemovedPrimary = static_cast<TH1F*>(mOutList->FindObject("hHotSpotDiffRemovedPrimary"));
 
     UInt_t nTracks = mPicoDst->numberOfTracks();
     Int_t nD0 = 0;
@@ -291,6 +293,7 @@ int StPicoD0AnaMaker::createCandidates() {
         hNTracksPrimary->Fill(nPrimary);
         hNTracksDiffRemovedPrimary->Fill(nPrimary-tracksToRemove.size());
         hNTracksDiffRemovedGlobal->Fill(nTracks-tracksToRemove.size());
+        if(mPrimVtx.x()>-0.25 && mPrimVtx.x()<-0.16 && mPrimVtx.y()>-0.25 && mPrimVtx.y()<-0.16) hHotSpotDiffRemovedPrimary->Fill(nPrimary-tracksToRemove.size());
     }
 
     hD0VsRemoved->Fill(tracksToRemove.size(), nD0);
@@ -329,7 +332,7 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
         for (unsigned short iTrack = 0; iTrack < mPicoDst->numberOfTracks(); ++iTrack) {
             StPicoTrack* trk = mPicoDst->track(iTrack);
             dca = (mPrimVtx - trk->origin()).Mag();
-            if (dca>0.01 && trk->isPrimary()) tracksToRemove.push_back(iTrack);
+            if (dca>0.009 && trk->isPrimary()) tracksToRemove.push_back(iTrack);
         }
     }
 
