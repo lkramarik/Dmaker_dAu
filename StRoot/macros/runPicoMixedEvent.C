@@ -54,7 +54,7 @@ void runPicoMixedEvent(
   float decayLengthMin  = 0.000; // minimum
   float decayLengthMax  = 999999; //std::numeric_limits<float>::max();
   float cosThetaMin     = -20.;   // minimum
-  float minMass         = 1.1;
+  float minMass         = 1.7;
   float maxMass         = 2.1;
   float pairDcaMax      = 99.9;
 
@@ -68,7 +68,7 @@ void runPicoMixedEvent(
 
   StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
   StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile);
-  picoMixedEventMaker->setBufferSize(3);
+  picoMixedEventMaker->setBufferSize(6);
 
   clock_t start = clock(); // getting starting time
   chain->Init();
