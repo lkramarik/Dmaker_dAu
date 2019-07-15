@@ -30,7 +30,7 @@ void loadSharedHFLibraries() {
   gSystem->Load("StiUtilities");
   gSystem->Load("StSsdDbMaker");
   gSystem->Load("StSvtDbMaker");
-  gSystem->Load("StiMaker");
+//  gSystem->Load("StiMaker");
   gSystem->Load("StPicoKFVertexFitter");
   gSystem->Load("StPicoKFVertexTools");
   // ---

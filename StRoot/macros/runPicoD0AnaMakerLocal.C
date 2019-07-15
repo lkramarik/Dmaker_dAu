@@ -25,10 +25,10 @@ void runPicoD0AnaMakerLocal(
 			const Char_t *badRunListFileName = "./picoLists/picoList_bad.list") {
   string SL_version = "SL18f";
   string env_SL = getenv ("STAR");
-  if (env_SL.find(SL_version)==string::npos) {
-      cout<<"Environment Star Library does not match the requested library. Exiting..."<<endl;
-      exit(1);
-  }
+//  if (env_SL.find(SL_version)==string::npos) {
+//      cout<<"Environment Star Library does not match the requested library. Exiting..."<<endl;
+//      exit(1);
+//  }
   
   Int_t nEvents = 1000000;
 

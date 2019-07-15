@@ -3,9 +3,6 @@ cd workDir
 productionId=`date +%F_%H-%M`_D0
 analyzer="lkramarik"
 
-starver SL18f
-cons
-
 mkdir $productionId
 cd $productionId
 #copylist
@@ -13,7 +10,7 @@ cp ../../picoLists/runs_path_all.list  ./
 list="runs_path_all.list"
 
 #copy needed folders
-cp -r ../../.sl73_gcc485 ./
+cp -r ../../.sl* ./
 cp -Lr ../../StRoot ./
 cp ../../picoLists/picoList_bad.list ./
 mkdir starSubmit

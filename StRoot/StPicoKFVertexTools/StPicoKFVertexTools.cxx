@@ -188,8 +188,8 @@ void StPicoKFVertexTools::compareFitters(int nD0, int nHftTracks) {
     ntVar[ii++] = mPicoEvent->numberOfGlobalTracks();
     ntVar[ii++] = nHftTracks;
     ntVar[ii++] = nD0;
-    ntVar[ii++] = StAnneling::Chi2Cut();
-
+//    ntVar[ii++] = StAnneling::Chi2Cut();
+ntVar[ii++] = 10;
     ntVar[ii++] = mPrimVtx.x();
     ntVar[ii++] = mPrimVtx.y();
     ntVar[ii++] = mPrimVtx.z();

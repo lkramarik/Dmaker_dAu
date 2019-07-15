@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!--  <job fileListSyntax="xrootd" minFilesPerProcess="45" maxFilesPerProcess="55" filesPerHour="4" simulateSubmission="false">-->
-  <job fileListSyntax="xrootd" minFilesPerProcess="15" maxFilesPerProcess="20" simulateSubmission="false">
+  <job fileListSyntax="xrootd" minFilesPerProcess="45" maxFilesPerProcess="55" simulateSubmission="false">
     <stdout URL="file:&basePath;/jobs/log/$JOBID.out"/>
     <stderr URL="file:&basePath;/jobs/err/$JOBID.err"/>
 
@@ -15,7 +15,14 @@
   </Generator>
 
   <command>
-    starver SL18f
+    setenv NODEBUG yes
+    starver .DEV2
+    source $STAR/setupDEV2.csh
+    setenv NODEBUG yes
+    starver TFG18n
+    setup 64b
+    setenv STARFPE NO
+ 
     root -q -b -l StRoot/macros/loadSharedHFLibraries.C StRoot/macros/&rootMacro;++\(\"$FILELIST\",\"&prodId;_$JOBINDEX\",\"picoList_bad.list\"\) &gt;&amp; ${JOBID}.log
   </command>
 
@@ -26,7 +33,7 @@
   <SandBox installer="ZIP">
     <Package name="LocalLibraries">
       <File>file:./StRoot/</File>
-      <File>file:./.sl73_gcc485/</File>
+      <File>file:./.sl73_x8664_gcc485/</File>
       <File>file:./picoList_bad.list</File>
     </Package>
   </SandBox>
