@@ -1,6 +1,7 @@
 #include <algorithm>
 //#include "StarRoot/MTrack.h"
-#include "StarRoot/KFVertex.h"
+//#include "StarRoot/KFVertex.h"
+#include "KFParticle/KFVertex.h"
 #include "StiMaker/StKFVerticesCollection.h"
 #include "StEvent/StDcaGeometry.h"
 #include "StPicoKFVertexFitter.h"
