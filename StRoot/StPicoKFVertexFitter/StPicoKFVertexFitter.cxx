@@ -1,5 +1,5 @@
 #include <algorithm>
-#include "StarRoot/MTrack.h"
+//#include "StarRoot/MTrack.h"
 #include "StarRoot/KFVertex.h"
 #include "StiMaker/StKFVerticesCollection.h"
 #include "StEvent/StDcaGeometry.h"
@@ -44,10 +44,12 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
     for (size_t iTrk = 0; iTrk < tracksToUse.size(); ++iTrk) {
         StPicoTrack* gTrack = (StPicoTrack*)picoDst->track(tracksToUse[iTrk]);
         StPicoTrackCovMatrix *cov = picoDst->trackCovMatrix(tracksToUse[iTrk]);
+
         StDcaGeometry dcaG = dcaGeometry(cov);
         Double_t xyzp[6], CovXyzp[21];
         dcaG.GetXYZ(xyzp, CovXyzp);
 
+        /*with MTrack
 	    Int_t q = 1;
         Int_t pdg = 211;
         if (gTrack->charge() < 0) {
@@ -62,6 +64,18 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
         track.SetCharge(q);
 
         particles[iTrk] = new KFParticle(track, pdg);
+        */
+
+        Int_t q = 1;
+        Int_t pdg = 211;
+        if (gTrack->charge() < 0) {
+            q=-1;
+            pdg=-211;
+        }
+
+        particles[iTrk] = new KFParticle();
+        particles[iTrk]->Create(xyzp, CovXyzp, q, pdg);
+
     }
 
     TArrayC Flag(tracksToUse.size());
