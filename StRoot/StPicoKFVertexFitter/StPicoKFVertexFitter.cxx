@@ -1,5 +1,5 @@
 #include <algorithm>
-#include "StarRoot/MTrack.h"
+//#include "StarRoot/MTrack.h"
 #include "StarRoot/KFVertex.h"
 #include "StiMaker/StKFVerticesCollection.h"
 #include "StEvent/StDcaGeometry.h"
@@ -26,8 +26,8 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* const picoDst
     // make a list of good tracks to be used in the KFVertex fit
     for (unsigned int iTrk = 0; iTrk < picoDst->numberOfTracks(); ++iTrk) {
         StPicoTrack* gTrack = (StPicoTrack*)picoDst->track(iTrk);
-        if (!gTrack->isPrimary()) continue;
         if (!gTrack) continue;
+        if (!gTrack->isPrimary()) continue;
         if(std::binary_search(tracksToRemove.begin(), tracksToRemove.end(), iTrk)) continue;
         goodTracks.push_back(iTrk);
     }
@@ -48,6 +48,7 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
         Double_t xyzp[6], CovXyzp[21];
         dcaG.GetXYZ(xyzp, CovXyzp);
 
+        /*
 	    Int_t q = 1;
         Int_t pdg = 211;
         if (gTrack->charge() < 0) {
@@ -62,6 +63,17 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
         track.SetCharge(q);
 
         particles[iTrk] = new KFParticle(track, pdg);
+        */
+
+        Int_t q = 1;
+        Int_t pdg = 211;
+        if (gTrack->charge() < 0) {
+            q=-1;
+            pdg=-211;
+        }
+
+        particles[iTrk] = new KFParticle();
+        particles[iTrk]->Create(xyzp, CovXyzp, q, pdg);
     }
 
     TArrayC Flag(tracksToUse.size());
