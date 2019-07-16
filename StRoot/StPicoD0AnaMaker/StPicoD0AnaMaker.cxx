@@ -328,6 +328,7 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
     bool isRemovedtrack=false;
 
     //removing according single track cuts
+    /*
     if (singleTrack) {
         float dca;
         for (unsigned short iTrack = 0; iTrack < mPicoDst->numberOfTracks(); ++iTrack) {
@@ -336,6 +337,7 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
             if (dca>0.010 && trk->isPrimary()) tracksToRemove.push_back(iTrack);
         }
     }
+     */
 
     //removing with pair cuts
     if (pairRem) {
