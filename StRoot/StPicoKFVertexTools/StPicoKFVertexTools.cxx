@@ -27,11 +27,11 @@ int StPicoKFVertexTools::InitHF() {
     mOutList->Add(new TH1F("hMassUSRefit","hMassUSRefit", 500, 1.6, 2.1));
     mOutList->Add(new TH2F("hPicoPosition","hPicoPosition", 400, -1, 1, 400, 1, 1));
 
-    ntp_vertex = new TNtuple("ntp_vertex","ntp_vertex","runId:refMult:grefMult:nGlobTracks:nHftTracks:nD0:StAnnelingChi2Cut:"
+    ntp_vertex = new TNtuple("ntp_vertex","ntp_vertex","runId:refMult:grefMult:nGlobTracks:nHftTracks:nPrimTracks:nD0:StAnnelingChi2Cut:"
                                                        "picoDstVx:picoDstVy:picoDstVz:"
                                                        "picoDstVErrX:picoDstVErrY:picoDstVErrZ:"
                                                        "KFVx:KFVy:KFVz:"
-                                                       "KFVErrX:KFVErrY:KFVErrZ");
+                                                       "KFVErrX:KFVErrY:KFVErrZ:nFlag0");
 
     ntp_KFReso = new TNtuple("ntp_KFReso","ntp_KFReso","KF1x:KF1y:KF1z:"
                                                        "KF2x:KF2y:KF2z:"
@@ -61,8 +61,8 @@ int StPicoKFVertexTools::MakeHF() {
 //    if (!(mPrimVtx.y()>-0.28)) return kStOK;
 //    if (!(mPrimVtx.y()<-0.13)) return kStOK;
 
-    if (!(abs(mPrimVtx.x())<0.4)) return kStOK;
-    if (!(abs(mPrimVtx.y())<0.4)) return kStOK;
+    if (!(abs(mPrimVtx.x())<0.5)) return kStOK;
+    if (!(abs(mPrimVtx.y())<0.5)) return kStOK;
 
     TH1F *hMassUS = static_cast<TH1F*>(mOutList->FindObject("hMassUS"));
     TH1F *hMassUSRefit = static_cast<TH1F*>(mOutList->FindObject("hMassUSRefit"));
@@ -83,7 +83,7 @@ int StPicoKFVertexTools::MakeHF() {
     for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
         StPicoTrack* trk = mPicoDst->track(iTrack);
         globalTracks.push_back(iTrack);
-//        if (trk->isPrimary()) primaryTracks.push_back(iTrack);
+        if (trk->isPrimary()) primaryTracks.push_back(iTrack);
         if (trk->isHFTTrack()) nHftTracks++;
         if (abs(trk->gMom().PseudoRapidity())>1) continue;
 //        if (mHFCuts->isGoodPion(trk)) mIdxPicoPions.push_back(iTrack);
@@ -122,7 +122,7 @@ int StPicoKFVertexTools::MakeHF() {
 
     if (goodEvent) {
 //    if (nD0>-1) {
-//        compareFitters(nD0, nHftTracks);
+        compareFitters(primaryTracks, nD0, nHftTracks);
 
         //making 2 vertices and comparing:
 //        if (primaryTracks.size()>10) {
@@ -174,7 +174,9 @@ int StPicoKFVertexTools::MakeHF() {
 }
 
 // _____________________________________________________________________________
-void StPicoKFVertexTools::compareFitters(int nD0, int nHftTracks) {
+void StPicoKFVertexTools::compareFitters(std::vector<int>&  primaryTracks, int nD0, int nHftTracks) {
+    const unsigned int nPrimTracks = primaryTracks.size();
+
     StPicoKFVertexFitter kfVertexFitter;
     KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
 
@@ -187,6 +189,7 @@ void StPicoKFVertexTools::compareFitters(int nD0, int nHftTracks) {
     ntVar[ii++] = mPicoEvent->grefMult();
     ntVar[ii++] = mPicoEvent->numberOfGlobalTracks();
     ntVar[ii++] = nHftTracks;
+    ntVar[ii++] = nPrimTracks;
     ntVar[ii++] = nD0;
     ntVar[ii++] = StAnneling::Chi2Cut();
 
@@ -205,6 +208,8 @@ void StPicoKFVertexTools::compareFitters(int nD0, int nHftTracks) {
     ntVar[ii++] = kfVertex.GetErrX();
     ntVar[ii++] = kfVertex.GetErrY();
     ntVar[ii++] = kfVertex.GetErrZ();
+
+    ntVar[ii++] = kfVertexFitter.nFlag0;
 
     ntp_vertex->Fill(ntVar);
 }
