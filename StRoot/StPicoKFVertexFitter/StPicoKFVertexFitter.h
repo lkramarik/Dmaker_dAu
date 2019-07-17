@@ -32,8 +32,8 @@ public:
     StPicoKFVertexFitter() {}
     ~StPicoKFVertexFitter() {}
 
-    KFVertex primaryVertexRefit(StPicoDst const*) const;
-    KFVertex primaryVertexRefit(StPicoDst const*, std::vector<int>&) const;
+    KFVertex primaryVertexRefit(StPicoDst const*);
+    KFVertex primaryVertexRefit(StPicoDst const*, std::vector<int>&);
     KFVertex primaryVertexRefitUsingTracks(StPicoDst const*, std::vector<int>&);
 
     int nFlag0;
@@ -46,8 +46,7 @@ private:
 
 };
 
-inline KFVertex StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* picoDst) const
-{
+inline KFVertex StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* picoDst) {
     std::vector<int> v;
     return primaryVertexRefit(picoDst,v);
 }

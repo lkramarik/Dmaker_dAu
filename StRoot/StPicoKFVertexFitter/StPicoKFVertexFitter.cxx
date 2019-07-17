@@ -16,7 +16,7 @@
 
 using namespace std;
 
-KFVertex StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* const picoDst, std::vector<int>& tracksToRemove) const {
+KFVertex StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* const picoDst, std::vector<int>& tracksToRemove) {
     // just in case it is not sorted
     std::sort(tracksToRemove.begin(),tracksToRemove.end());
 
