@@ -40,11 +40,12 @@ public:
 
     KFVertex primaryVertexRefitUsingTracks(StPicoDst const*, std::vector<int>&) const;
 
-    int nFlag0;
-    int nFlag1;
+
 
 private:
     StDcaGeometry dcaGeometry(StPicoTrackCovMatrix const*) const;
+    int nFlag0;
+    int nFlag1;
 
 };
 
