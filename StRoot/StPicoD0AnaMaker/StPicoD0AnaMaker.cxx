@@ -313,8 +313,9 @@ int StPicoD0AnaMaker::createCandidates() {
 
 //____________________________________________________________________________________
 TVector3 StPicoD0AnaMaker::refitVertex(bool always){
-    bool pairRem=false;
-    bool singleTrack=!pairRem;
+    bool pairRem=true;
+    bool singleTrack=true;
+//    bool singleTrack=!pairRem;
 
     TH1F *hPVDiffX = static_cast<TH1F*>(mOutList->FindObject("hPVDiffX"));
     TH1F *hPVDiffY = static_cast<TH1F*>(mOutList->FindObject("hPVDiffY"));
@@ -328,16 +329,16 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
     bool isRemovedtrack=false;
 
     //removing according single track cuts
-    /*
+
     if (singleTrack) {
         float dca;
         for (unsigned short iTrack = 0; iTrack < mPicoDst->numberOfTracks(); ++iTrack) {
             StPicoTrack* trk = mPicoDst->track(iTrack);
             dca = (mPrimVtx - trk->origin()).Mag();
-            if (dca>0.010 && trk->isPrimary()) tracksToRemove.push_back(iTrack);
+            if (dca>0.012 && trk->isPrimary()) tracksToRemove.push_back(iTrack);
         }
     }
-     */
+
 
     //removing with pair cuts
     if (pairRem) {
@@ -346,7 +347,7 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
             for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
                 StPicoTrack const *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
                 StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion), mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1], mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
-                if (cos(pair->pointingAngle()) > 0.9 && pair->dcaDaughters() < 0.007 && pair->DcaToPrimaryVertex()<0.0075 && pair->particle1Dca()>0.009 && pair->particle2Dca()>0.009) {
+                if (cos(pair->pointingAngle()) > 0.9 && pair->dcaDaughters() < 0.007) {
                     tracksToRemove.push_back(mIdxPicoPions[idxPion1]);
                     tracksToRemove.push_back(mIdxPicoKaons[idxKaon]);
                     hRemovedPairMass->Fill(pair->m());
@@ -361,7 +362,6 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
         //Make new vertex and evaluate stuff:
         StPicoKFVertexFitter kfVertexFitter;
         KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst, tracksToRemove);
-        cout<<kfVertexFitter.nFlag0<<endl;
         if (kfVertex.GetX()) {
             newKFVertex.SetXYZ(kfVertex.GetX(), kfVertex.GetY(), kfVertex.GetZ());
             hPVDiffX->Fill(mPrimVtx.x() - newKFVertex.x());
