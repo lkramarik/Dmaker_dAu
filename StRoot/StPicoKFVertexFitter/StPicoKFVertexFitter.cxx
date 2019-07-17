@@ -100,7 +100,6 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
         }
         if (Flag[i]==1) {
             nFlag1++;
-            cout<<"1"<<endl;
         }
 
 
