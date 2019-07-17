@@ -88,11 +88,22 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
 
     aVertex.Create(parVertex,covVertex, 0, 0);
 
-    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), 5); //Yuri - particles, that have worst hi2cut, are not used for refit
+    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), 5); //Yuri - particles, that have worst hi2cut, are not used for final fit
     //if flag is 0, track was not used for PV refit. If all flags are 0, PV is probably not good
 
+    nFlag0=0;
+    nFlag1=0;
     for (int i = 0; i < tracksToUse.size(); ++i) {
-        if (Flag[i]==0) cout<<"0"<<endl;
+        if (Flag[i]==0) {
+            nFlag0++;
+            cout<<"0"<<endl;
+        }
+        if (Flag[i]==1) {
+            nFlag1++;
+            cout<<"1"<<endl;
+        }
+
+
     }
 
 //    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), TMath::Sqrt(StAnneling::Chi2Cut()/2)); //original

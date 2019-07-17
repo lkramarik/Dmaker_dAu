@@ -361,7 +361,7 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
         //Make new vertex and evaluate stuff:
         StPicoKFVertexFitter kfVertexFitter;
         KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst, tracksToRemove);
-
+        cout<<kfVertexFitter->nFlag0<<endl;
         if (kfVertex.GetX()) {
             newKFVertex.SetXYZ(kfVertex.GetX(), kfVertex.GetY(), kfVertex.GetZ());
             hPVDiffX->Fill(mPrimVtx.x() - newKFVertex.x());
