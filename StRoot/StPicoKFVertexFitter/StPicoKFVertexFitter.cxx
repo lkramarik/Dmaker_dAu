@@ -94,15 +94,8 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
     nFlag0=0;
     nFlag1=0;
     for (int i = 0; i < tracksToUse.size(); ++i) {
-        if (Flag[i]==0) {
-            nFlag0++;
-            cout<<"0"<<endl;
-        }
-        if (Flag[i]==1) {
-            nFlag1++;
-        }
-
-
+        if (Flag[i]==0) nFlag0++;
+        if (Flag[i]==1) nFlag1++;
     }
 
 //    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), TMath::Sqrt(StAnneling::Chi2Cut()/2)); //original
