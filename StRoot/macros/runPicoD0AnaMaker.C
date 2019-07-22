@@ -53,8 +53,8 @@ void runPicoD0AnaMaker(
     hfCuts->setCutTOFDeltaOneOverBetaPion(0.03);
     hfCuts->setCutPtMin(0.15);
 
-    hfCuts->setCutDcaMin(0.001,StHFCuts::kPion);
-    hfCuts->setCutDcaMin(0.001,StHFCuts::kKaon);
+    hfCuts->setCutDcaMin(0.002,StHFCuts::kPion);
+    hfCuts->setCutDcaMin(0.002,StHFCuts::kKaon);
 
     float dcaDaughtersMax = 0.04;  // maximum toto ide
     float decayLengthMin  = 0.001; // minimum

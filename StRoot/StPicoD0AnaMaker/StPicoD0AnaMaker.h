@@ -50,6 +50,7 @@ protected:
     std::vector<unsigned short> mIdxPicoPions;
     std::vector<unsigned short> mIdxPicoKaons;
     std::vector<int> tracksToRemove;
+    std::vector<int> primaryTracks;
 
 private:
     int createCandidates();
