@@ -383,10 +383,6 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
     goodTracks.clear();
     goodTracks.shrink_to_fit();
 
-    delete pair;
-    delete trk;
-    delete pion1;
-    delete kaon;
     return newKFVertex;
 }
 
