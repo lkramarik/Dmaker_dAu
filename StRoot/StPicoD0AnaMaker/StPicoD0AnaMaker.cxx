@@ -356,8 +356,8 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
     std::vector<int> goodTracks;
 
     for (int iTrk = 0; iTrk < primaryTracks.size(); ++iTrk) {
-        if(std::binary_search(tracksToRemove.begin(), tracksToRemove.end(), primaryTracks(iTrk))) continue;
-        goodTracks.push_back(primaryTracks(iTrk));
+        if(std::binary_search(tracksToRemove.begin(), tracksToRemove.end(), primaryTracks[iTrk])) continue;
+        goodTracks.push_back(primaryTracks[iTrk]);
     }
 
     TVector3 newKFVertex(mPrimVtx.x(), mPrimVtx.y(), mPrimVtx.z());
