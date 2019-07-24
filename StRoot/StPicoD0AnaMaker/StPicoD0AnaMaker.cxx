@@ -90,8 +90,8 @@ void StPicoD0AnaMaker::ClearHF(Option_t *opt="") {
 
 // _________________________________________________________
 int StPicoD0AnaMaker::FinishHF() {
-//    ntp_DMeson_Signal -> Write(ntp_DMeson_Signal->GetName(), TObject::kOverwrite);
-//    ntp_DMeson_Background -> Write(ntp_DMeson_Background->GetName(), TObject::kOverwrite);
+    ntp_DMeson_Signal -> Write(ntp_DMeson_Signal->GetName(), TObject::kOverwrite);
+    ntp_DMeson_Background -> Write(ntp_DMeson_Background->GetName(), TObject::kOverwrite);
 //    ntp_pion -> Write(ntp_pion->GetName(), TObject::kOverwrite);
 //    ntp_kaon -> Write(ntp_kaon->GetName(), TObject::kOverwrite);
     return kStOK;

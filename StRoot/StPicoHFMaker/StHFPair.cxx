@@ -25,6 +25,12 @@ StHFPair::StHFPair(StHFPair const * t) : mLorentzVector(t->mLorentzVector), mDec
 }
 
 // _________________________________________________________
+StHFPair::~StHFPair() {
+    // destructor
+
+}
+
+// _________________________________________________________
 StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * const particle2,
 		   float p1MassHypo, float p2MassHypo, unsigned short const p1Idx, unsigned short const p2Idx,
 		   TVector3 const & vtx, float const bField, bool const useStraightLine) :

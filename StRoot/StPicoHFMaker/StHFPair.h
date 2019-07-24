@@ -46,7 +46,7 @@ public:
 			 unsigned short p1Idx, unsigned short p2Idx,
 			 TVector3 const & vtx, float bField, bool useStraightLine = true);
 
-	~StHFPair() {;}
+	~StHFPair();
 
 	TLorentzVector const & lorentzVector() const;
 	TVector3 const & decayVertex() const;
