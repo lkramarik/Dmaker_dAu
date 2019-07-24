@@ -218,16 +218,13 @@ int StPicoD0AnaMaker::createCandidates() {
 //            cout<<useVertex.x()<<" "<<useVertex.y()<<" "<<useVertex.z()<<endl;
 //            cout<<mPrimVtx.x()<<" "<<mPrimVtx.y()<<" "<<mPrimVtx.z()<<endl;
 //        }
-    cout<<"after refit"<<endl;
 
     for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
         StPicoTrack *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
         for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
             StPicoTrack *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
-            cout<<"lets def pair"<<endl;
             StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], useVertex, mBField, kTRUE);
 
-            cout<<"pair ok"<<endl;
             if (!mHFCuts->isGoodSecondaryVertexPair(pair)) continue;
 
             bool isD0 = false;
@@ -306,8 +303,6 @@ int StPicoD0AnaMaker::createCandidates() {
 
     tracksToRemove.clear();
     tracksToRemove.shrink_to_fit();
-
-    cout<<"lets delete"<<endl;
 
     return kStOK;
 }
