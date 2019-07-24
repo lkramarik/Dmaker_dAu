@@ -198,8 +198,10 @@ int StPicoD0AnaMaker::createCandidates() {
     UInt_t nTracks = mPicoDst->numberOfTracks();
     Int_t nD0 = 0;
     nPrimary = 0;
+
+    StPicoTrack* trk;
     for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
-        StPicoTrack* trk = mPicoDst->track(iTrack);
+        trk = mPicoDst->track(iTrack);
         if (abs(trk->gMom().PseudoRapidity())>1) continue;
 
         if (trk->isPrimary()) {
