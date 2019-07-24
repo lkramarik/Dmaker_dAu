@@ -228,8 +228,10 @@ int StPicoD0AnaMaker::createCandidates() {
         pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
         for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
             kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
+            cout<<"lets def pair"<<endl;
             pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], useVertex, mBField, kTRUE);
 
+            cout<<"pair ok"<<endl;
             if (!mHFCuts->isGoodSecondaryVertexPair(pair)) continue;
 
             bool isD0 = false;
