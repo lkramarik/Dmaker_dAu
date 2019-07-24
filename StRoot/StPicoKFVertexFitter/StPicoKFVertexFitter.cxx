@@ -39,7 +39,7 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* const picoDst
 KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* const picoDst, std::vector<int>& tracksToUse) {
     // fill an array of KFParticles
     KFParticle* particles[tracksToUse.size()];
-
+    cout<<"go to refit"<<endl;
     TVector3 Vtx = picoDst->event()->primaryVertex();
     StPicoTrack* gTrack;
     StPicoTrackCovMatrix *cov;

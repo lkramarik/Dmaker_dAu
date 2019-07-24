@@ -219,6 +219,7 @@ int StPicoD0AnaMaker::createCandidates() {
 //            cout<<useVertex.x()<<" "<<useVertex.y()<<" "<<useVertex.z()<<endl;
 //            cout<<mPrimVtx.x()<<" "<<mPrimVtx.y()<<" "<<mPrimVtx.z()<<endl;
 //        }
+    cout<<"after refit"<<endl;
     StPicoTrack const *pion1;//=new StPicoTrack();
     StPicoTrack const *kaon;//=new StPicoTrack();
     StHFPair *pair;//=new StHFPair();
