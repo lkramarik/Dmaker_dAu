@@ -313,10 +313,10 @@ int StPicoD0AnaMaker::createCandidates() {
 
     cout<<"lets delete"<<endl;
 
-    delete trk;
+//    delete trk;
 //    delete pair;
-    delete kaon;
-    delete pion1;
+//    delete kaon;
+//    delete pion1;
 
     cout<<"deleted"<<endl;
     return kStOK;
