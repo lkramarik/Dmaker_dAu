@@ -126,13 +126,8 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
 
    // clean up
     for(size_t iTrk = 0; iTrk < tracksToUse.size(); ++iTrk) delete particles[iTrk];
-
-
-//    TVector3 kfVertex(-999.,-999.,-999.);
-//
-//    if (aVertex.GetX()) {
-//        kfVertex.SetXYZ(aVertex.GetX(), aVertex.GetY(), aVertex.GetZ());
-//    }
+    delete cov;
+    delete gTrack;
 
     return aVertex;
 }
