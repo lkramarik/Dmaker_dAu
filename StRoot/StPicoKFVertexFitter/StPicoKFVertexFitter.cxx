@@ -39,11 +39,14 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* const picoDst
 KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* const picoDst, std::vector<int>& tracksToUse) {
     // fill an array of KFParticles
     KFParticle* particles[tracksToUse.size()];
+
     TVector3 Vtx = picoDst->event()->primaryVertex();
+    StPicoTrack* gTrack;
+    StPicoTrackCovMatrix *cov;
 
     for (size_t iTrk = 0; iTrk < tracksToUse.size(); ++iTrk) {
-        StPicoTrack* gTrack = (StPicoTrack*)picoDst->track(tracksToUse[iTrk]);
-        StPicoTrackCovMatrix *cov = picoDst->trackCovMatrix(tracksToUse[iTrk]);
+        gTrack = (StPicoTrack*)picoDst->track(tracksToUse[iTrk]);
+        cov = picoDst->trackCovMatrix(tracksToUse[iTrk]);
         StDcaGeometry dcaG = dcaGeometry(cov);
         Double_t xyzp[6], CovXyzp[21];
         dcaG.GetXYZ(xyzp, CovXyzp);
