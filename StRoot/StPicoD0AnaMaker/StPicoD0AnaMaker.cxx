@@ -222,14 +222,14 @@ int StPicoD0AnaMaker::createCandidates() {
     cout<<"after refit"<<endl;
     StPicoTrack const *pion1;//=new StPicoTrack();
     StPicoTrack const *kaon;//=new StPicoTrack();
-    StHFPair *pair;//=new StHFPair();
+//    StHFPair *pair;//=new StHFPair();
 
     for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
         pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
         for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
             kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
             cout<<"lets def pair"<<endl;
-            pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], useVertex, mBField, kTRUE);
+            StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], useVertex, mBField, kTRUE);
 
             cout<<"pair ok"<<endl;
             if (!mHFCuts->isGoodSecondaryVertexPair(pair)) continue;
