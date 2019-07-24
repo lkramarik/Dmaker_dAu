@@ -222,7 +222,7 @@ int StPicoD0AnaMaker::createCandidates() {
     cout<<"after refit"<<endl;
     StPicoTrack *pion1=new StPicoTrack();
     StPicoTrack *kaon=new StPicoTrack();
-    StHFPair *pair=new StHFPair();
+    StHFPair *pair;
 
     for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
         pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
