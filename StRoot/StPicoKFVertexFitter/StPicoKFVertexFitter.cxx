@@ -45,8 +45,8 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
     StPicoTrackCovMatrix *cov=new StPicoTrackCovMatrix();
 
     for (size_t iTrk = 0; iTrk < tracksToUse.size(); ++iTrk) {
-        gTrack = picoDst->track(tracksToUse[iTrk]);
-        cov = picoDst->trackCovMatrix(tracksToUse[iTrk]);
+        gTrack = (StPicoTrack*)picoDst->track(tracksToUse[iTrk]);
+        cov = (StPicoTrackCovMatrix*)picoDst->trackCovMatrix(tracksToUse[iTrk]);
         StDcaGeometry dcaG = dcaGeometry(cov);
         Double_t xyzp[6], CovXyzp[21];
         dcaG.GetXYZ(xyzp, CovXyzp);
