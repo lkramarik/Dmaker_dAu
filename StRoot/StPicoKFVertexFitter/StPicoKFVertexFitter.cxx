@@ -41,12 +41,12 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
     KFParticle* particles[tracksToUse.size()];
     cout<<"go to refit"<<endl;
     TVector3 Vtx = picoDst->event()->primaryVertex();
-    StPicoTrack* gTrack=new StPicoTrack();
-    StPicoTrackCovMatrix *cov=new StPicoTrackCovMatrix();
+//    StPicoTrack* gTrack=new StPicoTrack();
+//    StPicoTrackCovMatrix *cov=new StPicoTrackCovMatrix();
 
     for (size_t iTrk = 0; iTrk < tracksToUse.size(); ++iTrk) {
-        gTrack = (StPicoTrack*)picoDst->track(tracksToUse[iTrk]);
-        cov = (StPicoTrackCovMatrix*)picoDst->trackCovMatrix(tracksToUse[iTrk]);
+        StPicoTrack* gTrack = (StPicoTrack*)picoDst->track(tracksToUse[iTrk]);
+        StPicoTrackCovMatrix *cov = (StPicoTrackCovMatrix*)picoDst->trackCovMatrix(tracksToUse[iTrk]);
         StDcaGeometry dcaG = dcaGeometry(cov);
         Double_t xyzp[6], CovXyzp[21];
         dcaG.GetXYZ(xyzp, CovXyzp);
@@ -129,8 +129,6 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
 
    // clean up
     for(size_t iTrk = 0; iTrk < tracksToUse.size(); ++iTrk) delete particles[iTrk];
-    delete cov;
-    delete gTrack;
 
     return aVertex;
 }
