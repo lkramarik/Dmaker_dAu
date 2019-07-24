@@ -199,7 +199,7 @@ int StPicoD0AnaMaker::createCandidates() {
     Int_t nD0 = 0;
     nPrimary = 0;
 
-    StPicoTrack* trk;
+    StPicoTrack* trk=new StPicoTrack();
     for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
         trk = mPicoDst->track(iTrack);
         if (abs(trk->gMom().PseudoRapidity())>1) continue;
@@ -222,14 +222,14 @@ int StPicoD0AnaMaker::createCandidates() {
     cout<<"after refit"<<endl;
     StPicoTrack *pion1=new StPicoTrack();
     StPicoTrack *kaon=new StPicoTrack();
-//    StHFPair *pair;//=new StHFPair();
+    StHFPair *pair=new StHFPair();
 
     for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
         pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
         for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
             kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
             cout<<"lets def pair"<<endl;
-            StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], useVertex, mBField, kTRUE);
+            pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1],mIdxPicoKaons[idxKaon], useVertex, mBField, kTRUE);
 
             cout<<"pair ok"<<endl;
             if (!mHFCuts->isGoodSecondaryVertexPair(pair)) continue;
@@ -313,10 +313,10 @@ int StPicoD0AnaMaker::createCandidates() {
 
     cout<<"lets delete"<<endl;
 
-//    delete trk;
-//    delete pair;
-//    delete kaon;
-//    delete pion1;
+    delete trk;
+    delete pair;
+    delete kaon;
+    delete pion1;
 
     cout<<"deleted"<<endl;
     return kStOK;
