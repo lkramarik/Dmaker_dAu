@@ -311,6 +311,8 @@ int StPicoD0AnaMaker::createCandidates() {
     tracksToRemove.clear();
     tracksToRemove.shrink_to_fit();
 
+    cout<<"lets delete"<<endl;
+
     delete trk;
     delete pair;
     delete kaon;
