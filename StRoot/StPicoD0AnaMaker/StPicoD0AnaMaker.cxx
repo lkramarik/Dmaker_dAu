@@ -220,8 +220,8 @@ int StPicoD0AnaMaker::createCandidates() {
 //            cout<<mPrimVtx.x()<<" "<<mPrimVtx.y()<<" "<<mPrimVtx.z()<<endl;
 //        }
     cout<<"after refit"<<endl;
-    StPicoTrack const *pion1;//=new StPicoTrack();
-    StPicoTrack const *kaon;//=new StPicoTrack();
+    StPicoTrack *pion1;//=new StPicoTrack();
+    StPicoTrack *kaon;//=new StPicoTrack();
 //    StHFPair *pair;//=new StHFPair();
 
     for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
