@@ -37,7 +37,17 @@ int StPicoQAMaker::InitHF() {
     //___detector, centrality and statistics (No. of events, tracks...) histograms
     mOutList->Add(new TH2F("h_mh1Cent", "EventsVsCentrality;cent;CountsvsRunIndex", 10, -1.5, 8.5, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
     mOutList->Add(new TH2F("h_mh1CentWg", "EventsVsCentrality;cent;CountsvsRunIndex", 10, -1.5, 8.5, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
-    mOutList->Add(new TH2F("h_mh1gRefmultCor", "gRefmultCor;gRefmult;CountsvsRunIndex", 700, 0, 700, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
+    mOutList->Add(new TH2F("h_gRefmult", "gRefmult;CountsvsRunIndex", 700, 0, 700, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
+
+    mOutList->Add(new TH2F("h_gRefmult_vs_ZDCx", "gRefmult;ZDCx", 250, 0, 250, 101, -0.5, 100.5);
+
+    mOutList->Add(new TH1F("h_gRefmult_Vz_min6_min4", "gRefmult for Vz>-6 && Vz<=-4", 101, -0.5, 100.5);
+    mOutList->Add(new TH1F("h_gRefmult_Vz_min4_min2", "gRefmult for Vz>-4 && Vz<=-2", 101, -0.5, 100.5);
+    mOutList->Add(new TH1F("h_gRefmult_Vz_min2_0", "gRefmult for Vz>-2 && Vz<=0", 101, -0.5, 100.5);
+    mOutList->Add(new TH1F("h_gRefmult_Vz_0_2", "gRefmult for Vz>0 && Vz<=2", 101, -0.5, 100.5);
+    mOutList->Add(new TH1F("h_gRefmult_Vz_2_4", "gRefmult for Vz>2 && Vz<=4", 101, -0.5, 100.5);
+    mOutList->Add(new TH1F("h_gRefmult_Vz_4_6", "gRefmult for Vz>4 && Vz<=6", 101, -0.5, 100.5);
+
     mOutList->Add(new TH2F("h_mh1gRefmultCorWg", "gRefmultCorWg;gRefmultCorWg;CountsvsRunIndex", 700, 0, 700, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
     mOutList->Add(new TH3F("h_mh2CentVz", "CentralityVsVz;cent;VzvsRunIndex", 10, -1.5, 8.5, 200, -10, 10, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
     mOutList->Add(new TH3F("h_mh2CentVzWg", "CentralityVsVzWg;cent;VzvsRunIndex", 10, -1.5, 8.5, 200, -10, 10, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
@@ -294,7 +304,16 @@ int StPicoQAMaker::MakeHF() {
         }
     }
 
-    TH2F *h_mh1gRefmultCor = static_cast<TH2F *>(mOutList->FindObject("h_mh1gRefmultCor"));
+    TH2F *h_gRefmult = static_cast<TH2F *>(mOutList->FindObject("h_gRefmult"));
+    TH2F *h_gRefmult_vs_ZDCx = static_cast<TH2F *>(mOutList->FindObject("h_gRefmult_vs_ZDCx"));
+
+    TH1F *h_gRefmult_Vz_min6_min4 = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_min6_min4"));
+    TH1F *h_gRefmult_Vz_min4_min2 = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_min4_min2"));
+    TH1F *h_gRefmult_Vz_min2_0 = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_min2_0"));
+    TH1F *h_gRefmult_Vz_0_2 = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_0_2"));
+    TH1F *h_gRefmult_Vz_2_4 = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_2_4"));
+    TH1F *h_gRefmult_Vz_4_6 = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_4_6"));
+
     TH2D *h_QA_Vz = static_cast<TH2D *>(mOutList->FindObject("h_QA_Vz"));
     TH2F *h_QA_Vz_position = static_cast<TH2F *>(mOutList->FindObject("h_QA_Vz_position"));
     TH2F *h_QA_Vx_position = static_cast<TH2F *>(mOutList->FindObject("h_QA_Vx_position"));
@@ -474,8 +493,8 @@ int StPicoQAMaker::MakeHF() {
 
     TVector3 pVtx = mPicoDst->event()->primaryVertex();
     float b = mPicoDst->event()->bField();
-
-    h_mh1gRefmultCor->Fill(mPicoDst->event()->refMult(), RunIndex);
+    float grefMult = mPicoDst->event()->grefMult();
+    h_gRefmult->Fill(mPicoDst->event()->grefMult(), RunIndex);
     h_QA_nEvents->Fill(RunIndex); //number of 0 filled to this histogram = number of events
 
     h_QA_ZDC_rate->Fill(mPicoDst->event()->ZDCx() / 1000., RunIndex);
@@ -489,6 +508,15 @@ int StPicoQAMaker::MakeHF() {
     float vertex_y_QA = pVtx.y();
     float vertex_z_QA = pVtx.z();
     float nTrk=0, nTrk0406=0, nTrk1012=0, nTrk3040=0, nTrkHftTof=0, nTrkHftTof0406=0, nTrkHftTof1012=0, nTrkHftTof3040=0, nTrkHft=0, nTrkHft0406=0, nTrkHft1012=0, nTrkHft3040=0, nTrkTof=0, nTrkTof0406=0, nTrkTof1012=0, nTrkTof3040=0;
+
+    if (vertex_z_QA>-6 && vertex_z_QA<=-4) h_gRefmult_Vz_min6_min4->Fill(grefMult);
+    if (vertex_z_QA>-4 && vertex_z_QA<=-2) h_gRefmult_Vz_min4_min2->Fill(grefMult);
+    if (vertex_z_QA>-2 && vertex_z_QA<=0) h_gRefmult_Vz_min2_0->Fill(grefMult);
+    if (vertex_z_QA>0 && vertex_z_QA<=2) h_gRefmult_Vz_0_2->Fill(grefMult);
+    if (vertex_z_QA>2 && vertex_z_QA<=4) h_gRefmult_Vz_2_4->Fill(grefMult);
+    if (vertex_z_QA>4 && vertex_z_QA<=6) h_gRefmult_Vz_4_6->Fill(grefMult);
+
+    h_gRefmult_vs_ZDCx->Fill(ZDC, grefMult);
 
     h_QA_Vz->Fill(vertex_z_QA, RunIndex);
     h_QA_VzmVzVPD->Fill(fabs(vertex_z_QA - mPicoDst->event()->vzVpd()), RunIndex);
