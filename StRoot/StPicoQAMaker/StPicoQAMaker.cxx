@@ -39,14 +39,14 @@ int StPicoQAMaker::InitHF() {
     mOutList->Add(new TH2F("h_mh1CentWg", "EventsVsCentrality;cent;CountsvsRunIndex", 10, -1.5, 8.5, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
     mOutList->Add(new TH2F("h_gRefmult", "gRefmult;CountsvsRunIndex", 700, 0, 700, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
 
-    mOutList->Add(new TH2F("h_gRefmult_vs_ZDCx", "gRefmult;ZDCx", 250, 0, 250, 101, -0.5, 100.5);
+    mOutList->Add(new TH2F("h_gRefmult_vs_ZDCx", "gRefmult;ZDCx", 250, 0, 250, 101, -0.5, 100.5));
 
-    mOutList->Add(new TH1F("h_gRefmult_Vz_min6_min4", "gRefmult for Vz>-6 && Vz<=-4", 101, -0.5, 100.5);
-    mOutList->Add(new TH1F("h_gRefmult_Vz_min4_min2", "gRefmult for Vz>-4 && Vz<=-2", 101, -0.5, 100.5);
-    mOutList->Add(new TH1F("h_gRefmult_Vz_min2_0", "gRefmult for Vz>-2 && Vz<=0", 101, -0.5, 100.5);
-    mOutList->Add(new TH1F("h_gRefmult_Vz_0_2", "gRefmult for Vz>0 && Vz<=2", 101, -0.5, 100.5);
-    mOutList->Add(new TH1F("h_gRefmult_Vz_2_4", "gRefmult for Vz>2 && Vz<=4", 101, -0.5, 100.5);
-    mOutList->Add(new TH1F("h_gRefmult_Vz_4_6", "gRefmult for Vz>4 && Vz<=6", 101, -0.5, 100.5);
+    mOutList->Add(new TH1F("h_gRefmult_Vz_min6_min4", "gRefmult for Vz>-6 && Vz<=-4", 101, -0.5, 100.5));
+    mOutList->Add(new TH1F("h_gRefmult_Vz_min4_min2", "gRefmult for Vz>-4 && Vz<=-2", 101, -0.5, 100.5));
+    mOutList->Add(new TH1F("h_gRefmult_Vz_min2_0", "gRefmult for Vz>-2 && Vz<=0", 101, -0.5, 100.5));
+    mOutList->Add(new TH1F("h_gRefmult_Vz_0_2", "gRefmult for Vz>0 && Vz<=2", 101, -0.5, 100.5));
+    mOutList->Add(new TH1F("h_gRefmult_Vz_2_4", "gRefmult for Vz>2 && Vz<=4", 101, -0.5, 100.5));
+    mOutList->Add(new TH1F("h_gRefmult_Vz_4_6", "gRefmult for Vz>4 && Vz<=6", 101, -0.5, 100.5));
 
     mOutList->Add(new TH2F("h_mh1gRefmultCorWg", "gRefmultCorWg;gRefmultCorWg;CountsvsRunIndex", 700, 0, 700, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
     mOutList->Add(new TH3F("h_mh2CentVz", "CentralityVsVz;cent;VzvsRunIndex", 10, -1.5, 8.5, 200, -10, 10, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
@@ -58,7 +58,6 @@ int StPicoQAMaker::InitHF() {
     mOutList->Add(new TH2F("h_QA_Vz_position", "VzDef_vs_VzKF", 1200, -6, 6, 1200, -6, 6));
     mOutList->Add(new TH2F("h_QA_Vx_position", "VxDef_vs_VxKF", 1200, -6, 6, 1200, -6, 6));
     mOutList->Add(new TH2F("h_QA_Vy_position", "VyDef_vs_VyKF", 1200, -6, 6, 1200, -6, 6));
-
 
     mOutList->Add(new TH2D("h_QA_ZDC_rate", "ZDC_rateVsRunIndex", 250, 0, 250, RunNumberVector.size() + 1, -1, RunNumberVector.size())); //check binning and range
     mOutList->Add(new TH2D("h_QA_BBC_rate", "BBC_rateVsRunIndex", 2000, 0, 2000, RunNumberVector.size() + 1, -1, RunNumberVector.size())); //check binning and range
