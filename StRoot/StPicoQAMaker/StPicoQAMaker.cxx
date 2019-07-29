@@ -58,6 +58,16 @@ int StPicoQAMaker::InitHF() {
     mOutList->Add(new TH1F("h_gRefmult_Vz_2_4_HFT", "gRefmult for Vz>2 && Vz<=4", 101, -0.5, 100.5));
     mOutList->Add(new TH1F("h_gRefmult_Vz_4_6_HFT", "gRefmult for Vz>4 && Vz<=6", 101, -0.5, 100.5));
 
+    mOutList->Add(new TH2F("h_gRefmult_HFT_hybridTOF", "gRefmult;CountsvsRunIndex", 700, 0, 700, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
+    mOutList->Add(new TH2F("h_gRefmult_vs_ZDCx_HFT_hybridTOF", "gRefmult;ZDCx", 250, 0, 250, 101, -0.5, 100.5));
+
+    mOutList->Add(new TH1F("h_gRefmult_Vz_min6_min4_HFT_hybridTOF", "gRefmult for Vz>-6 && Vz<=-4", 101, -0.5, 100.5));
+    mOutList->Add(new TH1F("h_gRefmult_Vz_min4_min2_HFT_hybridTOF", "gRefmult for Vz>-4 && Vz<=-2", 101, -0.5, 100.5));
+    mOutList->Add(new TH1F("h_gRefmult_Vz_min2_0_HFT_hybridTOF", "gRefmult for Vz>-2 && Vz<=0", 101, -0.5, 100.5));
+    mOutList->Add(new TH1F("h_gRefmult_Vz_0_2_HFT_hybridTOF", "gRefmult for Vz>0 && Vz<=2", 101, -0.5, 100.5));
+    mOutList->Add(new TH1F("h_gRefmult_Vz_2_4_HFT_hybridTOF", "gRefmult for Vz>2 && Vz<=4", 101, -0.5, 100.5));
+    mOutList->Add(new TH1F("h_gRefmult_Vz_4_6_HFT_hybridTOF", "gRefmult for Vz>4 && Vz<=6", 101, -0.5, 100.5));
+
     mOutList->Add(new TH2F("h_mh1gRefmultCorWg", "gRefmultCorWg;gRefmultCorWg;CountsvsRunIndex", 700, 0, 700, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
     mOutList->Add(new TH3F("h_mh2CentVz", "CentralityVsVz;cent;VzvsRunIndex", 10, -1.5, 8.5, 200, -10, 10, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
     mOutList->Add(new TH3F("h_mh2CentVzWg", "CentralityVsVzWg;cent;VzvsRunIndex", 10, -1.5, 8.5, 200, -10, 10, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
@@ -332,6 +342,16 @@ int StPicoQAMaker::MakeHF() {
     TH1F *h_gRefmult_Vz_0_2_HFT = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_0_2_HFT"));
     TH1F *h_gRefmult_Vz_2_4_HFT = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_2_4_HFT"));
     TH1F *h_gRefmult_Vz_4_6_HFT = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_4_6_HFT"));
+
+    TH2F *h_gRefmult_HFT_hybridTOF = static_cast<TH2F *>(mOutList->FindObject("h_gRefmult_HFT_hybridTOF"));
+    TH2F *h_gRefmult_vs_ZDCx_HFT_hybridTOF = static_cast<TH2F *>(mOutList->FindObject("h_gRefmult_vs_ZDCx_HFT_hybridTOF"));
+
+    TH1F *h_gRefmult_Vz_min6_min4_HFT_hybridTOF = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_min6_min4_HFT_hybridTOF"));
+    TH1F *h_gRefmult_Vz_min4_min2_HFT_hybridTOF = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_min4_min2_HFT_hybridTOF"));
+    TH1F *h_gRefmult_Vz_min2_0_HFT_hybridTOF = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_min2_0_HFT_hybridTOF"));
+    TH1F *h_gRefmult_Vz_0_2_HFT_hybridTOF = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_0_2_HFT_hybridTOF"));
+    TH1F *h_gRefmult_Vz_2_4_HFT_hybridTOF = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_2_4_HFT_hybridTOF"));
+    TH1F *h_gRefmult_Vz_4_6_HFT_hybridTOF = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_4_6_HFT_hybridTOF"));
 
     TH2D *h_QA_Vz = static_cast<TH2D *>(mOutList->FindObject("h_QA_Vz"));
     TH2F *h_QA_Vz_position = static_cast<TH2F *>(mOutList->FindObject("h_QA_Vz_position"));
@@ -843,6 +863,20 @@ int StPicoQAMaker::MakeHF() {
 
         h_gRefmult_vs_ZDCx_HFT->Fill(ZDC, grefMult);
     }
+
+    if(nKaonsHFThybridTOF+nPionsHFThybridTOF>1) {
+        h_gRefmult_HFT_hybridTOF->Fill(mPicoDst->event()->grefMult(), RunIndex);
+
+        if (vertex_z_QA > -6 && vertex_z_QA <= -4) h_gRefmult_Vz_min6_min4_HFT_hybridTOF->Fill(grefMult);
+        if (vertex_z_QA > -4 && vertex_z_QA <= -2) h_gRefmult_Vz_min4_min2_HFT_hybridTOF->Fill(grefMult);
+        if (vertex_z_QA > -2 && vertex_z_QA <= 0) h_gRefmult_Vz_min2_0_HFT_hybridTOF->Fill(grefMult);
+        if (vertex_z_QA > 0 && vertex_z_QA <= 2) h_gRefmult_Vz_0_2_HFT_hybridTOF->Fill(grefMult);
+        if (vertex_z_QA > 2 && vertex_z_QA <= 4) h_gRefmult_Vz_2_4_HFT_hybridTOF->Fill(grefMult);
+        if (vertex_z_QA > 4 && vertex_z_QA <= 6) h_gRefmult_Vz_4_6_HFT_hybridTOF->Fill(grefMult);
+
+        h_gRefmult_vs_ZDCx_HFT_hybridTOF->Fill(ZDC, grefMult);
+    }
+
 
     return kStOK;
 }
