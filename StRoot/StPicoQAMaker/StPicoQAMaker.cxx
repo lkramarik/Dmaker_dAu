@@ -48,6 +48,16 @@ int StPicoQAMaker::InitHF() {
     mOutList->Add(new TH1F("h_gRefmult_Vz_2_4", "gRefmult for Vz>2 && Vz<=4", 101, -0.5, 100.5));
     mOutList->Add(new TH1F("h_gRefmult_Vz_4_6", "gRefmult for Vz>4 && Vz<=6", 101, -0.5, 100.5));
 
+    mOutList->Add(new TH2F("h_gRefmult_HFT", "gRefmult;CountsvsRunIndex", 700, 0, 700, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
+    mOutList->Add(new TH2F("h_gRefmult_vs_ZDCx_HFT", "gRefmult;ZDCx", 250, 0, 250, 101, -0.5, 100.5));
+
+    mOutList->Add(new TH1F("h_gRefmult_Vz_min6_min4_HFT", "gRefmult for Vz>-6 && Vz<=-4", 101, -0.5, 100.5));
+    mOutList->Add(new TH1F("h_gRefmult_Vz_min4_min2_HFT", "gRefmult for Vz>-4 && Vz<=-2", 101, -0.5, 100.5));
+    mOutList->Add(new TH1F("h_gRefmult_Vz_min2_0_HFT", "gRefmult for Vz>-2 && Vz<=0", 101, -0.5, 100.5));
+    mOutList->Add(new TH1F("h_gRefmult_Vz_0_2_HFT", "gRefmult for Vz>0 && Vz<=2", 101, -0.5, 100.5));
+    mOutList->Add(new TH1F("h_gRefmult_Vz_2_4_HFT", "gRefmult for Vz>2 && Vz<=4", 101, -0.5, 100.5));
+    mOutList->Add(new TH1F("h_gRefmult_Vz_4_6_HFT", "gRefmult for Vz>4 && Vz<=6", 101, -0.5, 100.5));
+
     mOutList->Add(new TH2F("h_mh1gRefmultCorWg", "gRefmultCorWg;gRefmultCorWg;CountsvsRunIndex", 700, 0, 700, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
     mOutList->Add(new TH3F("h_mh2CentVz", "CentralityVsVz;cent;VzvsRunIndex", 10, -1.5, 8.5, 200, -10, 10, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
     mOutList->Add(new TH3F("h_mh2CentVzWg", "CentralityVsVzWg;cent;VzvsRunIndex", 10, -1.5, 8.5, 200, -10, 10, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
@@ -312,6 +322,16 @@ int StPicoQAMaker::MakeHF() {
     TH1F *h_gRefmult_Vz_0_2 = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_0_2"));
     TH1F *h_gRefmult_Vz_2_4 = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_2_4"));
     TH1F *h_gRefmult_Vz_4_6 = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_4_6"));
+
+    TH2F *h_gRefmult_HFT = static_cast<TH2F *>(mOutList->FindObject("h_gRefmult_HFT"));
+    TH2F *h_gRefmult_vs_ZDCx_HFT = static_cast<TH2F *>(mOutList->FindObject("h_gRefmult_vs_ZDCx_HFT"));
+
+    TH1F *h_gRefmult_Vz_min6_min4_HFT = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_min6_min4_HFT"));
+    TH1F *h_gRefmult_Vz_min4_min2_HFT = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_min4_min2_HFT"));
+    TH1F *h_gRefmult_Vz_min2_0_HFT = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_min2_0_HFT"));
+    TH1F *h_gRefmult_Vz_0_2_HFT = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_0_2_HFT"));
+    TH1F *h_gRefmult_Vz_2_4_HFT = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_2_4_HFT"));
+    TH1F *h_gRefmult_Vz_4_6_HFT = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_4_6_HFT"));
 
     TH2D *h_QA_Vz = static_cast<TH2D *>(mOutList->FindObject("h_QA_Vz"));
     TH2F *h_QA_Vz_position = static_cast<TH2F *>(mOutList->FindObject("h_QA_Vz_position"));
@@ -810,6 +830,19 @@ int StPicoQAMaker::MakeHF() {
     h_QA_BBC_rate_pions_HFT_TOF->Fill(mPicoDst->event()->BBCx()/1000., nPionsHFTTOF);
     h_QA_BBC_rate_kaons_HFT_hybridTOF->Fill(mPicoDst->event()->BBCx()/1000., nKaonsHFThybridTOF);
     h_QA_BBC_rate_pions_HFT_hybridTOF->Fill(mPicoDst->event()->BBCx()/1000., nPionsHFThybridTOF);
+
+    if(nTrkHft>1) {
+        h_gRefmult_HFT->Fill(mPicoDst->event()->grefMult(), RunIndex);
+
+        if (vertex_z_QA > -6 && vertex_z_QA <= -4) h_gRefmult_Vz_min6_min4_HFT->Fill(grefMult);
+        if (vertex_z_QA > -4 && vertex_z_QA <= -2) h_gRefmult_Vz_min4_min2_HFT->Fill(grefMult);
+        if (vertex_z_QA > -2 && vertex_z_QA <= 0) h_gRefmult_Vz_min2_0_HFT->Fill(grefMult);
+        if (vertex_z_QA > 0 && vertex_z_QA <= 2) h_gRefmult_Vz_0_2_HFT->Fill(grefMult);
+        if (vertex_z_QA > 2 && vertex_z_QA <= 4) h_gRefmult_Vz_2_4_HFT->Fill(grefMult);
+        if (vertex_z_QA > 4 && vertex_z_QA <= 6) h_gRefmult_Vz_4_6_HFT->Fill(grefMult);
+
+        h_gRefmult_vs_ZDCx_HFT->Fill(ZDC, grefMult);
+    }
 
     return kStOK;
 }
