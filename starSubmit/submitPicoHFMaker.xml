@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!--  <job fileListSyntax="xrootd" minFilesPerProcess="45" maxFilesPerProcess="55" filesPerHour="4" simulateSubmission="false">-->
-  <job fileListSyntax="xrootd" minFilesPerProcess="25" maxFilesPerProcess="30" simulateSubmission="false">
+  <job fileListSyntax="xrootd" minFilesPerProcess="35" maxFilesPerProcess="40" simulateSubmission="false">
     <stdout URL="file:&basePath;/jobs/log/$JOBID.out"/>
     <stderr URL="file:&basePath;/jobs/err/$JOBID.err"/>
 
@@ -16,7 +16,7 @@
 
   <command>
     starver SL18f
-    root -q -b -l StRoot/macros/loadSharedHFLibraries.C StRoot/macros/&rootMacro;++\(\"$FILELIST\",\"&prodId;_$JOBINDEX\",\"picoList_bad.list\"\) &gt;&amp; ${JOBID}.log
+    root4star -q -b -l StRoot/macros/loadSharedHFLibraries.C StRoot/macros/&rootMacro;++\(\"$FILELIST\",\"&prodId;_$JOBINDEX\",\"picoList_bad.list\"\) &gt;&amp; ${JOBID}.log
   </command>
 
   <output fromScratch="*.root"    toURL="&basePath;/production/" />
