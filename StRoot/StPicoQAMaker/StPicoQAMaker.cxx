@@ -577,6 +577,7 @@ int StPicoQAMaker::MakeHF() {
     Int_t nKaonsHFT=0;
     Int_t nKaonsHFTTOF=0;
     Int_t nKaonsHFThybridTOF=0;
+    Int_t nCommon=0;
 
     for (unsigned short iTrack = 0; iTrack < mPicoDst->numberOfTracks(); ++iTrack) {
         StPicoTrack const *trk = mPicoDst->track(iTrack);
@@ -795,6 +796,8 @@ int StPicoQAMaker::MakeHF() {
 
         }
 
+        bool isCommon=false;
+
         if (fabs(trk->nSigmaKaon())<3) {
             nKaons = nKaons + 1;
             if (mHFCuts->isTOFmatched(trk)) {
@@ -802,7 +805,10 @@ int StPicoQAMaker::MakeHF() {
             }
             if (trk->isHFTTrack()) nKaonsHFT=nKaonsHFT+1;
             if (trk->isHFTTrack() && mHFCuts->isTOFmatched(trk)) nKaonsHFTTOF=nKaonsHFTTOF+1;
-            if (trk->isHFTTrack() && mHFCuts->isHybridTOFKaon(trk)) nKaonsHFThybridTOF=nKaonsHFThybridTOF+1;
+            if (trk->isHFTTrack() && mHFCuts->isHybridTOFKaon(trk)) {
+                nKaonsHFThybridTOF=nKaonsHFThybridTOF+1;
+                isCommon=true;
+            }
         }
 
         if (fabs(trk->nSigmaPion())<3) {
@@ -812,8 +818,14 @@ int StPicoQAMaker::MakeHF() {
             }
             if (trk->isHFTTrack()) nPionsHFT=nPionsHFT+1;
             if (trk->isHFTTrack() && mHFCuts->isTOFmatched(trk)) nPionsHFTTOF=nPionsHFTTOF+1;
-            if (trk->isHFTTrack() && mHFCuts->isHybridTOFPion(trk)) nPionsHFThybridTOF=nPionsHFThybridTOF+1;
+            if (trk->isHFTTrack() && mHFCuts->isHybridTOFPion(trk)) {
+                nPionsHFThybridTOF=nPionsHFThybridTOF+1;
+                if (isCommon) isCommon=true;
+                else isCommon=false;
+            }
         }
+
+        if (isCommon) ++nCommon;
 
     } // .. end tracks loop
 
@@ -864,7 +876,7 @@ int StPicoQAMaker::MakeHF() {
         h_gRefmult_vs_ZDCx_HFT->Fill(ZDC, grefMult);
     }
 
-    if(nKaonsHFThybridTOF+nPionsHFThybridTOF>1) {
+    if((nCommon!=1 && nKaonsHFThybridTOF>0 && nPionsHFThybridTOF>0) || (nCommon==1 && nKaonsHFThybridTOF>1)) {
         h_gRefmult_HFT_hybridTOF->Fill(mPicoDst->event()->grefMult(), RunIndex);
 
         if (vertex_z_QA > -6 && vertex_z_QA <= -4) h_gRefmult_Vz_min6_min4_HFT_hybridTOF->Fill(grefMult);
