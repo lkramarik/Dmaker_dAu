@@ -52,9 +52,9 @@ int StPicoD0AnaMaker::InitHF() {
 
     mOutList->Add(new TH1F("hNTracksRemoved","hNTracksRemoved", 2000, -0.5, 1999.5));
     mOutList->Add(new TH1F("hNTracksPrimary","hNTracksPrimary", 200, -0.5, 199.5));
-    mOutList->Add(new TH1F("hNTracksDiffRemovedPrimary","hNTracksDiffRemovedPrimary", 200, -0.001, 199.999));
-    mOutList->Add(new TH1F("hNTracksDiffRemovedGlobal","hNTracksDiffRemovedGlobal", 200, -0.001, 199.999));
-    mOutList->Add(new TH1F("hHotSpotDiffRemovedPrimary","hHotSpotDiffRemovedPrimary", 200, -0.001, 199.999));
+    mOutList->Add(new TH1F("hNTracksDiffRemovedPrimary","hNTracksDiffRemovedPrimary", 200, -0.5, 199.5));
+    mOutList->Add(new TH1F("hNTracksDiffRemovedGlobal","hNTracksDiffRemovedGlobal", 200, -0.5, 199.5));
+    mOutList->Add(new TH1F("hHotSpotDiffRemovedPrimary","hHotSpotDiffRemovedPrimary", 200, -0.5, 199.5));
 
     mOutList->Add(new TH1F("hRemovedPairMass","hRemovedPairMass", 300, 1.7, 2.0));
 
@@ -331,7 +331,7 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
         for (unsigned short iTrack = 0; iTrack < primaryTracks.size(); ++iTrack) {
             StPicoTrack* trk = mPicoDst->track(primaryTracks[iTrack]);
                 dca = (mPrimVtx - trk->origin()).Mag();
-                if (dca > 0.009) tracksToRemove.push_back(primaryTracks[iTrack]);
+                if (dca > 0.012) tracksToRemove.push_back(primaryTracks[iTrack]);
         }
     }
 
