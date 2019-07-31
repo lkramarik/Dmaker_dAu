@@ -40,6 +40,7 @@ int StPicoQAMaker::InitHF() {
     mOutList->Add(new TH2F("h_gRefmult", "gRefmult;CountsvsRunIndex", 700, 0, 700, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
 
     mOutList->Add(new TH2F("h_gRefmult_vs_ZDCx", "gRefmult;ZDCx", 250, 0, 250, 101, -0.5, 100.5));
+    mOutList->Add(new TH2F("h_gRefmult_vs_BBCx", "gRefmult;BBCx", 1350, 0, 1350, 101, -0.5, 100.5));
 
     mOutList->Add(new TH1F("h_gRefmult_Vz_min6_min4", "gRefmult for Vz>-6 && Vz<=-4", 101, -0.5, 100.5));
     mOutList->Add(new TH1F("h_gRefmult_Vz_min4_min2", "gRefmult for Vz>-4 && Vz<=-2", 101, -0.5, 100.5));
@@ -50,6 +51,7 @@ int StPicoQAMaker::InitHF() {
 
     mOutList->Add(new TH2F("h_gRefmult_HFT", "gRefmult;CountsvsRunIndex", 700, 0, 700, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
     mOutList->Add(new TH2F("h_gRefmult_vs_ZDCx_HFT", "gRefmult;ZDCx", 250, 0, 250, 101, -0.5, 100.5));
+    mOutList->Add(new TH2F("h_gRefmult_vs_BBCx_HFT", "gRefmult;BBCx", 1350, 0, 1350, 101, -0.5, 100.5));
 
     mOutList->Add(new TH1F("h_gRefmult_Vz_min6_min4_HFT", "gRefmult for Vz>-6 && Vz<=-4", 101, -0.5, 100.5));
     mOutList->Add(new TH1F("h_gRefmult_Vz_min4_min2_HFT", "gRefmult for Vz>-4 && Vz<=-2", 101, -0.5, 100.5));
@@ -60,6 +62,7 @@ int StPicoQAMaker::InitHF() {
 
     mOutList->Add(new TH2F("h_gRefmult_HFT_hybridTOF", "gRefmult;CountsvsRunIndex", 700, 0, 700, RunNumberVector.size() + 1, -1, RunNumberVector.size()));
     mOutList->Add(new TH2F("h_gRefmult_vs_ZDCx_HFT_hybridTOF", "gRefmult;ZDCx", 250, 0, 250, 101, -0.5, 100.5));
+    mOutList->Add(new TH2F("h_gRefmult_vs_BBCx_HFT_hybridTOF", "gRefmult;BBCx", 1350, 0, 1350, 101, -0.5, 100.5));
 
     mOutList->Add(new TH1F("h_gRefmult_Vz_min6_min4_HFT_hybridTOF", "gRefmult for Vz>-6 && Vz<=-4", 101, -0.5, 100.5));
     mOutList->Add(new TH1F("h_gRefmult_Vz_min4_min2_HFT_hybridTOF", "gRefmult for Vz>-4 && Vz<=-2", 101, -0.5, 100.5));
@@ -325,6 +328,7 @@ int StPicoQAMaker::MakeHF() {
 
     TH2F *h_gRefmult = static_cast<TH2F *>(mOutList->FindObject("h_gRefmult"));
     TH2F *h_gRefmult_vs_ZDCx = static_cast<TH2F *>(mOutList->FindObject("h_gRefmult_vs_ZDCx"));
+    TH2F *h_gRefmult_vs_BBCx = static_cast<TH2F *>(mOutList->FindObject("h_gRefmult_vs_BBCx"));
 
     TH1F *h_gRefmult_Vz_min6_min4 = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_min6_min4"));
     TH1F *h_gRefmult_Vz_min4_min2 = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_min4_min2"));
@@ -335,6 +339,7 @@ int StPicoQAMaker::MakeHF() {
 
     TH2F *h_gRefmult_HFT = static_cast<TH2F *>(mOutList->FindObject("h_gRefmult_HFT"));
     TH2F *h_gRefmult_vs_ZDCx_HFT = static_cast<TH2F *>(mOutList->FindObject("h_gRefmult_vs_ZDCx_HFT"));
+    TH2F *h_gRefmult_vs_BBCx_HFT = static_cast<TH2F *>(mOutList->FindObject("h_gRefmult_vs_BBCx_HFT"));
 
     TH1F *h_gRefmult_Vz_min6_min4_HFT = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_min6_min4_HFT"));
     TH1F *h_gRefmult_Vz_min4_min2_HFT = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_min4_min2_HFT"));
@@ -345,6 +350,7 @@ int StPicoQAMaker::MakeHF() {
 
     TH2F *h_gRefmult_HFT_hybridTOF = static_cast<TH2F *>(mOutList->FindObject("h_gRefmult_HFT_hybridTOF"));
     TH2F *h_gRefmult_vs_ZDCx_HFT_hybridTOF = static_cast<TH2F *>(mOutList->FindObject("h_gRefmult_vs_ZDCx_HFT_hybridTOF"));
+    TH2F *h_gRefmult_vs_BBCx_HFT_hybridTOF = static_cast<TH2F *>(mOutList->FindObject("h_gRefmult_vs_BBCx_HFT_hybridTOF"));
 
     TH1F *h_gRefmult_Vz_min6_min4_HFT_hybridTOF = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_min6_min4_HFT_hybridTOF"));
     TH1F *h_gRefmult_Vz_min4_min2_HFT_hybridTOF = static_cast<TH1F *>(mOutList->FindObject("h_gRefmult_Vz_min4_min2_HFT_hybridTOF"));
@@ -556,6 +562,7 @@ int StPicoQAMaker::MakeHF() {
     if (vertex_z_QA>4 && vertex_z_QA<=6) h_gRefmult_Vz_4_6->Fill(grefMult);
 
     h_gRefmult_vs_ZDCx->Fill(ZDC, grefMult);
+    h_gRefmult_vs_BBCx->Fill(ZDC, grefMult);
 
     h_QA_Vz->Fill(vertex_z_QA, RunIndex);
     h_QA_VzmVzVPD->Fill(fabs(vertex_z_QA - mPicoDst->event()->vzVpd()), RunIndex);
@@ -874,6 +881,7 @@ int StPicoQAMaker::MakeHF() {
         if (vertex_z_QA > 4 && vertex_z_QA <= 6) h_gRefmult_Vz_4_6_HFT->Fill(grefMult);
 
         h_gRefmult_vs_ZDCx_HFT->Fill(ZDC, grefMult);
+        h_gRefmult_vs_BBCx_HFT->Fill(BBC, grefMult);
     }
 
     if((nCommon!=1 && nKaonsHFThybridTOF>0 && nPionsHFThybridTOF>0) || (nCommon==1 && nKaonsHFThybridTOF>1)) {
@@ -887,6 +895,7 @@ int StPicoQAMaker::MakeHF() {
         if (vertex_z_QA > 4 && vertex_z_QA <= 6) h_gRefmult_Vz_4_6_HFT_hybridTOF->Fill(grefMult);
 
         h_gRefmult_vs_ZDCx_HFT_hybridTOF->Fill(ZDC, grefMult);
+        h_gRefmult_vs_BBCx_HFT_hybridTOF->Fill(BBC, grefMult);
     }
 
 

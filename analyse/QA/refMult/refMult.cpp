@@ -1,11 +1,12 @@
 
 
 void refMult() {
-    TString input = "outputLocal.picoQAAnaMaker.root";
+//    TString input = "outputLocal.picoQAAnaMaker.root";
+    TString input = "qa.refmult.3001.root";
 //    TString input = "qa.2907.gref.root";
 
     TFile *inFile = new TFile(input, "READ");
-    TList *list = (TList*)inFile->Get("picoQAAnaMaker;1");
+    TList *list = (TList*)inFile->Get("picoQAMaker;1");
 
     TString names[3]={"", "_HFT", "_HFT_hybridTOF"};
 
@@ -22,9 +23,11 @@ void refMult() {
         pxy->SetTitle("");
         pxy->SetStats(0);
         pxy->GetXaxis()->SetLabelFont(42);
+        pxy->GetXaxis()->SetRangeUser(50,250);
+        pxy->GetYaxis()->SetRangeUser(0,21);
         pxy->GetXaxis()->SetTitleFont(42);
 
-        TCanvas *c3 = new TCanvas("c3", "c3", 1200, 900);
+        TCanvas *c3 = new TCanvas("c3", "c3", 1000, 900);
         pxy->Draw();
         c3->SaveAs(Form("gref_vs_ZDC%s.png",names[k].Data()));
         c3->Close();
@@ -38,6 +41,7 @@ void refMult() {
         TH1F *hgref[6];
         for (int i = 0; i < 6; ++i) {
             cgRef->cd(i + 1);
+            gPad->SetLogy();
             hgref[i] = static_cast<TH1F *>(list->FindObject(Form("h_gRefmult_Vz_%s_%s%s", vzInt[i].Data(), vzInt[i + 1].Data(), names[k].Data())));
             hgref[i]->Sumw2();
             hgref[i]->SetStats(0);
@@ -48,6 +52,7 @@ void refMult() {
             hgref[i]->SetMarkerStyle(2);
             hgref[i]->DrawClone();
         }
+        cgRef->SetLogy();
         cgRef->SaveAs(Form("grefAll_Vz%s.png",names[k].Data()));
         cgRef->Close();
 
@@ -67,6 +72,8 @@ void refMult() {
             legendPub->SetTextSize(0.04);
         }
         legendPub->Draw("same");
+        cgRefOne->SetLogy();
+//        cgRefOne->Update();
         cgRefOne->SaveAs(Form("grefOne_Vz%s.png",names[k].Data()));
         cgRefOne->Close();
     }
