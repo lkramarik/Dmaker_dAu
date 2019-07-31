@@ -562,7 +562,7 @@ int StPicoQAMaker::MakeHF() {
     if (vertex_z_QA>4 && vertex_z_QA<=6) h_gRefmult_Vz_4_6->Fill(grefMult);
 
     h_gRefmult_vs_ZDCx->Fill(ZDC, grefMult);
-    h_gRefmult_vs_BBCx->Fill(ZDC, grefMult);
+    h_gRefmult_vs_BBCx->Fill(BBC, grefMult);
 
     h_QA_Vz->Fill(vertex_z_QA, RunIndex);
     h_QA_VzmVzVPD->Fill(fabs(vertex_z_QA - mPicoDst->event()->vzVpd()), RunIndex);
