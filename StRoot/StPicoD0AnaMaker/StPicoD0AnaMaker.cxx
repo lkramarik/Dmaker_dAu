@@ -331,7 +331,7 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
         for (unsigned short iTrack = 0; iTrack < primaryTracks.size(); ++iTrack) {
             StPicoTrack* trk = mPicoDst->track(primaryTracks[iTrack]);
                 dca = (mPrimVtx - trk->origin()).Mag();
-                if (dca > 0.012) tracksToRemove.push_back(primaryTracks[iTrack]);
+                if (dca > 0.01) tracksToRemove.push_back(primaryTracks[iTrack]);
         }
     }
 
@@ -346,7 +346,7 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
                 if(kaon->charge()+pion1->charge() != 0) continue;
 
                 StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion), mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1], mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
-                if (cos(pair->pointingAngle()) > 0.9 && pair->dcaDaughters() < 0.007 && pair->m()>1.81 && pair->m()<1.92) {
+                if (cos(pair->pointingAngle()) > 0.9 && pair->dcaDaughters() < 0.007 && pair->m()>1.81 && pair->m()<1.92 && pair->DcaToPrimaryVertex()<0.008) {
                     tracksToRemove.push_back(mIdxPicoPions[idxPion1]);
                     tracksToRemove.push_back(mIdxPicoKaons[idxKaon]);
                     hRemovedPairMass->Fill(pair->m());
