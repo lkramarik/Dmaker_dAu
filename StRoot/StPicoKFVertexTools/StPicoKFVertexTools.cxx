@@ -56,13 +56,11 @@ int StPicoKFVertexTools::MakeHF() {
     bool goodEvent=true;
 
     if (!(mPicoEvent->BBCx()<950000)) return kStOK;
-//    if (!(mPrimVtx.x()>-0.28)) return kStOK;
-//    if (!(mPrimVtx.x()<-0.13)) return kStOK;
-//    if (!(mPrimVtx.y()>-0.28)) return kStOK;
-//    if (!(mPrimVtx.y()<-0.13)) return kStOK;
+    if (!(mPrimVtx.x()>-0.28)) return kStOK;
+    if (!(mPrimVtx.x()<-0.13)) return kStOK;
+    if (!(mPrimVtx.y()>-0.28)) return kStOK;
+    if (!(mPrimVtx.y()<-0.13)) return kStOK;
 
-    if (!(abs(mPrimVtx.x())<0.4)) return kStOK;
-    if (!(abs(mPrimVtx.y())<0.4)) return kStOK;
 
     TH1F *hMassUS = static_cast<TH1F*>(mOutList->FindObject("hMassUS"));
     TH1F *hMassUSRefit = static_cast<TH1F*>(mOutList->FindObject("hMassUSRefit"));
@@ -83,7 +81,7 @@ int StPicoKFVertexTools::MakeHF() {
     for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
         StPicoTrack* trk = mPicoDst->track(iTrack);
         globalTracks.push_back(iTrack);
-//        if (trk->isPrimary()) primaryTracks.push_back(iTrack);
+        if (trk->isPrimary()) primaryTracks.push_back(iTrack);
         if (trk->isHFTTrack()) nHftTracks++;
         if (abs(trk->gMom().PseudoRapidity())>1) continue;
 //        if (mHFCuts->isGoodPion(trk)) mIdxPicoPions.push_back(iTrack);
@@ -125,10 +123,10 @@ int StPicoKFVertexTools::MakeHF() {
 //        compareFitters(nD0, nHftTracks);
 
         //making 2 vertices and comparing:
-//        if (primaryTracks.size()>10) {
-//            makeKFReso(primaryTracks, nHftTracks);
-            makeKFReso(globalTracks, nHftTracks);
-//        }
+        if (primaryTracks.size()>10) {
+            makeKFReso(primaryTracks, nHftTracks);
+//            makeKFReso(globalTracks, nHftTracks);
+        }
 //        KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst, tracksToRemove);
 
         //////////////////////////////////////////////////////////

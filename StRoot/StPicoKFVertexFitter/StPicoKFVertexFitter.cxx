@@ -92,9 +92,6 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
     aVertex.Create(parVertex,covVertex, 0, 0);
 
     aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), 5); //Yuri
-//    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), TMath::Sqrt(StAnneling::Chi2Cut()/2)); //original
-//    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), 3.5); //in makzym stuffs
-//    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), StAnneling::Chi2Cut()); //ok
 
 //Yuri
 //    KFVertex     Vertex;
@@ -117,6 +114,8 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
 //    delete [] parts;
 //Yuri end
 
+
+//if flag is 0, track was not used for PV refit. If all flags are 0, PV is probably not good
 
    // clean up
     for(size_t iTrk = 0; iTrk < tracksToUse.size(); ++iTrk) delete particles[iTrk];
