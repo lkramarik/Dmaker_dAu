@@ -538,8 +538,9 @@ int StPicoQAMaker::MakeHF() {
 
     TVector3 pVtx = mPicoDst->event()->primaryVertex();
     float b = mPicoDst->event()->bField();
-    float grefMult = mPicoDst->event()->grefMult();
-    h_gRefmult->Fill(mPicoDst->event()->grefMult(), RunIndex);
+    float grefMult = mPicoDst->event()->refMult();
+    h_gRefmult->Fill(grefMult, RunIndex);
+
     h_QA_nEvents->Fill(RunIndex); //number of 0 filled to this histogram = number of events
 
     h_QA_ZDC_rate->Fill(mPicoDst->event()->ZDCx() / 1000., RunIndex);
