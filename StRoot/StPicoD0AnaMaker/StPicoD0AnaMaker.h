@@ -51,9 +51,10 @@ protected:
     std::vector<unsigned short> mIdxPicoKaons;
     std::vector<int> tracksToRemove;
     std::vector<int> primaryTracks;
-    std::vector<int> goodTracks;
 
 private:
+    int nGoodTracks;
+
     int createCandidates();
     int analyzeCandidates();
     TVector3 refitVertex(bool);
