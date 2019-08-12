@@ -286,7 +286,7 @@ int StPicoD0AnaMaker::createCandidates() {
 
     if (nD0>0) {
         hNTracksRemoved->Fill(tracksToRemove.size());
-        hNTracksGoodToFit->Fill(goodTracks);
+        hNTracksGoodToFit->Fill(goodTracks.size());
         hNTracksPrimary->Fill(nPrimary);
         hNTracksDiffRemovedPrimary->Fill(nPrimary-tracksToRemove.size());
         hNTracksDiffRemovedGlobal->Fill(nTracks-tracksToRemove.size());
