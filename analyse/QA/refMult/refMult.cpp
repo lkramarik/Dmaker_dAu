@@ -2,7 +2,8 @@
 
 void refMult() {
 //    TString input = "outputLocal.picoQAAnaMaker.root";
-    TString input = "qa.refmult.3001.root";
+//    TString input = "qa.refmult.3001.root";
+    TString input = "qa.grefmultIsrefmult.1208.root";
 //    TString input = "qa.2907.gref.root";
 
     TFile *inFile = new TFile(input, "READ");
