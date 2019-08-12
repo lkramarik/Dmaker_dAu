@@ -316,7 +316,7 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
     bool pairRem=true;
     bool singleTrack=true;
 //    bool singleTrack=!pairRem;
-    std::vector<int> goodTracks;
+    std::vector<int> goodTracksToFit;
 
     TH1F *hPVDiffX = static_cast<TH1F*>(mOutList->FindObject("hPVDiffX"));
     TH1F *hPVDiffY = static_cast<TH1F*>(mOutList->FindObject("hPVDiffY"));
@@ -363,7 +363,7 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
 
     for (int iTrk = 0; iTrk < primaryTracks.size(); ++iTrk) {
         if(std::binary_search(tracksToRemove.begin(), tracksToRemove.end(), primaryTracks[iTrk])) continue;
-        goodTracks.push_back(primaryTracks[iTrk]);
+        goodTracksToFit.push_back(primaryTracks[iTrk]);
     }
 
     TVector3 newKFVertex(mPrimVtx.x(), mPrimVtx.y(), mPrimVtx.z());
@@ -371,7 +371,7 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
         //Make new vertex and evaluate stuff:
         StPicoKFVertexFitter kfVertexFitter;
 //        KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst, tracksToRemove); //when removed tracks need to be checked
-        KFVertex kfVertex = kfVertexFitter.primaryVertexRefitUsingTracks(mPicoDst, goodTracks); //when you have array with tracks for refit
+        KFVertex kfVertex = kfVertexFitter.primaryVertexRefitUsingTracks(mPicoDst, goodTracksToFit); //when you have array with tracks for refit
         if (kfVertex.GetX()) {
             newKFVertex.SetXYZ(kfVertex.GetX(), kfVertex.GetY(), kfVertex.GetZ());
             hPVDiffX->Fill(mPrimVtx.x() - newKFVertex.x());
@@ -385,10 +385,10 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
             }
         }
     }
-    nGoodTracks=goodTracks.size();
+    nGoodTracks=goodTracksToFit.size();
 
-    goodTracks.clear();
-    goodTracks.shrink_to_fit();
+    goodTracksToFit.clear();
+    goodTracksToFit.shrink_to_fit();
 
     return newKFVertex;
 }
