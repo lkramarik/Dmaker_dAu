@@ -103,6 +103,7 @@ public:
 
     void setCutVzMax(float f);
     void setCutVzVpdVzMax(float f);
+    void setCheckHotSpot(bool);
 
     void setCutNHitsFitMin(int i);
     void setCutRequireHFT(bool b);
