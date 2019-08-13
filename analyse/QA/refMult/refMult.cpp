@@ -2,12 +2,15 @@
 
 void refMult() {
 //    TString input = "outputLocal.picoQAAnaMaker.root";
-//    TString input = "qa.refmult.3001.root";
-    TString input = "qa.grefmultIsrefmult.1208.root";
+    TString input = "qa.refmult.3001.root";
+//    TString input = "qa.grefmultIsrefmult.1208.root";
 //    TString input = "qa.2907.gref.root";
 
     TFile *inFile = new TFile(input, "READ");
     TList *list = (TList*)inFile->Get("picoQAMaker;1");
+
+    TString variable = "gref";
+//    TString variable = "ref";
 
     TString names[3]={"", "_HFT", "_HFT_hybridTOF"};
     TString legend[3]={"no req. on tracks", "#(HFT)>1", "#(HFT && hybridTOF)>1"};
@@ -35,7 +38,7 @@ void refMult() {
         pxy->SetMarkerColor(col[k]);
         pxy->SetLineColor(col[k]);
         pxy->GetXaxis()->SetTitle("ZDC rate [kHz]");
-        pxy->GetYaxis()->SetTitle("<grefMult>");
+        pxy->GetYaxis()->SetTitle(Form("<%sMult>",variable.Data()));
         pxy->SetTitle("");
         pxy->SetStats(0);
         pxy->GetXaxis()->SetLabelFont(42);
@@ -61,7 +64,7 @@ void refMult() {
         pxy1->SetMarkerStyle(2);
         pxy1->SetMarkerColor(col[k]);
         pxy1->SetLineColor(col[k]);
-        pxy1->GetXaxis()->SetTitle("grefMult");
+        pxy1->GetXaxis()->SetTitle(Form("%sMult",variable.Data()));
         pxy1->GetYaxis()->SetTitle("1/Entries");
         pxy1->SetTitle("");
         pxy1->SetStats(0);
@@ -96,7 +99,7 @@ void refMult() {
             hgref[i]->Sumw2();
             hgref[i]->SetStats(0);
             hgref[i]->SetTitle(Form("%i cm < V_{z} < %i cm", vzRange[i], vzRange[i + 1]));
-            hgref[i]->GetXaxis()->SetTitle("grefMult");
+            hgref[i]->GetXaxis()->SetTitle(Form("%sMult", variable.Data()));
             hgref[i]->GetYaxis()->SetTitle("Counts");
             hgref[i]->GetYaxis()->SetTitleOffset(1.1);
             hgref[i]->SetMarkerStyle(2);
@@ -116,7 +119,7 @@ void refMult() {
 
         }
         cgRef->SetLogy();
-        cgRef->SaveAs(Form("grefAll_Vz%s.png",names[k].Data()));
+        cgRef->SaveAs(Form("%sAll_Vz%s.png", variable.Data(), names[k].Data()));
         cgRef->Close();
 
         TCanvas *cgRefOne = new TCanvas("cgRefOne", "cgRefOne", 1200, 900);
@@ -142,12 +145,12 @@ void refMult() {
 
 //        cgRefOne->SetLogy();
 //        cgRefOne->Update();
-        cgRefOne->SaveAs(Form("grefOne_Vz%s.png",names[k].Data()));
+        cgRefOne->SaveAs(Form("%sOne_Vz%s.png",variable.Data(), names[k].Data()));
         cgRefOne->Close();
     }
 
 //    c3->SaveAs(Form("gref_vs_ZDC%s.png",names[k].Data()));
-    c3->SaveAs("gref_vs_ZDC.png");
+    c3->SaveAs(Form("%s_vs_ZDC.png", variable.Data()));
     c3->Close();
     delete c3;
 

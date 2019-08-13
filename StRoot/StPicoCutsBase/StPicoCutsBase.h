@@ -31,7 +31,7 @@ public:
     bool isGoodPion(StPicoTrack const * const trk) const;
     bool isGoodKaon(StPicoTrack const * const trk) const;
     bool isGoodProton(StPicoTrack const * const trk) const;
-
+    bool checkHotSpot(const TVector3* ) const;
     // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
     // -- DCA to Primary vertex
     // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
@@ -192,7 +192,7 @@ private:
     // -- event cuts
     float mVzMax;
     float mVzVpdVzMax;
-
+    bool mOnlyHotSpot;
 
     // -- tracking
     int   mNHitsFitMin;
@@ -228,6 +228,8 @@ inline void StPicoCutsBase::addTriggerId(unsigned int triggerId) {mVecTriggerIdL
 
 inline void StPicoCutsBase::setCutVzMax(float f)              { mVzMax            = f; }
 inline void StPicoCutsBase::setCutVzVpdVzMax(float f)         { mVzVpdVzMax       = f; }
+
+inline void StPicoCutsBase::setCheckHotSpot(bool b)         { mOnlyHotSpot       = b; }
 
 inline void StPicoCutsBase::setCutNHitsFitMin(int i)          { mNHitsFitMin      = i; }
 inline void StPicoCutsBase::setCutRequireHFT(bool b)          { mRequireHFT       = b; }
