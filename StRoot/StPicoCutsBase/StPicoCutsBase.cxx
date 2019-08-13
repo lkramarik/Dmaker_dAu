@@ -141,7 +141,7 @@ bool StPicoCutsBase::isGoodEvent(StPicoDst const * const picoDst, int *aEventCut
     // -- set current primary vertex
     mPrimVtx = picoEvent->primaryVertex();
 
-    if(mOnlyHotSpot && !(checkHotSpot(mPrimVtx))) return false;
+    if(mOnlyHotSpot && !(checkHotSpot(*mPrimVtx))) return false;
 
     // -- quick method without providing stats
     if (!aEventCuts) {
