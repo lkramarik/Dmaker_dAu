@@ -486,7 +486,7 @@ float StPicoCutsBase::tofPathLength(const TVector3* beginPoint, const TVector3* 
 }
 
 // _________________________________________________________
-bool StPicoCutsBase::checkHotSpot(TVector3 const * const vertex) const {
+bool StPicoCutsBase::checkHotSpot(TVector3* vertex) const {
     if(vertex->x()>-0.25 && vertex->x()<-0.16 && vertex->y()>-0.25 && vertex->y()<-0.16) return true;
     else return false;
 }
