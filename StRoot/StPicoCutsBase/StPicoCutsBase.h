@@ -31,7 +31,7 @@ public:
     bool isGoodPion(StPicoTrack const * const trk) const;
     bool isGoodKaon(StPicoTrack const * const trk) const;
     bool isGoodProton(StPicoTrack const * const trk) const;
-    bool checkHotSpot(const TVector3* ) const;
+    bool checkHotSpot(TVector3 const * const ) const;
     // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
     // -- DCA to Primary vertex
     // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
