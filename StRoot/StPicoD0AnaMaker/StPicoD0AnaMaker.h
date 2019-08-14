@@ -74,7 +74,7 @@ private:
     TFile* mOutFile;
 
     TMVA::Reader *reader[3];
-    Float_t k_dca[3], pi1_dca[3], dcaDaughters[3], cosTheta[3], D_decayL[3], dcaD0ToPv[3];
+    Float_t k_dca[3], pi1_dca[3], dcaDaughters[3], cosTheta[3], D_decayL[3], dcaD0ToPv[3], thetaStar[3];
 
     ClassDef(StPicoD0AnaMaker, 1) //set to 1
 };

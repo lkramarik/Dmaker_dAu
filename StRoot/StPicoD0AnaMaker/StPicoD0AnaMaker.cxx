@@ -9,8 +9,8 @@
 ClassImp(StPicoD0AnaMaker)
 
 const int nptBins=3;
-//float const bdtCuts[nptBins] = {0.21, 0.2, 0.22};
-float const bdtCuts[nptBins] = {-1, -1, -1};
+float const bdtCuts[nptBins] = {0.36, 0.3, 0.29};
+//float const bdtCuts[nptBins] = {-1, -1, -1};
 const float momBins[nptBins+1] = {1,2,3,5};
 TString ptbin[nptBins] = {"12", "23", "35"};
 
@@ -102,6 +102,7 @@ int StPicoD0AnaMaker::InitHF() {
             reader[pT]->AddVariable("cosTheta", &cosTheta[pT]);
             reader[pT]->AddVariable("D_decayL", &D_decayL[pT]);
             reader[pT]->AddVariable("dcaD0ToPv", &dcaD0ToPv[pT]);
+//            reader[pT]->AddVariable("D_cosThetaStar", &thetaStar[pT]);
 
             TString methodName = "BDT method";
             TString weightfile = dir + prefix + TString("_BDT.weights.pt") + ptbin[pT] + TString(".xml");
@@ -404,6 +405,7 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
                 cosTheta[pTbin] = cos(pair->pointingAngle());
                 dcaD0ToPv[pTbin] = pair->DcaToPrimaryVertex();
                 dcaDaughters[pTbin] = pair->dcaDaughters();
+//                thetaStar[pTbin] = pair->cosThetaStar();
 
                 //evaluate BDT, continue just pairs that have passed BDT cut
                 float valueMVA = reader[pTbin]->EvaluateMVA("BDT method");
