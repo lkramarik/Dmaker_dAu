@@ -377,8 +377,8 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
                 StPicoTrack const *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
 
                 if(kaon->charge()+pion1->charge() != 0) continue;
-                if(!(pair->m()>1.81 && pair->m()<1.92)) continue;
                 StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion), mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1], mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
+                if(!(pair->m()>1.81 && pair->m()<1.92)) continue;
 
                 //CUTS
                 /*

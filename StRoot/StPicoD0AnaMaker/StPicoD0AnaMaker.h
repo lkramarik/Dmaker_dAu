@@ -49,6 +49,7 @@ public:
     virtual void  ClearHF(Option_t *opt);
     virtual Int_t FinishHF();
     void workWithRefit(bool);
+
 protected:
     std::vector<unsigned short> mIdxPicoPions;
     std::vector<unsigned short> mIdxPicoKaons;
@@ -57,7 +58,6 @@ protected:
 
 private:
     int nGoodTracks;
-    bool mSwitchRefit;
 
     int createCandidates();
     int analyzeCandidates();
@@ -69,6 +69,7 @@ private:
     int mRunNumber;
     Int_t nPrimary;
     TString mOutFileBaseName;
+    bool mSwitchRefit;
 
     TFile* mOutFile;
 
