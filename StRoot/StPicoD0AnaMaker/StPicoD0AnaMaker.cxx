@@ -9,7 +9,8 @@
 ClassImp(StPicoD0AnaMaker)
 
 const int nptBins=3;
-float const bdtCuts[nptBins] = {0.21, 0.2, 0.22};
+//float const bdtCuts[nptBins] = {0.21, 0.2, 0.22};
+float const bdtCuts[nptBins] = {-1, -1, -1};
 const float momBins[nptBins+1] = {1,2,3,5};
 TString ptbin[nptBins] = {"12", "23", "35"};
 
