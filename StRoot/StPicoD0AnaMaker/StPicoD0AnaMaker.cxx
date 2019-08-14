@@ -90,7 +90,7 @@ int StPicoD0AnaMaker::InitHF() {
     ntp_DMeson_Background = new TNtuple("ntp_background","DMeson TreeBackground", ntpVars);
 
     if (mSwitchRefit) {
-        TString dir = "StRoot/weights/";
+        TString dir = "./StRoot/weights/";
         TString prefix = "TMVAClassification";
 
         for (int pT = 0; pT < nptBins; pT++) {
