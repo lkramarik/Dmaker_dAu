@@ -340,7 +340,7 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
     bool singleTrack=true;
 //    bool singleTrack=!pairRem;
     std::vector<int> goodTracksToFit;
-
+    const int nptBins=3;
     float const bdtCuts[nptBins] = {0.21, 0.2, 0.22};
     const float momBins[nptBins+1] = {1,2,3,5};
 
