@@ -2,15 +2,15 @@
 
 void refMult() {
 //    TString input = "outputLocal.picoQAAnaMaker.root";
-    TString input = "qa.refmult.3001.root";
-//    TString input = "qa.grefmultIsrefmult.1208.root";
+//    TString input = "qa.refmult.3001.root";
+    TString input = "qa.grefmultIsrefmult.1208.root";
 //    TString input = "qa.2907.gref.root";
 
     TFile *inFile = new TFile(input, "READ");
     TList *list = (TList*)inFile->Get("picoQAMaker;1");
 
-    TString variable = "gref";
-//    TString variable = "ref";
+//    TString variable = "gref";
+    TString variable = "ref";
 
     TString names[3]={"", "_HFT", "_HFT_hybridTOF"};
     TString legend[3]={"no req. on tracks", "#(HFT)>1", "#(HFT && hybridTOF)>1"};
@@ -140,6 +140,12 @@ void refMult() {
             legendPub->SetLineColor(0);
             legendPub->SetTextSize(0.04);
         }
+
+        Double_t myLine = hgref[5]->GetBinCenter(hgref[5]->GetMaximumBin());
+        TLine *leftline1 = new TLine(myLine, hgref[5]->GetMinimum(), myLine, hgref[5]->GetMaximum());
+        leftline1->SetLineStyle(9);
+        leftline1->SetLineColor(28);
+        leftline1->Draw("same");
         legendPub->Draw("same");
         text1->Draw("same");
 
@@ -157,12 +163,23 @@ void refMult() {
     TFile *inFileSim = new TFile("/home/lukas/work/glauber/ncoll_npart.root", "READ");
     TH1F *hMult = static_cast<TH1F *>(inFileSim->Get("hMult"));
     hMult->Sumw2();
+    hMult->SetMarkerColor(46);
+    hMult->SetMarkerStyle(20);
+    hMult->SetLineColor(46);
     hMult->Scale(1/hMult->GetEntries());
+    hMult->SetStats(0);
     hMult->Draw();
     TH2F *hgrefOne = static_cast<TH2F *>(list->FindObject(Form("h_gRefmult%s", names[2].Data())));
     TH1D *pxy1 = new TH1D();
     pxy1 = hgrefOne->ProjectionX();
     pxy1->Scale(1/pxy1->GetEntries());
     pxy1->Draw("same");
+    TLegend *legendMult = new TLegend(0.6, 0.67, 0.77, 0.88, "", "brNDC");
+    legendMult->AddEntry(pxy1, "refMult from data", "pl");
+    legendMult->AddEntry(hMult, "mult from Glauber", "pl");
+    legendMult->Draw("same");
 
+    TFile *outRef = new TFile("/home/lukas/work/glauber/data_refmult.root", "RECREATE");
+    pxy1->Write("hgRefMult_data");
+    outRef->Close();
 }

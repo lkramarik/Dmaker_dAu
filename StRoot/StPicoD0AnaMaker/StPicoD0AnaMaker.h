@@ -20,6 +20,9 @@
 #include "StPicoHFMaker/StHFPair.h"
 //#include "StPicoHFMaker/StHFTriplet.h"
 
+#include "TMVA/Tools.h"
+#include "TMVA/Reader.h"
+
 #include "phys_constants.h"
 
 #include "TH1F.h"
@@ -45,7 +48,7 @@ public:
     virtual Int_t MakeHF();
     virtual void  ClearHF(Option_t *opt);
     virtual Int_t FinishHF();
-
+    void workWithRefit(bool);
 protected:
     std::vector<unsigned short> mIdxPicoPions;
     std::vector<unsigned short> mIdxPicoKaons;
@@ -54,6 +57,7 @@ protected:
 
 private:
     int nGoodTracks;
+    bool mSwitchRefit;
 
     int createCandidates();
     int analyzeCandidates();
@@ -68,7 +72,12 @@ private:
 
     TFile* mOutFile;
 
+    TMVA::Reader *reader[3];
+    Float_t k_dca[3], pi1_dca[3], dcaDaughters[3], cosTheta[3], D_decayL[3], dcaD0ToPv[3];
+
     ClassDef(StPicoD0AnaMaker, 1) //set to 1
 };
+
+inline void StPicoD0AnaMaker::workWithRefit(bool b) { mSwitchRefit = b; }
 
 #endif

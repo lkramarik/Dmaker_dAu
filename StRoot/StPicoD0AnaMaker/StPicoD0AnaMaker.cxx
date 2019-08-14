@@ -11,7 +11,7 @@ ClassImp(StPicoD0AnaMaker)
 // _________________________________________________________
 StPicoD0AnaMaker::StPicoD0AnaMaker(char const* name, StPicoDstMaker* picoMaker, char const* outputBaseFileName) :
         StPicoHFMaker(name, picoMaker, outputBaseFileName),
-        mOutFileBaseName(outputBaseFileName){
+        mOutFileBaseName(outputBaseFileName), mSwitchRefit(false){
     // constructor
 }
 
@@ -58,6 +58,9 @@ int StPicoD0AnaMaker::InitHF() {
     mOutList->Add(new TH1F("hNTracksGoodToFit","hNTracksGoodToFit", 200, -0.5, 199.5));
 
     mOutList->Add(new TH1F("hRemovedPairMass","hRemovedPairMass", 300, 1.7, 2.0));
+    mOutList->Add(new TH1F("hInvMassBDT12","hInvMassBDT12", 300, 1.7, 2.0));
+    mOutList->Add(new TH1F("hInvMassBDT23","hInvMassBDT23", 300, 1.7, 2.0));
+    mOutList->Add(new TH1F("hInvMassBDT35","hInvMassBDT35", 300, 1.7, 2.0));
 
     mOutList->Add(new TH1F("hPVDiffX","hPVDiffX", 1000, -2.0, 2.0));
     mOutList->Add(new TH1F("hPVDiffY","hPVDiffY", 1000, -2.0, 2.0));
@@ -80,6 +83,26 @@ int StPicoD0AnaMaker::InitHF() {
 //    ntp_pion = new TNtuple("ntp_pion", "pion tree","pi_pt:pi_phi:pi_eta:pi_nSigma:pi_nHitFit:pi_TOFinvbeta:k_eventId:k_runId");
     ntp_DMeson_Signal = new TNtuple("ntp_signal","DMeson TreeSignal", ntpVars);
     ntp_DMeson_Background = new TNtuple("ntp_background","DMeson TreeBackground", ntpVars);
+
+    if (mSwitchRefit) {
+        TString dir = "StRoot/weights/";
+        TString prefix = "TMVAClassification";
+        TString ptbin[nptBins] = {"12", "23", "35"};
+
+        for (int pT = 0; pT < nptBins; pT++) {
+            reader[pT] = new TMVA::Reader("!Color:!Silent");
+            reader[pT]->AddVariable("k_dca", &k_dca[pT]);
+            reader[pT]->AddVariable("pi1_dca", &pi1_dca[pT]);
+            reader[pT]->AddVariable("dcaDaughters", &dcaDaughters[pT]);
+            reader[pT]->AddVariable("cosTheta", &cosTheta[pT]);
+            reader[pT]->AddVariable("D_decayL", &D_decayL[pT]);
+            reader[pT]->AddVariable("dcaD0ToPv", &dcaD0ToPv[pT]);
+
+            TString methodName = "BDT method";
+            TString weightfile = dir + prefix + TString("_BDT.weights.pt") + ptbin[pT] + TString(".xml");
+            reader[pT]->BookMVA(methodName, weightfile);
+        }
+    }
 
     return kStOK;
 }
@@ -216,7 +239,7 @@ int StPicoD0AnaMaker::createCandidates() {
     }
 
     TVector3 useVertex(mPrimVtx.x(), mPrimVtx.y(), mPrimVtx.z());
-    useVertex=refitVertex(true);
+    if (mSwitchRefit) useVertex=refitVertex(true);
 //        if (tracksToRemove.size()==nPrimary) {
 //            cout<<useVertex.x()<<" "<<useVertex.y()<<" "<<useVertex.z()<<endl;
 //            cout<<mPrimVtx.x()<<" "<<mPrimVtx.y()<<" "<<mPrimVtx.z()<<endl;
@@ -318,6 +341,9 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
 //    bool singleTrack=!pairRem;
     std::vector<int> goodTracksToFit;
 
+    float const bdtCuts[nptBins] = {0.21, 0.2, 0.22};
+    const float momBins[nptBins+1] = {1,2,3,5};
+
     TH1F *hPVDiffX = static_cast<TH1F*>(mOutList->FindObject("hPVDiffX"));
     TH1F *hPVDiffY = static_cast<TH1F*>(mOutList->FindObject("hPVDiffY"));
     TH1F *hPVDiffZ = static_cast<TH1F*>(mOutList->FindObject("hPVDiffZ"));
@@ -326,6 +352,7 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
     TH1F *hPVDiffZRemoved = static_cast<TH1F*>(mOutList->FindObject("hPVDiffZRemoved"));
 
     TH1F *hRemovedPairMass = static_cast<TH1F*>(mOutList->FindObject("hRemovedPairMass"));
+    TH1F *hInvMass[3] = {static_cast<TH1F*>(mOutList->FindObject("hInvMassBDT12")), static_cast<TH1F*>(mOutList->FindObject("hInvMassBDT23")), static_cast<TH1F*>(mOutList->FindObject("hInvMassBDT35"))};
 
     bool isRemovedtrack=false;
 
@@ -349,13 +376,41 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
                 StPicoTrack const *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
 
                 if(kaon->charge()+pion1->charge() != 0) continue;
-
+                if(!(pair->m()>1.81 && pair->m()<1.92)) continue;
                 StHFPair *pair = new StHFPair(pion1, kaon, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion), mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoPions[idxPion1], mIdxPicoKaons[idxKaon], mPrimVtx, mBField, kTRUE);
+
+                //CUTS
+                /*
                 if (cos(pair->pointingAngle()) > 0.95 && pair->dcaDaughters() < 0.006 && pair->m()>1.81 && pair->m()<1.92 && pair->DcaToPrimaryVertex()<0.008 && pair->particle2Dca()>0.009 && pair->particle1Dca()>0.009) {
                     tracksToRemove.push_back(mIdxPicoPions[idxPion1]);
                     tracksToRemove.push_back(mIdxPicoKaons[idxKaon]);
                     hRemovedPairMass->Fill(pair->m());
                     isRemovedtrack = true;
+                }
+                */
+
+                //BDT
+                //find the correct pT bin
+                int pTbin = 0;
+                for (int pT = 0; pT < nptBins; pT++) {
+                    if(pair->pt() >= momBins[pT] && pair->pt() < momBins[pT+1]) pTbin = pT;
+                }
+
+                k_dca[pTbin] = pair->particle2Dca();
+                pi1_dca[pTbin] = pair->particle1Dca();
+                D_decayL[pTbin] = pair->decayLength();
+                cosTheta[pTbin] = cos(pair->pointingAngle());
+                dcaD0ToPv[pTbin] = pair->DcaToPrimaryVertex();
+                dcaDaughters[pTbin] = pair->dcaDaughters();
+
+                //evaluate BDT, continue just pairs that have passed BDT cut
+                float valueMVA = reader[pTbin]->EvaluateMVA("BDT method");
+                if(valueMVA > bdtCuts[pTbin]) {
+                    //filling plots of invariant mass for unlike and like sign pairs
+                    hInvMass[pTbin]->Fill(pair->m());
+                    //excluding daughter tracks
+                    tracksToRemove.push_back(mIdxPicoPions[idxPion1]);
+                    tracksToRemove.push_back(mIdxPicoKaons[idxKaon]);
                 }
             }
         }
