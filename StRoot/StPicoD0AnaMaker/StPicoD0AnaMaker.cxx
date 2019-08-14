@@ -8,6 +8,11 @@
 #include "StPicoKFVertexFitter/StPicoKFVertexFitter.h"
 ClassImp(StPicoD0AnaMaker)
 
+const int nptBins=3;
+float const bdtCuts[nptBins] = {0.21, 0.2, 0.22};
+const float momBins[nptBins+1] = {1,2,3,5};
+TString ptbin[nptBins] = {"12", "23", "35"};
+
 // _________________________________________________________
 StPicoD0AnaMaker::StPicoD0AnaMaker(char const* name, StPicoDstMaker* picoMaker, char const* outputBaseFileName) :
         StPicoHFMaker(name, picoMaker, outputBaseFileName),
@@ -87,7 +92,6 @@ int StPicoD0AnaMaker::InitHF() {
     if (mSwitchRefit) {
         TString dir = "StRoot/weights/";
         TString prefix = "TMVAClassification";
-        TString ptbin[nptBins] = {"12", "23", "35"};
 
         for (int pT = 0; pT < nptBins; pT++) {
             reader[pT] = new TMVA::Reader("!Color:!Silent");
@@ -340,9 +344,6 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
     bool singleTrack=true;
 //    bool singleTrack=!pairRem;
     std::vector<int> goodTracksToFit;
-    const int nptBins=3;
-    float const bdtCuts[nptBins] = {0.21, 0.2, 0.22};
-    const float momBins[nptBins+1] = {1,2,3,5};
 
     TH1F *hPVDiffX = static_cast<TH1F*>(mOutList->FindObject("hPVDiffX"));
     TH1F *hPVDiffY = static_cast<TH1F*>(mOutList->FindObject("hPVDiffY"));
