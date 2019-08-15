@@ -193,17 +193,17 @@ private:
     // -- event cuts
     float mVzMax;
     float mVzVpdVzMax;
-    bool mOnlyHotSpot;
 
     // -- tracking
     int   mNHitsFitMin;
     bool  mRequireHFT;
-    bool  mHybridTof;
     float mNHitsFitnHitsMax;
-
     float mPrimaryDCAtoVtxMax;         // used for primary selection for TOF Beta recalculation
-
     float mPtMin;
+    bool  mHybridTof;
+    bool mOnlyHotSpot;
+
+
     // -- acceptance - per particle type [ePicoPID]
     float mPtRange[kPicoPIDMax][2];
 
