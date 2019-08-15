@@ -366,7 +366,7 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
         for (unsigned short iTrack = 0; iTrack < primaryTracks.size(); ++iTrack) {
             StPicoTrack* trk = mPicoDst->track(primaryTracks[iTrack]);
                 dca = (mPrimVtx - trk->origin()).Mag();
-                if (dca > 0.012) tracksToRemove.push_back(primaryTracks[iTrack]);
+                if (dca > 0.009) tracksToRemove.push_back(primaryTracks[iTrack]);
         }
     }
 

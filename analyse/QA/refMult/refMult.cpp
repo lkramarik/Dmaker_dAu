@@ -3,7 +3,8 @@
 void refMult() {
 //    TString input = "outputLocal.picoQAAnaMaker.root";
 //    TString input = "qa.refmult.3001.root";
-    TString input = "qa.grefmultIsrefmult.1208.root";
+//    TString input = "qa.grefmultIsrefmult.1208.root";
+    TString input = "qa.grefmultIsRefmult.hotspot.root";
 //    TString input = "qa.2907.gref.root";
 
     TFile *inFile = new TFile(input, "READ");
@@ -27,10 +28,14 @@ void refMult() {
     text1->AddText(textData);
     text1->SetFillColor(0);
 
+    TF1 *fLinear[3];
+
     Int_t col[]={1,46,8};
     for (int k=0; k<3;++k) {
         TH2F *hgrefZdc = static_cast<TH2F *>(list->FindObject(Form("h_gRefmult_vs_ZDCx%s", names[k].Data())));
         hgrefZdc->Sumw2();
+
+        fLinear[k]=new TF1("fLinear", "[0]*x+[1]", 50, 250);
 
         TProfile *pxy = new TProfile();
         pxy = hgrefZdc->ProfileX(legend[k]);
@@ -43,8 +48,10 @@ void refMult() {
         pxy->SetStats(0);
         pxy->GetXaxis()->SetLabelFont(42);
         pxy->GetXaxis()->SetRangeUser(50,250);
+//        pxy->GetXaxis()->SetRangeUser(200,1400);
         pxy->GetYaxis()->SetRangeUser(0,21);
         pxy->GetXaxis()->SetTitleFont(42);
+        pxy->Fit(fLinear[k], "R");
         c3->cd();
         if (k==0) pxy->DrawClone();
         else pxy->DrawClone("same");
@@ -179,7 +186,7 @@ void refMult() {
     legendMult->AddEntry(hMult, "mult from Glauber", "pl");
     legendMult->Draw("same");
 
-    TFile *outRef = new TFile("/home/lukas/work/glauber/data_refmult.root", "RECREATE");
-    pxy1->Write("hgRefMult_data");
-    outRef->Close();
+//    TFile *outRef = new TFile("/home/lukas/work/glauber/data_refmult.root", "RECREATE");
+//    pxy1->Write("hgRefMult_data");
+//    outRef->Close();
 }
