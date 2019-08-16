@@ -29,33 +29,35 @@ void refMult() {
     text1->SetFillColor(0);
 
     TF1 *fLinear[3];
-
+    TProfile* pxy[3];
     Int_t col[]={1,46,8};
     for (int k=0; k<3;++k) {
         TH2F *hgrefZdc = static_cast<TH2F *>(list->FindObject(Form("h_gRefmult_vs_ZDCx%s", names[k].Data())));
         hgrefZdc->Sumw2();
 
-        fLinear[k]=new TF1("fLinear", "[0]*x+[1]", 50, 250);
+        fLinear[k]=new TF1(Form("fLinear%i", k), "[0]*x+[1]", 50, 250);
 
-        TProfile *pxy = new TProfile();
-        pxy = hgrefZdc->ProfileX(legend[k]);
-        pxy->SetMarkerStyle(2);
-        pxy->SetMarkerColor(col[k]);
-        pxy->SetLineColor(col[k]);
-        pxy->GetXaxis()->SetTitle("ZDC rate [kHz]");
-        pxy->GetYaxis()->SetTitle(Form("<%sMult>",variable.Data()));
-        pxy->SetTitle("");
-        pxy->SetStats(0);
-        pxy->GetXaxis()->SetLabelFont(42);
-        pxy->GetXaxis()->SetRangeUser(50,250);
+        pxy[k] = new TProfile();
+        pxy[k] = hgrefZdc->ProfileX(legend[k]);
+        pxy[k]->SetMarkerStyle(2);
+        pxy[k]->SetMarkerColor(col[k]);
+        pxy[k]->SetLineColor(col[k]);
+        pxy[k]->GetXaxis()->SetTitle("ZDC rate [kHz]");
+        pxy[k]->GetYaxis()->SetTitle(Form("<%sMult>",variable.Data()));
+        pxy[k]->SetTitle("");
+        pxy[k]->SetStats(0);
+        pxy[k]->GetXaxis()->SetLabelFont(42);
+        pxy[k]->GetXaxis()->SetRangeUser(50,250);
 //        pxy->GetXaxis()->SetRangeUser(200,1400);
-        pxy->GetYaxis()->SetRangeUser(0,21);
-        pxy->GetXaxis()->SetTitleFont(42);
-        pxy->Fit(fLinear[k], "R");
+        pxy[k]->GetYaxis()->SetRangeUser(0,21);
+        pxy[k]->GetXaxis()->SetTitleFont(42);
+//        if (k==2) {
+//         pxy[k]->Fit(fLinear[k]);
+//        }
         c3->cd();
-        if (k==0) pxy->DrawClone();
-        else pxy->DrawClone("same");
-        legendZDC->AddEntry(pxy, legend[k], "pl");
+        if (k==0) pxy[k]->Draw();
+        else pxy[k]->Draw("same");
+        legendZDC->AddEntry(pxy[k], legend[k], "pl");
 
         if (k==2) {
 //            legendZDC->Draw("same");
@@ -185,6 +187,7 @@ void refMult() {
     legendMult->AddEntry(pxy1, "refMult from data", "pl");
     legendMult->AddEntry(hMult, "mult from Glauber", "pl");
     legendMult->Draw("same");
+
 
 //    TFile *outRef = new TFile("/home/lukas/work/glauber/data_refmult.root", "RECREATE");
 //    pxy1->Write("hgRefMult_data");
