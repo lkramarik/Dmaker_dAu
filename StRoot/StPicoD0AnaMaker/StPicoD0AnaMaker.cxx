@@ -384,17 +384,18 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
                 if(!(pair->m()>1.81 && pair->m()<1.92)) continue;
 
                 //CUTS
-                /*
-                if (cos(pair->pointingAngle()) > 0.95 && pair->dcaDaughters() < 0.006 && pair->m()>1.81 && pair->m()<1.92 && pair->DcaToPrimaryVertex()<0.008 && pair->particle2Dca()>0.009 && pair->particle1Dca()>0.009) {
+
+                if (cos(pair->pointingAngle()) > 0.9 && pair->dcaDaughters() < 0.007 && pair->m()>1.81 && pair->m()<1.92) {
                     tracksToRemove.push_back(mIdxPicoPions[idxPion1]);
                     tracksToRemove.push_back(mIdxPicoKaons[idxKaon]);
                     hRemovedPairMass->Fill(pair->m());
                     isRemovedtrack = true;
                 }
-                */
+
 
                 //BDT
                 //find the correct pT bin
+                /*
                 int pTbin = 0;
                 for (int pT = 0; pT < nptBins; pT++) {
                     if(pair->pt() >= momBins[pT] && pair->pt() < momBins[pT+1]) pTbin = pT;
@@ -416,7 +417,8 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
                     //excluding daughter tracks
                     tracksToRemove.push_back(mIdxPicoPions[idxPion1]);
                     tracksToRemove.push_back(mIdxPicoKaons[idxKaon]);
-                }
+
+                }*/
             }
         }
     }
