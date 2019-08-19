@@ -69,9 +69,9 @@ int StPicoD0AnaMaker::InitHF() {
     mOutList->Add(new TH1F("hInvMassBDT23","hInvMassBDT23", 300, 1.7, 2.0));
     mOutList->Add(new TH1F("hInvMassBDT35","hInvMassBDT35", 300, 1.7, 2.0));
 
-    mOutList->Add(new TH1F("hPVDiffX","hPVDiffX", 1000, -2.0, 2.0));
-    mOutList->Add(new TH1F("hPVDiffY","hPVDiffY", 1000, -2.0, 2.0));
-    mOutList->Add(new TH1F("hPVDiffZ","hPVDiffZ", 1000, -2.0, 2.0));
+    mOutList->Add(new TH1F("hPVDiffX","hPVDiffX", 1001, -0.02002, 0.01998));
+    mOutList->Add(new TH1F("hPVDiffY","hPVDiffY", 1001, -0.02002, 0.01998));
+    mOutList->Add(new TH1F("hPVDiffZ","hPVDiffZ", 1001, -0.02002, 0.01998));
 
     mOutList->Add(new TH1F("hPVDiffXRemoved","hPVDiffXRemoved", 1000, -2.0, 2.0));
     mOutList->Add(new TH1F("hPVDiffYRemoved","hPVDiffYRemoved", 1000, -2.0, 2.0));
@@ -427,7 +427,8 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
     }
 
     TVector3 newKFVertex(mPrimVtx.x(), mPrimVtx.y(), mPrimVtx.z());
-    if (isRemovedtrack || always) {
+    if (goodTracksToFit.size()>2) {
+//    if (isRemovedtrack || always) {
         //Make new vertex and evaluate stuff:
         StPicoKFVertexFitter kfVertexFitter;
 //        KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst, tracksToRemove); //when removed tracks need to be checked

@@ -2,9 +2,9 @@
 
 void refMult() {
 //    TString input = "outputLocal.picoQAAnaMaker.root";
-//    TString input = "qa.refmult.3001.root";
-//    TString input = "qa.grefmultIsrefmult.1208.root";
-    TString input = "qa.grefmultIsRefmult.hotspot.root";
+//    TString input = "qa.grefmult.3008.root";
+    TString input = "qa.grefmultIsrefmult.1208.root";
+//    TString input = "qa.grefmultIsRefmult.hotspot.root";
 //    TString input = "qa.2907.gref.root";
 
     TFile *inFile = new TFile(input, "READ");
@@ -61,7 +61,9 @@ void refMult() {
 
         if (k==2) {
 //            legendZDC->Draw("same");
-            c3->BuildLegend();
+            TLegend* lef = c3->BuildLegend();
+            lef->SetTextSize(0.04);
+            lef->SetLineColor(0);
             text1->Draw("same");
         }
 
@@ -70,7 +72,8 @@ void refMult() {
         TH1D *pxy1 = new TH1D();
         pxy1 = hgrefOne->ProjectionX();
 //        pxy1 = hgrefOne->ProjectionY(legend[k]);
-        pxy1->SetMarkerStyle(2);
+        pxy1->SetMarkerStyle(34);
+        pxy1->SetMarkerSize(1.5);
         pxy1->SetMarkerColor(col[k]);
         pxy1->SetLineColor(col[k]);
         pxy1->GetXaxis()->SetTitle(Form("%sMult",variable.Data()));
@@ -169,24 +172,24 @@ void refMult() {
     c3->Close();
     delete c3;
 
-    TFile *inFileSim = new TFile("/home/lukas/work/glauber/ncoll_npart.root", "READ");
-    TH1F *hMult = static_cast<TH1F *>(inFileSim->Get("hMult"));
-    hMult->Sumw2();
-    hMult->SetMarkerColor(46);
-    hMult->SetMarkerStyle(20);
-    hMult->SetLineColor(46);
-    hMult->Scale(1/hMult->GetEntries());
-    hMult->SetStats(0);
-    hMult->Draw();
-    TH2F *hgrefOne = static_cast<TH2F *>(list->FindObject(Form("h_gRefmult%s", names[2].Data())));
-    TH1D *pxy1 = new TH1D();
-    pxy1 = hgrefOne->ProjectionX();
-    pxy1->Scale(1/pxy1->GetEntries());
-    pxy1->Draw("same");
-    TLegend *legendMult = new TLegend(0.6, 0.67, 0.77, 0.88, "", "brNDC");
-    legendMult->AddEntry(pxy1, "refMult from data", "pl");
-    legendMult->AddEntry(hMult, "mult from Glauber", "pl");
-    legendMult->Draw("same");
+//    TFile *inFileSim = new TFile("/home/lukas/work/glauber/ncoll_npart.root", "READ");
+//    TH1F *hMult = static_cast<TH1F *>(inFileSim->Get("hMult"));
+//    hMult->Sumw2();
+//    hMult->SetMarkerColor(46);
+//    hMult->SetMarkerStyle(20);
+//    hMult->SetLineColor(46);
+//    hMult->Scale(1/hMult->GetEntries());
+//    hMult->SetStats(0);
+//    hMult->Draw();
+//    TH2F *hgrefOne = static_cast<TH2F *>(list->FindObject(Form("h_gRefmult%s", names[2].Data())));
+//    TH1D *pxy1 = new TH1D();
+//    pxy1 = hgrefOne->ProjectionX();
+//    pxy1->Scale(1/pxy1->GetEntries());
+//    pxy1->Draw("same");
+//    TLegend *legendMult = new TLegend(0.6, 0.67, 0.77, 0.88, "", "brNDC");
+//    legendMult->AddEntry(pxy1, "refMult from data", "pl");
+//    legendMult->AddEntry(hMult, "mult from Glauber", "pl");
+//    legendMult->Draw("same");
 
 
 //    TFile *outRef = new TFile("/home/lukas/work/glauber/data_refmult.root", "RECREATE");
