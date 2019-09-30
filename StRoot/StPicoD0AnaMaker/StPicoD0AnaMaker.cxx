@@ -85,8 +85,7 @@ int StPicoD0AnaMaker::InitHF() {
     mOutList->Add(new TH1D("h_tracktest_TOF","h_tracktest_TOF", 6, 0.5, 6.5));
 
     mOutFileBaseName = mOutFileBaseName.ReplaceAll(".root", "");
-    TString ntpVars = "grefMult:refMult:runId:eventId:ZDC:BBC:primary:diffRemovedPrimary:pi1_pt:pi1_dca:pi1_nSigma:pi1_nHitFit:pi1_TOFinvbeta:pi1_betaBase:k_pt:k_dca:k_nSigma:k_nHitFit:k_TOFinvbeta:k_betaBase:dcaDaughters:primVz:primVzVpd:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_cosThetaStar:D_pt"
-                      ":D_mass";
+    TString ntpVars = "grefMult:refMult:runId:eventId:ZDC:BBC:primary:diffRemovedPrimary:pi1_pt:pi1_dca:pi1_nSigma:pi1_nHitFit:pi1_TOFinvbeta:pi1_betaBase:k_pt:k_dca:k_nSigma:k_nHitFit:k_TOFinvbeta:k_betaBase:dcaDaughters:primVz:primVzVpd:D_theta:cosTheta:D_decayL:dcaD0ToPv:D_cosThetaStar:D_pt:D_mass";
 //    ntp_kaon = new TNtuple("ntp_kaon", "kaon tree","k_pt:k_phi:k_eta:k_nSigma:k_nHitFit:k_TOFinvbeta:pi_eventId:pi_runId");
 //    ntp_pion = new TNtuple("ntp_pion", "pion tree","pi_pt:pi_phi:pi_eta:pi_nSigma:pi_nHitFit:pi_TOFinvbeta:k_eventId:k_runId");
     ntp_DMeson_Signal = new TNtuple("ntp_signal","DMeson TreeSignal", ntpVars);
@@ -269,6 +268,9 @@ int StPicoD0AnaMaker::createCandidates() {
             if (kaon->isPrimary()) primary = 4;
             if (pion1->isPrimary() && kaon->isPrimary()) primary = 2;
 
+            Float_t hotSpot=0;
+            if (mHFCuts->checkHotSpot(mPrimVtx);) hotSpot=1;
+
             const int nNtVars = ntp_DMeson_Signal->GetNvar();
             float ntVar[nNtVars];
             int ii=0;
@@ -279,6 +281,7 @@ int StPicoD0AnaMaker::createCandidates() {
             ntVar[ii++] = mPicoEvent->eventId();
             ntVar[ii++] = mPicoEvent->ZDCx();
             ntVar[ii++] = mPicoEvent->BBCx();
+            ntVar[ii++] = hotSpot;
 
             ntVar[ii++] = primary;
             ntVar[ii++] = nGoodTracks;
