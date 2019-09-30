@@ -270,7 +270,7 @@ int StPicoD0AnaMaker::createCandidates() {
             if (pion1->isPrimary() && kaon->isPrimary()) primary = 2;
 
             Float_t hotSpot=0;
-            if (mHFCuts->checkHotSpot(mPrimVtx)) hotSpot=1;
+            if (mHFCuts->checkHotSpot(&mPrimVtx)) hotSpot=1;
 
             const int nNtVars = ntp_DMeson_Signal->GetNvar();
             float ntVar[nNtVars];

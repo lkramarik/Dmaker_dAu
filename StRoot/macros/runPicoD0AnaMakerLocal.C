@@ -55,7 +55,7 @@ void runPicoD0AnaMakerLocal(
   hfCuts->setCutNHitsFitMin(15); //default is 20
   hfCuts->setCutRequireHFT(true);
   hfCuts->setHybridTof(true);
-  hfCuts->setCheckHotSpot(true);
+  hfCuts->setCheckHotSpot(false);
 
 
     //LK hfCuts->setCutDcaMin(0.009,StHFCuts::kPion); //federic 1aug2016
