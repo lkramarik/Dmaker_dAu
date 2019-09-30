@@ -93,7 +93,7 @@ void runPicoD0AnaMakerLocal(
 
   StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
   StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile);
-    PicoD0AnaMaker->workWithRefit(true);
+    PicoD0AnaMaker->workWithRefit(false);
     PicoD0AnaMaker->setHFBaseCuts(hfCuts);
 
 //  StPicoMixedEventMaker* picoMixedEventMaker = new StPicoMixedEventMaker("picoMixedEventMaker", picoDstMaker, hfCuts, outputFile);

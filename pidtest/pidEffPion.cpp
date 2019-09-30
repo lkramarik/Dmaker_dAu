@@ -32,6 +32,9 @@ void pidEffPion() {
 //    gSystem->Load("FitPID");
     bool tofPid = true;
     bool plotPart2 = false;
+    bool hybridTof=false;
+    bool tofPidEff=true;
+
     gROOT->ProcessLine(".L FitPID.c++");
 
     gSystem->Exec("rm rootFiles/nSigma_pipi_1.root rootFiles/nSigma_pipi_2.root");
@@ -63,11 +66,12 @@ void pidEffPion() {
     pair = "#pi#pi";
     pairName = "pipi";
 
-    bool hybridTof=false;
-
     if (hybridTof) {
         tof1="pi1_TOFinvbeta<0.03 || pi1_TOFinvbeta>93";
         tof2="pi2_TOFinvbeta<0.03 || pi2_TOFinvbeta>93";
+    } else if (tofPidEff) { //
+        tof1="pi1_TOFinvbeta<0.03";
+        tof2="pi2_TOFinvbeta<0.03";
     }
     else {
         tof1="pi1_TOFinvbeta<93";
@@ -87,13 +91,15 @@ void pidEffPion() {
 
     cut = Form("pair_mass>%.3f && pair_mass<%.3f", massMin, massMax);
 
-    int bbc=800;
+    int bbcMin=500;
+    int bbcMax=950;
     int nTof=0;
     float nsigma=3;
     float tofInvBeta=0.03;
     float ptTrackCut=0.5;
 
-    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<%i && nHftTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbc, nTof, nsigma, tofInvBeta, ptTrackCut);
+    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate>%i && bbcRate<=%i && nHftTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
+
 //    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<%i && nHftTracks>%i && abs(pi2_nSigma)<%.1f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbc, nTof, nsigma, ptTrackCut);
 
 //    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<%i && nTofTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbc, nTof, nsigma, tofInvBeta, ptTrackCut);
@@ -103,9 +109,10 @@ void pidEffPion() {
 //    cutPair = Form("pair_pt>%.3f && pair_pt<%.3f && nTofTracks>0", ptPairMin, ptPairMax);
 //    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<800 && nTofTracks>0", ptPairMin, ptPairMax);
 
-
-    TString dirName=Form("bbc%i_nHft%i_nsigma%.1f_tof%.2f_pt%.1f",bbc, nTof, nsigma, tofInvBeta, ptTrackCut);
-
+    TString dirName=Form("bbc%i_%i_nHft%i_nsigma%.1f_tof%.2f_pt%.1f", bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
+    if (tofPidEff) dirName="tofPidEff_"+dirName;
+    if (hybridTof) dirName="hybrid_"+dirName;
+    if (!tofPid) dirName="tpc_"+dirName;
 
 //    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<%i && nHftTracks>%i", ptPairMin, ptPairMax, bbc, nTof);
 //    TString dirName=Form("tpc_bbc%i_nHft%i",bbc, nTof);
@@ -125,6 +132,8 @@ void pidEffPion() {
     massSigma = fitmass->getSigma();
 
     cut = Form("pair_mass>%.3f && pair_mass<%.3f", massMean-2*massSigma, massMean+2*massSigma);
+    if (tofPidEff) cut += "pi1_TOFinvbeta<93";
+
     fitmass->makeTuple(input, cut+cutPair, plotPart2);
 
     int analysedBins = 0;
