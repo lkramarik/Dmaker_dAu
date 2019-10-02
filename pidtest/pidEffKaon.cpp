@@ -92,12 +92,12 @@ void pidEffKaon() {
 
     cut = Form("pair_mass>%.3f && pair_mass<%.3f", massMin, massMax);
 
-    int bbcMin=500;
+    int bbcMin=750;
     int bbcMax=950;
     int nTof=0;
     float nsigma=3;
     float tofInvBeta=0.03;
-    float ptTrackCut=0.5;
+    float ptTrackCut=0.;
 
     cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate>%i && bbcRate<=%i && nTofTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
 //    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<%i && nHftTracks>%i && abs(pi2_nSigma)<%.1f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbc, nTof, nsigma, ptTrackCut);
