@@ -64,6 +64,9 @@ int StPicoD0AnaMaker::InitHF() {
     mOutList->Add(new TH1F("hHotSpotDiffRemovedPrimary","hHotSpotDiffRemovedPrimary", 200, -0.5, 199.5));
     mOutList->Add(new TH1F("hNTracksGoodToFit","hNTracksGoodToFit", 200, -0.5, 199.5));
 
+    mOutList->Add(new TH1F("hPionPt","hPionPt", 100, 0, 10));
+    mOutList->Add(new TH1F("hKaonPt","hKaonPt", 100, 0, 10));
+
     mOutList->Add(new TH1F("hRemovedPairMass","hRemovedPairMass", 300, 1.7, 2.0));
     mOutList->Add(new TH1F("hInvMassBDT12","hInvMassBDT12", 300, 1.7, 2.0));
     mOutList->Add(new TH1F("hInvMassBDT23","hInvMassBDT23", 300, 1.7, 2.0));
@@ -222,6 +225,9 @@ int StPicoD0AnaMaker::createCandidates() {
 
     TH2F *hD0VsRemoved = static_cast<TH2F*>(mOutList->FindObject("hD0VsRemoved"));
 
+    TH1F *hKaonPt = static_cast<TH1F*>(mOutList->FindObject("hKaonPt"));
+    TH1F *hPionPt = static_cast<TH1F*>(mOutList->FindObject("hPionPt"));
+
     TH1F *hNTracksRemoved = static_cast<TH1F*>(mOutList->FindObject("hNTracksRemoved"));
     TH1F *hNTracksPrimary = static_cast<TH1F*>(mOutList->FindObject("hNTracksPrimary"));
     TH1F *hNTracksDiffRemovedPrimary = static_cast<TH1F*>(mOutList->FindObject("hNTracksDiffRemovedPrimary"));
@@ -241,8 +247,14 @@ int StPicoD0AnaMaker::createCandidates() {
             nPrimary++;
             primaryTracks.push_back(iTrack);
 
-            if (mHFCuts->isGoodPion(trk)) mIdxPicoPions.push_back(iTrack);
-            if (mHFCuts->isGoodKaon(trk)) mIdxPicoKaons.push_back(iTrack);
+            if (mHFCuts->isGoodPion(trk)) {
+                mIdxPicoPions.push_back(iTrack);
+                hPionPt->Fill(trk->gPt());
+            }
+            if (mHFCuts->isGoodKaon(trk)){
+                mIdxPicoKaons.push_back(iTrack);
+                hKaonPt->Fill(trk->gPt());
+            }
         }
     }
 
@@ -253,6 +265,7 @@ int StPicoD0AnaMaker::createCandidates() {
 //            cout<<mPrimVtx.x()<<" "<<mPrimVtx.y()<<" "<<mPrimVtx.z()<<endl;
 //        }
 
+/*TEMPO COMMENT
     for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
         StPicoTrack *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
         for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
@@ -346,7 +359,7 @@ int StPicoD0AnaMaker::createCandidates() {
 
     tracksToRemove.clear();
     tracksToRemove.shrink_to_fit();
-
+*/
     return kStOK;
 }
 

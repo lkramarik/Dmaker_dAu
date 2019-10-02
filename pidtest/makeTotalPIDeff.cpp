@@ -38,17 +38,16 @@ TF1* FitEff(TGraphErrors* gr, TString folder){
 //    TF1 *fitF1 = new TF1("eff_fit", "0.5*([0]+[1]*x+[2]*x*x+[3]*x*x*x)", 0.1, 5);
 //    fitF1->SetParameters(1, -0.06, -0.1, 0.02);
 
-    TF1 *fitF1 = new TF1("eff_fit", "[0]+[1]/x+[2]/x/x", 0.15, 4); //momentum resolution fit
-//    TF1 *fitF1 = new TF1("eff_fit", "[0]+[1]/x+[2]*x+[3]*x*x+[4]/x/x", 0.15, 4); //momentum resolution fit
+//    TF1 *fitF1 = new TF1("eff_fit", "[0]+[1]/x+[2]/x/x", 0.15, 4); //momentum resolution fit
+    TF1 *fitF1 = new TF1("eff_fit", "[0]+[1]/x+[2]*x+[3]*x*x+[4]/x/x", 0.15, 4); //momentum resolution fit
     fitF1->SetParameters(1, -0.06, -0.1, 0.02, 0.006);
     fitF1->SetParLimits(0, 0, 1);
     fitF1->SetParLimits(1, 0, 1);
-//    fitF1->SetParLimits(2, 0, 1);
-//    fitF1->SetParLimits(3, -1, 0);
-//    fitF1->SetParLimits(4, -1, 0);
-    fitF1->SetParLimits(2, -1, 0);
+    fitF1->SetParLimits(2, 0, 1);
+    fitF1->SetParLimits(3, -1, 0);
+    fitF1->SetParLimits(4, -1, 0);
 
-    gr->Fit(fitF1, "", "", 0.13, 4);
+    gr->Fit(fitF1, "", "", 0.13, 2.5);
     gr->GetYaxis()->SetRangeUser(0,1.2);
 
     TCanvas *out = new TCanvas("out", "out", 900, 1100);
@@ -114,7 +113,7 @@ TGraphErrors* totalGraph(TGraphErrors* gTOF, TGraphErrors* gTPC, TGraphErrors* g
 
 
 void makeTotalPIDeff(){
-    int bbcMin=750;
+    int bbcMin=0;
     int bbcMax=950;
     int nTof=0;
     float nsigma=3;
