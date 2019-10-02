@@ -27,7 +27,7 @@ int StPicoKFVertexTools::InitHF() {
     mOutList->Add(new TH1F("hMassUSRefit","hMassUSRefit", 500, 1.6, 2.1));
     mOutList->Add(new TH2F("hPicoPosition","hPicoPosition", 400, -1, 1, 400, 1, 1));
 
-    ntp_vertex = new TNtuple("ntp_vertex","ntp_vertex","runId:refMult:grefMult:nGlobTracks:nHftTracks:nPrimTracks:nD0:StAnnelingChi2Cut:BBC:ZDC"
+    ntp_vertex = new TNtuple("ntp_vertex","ntp_vertex","runId:refMult:grefMult:nGlobTracks:nHftTracks:nPrimTracks:nD0:StAnnelingChi2Cut:BBC:ZDC:"
                                                        "picoDstVx:picoDstVy:picoDstVz:"
                                                        "picoDstVErrX:picoDstVErrY:picoDstVErrZ:"
                                                        "KFVx:KFVy:KFVz:"
