@@ -26,8 +26,8 @@ void createDCAhists() {
 //    const int nZDC = 5;
 //    float const m_zdcEdge[nZDC+1] = {0,50,90,130,170,210};
 
-    const int nZDC = 3;
-    float const m_zdcEdge[nZDC+1] = {0,90,170,210};
+    const int nZDC = 2;
+    float const m_zdcEdge[m_nZdc+1] = {0,150,210};
 
 //    const int m_nmultEdge = 7;
 //    float const m_multEdge[m_nmultEdge+1] = {0, 4, 8, 12, 16, 20, 24, 200};

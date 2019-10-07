@@ -100,7 +100,7 @@ int StPicoSimInputsMaker::createQA(){
         int PhiIndex = getPhiIndexRatio(momentum.Phi());
         if ((EtaIndex==-1) || (PhiIndex==-1)) continue;
 
-        if (trk->isHFTTrack()) {
+//        if (trk->isHFTTrack()) {
             for (int i = 0; i < 3; ++i) {
                 if (trk->nSigmaPion() < i + 1) {
                     if (tofPion) { h1TofmatchTOF[0][i]->Fill(momentum.Perp()); }
@@ -112,7 +112,7 @@ int StPicoSimInputsMaker::createQA(){
                     h1Tofmatch[1][i]->Fill(momentum.Perp());
                 }
             }
-        }
+//        }
 
         if (trk->isHFTTrack() && (goodPion || goodKaon) && vars::dcaHists){
             addDcaPtCent(dca, dcaXy, dcaZ, goodPion, goodKaon, momentum.Perp(), multiplicity, EtaIndex, PhiIndex, mPrimVtx.z(), ZdcIndex);
