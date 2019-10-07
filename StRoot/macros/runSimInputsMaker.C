@@ -40,6 +40,7 @@ void runSimInputsMaker(
     hfCuts->addTriggerId(530003); //VPD-5
     hfCuts->setCutVzMax(6);
     hfCuts->setCutVzVpdVzMax(6.);
+    hfCuts->setCheckHotSpot(false);
 
     hfCuts->setCutNHitsFitMin(15);
     hfCuts->setCutRequireHFT(false); //we want to study HFT ratio, thus need non-HFT tracks

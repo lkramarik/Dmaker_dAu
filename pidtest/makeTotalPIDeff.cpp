@@ -29,7 +29,14 @@
 
 TF1* FitEff(TGraphErrors* gr, TString folder);
 void makeTotalPIDeff();
+double totalEffFct(double *x, double *par);
+double ratioFct(double *x, double *par);
 TGraphErrors* totalGraph(TGraphErrors*, TGraphErrors*, TGraphErrors*, TString, TString);
+TF1* fTOF;
+TF1* fTPC;
+TF1* fTOFMatch;
+TF1* fTotal;
+TF1* fTotalGraph;
 
 TF1* FitEff(TGraphErrors* gr, TString folder){
     gSystem->Exec("mkdir results_total_eff/"+folder);
@@ -39,18 +46,20 @@ TF1* FitEff(TGraphErrors* gr, TString folder){
 //    fitF1->SetParameters(1, -0.06, -0.1, 0.02);
 
 //    TF1 *fitF1 = new TF1("eff_fit", "[0]+[1]/x+[2]/x/x", 0.15, 4); //momentum resolution fit
-    TF1 *fitF1 = new TF1("eff_fit", "[0]+[1]/x+[2]*x+[3]*x*x+[4]/x/x", 0.15, 4); //momentum resolution fit
+//    TF1 *fitF1 = new TF1("eff_fit", "[0]+[1]/x+[2]*x+[3]*x*x+[4]/x/x", 0.15, 4); //momentum resolution fit
+    TF1 *fitF1 = new TF1("eff_fit", "[0]+[1]/x+[2]*x+[3]/x/x", 0.15, 4); //momentum resolution fit
     fitF1->SetParameters(1, -0.06, -0.1, 0.02, 0.006);
     fitF1->SetParLimits(0, 0, 1);
     fitF1->SetParLimits(1, 0, 1);
     fitF1->SetParLimits(2, 0, 1);
     fitF1->SetParLimits(3, -1, 0);
-    fitF1->SetParLimits(4, -1, 0);
+//    fitF1->SetParLimits(4, -1, 0);
 
-    gr->Fit(fitF1, "", "", 0.13, 2.5);
+    gr->Fit(fitF1, "", "", 0.15, 3);
     gr->GetYaxis()->SetRangeUser(0,1.2);
 
     TCanvas *out = new TCanvas("out", "out", 900, 1100);
+    out->SetGrid();
     gr->Draw("ap");
     TString filename = "results_total_eff/"+folder+(TString)gr->GetName()+".png";
     out->SaveAs(filename);
@@ -67,6 +76,16 @@ TF1* FitEff(TGraphErrors* gr, TString folder){
     fitF1->SetName(gr->GetName());
     return fitF1;
 }
+
+
+double totalEffFct(double *x, double *par){
+    return fTPC->Eval(x[0])*fTOFMatch->Eval(x[0])*fTOF->Eval(x[0])+(1.0-fTOFMatch->Eval(x[0]))*fTPC->Eval(x[0]);
+}
+
+double ratioFct(double *x, double *par){
+    return fTotal->Eval(x[0])/fTotalGraph->Eval(x[0]);
+}
+
 
 TGraphErrors* totalGraph(TGraphErrors* gTOF, TGraphErrors* gTPC, TGraphErrors* gTOFMatch, TString folder, TString particle) {
     if ( (gTOF->GetN()!=gTPC->GetN()) || (gTOFMatch->GetN()!=gTPC->GetN()) || (gTOF->GetN()!=gTOFMatch->GetN())) cout<<"Your graphs are not compatible."<<endl;
@@ -119,7 +138,7 @@ void makeTotalPIDeff(){
     float nsigma=3;
     float tofInvBeta=0.03;
     float ptTrackCut=0.;
-    TString particle = "pi";
+    TString particle = "K";
 
     TString cutComb=Form("bbc%i_%i_nHft%i_nsigma%.1f_tof%.2f_pt%.1f/",bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
 //    TString cutComb1=Form("bbc%i_%i_nHft%i_nsigma%.1f_tof%.2f_pt%.1f/",bbcMin, bbcMax, nTof, nsigma, tofInvBeta, 0.);
@@ -146,22 +165,24 @@ void makeTotalPIDeff(){
 
     TGraphErrors *gTotal = totalGraph(gTOF, gTPC, gTOFMatch, cutComb, particle);
     gTotal->SetNameTitle("total_eff_"+particle, "total eff. "+particle);
-    TF1* fTotalGraph = FitEff(gTotal, cutComb);
+    fTotalGraph = FitEff(gTotal, cutComb);
     fTotalGraph->SetName("fTotalGraph");
     fTotalGraph->SetLineColor(1);
 //    fTotalGraph->SetLineStyle(1);
 
-    TF1* fTOF = FitEff(gTOF, cutComb);
+
+    fTOF = FitEff(gTOF, cutComb);
     fTOF->SetName("fTOF");
-    TF1* fTPC = FitEff(gTPC, cutComb);
+    fTPC = FitEff(gTPC, cutComb);
     fTPC->SetName("fTPC");
-    TF1* fTOFMatch = FitEff(gTOFMatch, cutComb);
+    fTOFMatch = FitEff(gTOFMatch, cutComb);
     fTOFMatch->SetName("fTOFMatch");
 //    TF1* fTOFHybrid = FitEff(gTOFHybrid, cutComb);
 //    fTOFHybrid->SetName("fTOFHybrid");
 
 //    TF1* fTotal = new TF1("fTotal", "fTPC*fTOFMatch*fTOF+(1-fTOFMatch)*fTPC", 0.15, 4);
-    TF1* fTotal = new TF1("fTotal", "(fTPC(x))*(fTOFMatch(x))*(fTOF(x))+(1.0-(fTOFMatch(x)))*(fTPC(x))", 0.15, 4);
+//    TF1* fTotal = new TF1("fTotal", "(fTPC(x))*(fTOFMatch(x))*(fTOF(x))+(1.0-(fTOFMatch(x)))*(fTPC(x))", 0.15, 4);
+    fTotal = new TF1("fTotal", totalEffFct, 0.15, 4);
 
 //    TF1* fTotal1 = new TF1("fTotal1", "(fTPC(x))*(fTOFMatch(x))*(fTOF(x))", 0.15, 4);
 //    TF1* fTotal2 = new TF1("fTotal2", "(1.0-(fTOFMatch(x)))*(fTPC(x))", 0.15, 4);
@@ -169,13 +190,12 @@ void makeTotalPIDeff(){
 
     //    TF1* fTotal = new TF1("fTotal", "(fTPC(0))*(fTOFMatch(5))*(fTOF(10))+(1.0-(fTOFMatch(15)))*(fTPC(20))", 0.15, 4);
     cout<<fTotal->Eval(2)<<endl;
-
-
     cout<<fTPC->Eval(2)*fTOFMatch->Eval(2)*fTOF->Eval(2)+(1-fTOFMatch->Eval(2))*fTPC->Eval(2)<<endl;
 
 //    TF1* fTotalHybrid = new TF1("fTotalHybrid", "(fTPC(x))*(fTOFHybrid(x))", 0.15, 4);
 
     TCanvas *out = new TCanvas("out", "out", 900, 1100);
+    out->SetGrid();
     gPad->SetLeftMargin(0.15);
     fTotal->Draw();
 //    fTotalHybrid->Draw("same");
@@ -197,13 +217,13 @@ void makeTotalPIDeff(){
     out->SaveAs("results_total_eff/"+cutComb+"fTotalEffPid_"+particle+".png");
     out->SaveAs("results_total_eff/"+cutComb+"fTotalEffPid_"+particle+".pdf");
 
-    TF1* fRatio = new TF1("fRatio", "((fTotalGraph(x))+(fTotal(x)))", 0.15, 4);
+    TF1* fRatio = new TF1("fRatio", ratioFct, 0.15, 4);
     cout<<fTotal->Eval(3.5)<<endl;
     cout<<fTotalGraph->Eval(3.5)<<endl;
     cout<<fTotalGraph->Eval(3.5)+fTotal->Eval(3.5)<<endl;
     cout<<fRatio->Eval(3.5)<<endl;
 
-    fRatio->Draw();
+//    fRatio->Draw();
 
     TFile *file = new TFile("results_total_eff/"+cutComb+"totalEff_"+particle+".root", "RECREATE");
     fTotal->Write("fTotalEffPid_"+particle);

@@ -290,7 +290,7 @@ bool StPicoCutsBase::isTPCHadron(StPicoTrack const * const trk, int pidFlag) con
     else if (pidFlag == kProton)
         nSigma = fabs(trk->nSigmaProton());
 
-    return (nSigma < mTPCNSigmaMax[pidFlag]);
+    return (nSigma < mTPCNSigmaMax[pidFlag] && trk->nHitsFit() >= mNHitsFitMin);
 }
 
 // _________________________________________________________

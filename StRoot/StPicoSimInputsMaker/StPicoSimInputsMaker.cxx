@@ -80,8 +80,8 @@ int StPicoSimInputsMaker::createQA(){
         bool tpcPion = false;
         bool tpcKaon = false;
 
-        if(mHFCuts->isGoodPion(trk)) tpcPion = true;
-        if(mHFCuts->isGoodKaon(trk)) tpcKaon = true;
+        if(mHFCuts->isTPCPion(trk)) tpcPion = true;
+        if(mHFCuts->isTPCKaon(trk)) tpcKaon = true;
 
         if(mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kPion)) tofPion = true;
         if(mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon)) tofKaon = true;
