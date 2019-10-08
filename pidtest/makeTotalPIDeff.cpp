@@ -239,6 +239,7 @@ void makeTotalPIDeff(){
 //    fRatio->Draw();
 
     TFile *file = new TFile("results_total_eff/"+cutComb+"totalEff_"+particle+".root", "RECREATE");
+    file->SetCompressionAlgorithm(1);
     fTotal->Write("fTotalEffPid_"+particle);
     fTotalGraph->Write("fTotalGraphEffPid_"+particle);
     gTotal->Write("grTotalGraphEffPid_"+particle);
