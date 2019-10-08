@@ -22,7 +22,7 @@ namespace vars {
     const int m_nZdc = 2;
     float const m_zdcEdge[m_nZdc+1] = {0,150,210};
 
-    const int m_nZdcDCA = 3;
+    const int m_nZdcDCA = 2;
     float const m_zdcEdgeDCA[m_nZdcDCA+1] = {0,150,210};
 
     const int m_nParticles = 2;

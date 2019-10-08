@@ -19,7 +19,7 @@ void createDCAhists() {
     const int nEtas = 3; //ok
 
     // input file and output file
-    TFile fDca1("dca.hists.root");
+    TFile fDca1("dca.hists.0810.root");
     TFile *outHistF = new TFile("dcaxy_vs_dcaz.root", "RECREATE");
     outHistF->SetCompressionSettings(0);
 
@@ -27,7 +27,7 @@ void createDCAhists() {
 //    float const m_zdcEdge[nZDC+1] = {0,50,90,130,170,210};
 
     const int nZDC = 2;
-    float const m_zdcEdge[m_nZdc+1] = {0,150,210};
+    float const m_zdcEdge[nZDC+1] = {0,150,210};
 
 //    const int m_nmultEdge = 7;
 //    float const m_multEdge[m_nmultEdge+1] = {0, 4, 8, 12, 16, 20, 24, 200};

@@ -22,15 +22,17 @@ void createHist() {
     const Int_t nPhi = 11; //ok
 
     // input file and output file
-    TFile fDca1("ratio.hists.root");
+    TFile fDca1("ratio.hists.0810.root");
     TFile *outRatioPion = new TFile("hftratio_vs_pt_dAu_pion.root", "RECREATE");
     TFile *outRatioKaon = new TFile("hftratio_vs_pt_dAu_kaon.root", "RECREATE");
     TFile *outHist2d = new TFile("2d.root", "RECREATE");
     float const multEdge[nmultEdge + 1] = {0, 4, 8, 12, 16, 20, 24, 200};
 //    const Double_t ptEdge[nPtBins + 1] = {0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3.0, 3.5, 4.0, 6.0, 12.0};
-    const int m_nZdc = 5;
-    float const m_zdcEdge[m_nZdc+1] = {0,50,90,130,170,210};
+//    const int m_nZdc = 5;
+//    float const m_zdcEdge[m_nZdc+1] = {0,50,90,130,170,210};
 
+    const int m_nZdc = 2;
+    float const m_zdcEdge[m_nZdc+1] = {0,150,210};
 
 //    for(int iParticle = 0; iParticle < nParticles; ++iParticle){
 //        for (int iEta = 0; iEta < nEtas; ++iEta){
@@ -70,14 +72,16 @@ void createHist() {
                     hist3D = (TH3F*)(fDca1.Get(h3dName));
                     if (!hist3D) {
                         std::cout << "histogram \"" << h3dName << "\" not found." << endl;
-                        return;
+//                        return;
+                        continue;
                     }
                     TH3F *hist3Dtpc = 0;
                     const char *h3dNametpc = Form("h3_tpc_mult_pt_p%d_eta%d_vz%d_phi%d", iParticle, iEta, iVz, iPhi);
                     hist3Dtpc = (TH3F*)(fDca1.Get(h3dNametpc));
                     if (!hist3Dtpc) {
                         std::cout << "histogram \"" << h3dNametpc << "\" not found." << endl;
-                        return;
+//                        return;
+                        continue;
                     }
 
                     TH2F *hist2Dtpc = (TH2F*)hist3Dtpc->Project3D("xze"); // result: y = pt, x = ZDC

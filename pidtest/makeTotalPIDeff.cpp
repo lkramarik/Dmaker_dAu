@@ -1,7 +1,6 @@
 //
 // Created by lukas on 19. 9. 2019.
 //
-#include "FitPID.h"
 #include "TStyle.h"
 #include "TH1.h"
 #include "TCanvas.h"
@@ -16,6 +15,7 @@
 #include "TCut.h"
 #include "TFile.h"
 #include "TGraphErrors.h"
+#include "TVirtualFitter.h"
 #include "TMultiGraph.h"
 #include <iostream>
 #include <ctime>
@@ -61,6 +61,19 @@ TF1* FitEff(TGraphErrors* gr, TString folder){
     TCanvas *out = new TCanvas("out", "out", 900, 1100);
     out->SetGrid();
     gr->Draw("ap");
+
+    TH1D *hint = new TH1D("hint", "Fitted gaussian with .95 conf.band", 100, 0.15, 3);
+    (TVirtualFitter::GetFitter())->GetConfidenceIntervals(hint);
+    //Now the "hint" histogram has the fitted function values as the
+    //bin contents and the confidence intervals as bin errors
+    hint->GetYaxis()->SetRangeUser(0,1.2);
+
+    hint->SetStats(kFALSE);
+    hint->SetFillColor(0);
+    hint->SetLineColor(17);
+//    hint->Draw("e4 same");
+
+
     TString filename = "results_total_eff/"+folder+(TString)gr->GetName()+".png";
     out->SaveAs(filename);
     filename = "results_total_eff/"+folder+(TString)gr->GetName()+".pdf";
@@ -138,7 +151,7 @@ void makeTotalPIDeff(){
     float nsigma=3;
     float tofInvBeta=0.03;
     float ptTrackCut=0.;
-    TString particle = "K";
+    TString particle = "pi";
 
     TString cutComb=Form("bbc%i_%i_nHft%i_nsigma%.1f_tof%.2f_pt%.1f/",bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
 //    TString cutComb1=Form("bbc%i_%i_nHft%i_nsigma%.1f_tof%.2f_pt%.1f/",bbcMin, bbcMax, nTof, nsigma, tofInvBeta, 0.);
