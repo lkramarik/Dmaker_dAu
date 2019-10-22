@@ -27,7 +27,7 @@ int StPicoKFVertexTools::InitHF() {
     mOutList->Add(new TH1F("hMassUSRefit","hMassUSRefit", 500, 1.6, 2.1));
     mOutList->Add(new TH2F("hPicoPosition","hPicoPosition", 400, -1, 1, 400, 1, 1));
 
-    ntp_vertex = new TNtuple("ntp_vertex","ntp_vertex","runId:refMult:grefMult:nGlobTracks:nHftTracks:nPrimTracks:nD0:StAnnelingChi2Cut:BBC:ZDC:"
+    ntp_vertex = new TNtuple("ntp_vertex","ntp_vertex","runId:refMult:grefMult:nGlobTracks:nHftTracks:nPrimTracks:nD0:StAnnelingChi2Cut:BBC:ZDC:VzVpd:"
                                                        "picoDstVx:picoDstVy:picoDstVz:"
                                                        "picoDstVErrX:picoDstVErrY:picoDstVErrZ:"
                                                        "KFVx:KFVy:KFVz:"
@@ -177,8 +177,21 @@ int StPicoKFVertexTools::MakeHF() {
 void StPicoKFVertexTools::compareFitters(std::vector<int>&  primaryTracks, int nD0, int nHftTracks) {
     const unsigned int nPrimTracks = primaryTracks.size();
 
-    StPicoKFVertexFitter kfVertexFitter;
-    KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
+//    StPicoKFVertexFitter kfVertexFitter;
+//    KFVertex kfVertex = kfVertexFitter.primaryVertexRefit(mPicoDst);
+//    int nFlag0Write =  kfVertexFitter.nFlag0;
+
+    //if you dont want to reconstruct PV
+    const Double_t parVertex[6] = {Vtx.x(),Vtx.y(),Vtx.z(), 0, 0, 1000};
+    const Double_t covVertex[21] = {1,
+                                    0, 1,
+                                    0, 0, 100,
+                                    0, 0,   0, 100,
+                                    0, 0,   0,   0, 100,
+                                    0, 0,   0,   0,   0, 100};
+    KFVertex kfVertex;
+    kfVertex.Create(parVertex,covVertex, 0, 0);
+    nFlag0Write=0;
 
     const int nNtVars = ntp_vertex->GetNvar();
     Float_t ntVar[nNtVars];
@@ -194,6 +207,7 @@ void StPicoKFVertexTools::compareFitters(std::vector<int>&  primaryTracks, int n
     ntVar[ii++] = StAnneling::Chi2Cut();
     ntVar[ii++] = mPicoEvent->BBCx()/1000;
     ntVar[ii++] = mPicoEvent->ZDCx()/1000;
+    ntVar[ii++] = mPicoEvent->vzVpd();
 
     ntVar[ii++] = mPrimVtx.x();
     ntVar[ii++] = mPrimVtx.y();
@@ -211,7 +225,7 @@ void StPicoKFVertexTools::compareFitters(std::vector<int>&  primaryTracks, int n
     ntVar[ii++] = kfVertex.GetErrY();
     ntVar[ii++] = kfVertex.GetErrZ();
 
-    ntVar[ii++] = kfVertexFitter.nFlag0;
+    ntVar[ii++] = nFlag0Write;
 
     ntp_vertex->Fill(ntVar);
 }
