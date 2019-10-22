@@ -182,7 +182,7 @@ void StPicoKFVertexTools::compareFitters(std::vector<int>&  primaryTracks, int n
 //    int nFlag0Write =  kfVertexFitter.nFlag0;
 
     //if you dont want to reconstruct PV
-    const Double_t parVertex[6] = {Vtx.x(),Vtx.y(),Vtx.z(), 0, 0, 1000};
+    const Double_t parVertex[6] = {mPrimVtx.x(),mPrimVtx.y(),mPrimVtx.z(), 0, 0, 1000};
     const Double_t covVertex[21] = {1,
                                     0, 1,
                                     0, 0, 100,
@@ -191,7 +191,7 @@ void StPicoKFVertexTools::compareFitters(std::vector<int>&  primaryTracks, int n
                                     0, 0,   0,   0,   0, 100};
     KFVertex kfVertex;
     kfVertex.Create(parVertex,covVertex, 0, 0);
-    nFlag0Write=0;
+    int nFlag0Write=0;
 
     const int nNtVars = ntp_vertex->GetNvar();
     Float_t ntVar[nNtVars];
