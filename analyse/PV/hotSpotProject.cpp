@@ -16,8 +16,9 @@
 using namespace std;
 
 void hotSpotProject(){
-    TString input = "ntp.PV.0310.root";
-    TString folder = "/media/lukas/376AD6A434B7392F/work/";
+    TString input = "ntp.PV.1712.root";
+    TString folder = "";
+//    TString folder = "/media/lukas/376AD6A434B7392F/work/";
     TFile* outFile = new TFile("resH."+input ,"recreate");
 
     TFile* data = new TFile(folder+input ,"r");
@@ -26,27 +27,34 @@ void hotSpotProject(){
     TH1F *hOut;// = new TH1F();
     TH1F *hIn;// = new TH1F();
 
-    TString variable[] = {"BBC", "ZDC", "refMult", "nPrimTracks", "nHftTrack", "picoDstVErrX", "picoDstVErrY", "picoDstVErrZ"};
-    Float_t limsMax[] = {1200, 200, 100, 100, 100, 0.5, 0.5, 0.5};
-    Float_t nBins[] = {1200, 200, 100, 100, 100, 100, 100, 1000};
+//    TString variable[] = {"BBC", "ZDC", "refMult", "nPrimTracks", "nHftTrack", "picoDstVErrX", "picoDstVErrY", "picoDstVErrZ", ""};
+    TString variable[] = {"BBC", "ZDC", "refMult", "nPrimTracks", "nHftTrack", "picoDstVErrX", "picoDstVErrY", "picoDstVErrZ", "runId"};
+    Float_t limsMin[] = {0, 0, 0, 0, 0, 0, 0, 0, 17130000};
+    Float_t limsMax[] = {1200, 200, 100, 100, 100, 0.5, 0.5, 0.5, 17150000};
+    Float_t nBins[] = {1200, 200, 100, 100, 100, 100, 100, 100, 20000};
     TString in = "picoDstVy>-0.25 && picoDstVy<-0.16 && picoDstVx>-0.25 && picoDstVx<-0.16 && (nFlag0!=nPrimTracks)"; //hotspot
     TString out = "(picoDstVy<-0.25 || picoDstVy>-0.16 || picoDstVx<-0.25 || picoDstVx>-0.16) && (nFlag0!=nPrimTracks)"; //out of hotspot
+    TString inSecondHot = "(picoDstVy<0.2 && picoDstVy>-0.1 && picoDstVx<0.2 && picoDstVx>-0.1)"; //out of hotspot
+//    TString inSecondHot = "(picoDstVy<0.15 && picoDstVy>-0.1 && picoDstVx<0.15 && picoDstVx>-0.1)"; //out of hotspot
 
     //    TString axisName[] =     {};
 
     TCanvas *c = new TCanvas("c1", "c1", 900, 1200);
     c->SetGrid();
 
-    for (int k = 0; k < 8; ++k) {
-        hOut = new TH1F("hOut", variable[k], nBins[k], 0, limsMax[k]);
-        hIn = new TH1F("hIn", variable[k], nBins[k], 0, limsMax[k]);
+    cout<<"Number of stuff in the second spot: "<<ntp->GetEntries(inSecondHot)<<endl;
+
+    for (int k = 0; k < 9; ++k) {
+        hOut = new TH1F("hOut", variable[k], nBins[k], limsMin[k], limsMax[k]);
+        hIn = new TH1F("hIn", variable[k], nBins[k], limsMin[k], limsMax[k]);
         cout<<variable[k]<<endl;
-        ntp->Project("hOut", variable[k], out);
+//        ntp->Project("hOut", variable[k], out);
+        ntp->Project("hOut", variable[k], inSecondHot);
         ntp->Project("hIn", variable[k], in);
 
         hIn->Scale(1/hIn->GetEntries());
         hIn->SetStats(0);
-        hIn->Rebin(4);
+//        hIn->Rebin(4);
         hIn->SetFillColor(9);
         hIn->SetFillStyle(3005);
         hIn->SetLineColor(9);
@@ -54,7 +62,7 @@ void hotSpotProject(){
 
         hOut->Scale(1/hOut->GetEntries());
         hOut->SetStats(0);
-        hOut->Rebin(4);
+//        hOut->Rebin(4);
         hOut->SetFillColor(46);
         hOut->SetFillStyle(3004);
         hOut->SetLineColor(46);
