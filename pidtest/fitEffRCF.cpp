@@ -5,7 +5,7 @@ void fitEffRCF() {
     float nsigma=3;
     float tofInvBeta=0.03;
     float ptTrackCut=0.;
-    TString particle = "K";
+    TString particle = "pi";
 
     TString cutComb=Form("bbc%i_%i_nHft%i_nsigma%.1f_tof%.2f_pt%.1f/",bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
 
