@@ -181,18 +181,21 @@ void refMult() {
 //    hMult->Scale(1/hMult->GetEntries());
 //    hMult->SetStats(0);
 //    hMult->Draw();
-    TH2F *hgrefOne = static_cast<TH2F *>(list->FindObject(Form("h_gRefmult%s", names[2].Data())));
+    TH2F *hgrefOne = static_cast<TH2F *>(list->FindObject(Form("h_gRefmult%s", names[0].Data())));
     TH1D *pxy1 = new TH1D();
     pxy1 = hgrefOne->ProjectionX();
+    pxy1->GetXaxis()->SetRangeUser(0,100);
+    pxy1->GetXaxis()->SetTitle("Ref Mult");
 //    pxy1->Scale(1/pxy1->GetEntries());
 //    pxy1->Draw("same");
 //    TLegend *legendMult = new TLegend(0.6, 0.67, 0.77, 0.88, "", "brNDC");
 //    legendMult->AddEntry(pxy1, "refMult from data", "pl");
 //    legendMult->AddEntry(hMult, "mult from Glauber", "pl");
 //    legendMult->Draw("same");
-
+    pxy1->Draw();
 
     TFile *outRef = new TFile("/home/lukas/work/glauber/data_refmult.root", "RECREATE");
+    outRef->SetCompressionSettings(0);
     pxy1->Write("hgRefMult_data");
     outRef->Close();
 }
