@@ -265,7 +265,6 @@ int StPicoD0AnaMaker::createCandidates() {
 //            cout<<mPrimVtx.x()<<" "<<mPrimVtx.y()<<" "<<mPrimVtx.z()<<endl;
 //        }
 
-/*TEMPO COMMENT
     for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
         StPicoTrack *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
         for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
@@ -359,7 +358,7 @@ int StPicoD0AnaMaker::createCandidates() {
 
     tracksToRemove.clear();
     tracksToRemove.shrink_to_fit();
-*/
+
     return kStOK;
 }
 
