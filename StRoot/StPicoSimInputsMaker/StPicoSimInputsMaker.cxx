@@ -189,7 +189,7 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
 
     }
 
-    mh3VzZdcMult = new TH3F("mh3VzZdcMult", "mh3VzZdcMult", vars::m_nVzsRatio, vars::m_VzEdgeRatio, vars::m_nZdc, vars::m_zdcEdge, vars::m_nmultEdge, vars::m_multEdge);
+    mh3VzZdcMult = new TH3F("mh3VzZdcMult", "mh3VzZdcMult", 100, -6, 6, 100, 0, 250,  50, 0, 50);
 //    cout<<"endHistoint"<<endl;
 }
 

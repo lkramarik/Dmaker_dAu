@@ -26,7 +26,10 @@ void createHist() {
     TFile *outRatioPion = new TFile("hftratio_vs_pt_dAu_pion.root", "RECREATE");
     TFile *outRatioKaon = new TFile("hftratio_vs_pt_dAu_kaon.root", "RECREATE");
     TFile *outHist2d = new TFile("2d.root", "RECREATE");
-    float const multEdge[nmultEdge + 1] = {0, 4, 8, 12, 16, 20, 24, 200};
+    TFile *outEvent = new TFile("event.test.root", "RECREATE");
+    int multEdge[nmultEdge + 1] = {0, 4, 8, 12, 16, 20, 24, 200};
+//    float const multEdge[nmultEdge + 1] = {0, 4, 8, 12, 16, 20, 24, 200};
+
 //    const Double_t ptEdge[nPtBins + 1] = {0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3.0, 3.5, 4.0, 6.0, 12.0};
 //    const int m_nZdc = 5;
 //    float const m_zdcEdge[m_nZdc+1] = {0,50,90,130,170,210};
@@ -40,21 +43,26 @@ void createHist() {
 //                for(int iPhi = 0; iPhi < nPhi; ++iPhi){
 
     //VZ and ZDC test, this is directly in simulation
-//    TH3F* mh3VzZdcMult = (TH3F*)fDca1.Get("mh3VzZdcMult");
-//    for (int ii = 0; ii < nmultEdge; ++ii)   {
-//        int binVzmin = 0;
-//        int binVzup = mh3VzZdcMult->GetXaxis()->GetNbins();
-//        int binZDCmin = 0;
-//        int binZDCmax = mh3VzZdcMult->GetYaxis()->GetNbins();
-//        int binMultmin = mh3VzZdcMult->GetZaxis()->FindBin(multEdge[ii]);
-//        int binMultmax = mh3VzZdcMult->GetZaxis()->FindBin(multEdge[ii+1]);
-//        h1Vz[ii] = mh3VzZdcMult -> ProjectionX("_px",binZDCmin, binZDCmax, binMultmin, binMultmax, ""); //vz zdc
-//        h1Vz[ii]->SetDirectory(0);
-////        h1Vz[ii]->Draw();
-//        h1ZdcX[ii] = mh3VzZdcMult -> ProjectionY("_py",binVzmin, binVzup, binMultmin, binMultmax, ""); //vz zdc
-//        h1ZdcX[ii]->SetDirectory(0);
-//        h1ZdcX[ii]->Draw();
-//    }
+    TH3F* mh3VzZdcMult = (TH3F*)fDca1.Get("mh3VzZdcMult");
+    for (int ii = 0; ii < nmultEdge; ++ii)   {
+        int binVzmin = 0;
+        int binVzup = mh3VzZdcMult->GetXaxis()->GetNbins(); //ok
+        int binZDCmin = 0;
+        int binZDCmax = mh3VzZdcMult->GetYaxis()->GetNbins(); //ok
+        int binMultmin = mh3VzZdcMult->GetZaxis()->FindBin(multEdge[ii]);
+        int binMultmax = mh3VzZdcMult->GetZaxis()->FindBin(multEdge[ii+1]);
+        cout<<multEdge[ii]<<" "<<multEdge[ii+1]<<endl;
+        cout<<binMultmin<<" "<<binMultmax<<endl;
+        cout<<mh3VzZdcMult->GetZaxis()->GetNbins()<<endl;
+
+        h1Vz[ii] = mh3VzZdcMult -> ProjectionX("_px",binZDCmin, binZDCmax, binMultmin, binMultmax, ""); //vz zdc
+        h1Vz[ii]->SetDirectory(0);
+        outEvent->cd();
+        h1Vz[ii]->Write(Form("vz_mult_%i_%i", (int)multEdge[ii], (int)multEdge[ii+1]));
+        h1ZdcX[ii] = mh3VzZdcMult -> ProjectionY("_py",binVzmin, binVzup, binMultmin, binMultmax, ""); //vz zdc
+        h1ZdcX[ii]->SetDirectory(0);
+        h1ZdcX[ii]->Write();
+    }
 
 
 
@@ -103,8 +111,8 @@ void createHist() {
 //                        for (int iCent = 0; iCent < nmultEdge; ++iCent) {
                             binlow = hist2D->GetXaxis()->FindBin(m_zdcEdge[iZDC]);
                             binup = hist2D->GetXaxis()->FindBin(m_zdcEdge[iZDC + 1]);
-                            cout << m_zdcEdge[iZDC] << " " << m_zdcEdge[iZDC + 1] << endl;
-                            cout << binlow << " " << binup << endl;
+//                            cout << m_zdcEdge[iZDC] << " " << m_zdcEdge[iZDC + 1] << endl;
+//                            cout << binlow << " " << binup << endl;
                             TH1D *hist1d = hist2D->ProjectionY("_py", binlow, binup, "");
                             TH1D *hist1dtpc = hist2Dtpc->ProjectionY("_py", binlow, binup, "");
                             hist1d->Divide(hist1dtpc);
@@ -172,7 +180,7 @@ void createHist() {
 //            cout<<"Finished writing histograms for eta " << iEta << endl;
 //        }
 //    }
-                    cout << "Done..." << endl;
+//                    cout << "Done..." << endl;
                 }
             }
         }
