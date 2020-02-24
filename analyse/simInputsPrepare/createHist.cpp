@@ -22,7 +22,8 @@ void createHist() {
     const Int_t nPhi = 11; //ok
 
     // input file and output file
-    TFile fDca1("ratio.hists.0810.root");
+    TFile fDca1("2101.hists.root");
+//    TFile fDca1("ratio.hists.0810.root");
     TFile *outRatioPion = new TFile("hftratio_vs_pt_dAu_pion.root", "RECREATE");
     TFile *outRatioKaon = new TFile("hftratio_vs_pt_dAu_kaon.root", "RECREATE");
     TFile *outHist2d = new TFile("2d.root", "RECREATE");
@@ -59,8 +60,10 @@ void createHist() {
         h1Vz[ii]->SetDirectory(0);
         outEvent->cd();
         h1Vz[ii]->Write(Form("vz_mult_%i_%i", (int)multEdge[ii], (int)multEdge[ii+1]));
+
         h1ZdcX[ii] = mh3VzZdcMult -> ProjectionY("_py",binVzmin, binVzup, binMultmin, binMultmax, ""); //vz zdc
         h1ZdcX[ii]->SetDirectory(0);
+        h1ZdcX[ii]->Scale(1/h1ZdcX[ii]->GetEntries());
         h1ZdcX[ii]->Write();
     }
 

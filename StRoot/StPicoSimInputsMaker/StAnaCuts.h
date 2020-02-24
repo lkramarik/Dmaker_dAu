@@ -4,10 +4,10 @@
 using namespace std;
 
 namespace vars {
-    const bool ratioHists = true;
-//    const bool ratioHists = false;
-    const bool dcaHists = false;
-//    const bool dcaHists = true;
+//    const bool ratioHists = true;
+    const bool ratioHists = false;
+//    const bool dcaHists = false;
+    const bool dcaHists = true;
 
 //histo stuff
     const int m_nPtTOF = 19;
@@ -52,8 +52,13 @@ namespace vars {
     const int m_nVzsRatio = 6;
     float const m_VzEdgeRatio[m_nVzsRatio + 1] = { -6.0, -4.0, -2.0, 0, 2.0, 4.0, 6.0};
 
-    const int m_nmultEdge = 1; //7
-    float const m_multEdge[m_nmultEdge+1] = {0, 200}; //currently not used in dca
+//    const int m_nmultEdge = 1; //7
+//    float const m_multEdge[m_nmultEdge+1] = {0, 200}; //currently not used in dca
+
+    const int m_nmultEdge = 7;
+    float const m_multEdge[m_nmultEdge+1] = {0, 4, 8, 12, 16, 20, 24, 200}; //currently not used in dca
+//    int multEdge[nmultEdge + 1] = {0, 4, 8, 12, 16, 20, 24, 200};
+
 
     const int m_nPtsRatio = 15;
     float const m_PtEdgeRatio[m_nPtsRatio + 1] =
