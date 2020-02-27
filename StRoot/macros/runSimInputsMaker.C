@@ -16,7 +16,7 @@
 using namespace std;
 
 void runSimInputsMaker(
-    const Char_t *inputFile="./picoLists/runs_local_test.list"
+    const Char_t *inputFile="./picoLists/runs_local_test.list",
     const Char_t *outputFile="outputLocal",
     const Char_t *badRunListFileName = "./picoLists/picoList_bad.list") {
     string SL_version = "SL18f";
