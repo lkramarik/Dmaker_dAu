@@ -22,6 +22,11 @@ void createDCAhists() {
     TFile fDca1("dca.2802.root");
     TFile *outHistF = new TFile("dcaxy_vs_dcaz.root", "RECREATE");
     outHistF->SetCompressionSettings(0); //needed to open file in ROOT5
+    TFile *outEvent = new TFile("inputs.event.root", "RECREATE");
+    outEvent->SetCompressionSettings(0);
+
+
+
 
 //    TFile *outHist2dLowStats = new TFile("2d_badstats.root", "RECREATE");
 
@@ -52,6 +57,41 @@ void createDCAhists() {
     for (int i = 0; i < m_nDcasDca; ++i) {
         if (m_DcaEdgeDca[i+1]<m_DcaEdgeDca[i]) cout<<"wrong"<<endl;
     }
+
+    TH3F* mh3VzZdcMult = (TH3F*)fDca1.Get("mh3VzZdcMult");
+    outEvent->cd();
+    mh3VzZdcMult->Write();
+
+    TH1D* h1Vz[m_nmultEdge];
+    TH1D* h1ZdcX[m_nmultEdge];
+
+    int binVzmin = 1;
+    int binVzup = mh3VzZdcMult->GetXaxis()->GetNbins(); //ok
+    int binZDCmin = 1;
+    int binZDCmax = mh3VzZdcMult->GetYaxis()->GetNbins(); //ok
+
+    for (int ii = 0; ii < m_nmultEdge; ++ii)   {
+        int binMultmin = mh3VzZdcMult->GetZaxis()->FindBin(m_multEdge[ii]);
+        int binMultmax = mh3VzZdcMult->GetZaxis()->FindBin(m_multEdge[ii+1]);
+        cout<<m_multEdge[ii]<<" "<<m_multEdge[ii+1]<<endl;
+        cout<<binMultmin<<" "<<binMultmax<<endl;
+        cout<<mh3VzZdcMult->GetZaxis()->GetNbins()<<endl;
+        outEvent->cd();
+
+        h1Vz[ii] = mh3VzZdcMult -> ProjectionX("_px",binZDCmin, binZDCmax, binMultmin, binMultmax, ""); //vz zdc
+        h1Vz[ii]->SetDirectory(0);
+        h1Vz[ii]->Write(Form("vz_mult_%i_%i", (int)m_multEdge[ii], (int)m_multEdge[ii+1]));
+        h1ZdcX[ii] = mh3VzZdcMult -> ProjectionY("_py",binVzmin, binVzup, binMultmin, binMultmax, ""); //vz zdc
+        h1ZdcX[ii]->SetDirectory(0);
+        h1ZdcX[ii]->Scale(1/h1ZdcX[ii]->GetEntries());
+        h1ZdcX[ii]->Write(Form("zdc_mult_%i_%i", (int)m_multEdge[ii], (int)m_multEdge[ii+1]));
+    }
+
+    TH1D* hrefMult = mh3VzZdcMult -> ProjectionZ("_pz",binVzmin, binVzup, binZDCmin, binZDCmax, "");
+    hrefMult->Draw();
+    outEvent->cd();
+    hrefMult->Write("hrefMult");
+    outEvent->Close();
 
     for(int iParticle = 0; iParticle < nParticles; ++iParticle){
         for (int iEta = 0; iEta < nEtas; ++iEta) {
