@@ -11,7 +11,7 @@ namespace vars {
 
 //histo stuff
     const int m_nPtTOF = 19;
-    float const m_PtTOFedge[m_nPtTOF+1] = {0.2,0.3,0.4,0.5,0.6,0.8,1.,1.25,1.5,2.,3.0,4.,5.,6.,7,8,9,10,11,12.};
+    float const m_PtTOFedge[m_nPtTOF+1] = {0.15,0.3,0.4,0.5,0.6,0.8,1.,1.25,1.5,2.,3.0,4.,5.,6.,7,8,9,10,11,12.};
 
 //    const int m_nZdc = 10;
 //    float const m_zdcEdge[m_nZdc+1] = {0,50,70,90,110,130,150,170,190,210,250};
@@ -41,7 +41,7 @@ namespace vars {
 //    float const m_PtEdgeDca[m_nPtsDca + 1] = {0.3, 0.4, 0.5, 0.6,  0.7, 0.8, 0.9, 1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3.0, 3.5, 4.0, 6.0, 12.0};
 
     const int m_nPtsDca = 12;
-    float const m_PtEdgeDca[m_nPtsDca + 1] = {0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1., 1.25, 1.5, 2., 3., 5., 12.};
+    float const m_PtEdgeDca[m_nPtsDca + 1] = {0.15, 0.3, 0.4, 0.5, 0.6, 0.8, 1., 1.25, 1.5, 2., 3., 5., 12.};
 
     const int m_nEtasRatio = 10;
     float const m_EtaEdgeRatio[m_nEtasRatio + 1] = { -1.0, -0.8, -0.6, -0.4, -0.2, 0.0, 0.2, 0.4 , 0.6, 0.8, 1.0};
@@ -63,7 +63,7 @@ namespace vars {
     const int m_nPtsRatio = 15;
     float const m_PtEdgeRatio[m_nPtsRatio + 1] =
             {
-                    0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 2.0, 2.5, 3.0, 4.0, 6.0, 12.0
+                    0.15, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 2.0, 2.5, 3.0, 4.0, 6.0, 12.0
             };
 
 //    const int m_nPtsRatio = 36;

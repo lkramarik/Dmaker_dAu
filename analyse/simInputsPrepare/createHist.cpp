@@ -2,6 +2,7 @@
 // Created by lukas on 3.4.2018.
 //
 #include "TH3D.h"
+#include "TH3F.h"
 #include "TFile.h"
 #include "TH2D.h"
 #include "TString.h"
@@ -25,11 +26,17 @@ void createHist() {
     TFile fDca1("2101.hists.root");
 //    TFile fDca1("ratio.hists.0810.root");
     TFile *outRatioPion = new TFile("hftratio_vs_pt_dAu_pion.root", "RECREATE");
+    outRatioPion->SetCompressionSettings(0);
     TFile *outRatioKaon = new TFile("hftratio_vs_pt_dAu_kaon.root", "RECREATE");
+    outRatioKaon->SetCompressionSettings(0);
+
+
     TFile *outHist2d = new TFile("2d.root", "RECREATE");
-    TFile *outEvent = new TFile("event.test.root", "RECREATE");
+//    TFile *outHist2dLowStats = new TFile("2d_badstats.root", "RECREATE");
+    TFile *outEvent = new TFile("inputs.event.root", "RECREATE");
+    outEvent->SetCompressionSettings(0);
+
     int multEdge[nmultEdge + 1] = {0, 4, 8, 12, 16, 20, 24, 200};
-//    float const multEdge[nmultEdge + 1] = {0, 4, 8, 12, 16, 20, 24, 200};
 
 //    const Double_t ptEdge[nPtBins + 1] = {0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3.0, 3.5, 4.0, 6.0, 12.0};
 //    const int m_nZdc = 5;
@@ -45,34 +52,36 @@ void createHist() {
 
     //VZ and ZDC test, this is directly in simulation
     TH3F* mh3VzZdcMult = (TH3F*)fDca1.Get("mh3VzZdcMult");
+    outEvent->cd();
+    mh3VzZdcMult->Write();
+
+    int binVzmin = 1;
+    int binVzup = mh3VzZdcMult->GetXaxis()->GetNbins(); //ok
+    int binZDCmin = 1;
+    int binZDCmax = mh3VzZdcMult->GetYaxis()->GetNbins(); //ok
+
     for (int ii = 0; ii < nmultEdge; ++ii)   {
-        int binVzmin = 0;
-        int binVzup = mh3VzZdcMult->GetXaxis()->GetNbins(); //ok
-        int binZDCmin = 0;
-        int binZDCmax = mh3VzZdcMult->GetYaxis()->GetNbins(); //ok
         int binMultmin = mh3VzZdcMult->GetZaxis()->FindBin(multEdge[ii]);
         int binMultmax = mh3VzZdcMult->GetZaxis()->FindBin(multEdge[ii+1]);
         cout<<multEdge[ii]<<" "<<multEdge[ii+1]<<endl;
         cout<<binMultmin<<" "<<binMultmax<<endl;
         cout<<mh3VzZdcMult->GetZaxis()->GetNbins()<<endl;
+        outEvent->cd();
 
         h1Vz[ii] = mh3VzZdcMult -> ProjectionX("_px",binZDCmin, binZDCmax, binMultmin, binMultmax, ""); //vz zdc
         h1Vz[ii]->SetDirectory(0);
-        outEvent->cd();
         h1Vz[ii]->Write(Form("vz_mult_%i_%i", (int)multEdge[ii], (int)multEdge[ii+1]));
-
         h1ZdcX[ii] = mh3VzZdcMult -> ProjectionY("_py",binVzmin, binVzup, binMultmin, binMultmax, ""); //vz zdc
         h1ZdcX[ii]->SetDirectory(0);
         h1ZdcX[ii]->Scale(1/h1ZdcX[ii]->GetEntries());
-        h1ZdcX[ii]->Write();
+        h1ZdcX[ii]->Write(Form("zdc_mult_%i_%i", (int)multEdge[ii], (int)multEdge[ii+1]));
     }
 
+    TH1D* hrefMult = mh3VzZdcMult -> ProjectionZ("_pz",binVzmin, binVzup, binZDCmin, binZDCmax, "");
+    hrefMult->Draw();
+    hrefMult->Write("hrefMult");
 
 
-//    for (int iParticle = 0; iParticle < 2; ++iParticle) {
-//        for (int iEta = 0; iEta < 2; ++iEta) {
-//            for (int iVz = 0; iVz < 2; ++iVz) {
-//                for (int iPhi = 0; iPhi < 2; ++iPhi) {
     for (int iParticle = 0; iParticle < 2; ++iParticle) {
         for (int iEta = 0; iEta < nEtas; ++iEta) {
             for (int iVz = 0; iVz < nVzs; ++iVz) {
@@ -95,7 +104,7 @@ void createHist() {
                         continue;
                     }
 
-                    TH2F *hist2Dtpc = (TH2F*)hist3Dtpc->Project3D("xze"); // result: y = pt, x = ZDC
+                    TH2F *hist2Dtpc = (TH2F*)hist3Dtpc->Project3D("xze"); // result: y = pt, x = ZDC; skipping multiplicity
                     TH2F *hist2D = (TH2F*)hist3D->Project3D("xze");
 
                     TString name = Form("h2_tpc_zdc_pt_p%d_eta%d_vz%d_phi%d", iParticle, iEta, iVz, iPhi);
