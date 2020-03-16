@@ -46,8 +46,8 @@ void pvAnalyse(){
 //    TCut* detCuts = new TCut("nGlobTracks>0 && nHftTracks>1.5 && abs(picoDstVx)<0.5 && abs(picoDstVy)<0.5");
 //    TString detCuts = "nGlobTracks>0 && nHftTracks>1.5 && abs(picoDstVx)<0.5 && abs(picoDstVy)<0.5 && sqrt(picoDstVx*picoDstVx+picoDstVy*picoDstVy)<0.5";
 //    TString detCuts = "nHftTracks>1.5 && sqrt(picoDstVx*picoDstVx+picoDstVy*picoDstVy)<0.5 && picoDstVy>-0.25 && picoDstVy<-0.16 && picoDstVx>-0.25 && picoDstVx<-0.16"; //hotspot
-//    TString detCuts = "nHftTracks>0 && picoDstVy>-0.25 && picoDstVy<-0.16 && picoDstVx>-0.25 && picoDstVx<-0.16"; //hotspot
-    TString detCuts = "nHftTracks>0"; //all
+    TString detCuts = "nHftTracks>0 && picoDstVy>-0.25 && picoDstVy<-0.16 && picoDstVx>-0.25 && picoDstVx<-0.16"; //hotspot
+//    TString detCuts = "nHftTracks>0"; //all
 //    TString detCuts = "nHftTracks>0 && (picoDstVy<-0.25 || picoDstVy>-0.16 || picoDstVx<-0.25 || picoDstVx>-0.16)"; //out of hotspot
 //    TString detCuts = "nGlobTracks>0 && nHftTracks>1.5";
     TString hisName, varName;
@@ -124,10 +124,19 @@ void pvAnalyse(){
     ntp->Project("hPVyVsZ", "picoDstVy:picoDstVz", detCuts);
     hPVyVsZ->Write();
 
+    TH2F* hPVerrXVsRefMult = new TH2F("picoDstVErrX_vs_refMult", "picoDstVErrX_vs_refMult", 200, 0, 200, 1000, 0, 1);
+    ntp->Project("picoDstVErrX_vs_refMult", "picoDstVErrX:refMult", detCuts);
+    hPVerrXVsRefMult->Write();
+
+    TH2F* hPVerrZVsRefMult = new TH2F("picoDstVErrZ_vs_refMult", "picoDstVErrZ_vs_refMult", 200, 0, 200, 1000, 0, 1);
+    ntp->Project("picoDstVErrZ_vs_refMult", "picoDstVErrZ:refMult", detCuts);
+    hPVerrZVsRefMult->Write();
+
     varName = "sqrt(picoDstVx**2+picoDstVy**2):sqrt(KFVx**2+KFVy**2)";
     TH2F* hdR = new TH2F("hdRCorrelation", varName, 2000, 0, 6, 2000, 0, 6);
     ntp->Project("hdRCorrelation", varName, detCuts);
     hdR->Write();
+
 
 
 
