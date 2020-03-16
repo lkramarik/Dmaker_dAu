@@ -31,7 +31,7 @@ public:
     bool isGoodPion(StPicoTrack const * const trk) const;
     bool isGoodKaon(StPicoTrack const * const trk) const;
     bool isGoodProton(StPicoTrack const * const trk) const;
-
+    bool checkHotSpot(TVector3*) const;
     // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
     // -- DCA to Primary vertex
     // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
@@ -103,6 +103,7 @@ public:
 
     void setCutVzMax(float f);
     void setCutVzVpdVzMax(float f);
+    void setCheckHotSpot(bool b);
 
     void setCutNHitsFitMin(int i);
     void setCutRequireHFT(bool b);
@@ -193,16 +194,16 @@ private:
     float mVzMax;
     float mVzVpdVzMax;
 
-
     // -- tracking
     int   mNHitsFitMin;
     bool  mRequireHFT;
-    bool  mHybridTof;
     float mNHitsFitnHitsMax;
-
     float mPrimaryDCAtoVtxMax;         // used for primary selection for TOF Beta recalculation
-
     float mPtMin;
+    bool  mHybridTof;
+    bool mOnlyHotSpot;
+
+
     // -- acceptance - per particle type [ePicoPID]
     float mPtRange[kPicoPIDMax][2];
 
@@ -228,6 +229,8 @@ inline void StPicoCutsBase::addTriggerId(unsigned int triggerId) {mVecTriggerIdL
 
 inline void StPicoCutsBase::setCutVzMax(float f)              { mVzMax            = f; }
 inline void StPicoCutsBase::setCutVzVpdVzMax(float f)         { mVzVpdVzMax       = f; }
+
+inline void StPicoCutsBase::setCheckHotSpot(bool b)         { mOnlyHotSpot       = b; }
 
 inline void StPicoCutsBase::setCutNHitsFitMin(int i)          { mNHitsFitMin      = i; }
 inline void StPicoCutsBase::setCutRequireHFT(bool b)          { mRequireHFT       = b; }

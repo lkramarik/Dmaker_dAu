@@ -80,8 +80,8 @@ int StPicoSimInputsMaker::createQA(){
         bool tpcPion = false;
         bool tpcKaon = false;
 
-        if(mHFCuts->isGoodPion(trk)) tpcPion = true;
-        if(mHFCuts->isGoodKaon(trk)) tpcKaon = true;
+        if(mHFCuts->isTPCPion(trk)) tpcPion = true;
+        if(mHFCuts->isTPCKaon(trk)) tpcKaon = true;
 
         if(mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kPion)) tofPion = true;
         if(mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon)) tofKaon = true;
@@ -100,7 +100,7 @@ int StPicoSimInputsMaker::createQA(){
         int PhiIndex = getPhiIndexRatio(momentum.Phi());
         if ((EtaIndex==-1) || (PhiIndex==-1)) continue;
 
-        if (trk->isHFTTrack()) {
+//        if (trk->isHFTTrack()) {
             for (int i = 0; i < 3; ++i) {
                 if (trk->nSigmaPion() < i + 1) {
                     if (tofPion) { h1TofmatchTOF[0][i]->Fill(momentum.Perp()); }
@@ -112,7 +112,7 @@ int StPicoSimInputsMaker::createQA(){
                     h1Tofmatch[1][i]->Fill(momentum.Perp());
                 }
             }
-        }
+//        }
 
         if (trk->isHFTTrack() && (goodPion || goodKaon) && vars::dcaHists){
             addDcaPtCent(dca, dcaXy, dcaZ, goodPion, goodKaon, momentum.Perp(), multiplicity, EtaIndex, PhiIndex, mPrimVtx.z(), ZdcIndex);
@@ -189,7 +189,7 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
 
     }
 
-    mh3VzZdcMult = new TH3F("mh3VzZdcMult", "mh3VzZdcMult", vars::m_nVzsRatio, vars::m_VzEdgeRatio, vars::m_nZdc, vars::m_zdcEdge, vars::m_nmultEdge, vars::m_multEdge);
+    mh3VzZdcMult = new TH3F("mh3VzZdcMult", "mh3VzZdcMult", 100, -6, 6, 100, 0, 250,  50, 0, 50);
 //    cout<<"endHistoint"<<endl;
 }
 
@@ -361,7 +361,7 @@ void StPicoSimInputsMaker::closeFile()
     }
 
     mh3VzZdcMult -> Write();
-    mOutFile->Write();
+//    mOutFile->Write();
     mOutFile->Close();
 
     //mOutFile->Delete();

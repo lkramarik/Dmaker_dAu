@@ -76,10 +76,13 @@ StMixerPair::StMixerPair(StPicoTrack const&  particle1, StPicoTrack const& parti
     mLorentzVector = p1FourMom + p2FourMom;
 
     // -- calculate cosThetaStar
-    TVector3 const pairFourMomReverse(-mLorentzVector.Px(), -mLorentzVector.Py(), -mLorentzVector.Pz());
-    TLorentzVector p1FourMomStar = p1FourMom;
-    p1FourMomStar.Boost(pairFourMomReverse);
-    mCosThetaStar = std::cos(p1FourMomStar.Vect().Angle(mLorentzVector.Vect()));
+//    TVector3 const pairFourMomReverse(-mLorentzVector.Px(), -mLorentzVector.Py(), -mLorentzVector.Pz());
+//    TLorentzVector p1FourMomStar = p1FourMom;
+//    p1FourMomStar.Boost(pairFourMomReverse);
+//    mCosThetaStar = std::cos(p1FourMomStar.Vect().Angle(mLorentzVector.Vect()));
+
+    mCosThetaStar = p2FourMom.Vect().Unit().Dot(mLorentzVector.Vect().Unit()); //same as in FastSim
+    if (mCosThetaStar!=mCosThetaStar) mCosThetaStar=-999;
 
     // -- calculate decay vertex (secondary or tertiary)
     mDecayVertex = (p1AtDcaToP2 + p2AtDcaToP1) * 0.5 ;

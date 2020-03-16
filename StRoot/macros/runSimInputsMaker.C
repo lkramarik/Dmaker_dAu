@@ -16,9 +16,9 @@
 using namespace std;
 
 void runSimInputsMaker(
-    const char*  inputFile,
-    const Char_t *outputFile,  
-    const Char_t *badRunListFileName) {
+    const Char_t *inputFile="./picoLists/runs_local_test.list",
+    const Char_t *outputFile="outputLocal",
+    const Char_t *badRunListFileName = "./picoLists/picoList_bad.list") {
     string SL_version = "SL18f";
     string env_SL = getenv ("STAR");
     if (env_SL.find(SL_version)==string::npos) {
@@ -40,11 +40,12 @@ void runSimInputsMaker(
     hfCuts->addTriggerId(530003); //VPD-5
     hfCuts->setCutVzMax(6);
     hfCuts->setCutVzVpdVzMax(6.);
+    hfCuts->setCheckHotSpot(true);
 
     hfCuts->setCutNHitsFitMin(15);
     hfCuts->setCutRequireHFT(false); //we want to study HFT ratio, thus need non-HFT tracks
     hfCuts->setHybridTof(true);
-    hfCuts->setCutPrimaryDCAtoVtxMax(1.5);
+    hfCuts->setCutPrimaryDCAtoVtxMax(4);
 
     hfCuts->setCutTPCNSigmaPion(3.0);
     hfCuts->setCutTPCNSigmaKaon(2.0);

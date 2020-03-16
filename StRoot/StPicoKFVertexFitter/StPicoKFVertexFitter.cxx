@@ -1,5 +1,5 @@
 #include <algorithm>
-#include "StarRoot/MTrack.h"
+//#include "StarRoot/MTrack.h"
 #include "StarRoot/KFVertex.h"
 #include "StiMaker/StKFVerticesCollection.h"
 #include "StEvent/StDcaGeometry.h"
@@ -16,7 +16,7 @@
 
 using namespace std;
 
-KFVertex StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* const picoDst, std::vector<int>& tracksToRemove) const {
+KFVertex StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* const picoDst, std::vector<int>& tracksToRemove) {
     // just in case it is not sorted
     std::sort(tracksToRemove.begin(),tracksToRemove.end());
 
@@ -26,9 +26,9 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* const picoDst
     // make a list of good tracks to be used in the KFVertex fit
     for (unsigned int iTrk = 0; iTrk < picoDst->numberOfTracks(); ++iTrk) {
         StPicoTrack* gTrack = (StPicoTrack*)picoDst->track(iTrk);
-        if (! gTrack) continue;
+        if (!gTrack) continue;
+        if (!gTrack->isPrimary()) continue;
         if(std::binary_search(tracksToRemove.begin(), tracksToRemove.end(), iTrk)) continue;
-        if(!gTrack->isPrimary()) continue; //no
         goodTracks.push_back(iTrk);
     }
 
@@ -36,18 +36,21 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* const picoDst
 }
 
 //________________________________________________________________________________
-KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* const picoDst, std::vector<int>& tracksToUse) const {
+KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* const picoDst, std::vector<int>& tracksToUse) {
     // fill an array of KFParticles
     KFParticle* particles[tracksToUse.size()];
     TVector3 Vtx = picoDst->event()->primaryVertex();
+//    StPicoTrack* gTrack=new StPicoTrack();
+//    StPicoTrackCovMatrix *cov=new StPicoTrackCovMatrix();
 
     for (size_t iTrk = 0; iTrk < tracksToUse.size(); ++iTrk) {
         StPicoTrack* gTrack = (StPicoTrack*)picoDst->track(tracksToUse[iTrk]);
-        StPicoTrackCovMatrix *cov = picoDst->trackCovMatrix(tracksToUse[iTrk]);
+        StPicoTrackCovMatrix *cov = (StPicoTrackCovMatrix*)picoDst->trackCovMatrix(tracksToUse[iTrk]);
         StDcaGeometry dcaG = dcaGeometry(cov);
         Double_t xyzp[6], CovXyzp[21];
         dcaG.GetXYZ(xyzp, CovXyzp);
 
+        /*
 	    Int_t q = 1;
         Int_t pdg = 211;
         if (gTrack->charge() < 0) {
@@ -62,6 +65,17 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
         track.SetCharge(q);
 
         particles[iTrk] = new KFParticle(track, pdg);
+        */
+
+        Int_t q = 1;
+        Int_t pdg = 211;
+        if (gTrack->charge() < 0) {
+            q=-1;
+            pdg=-211;
+        }
+
+        particles[iTrk] = new KFParticle();
+        particles[iTrk]->Create(xyzp, CovXyzp, q, pdg);
     }
 
     TArrayC Flag(tracksToUse.size());
@@ -76,11 +90,19 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
 
     aVertex.Create(parVertex,covVertex, 0, 0);
 
-    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), 5); //Yuri
+    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), 5); //Yuri - particles, that have worst hi2cut, are not used for final fit
+    //if flag is 0, track was not used for PV refit. If all flags are 0, PV is probably not good
+
+    nFlag0=0;
+    nFlag1=0;
+    for (int i = 0; i < tracksToUse.size(); ++i) {
+        if (Flag[i]==0) nFlag0++;
+        if (Flag[i]==1) nFlag1++;
+    }
+
 //    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), TMath::Sqrt(StAnneling::Chi2Cut()/2)); //original
 //    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), 3.5); //in makzym stuffs
 //    aVertex.ConstructPrimaryVertex((const KFParticle **) particles, tracksToUse.size(), (Bool_t*) Flag.GetArray(), StAnneling::Chi2Cut()); //ok
-
 
 //Yuri
 //    KFVertex     Vertex;
@@ -106,13 +128,6 @@ KFVertex StPicoKFVertexFitter::primaryVertexRefitUsingTracks(StPicoDst const* co
 
    // clean up
     for(size_t iTrk = 0; iTrk < tracksToUse.size(); ++iTrk) delete particles[iTrk];
-
-
-//    TVector3 kfVertex(-999.,-999.,-999.);
-//
-//    if (aVertex.GetX()) {
-//        kfVertex.SetXYZ(aVertex.GetX(), aVertex.GetY(), aVertex.GetZ());
-//    }
 
     return aVertex;
 }

@@ -11,15 +11,19 @@ namespace vars {
 
 //histo stuff
     const int m_nPtTOF = 19;
-    float const m_PtTOFedge[m_nPtTOF+1] = {0.2,0.3,0.4,0.5,0.6,0.8,1.,1.25,1.5,2.,3.0,4.,5.,6.,7,8,9,10,11,12.};
+    float const m_PtTOFedge[m_nPtTOF+1] = {0.15,0.3,0.4,0.5,0.6,0.8,1.,1.25,1.5,2.,3.0,4.,5.,6.,7,8,9,10,11,12.};
 
 //    const int m_nZdc = 10;
 //    float const m_zdcEdge[m_nZdc+1] = {0,50,70,90,110,130,150,170,190,210,250};
-    const int m_nZdc = 5;
-    float const m_zdcEdge[m_nZdc+1] = {0,50,90,130,170,210};
 
-    const int m_nZdcDCA = 3;
-    float const m_zdcEdgeDCA[m_nZdcDCA+1] = {0,90,170,210};
+//    const int m_nZdc = 5;
+//    float const m_zdcEdge[m_nZdc+1] = {0,50,90,130,170,210};
+
+    const int m_nZdc = 2;
+    float const m_zdcEdge[m_nZdc+1] = {0,150,210};
+
+    const int m_nZdcDCA = 2;
+    float const m_zdcEdgeDCA[m_nZdcDCA+1] = {0,150,210};
 
     const int m_nParticles = 2;
     const TString m_ParticleName[m_nParticles] = {"Pion", "Kaon"};
@@ -33,14 +37,11 @@ namespace vars {
     const int m_nVzsDca = 4;
     float const m_VzEdgeDca[m_nVzsDca + 1] = { -6.0, -3.0, 0, 3.0, 6.0};
 
-    const int m_nCentsDca = 9;
-    float const m_CentEdgeDca[m_nCentsDca + 1] = { -0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5};
-
 //    const int m_nPtsDca = 19;
 //    float const m_PtEdgeDca[m_nPtsDca + 1] = {0.3, 0.4, 0.5, 0.6,  0.7, 0.8, 0.9, 1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3.0, 3.5, 4.0, 6.0, 12.0};
 
     const int m_nPtsDca = 12;
-    float const m_PtEdgeDca[m_nPtsDca + 1] = {0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1., 1.25, 1.5, 2., 3., 5., 12.};
+    float const m_PtEdgeDca[m_nPtsDca + 1] = {0.15, 0.3, 0.4, 0.5, 0.6, 0.8, 1., 1.25, 1.5, 2., 3., 5., 12.};
 
     const int m_nEtasRatio = 10;
     float const m_EtaEdgeRatio[m_nEtasRatio + 1] = { -1.0, -0.8, -0.6, -0.4, -0.2, 0.0, 0.2, 0.4 , 0.6, 0.8, 1.0};
@@ -51,16 +52,18 @@ namespace vars {
     const int m_nVzsRatio = 6;
     float const m_VzEdgeRatio[m_nVzsRatio + 1] = { -6.0, -4.0, -2.0, 0, 2.0, 4.0, 6.0};
 
-    const int m_nCentsRatio = 10; //not using
-    float const m_CentEdgeRatio[m_nCentsRatio + 1] = { -1.5, -0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5}; //not using
+//    const int m_nmultEdge = 1; //7
+//    float const m_multEdge[m_nmultEdge+1] = {0, 200}; //currently not used in dca
 
-    const int m_nmultEdge = 1; //7
-    float const m_multEdge[m_nmultEdge+1] = {0, 200}; //currently not used in dca
+    const int m_nmultEdge = 7;
+    float const m_multEdge[m_nmultEdge+1] = {0, 4, 8, 12, 16, 20, 24, 200}; //currently not used in dca
+//    int multEdge[nmultEdge + 1] = {0, 4, 8, 12, 16, 20, 24, 200};
+
 
     const int m_nPtsRatio = 15;
     float const m_PtEdgeRatio[m_nPtsRatio + 1] =
             {
-                    0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 2.0, 2.5, 3.0, 4.0, 6.0, 12.0
+                    0.15, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 2.0, 2.5, 3.0, 4.0, 6.0, 12.0
             };
 
 //    const int m_nPtsRatio = 36;

@@ -38,7 +38,7 @@ void runQAAnaMaker(
 
     hfCuts->setBadRunListFileName(badRunListFileName);
     hfCuts->addTriggerId(530003); //VPD-5
-
+    hfCuts->setCheckHotSpot(true);
     //    hfCuts->addTriggerId(2); //ZDC-VPD-5
 //    hfCuts->addTriggerId(3); //VPD-5
 //    hfCuts->addTriggerId(6);  //highMult-VPD-5

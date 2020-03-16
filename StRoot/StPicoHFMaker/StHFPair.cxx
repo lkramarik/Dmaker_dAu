@@ -4,6 +4,7 @@
 #include "StPicoEvent/StPicoPhysicalHelix.h"
 #include "StarClassLibrary/SystemOfUnits.h"
 #include "StPicoEvent/StPicoTrack.h"
+#include "StTypeDefs.h"
 
 ClassImp(StHFPair)
 
@@ -21,6 +22,12 @@ StHFPair::StHFPair(StHFPair const * t) : mLorentzVector(t->mLorentzVector), mDec
    mParticle1Dca(t->mParticle1Dca), mParticle2Dca(t->mParticle2Dca),
    mParticle1Idx(t->mParticle1Idx), mParticle2Idx(t->mParticle2Idx),
    mDcaDaughters(t->mDcaDaughters), mCosThetaStar(t->mCosThetaStar) {
+}
+
+// _________________________________________________________
+StHFPair::~StHFPair() {
+    // destructor
+
 }
 
 // _________________________________________________________
@@ -98,6 +105,7 @@ StHFPair::StHFPair(StPicoTrack const * const particle1, StPicoTrack const * cons
   mParticle1Dca = (p1Helix.origin() - vtx).Mag();
   mParticle2Dca = (p2Helix.origin() - vtx).Mag();
 
+  if (mParticle1Dca<0 || mParticle2Dca<0) mParticle2Dca=9999;
 //  mParticle1Dca = (vtx - particle1->origin()).Mag();
 //  mParticle2Dca = (vtx - particle2->origin()).Mag();
 }
