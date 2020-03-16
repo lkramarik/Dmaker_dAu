@@ -1,7 +1,9 @@
 #!/bin/bash
 cd workDir
 productionId=`date +%F_%H-%M`_D0
-analyzer="lkramarik"
+
+starver SL18f
+cons
 
 mkdir $productionId
 cd $productionId

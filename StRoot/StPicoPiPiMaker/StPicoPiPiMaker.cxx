@@ -26,7 +26,7 @@ int StPicoPiPiMaker::InitHF() {
 
     mOutFileBaseName = mOutFileBaseName.ReplaceAll(".root", "");
 
-    TString ntpVars = "pi1_pt:pi1_dca:pi1_nSigma:pi1_nHitFit:pi1_eta:pi1_phi:pi1_TOFinvbeta:pi2_pt:pi2_dca:pi2_nSigma:pi2_nHitFit:pi2_eta:pi2_phi:pi2_TOFinvbeta:dcaDaughters:primVz:primVzVpd:bbcRate:nTofTracks:nBTOFMatch:nHftTracks:pair_cosTheta:pair_decayL:pair_dcaToPv:pair_pt:pair_mass";
+    TString ntpVars = "pi1_pt:pi1_dca:pi1_nSigma:pi1_nHitFit:pi1_eta:pi1_phi:pi1_TOFinvbeta:pi2_pt:pi2_dca:pi2_nSigma:pi2_nHitFit:pi2_eta:pi2_phi:pi2_TOFinvbeta:dcaDaughters:hotSpot:primVz:primVzVpd:bbcRate:nTofTracks:nBTOFMatch:nHftTracks:pair_cosTheta:pair_decayL:pair_dcaToPv:pair_pt:pair_mass";
 
     ntp_signal = new TNtuple("ntp_signal","Ks_Signal", ntpVars);
     ntp_background = new TNtuple("ntp_background","Ks_background",ntpVars);
@@ -75,6 +75,9 @@ int StPicoPiPiMaker::createCandidates() {
             StHFPair *pair = new StHFPair(pion1, pion2, mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion),mHFCuts->getHypotheticalMass(StPicoCutsBase::kPion), mIdxPicoPions[j], mIdxPicoPions[i], mPrimVtx, mBField, kTRUE);
             if (!mHFCuts->isGoodSecondaryVertexPair(pair)) continue;
 
+            Float_t hotSpot=0;
+            if (mHFCuts->checkHotSpot(&mPrimVtx)) hotSpot=1;
+
             bool isKs = false;
             if (pion1->charge()+pion2->charge() == 0) isKs = true;
 
@@ -98,6 +101,7 @@ int StPicoPiPiMaker::createCandidates() {
             ntVar[ii++] = mHFCuts->getOneOverBeta(pion2, mHFCuts->getTofBetaBase(pion2), StPicoCutsBase::kPion);
 
             ntVar[ii++] = pair->dcaDaughters();
+            ntVar[ii++] = hotSpot;
             ntVar[ii++] = mPrimVtx.z();
             ntVar[ii++] = mPicoEvent->vzVpd();
             ntVar[ii++] = mPicoEvent->BBCx() / 1000.;

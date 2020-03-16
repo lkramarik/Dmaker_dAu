@@ -4,14 +4,19 @@
 #include "TCanvas.h"
 #include "TLegend.h"
 #include "TNtuple.h"
+#include "TPaveText.h"
 #include "TFile.h"
+#include "TF1.h"
+#include "TLatex.h"
 #include <iostream>
+#include "TSystem.h"
 
 using namespace std;
 
 void pvAnalyseKFreso() {
-    TString input = "ntp.vertexKF.small.1204.root";
-//    TString input = "ntp.KFVertexReso.1704.root";
+//    TString input = "ntp.KFVertex.global.2105.root";
+    TString input = "ntp.PVrefit.global.root";
+//    TString input = "ntp.KFVertexReso.1605.root";
     TFile *data = new TFile(input, "r");
     TNtuple *ntp = (TNtuple *) data->Get("ntp_KFReso");
     TFile *fOut = new TFile("res.KFreso.prim30." + input, "recreate");
@@ -23,50 +28,98 @@ void pvAnalyseKFreso() {
 
     TString var[] = {"", "x", "y", "z"};
 
-    Float_t limsMin[] = {0, -1, -1, -1};
-    Float_t limsMax[] = {1, 1, 1, 1};
+    Float_t limsMin[] = {0, -0.6, -1, -1};
+    Float_t limsMax[] = {1, 0.6, 1, 1};
 
-    int nPrimMin = 30;
-    int nHftMin = 1;
+    int nPrimMin = 10;
+    int nHftMin = 2;
 //    TString detCuts = "nPrimTracks>0 && nHftTracks>1.5 && abs(picoDstVx)<0.5 && abs(picoDstVy)<0.5";
-//    TString detCuts = Form("nPrimTracks>%i &&  nHftTracks>%i", nPrimMin, nHftMin);
-    TString detCuts = Form("nPrimTracks>%i", nPrimMin);
+    TString detCuts = Form("nPrimTracks>%i && nHftTracks>%i", nPrimMin, nHftMin);
+//    TString detCuts = Form("nPrimTracks>%i && nHftTracks>%i", nPrimMin, nHftMin);
+    TString folder = Form("nPrimMin%i_nHftMin%i_%s/", nPrimMin, nHftMin, input.Data());
+    gSystem->Exec(Form("mkdir %s", folder.Data()));
+
+//    TString detCuts = Form("nPrimTracks>%i", nPrimMin);
 
     TString hisName, varName;
     TCut cut1, cut2;
     TCanvas *c = new TCanvas("c1", "c1", 900, 1200);
     c->SetGrid();
+
+//    Double_t fwhm = 0, sigma = 0;
+
     for (int j = 0; j < 4; ++j) { //variable to project
+        TPaveText *text4 = new TPaveText(0.35, 0.848, 0.229, 0.873, "brNDC");
+        text4->SetTextSize(0.03);
+        text4->SetLineColor(0);
+        text4->SetShadowColor(0);
+        text4->SetFillColor(0);
+
         varName = Form("KFdiff%s", var[j].Data());
-        hVar = new TH1F(varName, varName, 1000, limsMin[j], limsMax[j]);
-        ntp->Project(varName, varName, detCuts);
+        hVar = new TH1F(var[j], var[j], 1500, limsMin[j], limsMax[j]);
+        ntp->Project(var[j], varName, detCuts);
         hVar->Rebin(2);
         hVar->SetStats(0);
-        hVar->SetTitle("");
+        hVar->SetTitle(detCuts);
         hVar->Scale(1/hVar->GetEntries());
         hVar->SetFillColor(46);
         hVar->SetFillStyle(3004);
+        hVar->SetMarkerStyle(20);
         hVar->SetLineColor(46);
+        hVar->SetMarkerColor(46);
         fOut->cd();
         hVar->GetXaxis()->SetTitle(Form("#Delta%s(KF1,KF2) [cm]", var[j].Data()));
-        hVar->GetYaxis()->SetTitleOffset(0.8);
+        hVar->GetYaxis()->SetTitleOffset(1.3);
         hVar->GetYaxis()->SetTitle("1/N");
+        TF1 *fun0 = new TF1("fun0", "[constant]/( pi*[gamma]*(1+(x-[mean])*(x-[mean])/([gamma]*[gamma])))+[jump]", -0.05, 0.05);
+        fun0->SetParameter(1, 0.005);
+        fun0->SetParLimits(1, 0.001, 1); //gamma
+        fun0->SetParLimits(2, -0.01, 0.01);
+        fun0->SetParameter(2, 0.001);
+        fun0->SetParLimits(3, -0.01, 0.01);
+        fun0->SetLineColor(46);
+        if (j!=0) {
+            hVar->Fit("fun0", "M", "R", -0.07, 0.07);
+            Double_t gamma = fun0->GetParameter(1);
+            cout<<gamma<<endl;
+            Double_t fwhm = 2*gamma;
+            cout<<fwhm<<endl;
+            text4->AddText(Form("FWHM: %.0f #mum", fwhm*10000));
+        }
 
         c->SetLogy();
         hVar->Draw("HIST");
-        c->SaveAs(varName + ".png");
+
+        c->SaveAs(folder + var[j] + ".png");
         hVar->Write();
         c->Clear();
-        hVar->GetXaxis()->SetRangeUser(limsMin[j]/3, limsMax[j]/3);
+        hVar->GetXaxis()->SetRangeUser(-0.07, 0.07);
 
 //        TCanvas *c = new TCanvas("c1", "c1", 900, 1200);
         c->SetLogy();
-        hVar->Draw("HIST");
-        c->SaveAs(varName + ".zoom.png");
+        hVar->Draw();
+        if (j!=0) text4->Draw("same");
+
+        c->SaveAs(folder + var[j] + ".zoom.png");
         c->Clear();
 
         hVar->Reset();
     }
+
+    c->SetLogy(0);
+    hVar = new TH1F("gRefMult", "gRefMult", 60, 0, 60);
+    ntp->Project("gRefMult", "grefMult", detCuts);
+    hVar->GetXaxis()->SetTitle("gRefMult");
+    hVar->GetYaxis()->SetTitle("N_{evts}");
+    hVar->GetYaxis()->SetTitleOffset(0.8);
+    hVar->SetFillColor(46);
+    hVar->SetLineColor(46);
+    hVar->SetFillStyle(3004);
+    hVar->SetStats(0);
+    hVar->SetTitle("");
+    hVar->Draw("HIST");
+
+    c->SaveAs(folder + "grefMult.png");
 
     fOut->Close();
     data->Close();

@@ -32,20 +32,21 @@ public:
     StPicoKFVertexFitter() {}
     ~StPicoKFVertexFitter() {}
 
-//    StDcaGeometry &dcaGeometry() const;
+    KFVertex primaryVertexRefit(StPicoDst const*);
+    KFVertex primaryVertexRefit(StPicoDst const*, std::vector<int>&);
+    KFVertex primaryVertexRefitUsingTracks(StPicoDst const*, std::vector<int>&);
 
-    KFVertex primaryVertexRefit(StPicoDst const*) const;
+    int nFlag0;
+    int nFlag1;
 
-    KFVertex primaryVertexRefit(StPicoDst const*, std::vector<int>&) const;
-
-    KFVertex primaryVertexRefitUsingTracks(StPicoDst const*, std::vector<int>&) const;
 
 private:
     StDcaGeometry dcaGeometry(StPicoTrackCovMatrix const*) const;
+
+
 };
 
-inline KFVertex StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* picoDst) const
-{
+inline KFVertex StPicoKFVertexFitter::primaryVertexRefit(StPicoDst const* picoDst) {
     std::vector<int> v;
     return primaryVertexRefit(picoDst,v);
 }

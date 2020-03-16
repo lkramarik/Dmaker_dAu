@@ -46,6 +46,7 @@ void runPicoD0AnaMaker(
     hfCuts->setCutNHitsFitMin(15);
     hfCuts->setCutRequireHFT(true);
     hfCuts->setHybridTof(true);
+    hfCuts->setCheckHotSpot(false);
 
     hfCuts->setCutTPCNSigmaPion(3.0);
     hfCuts->setCutTPCNSigmaKaon(2.0);
@@ -53,8 +54,8 @@ void runPicoD0AnaMaker(
     hfCuts->setCutTOFDeltaOneOverBetaPion(0.03);
     hfCuts->setCutPtMin(0.15);
 
-    hfCuts->setCutDcaMin(0.001,StHFCuts::kPion);
-    hfCuts->setCutDcaMin(0.001,StHFCuts::kKaon);
+    hfCuts->setCutDcaMin(0.002,StHFCuts::kPion);
+    hfCuts->setCutDcaMin(0.002,StHFCuts::kKaon);
 
     float dcaDaughtersMax = 0.04;  // maximum toto ide
     float decayLengthMin  = 0.001; // minimum
@@ -83,6 +84,7 @@ void runPicoD0AnaMaker(
 
     StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
     StPicoD0AnaMaker* PicoD0AnaMaker = new StPicoD0AnaMaker("picoD0AnaMaker", picoDstMaker, outputFile);
+    PicoD0AnaMaker->workWithRefit(false);
     PicoD0AnaMaker->setHFBaseCuts(hfCuts);
 
 //    StPicoD0V2AnaMaker* PicoD0V2AnaMaker = new StPicoD0V2AnaMaker("picoD0V2AnaMaker", picoDstMaker, outputFile);

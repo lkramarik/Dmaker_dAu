@@ -26,7 +26,7 @@ int StPicoKKMaker::InitHF() {
 
     mOutFileBaseName = mOutFileBaseName.ReplaceAll(".root", "");
 
-    TString ntpVars = "pi1_pt:pi1_dca:pi1_nSigma:pi1_nHitFit:pi1_eta:pi1_phi:pi1_TOFinvbeta:pi2_pt:pi2_dca:pi2_nSigma:pi2_nHitFit:pi2_eta:pi2_phi:pi2_TOFinvbeta:dcaDaughters:primVz:primVzVpd:bbcRate:nTofTracks:nBTOFMatch:nHftTracks:pair_cosTheta:pair_decayL:pair_dcaToPv:pair_pt:pair_mass";
+    TString ntpVars = "pi1_pt:pi1_dca:pi1_nSigma:pi1_nHitFit:pi1_eta:pi1_phi:pi1_TOFinvbeta:pi2_pt:pi2_dca:pi2_nSigma:pi2_nHitFit:pi2_eta:pi2_phi:pi2_TOFinvbeta:dcaDaughters:hotSpot:primVz:primVzVpd:bbcRate:nTofTracks:nBTOFMatch:nHftTracks:pair_cosTheta:pair_decayL:pair_dcaToPv:pair_pt:pair_mass";
 
     ntp_signal = new TNtuple("ntp_signal","phi_Signal", ntpVars);
     ntp_background = new TNtuple("ntp_background","phi_background",ntpVars);
@@ -75,6 +75,8 @@ int StPicoKKMaker::createCandidates() {
 //            if (!mHFCuts->isClosePair(pair)) continue;
             if (!mHFCuts->isGoodSecondaryVertexPair(pair)) continue;
 
+            Float_t hotSpot=0;
+            if (mHFCuts->checkHotSpot(&mPrimVtx)) hotSpot=1;
 
             bool isPhi = false;
             if (kaon1->charge()+kaon2->charge() == 0) isPhi = true;
@@ -98,6 +100,7 @@ int StPicoKKMaker::createCandidates() {
             ntVar[ii++] = mHFCuts->getOneOverBeta(kaon2, mHFCuts->getTofBetaBase(kaon2), StPicoCutsBase::kKaon);
 
             ntVar[ii++] = pair->dcaDaughters();
+            ntVar[ii++] = hotSpot;
             ntVar[ii++] = mPrimVtx.z();
             ntVar[ii++] = mPicoEvent->vzVpd();
             ntVar[ii++] = mPicoEvent->BBCx() / 1000.;
