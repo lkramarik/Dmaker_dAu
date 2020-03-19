@@ -45,7 +45,7 @@ void runSimInputsMaker(
     hfCuts->setCutNHitsFitMin(15);
     hfCuts->setCutRequireHFT(false); //we want to study HFT ratio, thus need non-HFT tracks
     hfCuts->setHybridTof(true);
-    hfCuts->setCutPrimaryDCAtoVtxMax(4);
+    hfCuts->setCutPrimaryDCAtoVtxMax(1.5);
 
     hfCuts->setCutTPCNSigmaPion(3.0);
     hfCuts->setCutTPCNSigmaKaon(2.0);

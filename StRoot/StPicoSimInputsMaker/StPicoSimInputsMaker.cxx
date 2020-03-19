@@ -118,6 +118,9 @@ int StPicoSimInputsMaker::createQA(){
             addDcaPtCent(dca, dcaXy, dcaZ, goodPion, goodKaon, momentum.Perp(), multiplicity, EtaIndex, PhiIndex, mPrimVtx.z(), ZdcIndex);
         }
 
+        goodKaon=true;
+        goodPion=true;
+
         if (vars::ratioHists) {
             if ((goodPion || goodKaon)) {
                 addTpcDenom1(goodPion, goodKaon, momentum.Perp(), multiplicity, EtaIndexRatio, PhiIndex, mPrimVtx.z(), mPicoDst->event()->ZDCx() / 1000.);
