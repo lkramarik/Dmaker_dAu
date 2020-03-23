@@ -164,14 +164,9 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
                 for (int iVz = 0; iVz < vars::m_nVzsRatio; iVz++) {
                     for (int iPhi = 0; iPhi < vars::m_nPhisRatio; iPhi++) {
                         mh2Tpc1PtCentPartEtaVzPhi[iParticle][iEta][iVz][iPhi] = new TH3F(Form("h3_tpc_mult_pt_p%d_eta%d_vz%d_phi%d", iParticle, iEta, iVz, iPhi), Form("h3_tpc_mult_pt_p%d_eta%d_vz%d_phi%d", iParticle, iEta, iVz, iPhi), vars::m_nPtsRatio, vars::m_PtEdgeRatio, vars::m_nmultEdge,
-                                                                                         vars::m_multEdge, vars::m_nZdc, vars::m_zdcEdge);
+                                vars::m_multEdge, vars::m_nZdc, vars::m_zdcEdge);
                         mh2HFT1PtCentPartEtaVzPhi[iParticle][iEta][iVz][iPhi] = new TH3F(Form("h3_hft_mult_pt_p%d_eta%d_vz%d_phi%d", iParticle, iEta, iVz, iPhi), Form("h3_hft_mult_pt_p%d_eta%d_vz%d_phi%d", iParticle, iEta, iVz, iPhi), vars::m_nPtsRatio, vars::m_PtEdgeRatio, vars::m_nmultEdge,
-                                                                                         vars::m_multEdge, vars::m_nZdc, vars::m_zdcEdge);
-
-//                        mh2Tpc1PtCentPartEtaVzPhi[iParticle][iEta][iVz][iPhi] = new TH3F(Form("h3_tpc_mult_pt_p%d_eta%d_vz%d_phi%d", iParticle, iEta, iVz, iPhi), Form("h3_tpc_mult_pt_p%d_eta%d_vz%d_phi%d", iParticle, iEta, iVz, iPhi), vars::m_nPtsRatio, vars::m_PtEdgeRatio, vars::m_nmultEdge,
-//                                                                                         vars::m_multEdge, vars::m_nZdc, vars::m_zdcEdge);
-//                        mh2HFT1PtCentPartEtaVzPhi[iParticle][iEta][iVz][iPhi] = new TH3F(Form("h3_hft_mult_pt_p%d_eta%d_vz%d_phi%d", iParticle, iEta, iVz, iPhi), Form("h3_hft_mult_pt_p%d_eta%d_vz%d_phi%d", iParticle, iEta, iVz, iPhi), vars::m_nPtsRatio, vars::m_PtEdgeRatio, vars::m_nmultEdge,
-//                                                                                         vars::m_multEdge, vars::m_nZdc, vars::m_zdcEdge);
+                                vars::m_multEdge, vars::m_nZdc, vars::m_zdcEdge);
                     }
                 }
             }
