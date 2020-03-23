@@ -166,6 +166,11 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
                                                                                          vars::m_multEdge, vars::m_nZdc, vars::m_zdcEdge);
                         mh2HFT1PtCentPartEtaVzPhi[iParticle][iEta][iVz][iPhi] = new TH3F(Form("h3_hft_mult_pt_p%d_eta%d_vz%d_phi%d", iParticle, iEta, iVz, iPhi), Form("h3_hft_mult_pt_p%d_eta%d_vz%d_phi%d", iParticle, iEta, iVz, iPhi), vars::m_nPtsRatio, vars::m_PtEdgeRatio, vars::m_nmultEdge,
                                                                                          vars::m_multEdge, vars::m_nZdc, vars::m_zdcEdge);
+
+//                        mh2Tpc1PtCentPartEtaVzPhi[iParticle][iEta][iVz][iPhi] = new TH3F(Form("h3_tpc_mult_pt_p%d_eta%d_vz%d_phi%d", iParticle, iEta, iVz, iPhi), Form("h3_tpc_mult_pt_p%d_eta%d_vz%d_phi%d", iParticle, iEta, iVz, iPhi), vars::m_nPtsRatio, vars::m_PtEdgeRatio, vars::m_nmultEdge,
+//                                                                                         vars::m_multEdge, vars::m_nZdc, vars::m_zdcEdge);
+//                        mh2HFT1PtCentPartEtaVzPhi[iParticle][iEta][iVz][iPhi] = new TH3F(Form("h3_hft_mult_pt_p%d_eta%d_vz%d_phi%d", iParticle, iEta, iVz, iPhi), Form("h3_hft_mult_pt_p%d_eta%d_vz%d_phi%d", iParticle, iEta, iVz, iPhi), vars::m_nPtsRatio, vars::m_PtEdgeRatio, vars::m_nmultEdge,
+//                                                                                         vars::m_multEdge, vars::m_nZdc, vars::m_zdcEdge);
                     }
                 }
             }
@@ -176,7 +181,7 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
         for (int iParticle = 0; iParticle < vars::m_nParticles; iParticle++) {
             for (int iEta = 0; iEta < vars::m_nEtasDca; iEta++) {
                 for (int iVz = 0; iVz < vars::m_nVzsDca; iVz++) {
-                    for (int iZdc = 0; iZdc < vars::m_nZdcDCA; iZdc++) {
+                    for (int iZdc = 0; iZdc < vars::m_nZdc; iZdc++) {
                         for (int iCent = 0; iCent < vars::m_nmultEdge; iCent++) {
 //                            cout<<Form("mh3DcaXyZPt_p%d_eta%d_vz%d_z%d_m%d", iParticle, iEta, iVz, iZdc, iCent)<<endl;
                             mh3DcaXyZPtCentPartEtaVzPhi[iParticle][iEta][iVz][iZdc][iCent] = new TH3F(Form("mh3DcaXyZPt_p%d_eta%d_vz%d_z%d_m%d", iParticle, iEta, iVz, iZdc, iCent), Form("mh3DcaXyZPt_p%d_eta%d_vz%d_z%d_m%d", iParticle, iEta, iVz, iZdc, iCent),
@@ -248,8 +253,8 @@ void StPicoSimInputsMaker::addDcaPtCent(float dca, float dcaXy, float dcaZ, bool
 
 // _________________________________________________________
 int StPicoSimInputsMaker::getZdcIndex(float zdc){
-    for (int i = 0; i < vars::m_nZdcDCA; i++){
-        if ((zdc >= vars::m_zdcEdgeDCA[i]) && (zdc < vars::m_zdcEdgeDCA[i + 1]))
+    for (int i = 0; i < vars::m_nZdc; i++){
+        if ((zdc >= vars::m_zdcEdge[i]) && (zdc < vars::m_zdcEdge[i + 1]))
             return i;
     }
     return -1;
@@ -326,7 +331,7 @@ void StPicoSimInputsMaker::closeFile()
         for (int iParticle = 0; iParticle < vars::m_nParticles; iParticle++) {
             for (int iEta = 0; iEta < vars::m_nEtasDca; iEta++) {
                 for (int iVz = 0; iVz < vars::m_nVzsDca; iVz++) {
-                    for (int iZdc = 0; iZdc < vars::m_nZdcDCA; iZdc++) {
+                    for (int iZdc = 0; iZdc < vars::m_nZdc; iZdc++) {
                         for (int iCent = 0; iCent < vars::m_nmultEdge; iCent++) {
                             mh3DcaXyZPtCentPartEtaVzPhi[iParticle][iEta][iVz][iZdc][iCent]->Write();
                         }

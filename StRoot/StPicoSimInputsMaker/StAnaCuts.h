@@ -19,11 +19,11 @@ namespace vars {
 //    const int m_nZdc = 5;
 //    float const m_zdcEdge[m_nZdc+1] = {0,50,90,130,170,210};
 
-    const int m_nZdc = 2;
-    float const m_zdcEdge[m_nZdc+1] = {0,150,210};
+    const int m_nZdc = 5; ///tmp
+    float const m_zdcEdge[m_nZdc+1] = {0,50,100,150,185,210}; ///tmp
 
-    const int m_nZdcDCA = 2;
-    float const m_zdcEdgeDCA[m_nZdcDCA+1] = {0,150,210};
+//    const int m_nZdc = 2;
+//    float const m_zdcEdge[m_nZdc+1] = {0,150,210};
 
     const int m_nParticles = 2;
     const TString m_ParticleName[m_nParticles] = {"Pion", "Kaon"};
@@ -60,11 +60,19 @@ namespace vars {
 //    int multEdge[nmultEdge + 1] = {0, 4, 8, 12, 16, 20, 24, 200};
 
 
-    const int m_nPtsRatio = 15;
-    float const m_PtEdgeRatio[m_nPtsRatio + 1] =
+//    const int m_nPtsRatio = 15;
+//    float const m_PtEdgeRatio[m_nPtsRatio + 1] =
+//            {
+//                    0.15, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 2.0, 2.5, 3.0, 4.0, 6.0, 12.0
+//            };
+
+//    const int m_nPtsRatio = 15; ///tmp
+    float const m_PtEdgeRatio[] =
             {
-                    0.15, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 2.0, 2.5, 3.0, 4.0, 6.0, 12.0
+                    0.15, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4, 2.6, 2.8, 3.0, 3.2, 3.4, 3.6, 3.8, 4.0, 4.2, 4.4, 4.6, 4.8, 5.0, 6.0, 12.0
             };
+    const int m_nPtsRatio = sizeof(m_PtEdgeRatio) / sizeof(float);
+
 
 //    const int m_nPtsRatio = 36;
 //    float const m_PtEdgeRatio[m_nPtsRatio + 1] =  {
