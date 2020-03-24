@@ -132,7 +132,8 @@ int StPicoSimInputsMaker::createQA(){
             if (trk->isHFTTrack()) isHft=1.;
             if (trk->isPrimary()) isPrimaryTrk=1.;
             Float_t nHitsFitTrk = trk->nHitsFit();
-            ntp_tracks->Fill(dca,isHft,zdc,isPrimaryTrk,nHitsFitTrk,multiplicity,nHftTracks);
+            Float_t pt=momentum.Perp();
+            ntp_tracks->Fill(pt,dca,isHft,zdc,isPrimaryTrk,nHitsFitTrk,multiplicity,nHftTracks);
         }
 
         if (trk->isHFTTrack() && (goodPion || goodKaon) && vars::dcaHists){
@@ -171,7 +172,7 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
     }
 
     if(vars::fillNtp) {
-        ntp_tracks = new TNtuple("ntp_tracks","ntp_tracks", "dca:isHFT:zdc:isPrimary:nHitsFit:refMult:nHftTracks");
+        ntp_tracks = new TNtuple("ntp_tracks","ntp_tracks", "pt:dca:isHFT:zdc:isPrimary:nHitsFit:refMult:nHftTracks");
     }
 
     if(vars::ratioHists) {
