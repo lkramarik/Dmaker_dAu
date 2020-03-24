@@ -214,7 +214,7 @@ bool StPicoCutsBase::isGoodTrack(StPicoTrack const * const trk) const {
 //  StPicoBTofPidTraits* tofPidTraits;
 //  if (tofIndex >= 0)  tofPidTraits = mPicoDst->btofPidTraits(tofIndex);
 //  if (tofIndex >= 0 && tofPidTraits && tofPidTraits->btofMatchFlag() > 0)  TofMatch = kTRUE;
-    return ((!mRequireHFT || trk->isHFTTrack()) && trk->nHitsFit() >= mNHitsFitMin && cutMaxDcaToPrimVertex(trk) && trk->gPt() > mPtMin);
+    return ((!mRequireHFT || trk->isHFTTrack()) && abs(trk->nHitsFit()) >= mNHitsFitMin && cutMaxDcaToPrimVertex(trk) && trk->gPt() > mPtMin);
 }
 
 // _________________________________________________________

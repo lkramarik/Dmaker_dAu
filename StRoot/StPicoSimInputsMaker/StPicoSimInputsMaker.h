@@ -91,6 +91,8 @@ private:
 
     TH3F* mh3VzZdcMult;
 
+    TNtuple *ntp_tracks;
+
     ClassDef(StPicoSimInputsMaker, 1) //set to 1
 };
 

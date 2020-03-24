@@ -33,6 +33,8 @@ int StPicoSimInputsMaker::InitHF() {
     mOutFileBaseName = mOutFileBaseName.ReplaceAll(".root", "");
     unsigned int nTracks = mPicoDst->numberOfTracks();
 
+    ntp_tracks = new TNtuple("ntp_tracks","ntp_tracks", "dca:isHFT:zdc:isPrimary:nHitsFit:refMult:nHftTracks");
+
     histoInit(mOutFileBaseName, true); //for createQA()
     return kStOK;
 }
@@ -45,6 +47,9 @@ void StPicoSimInputsMaker::ClearHF(Option_t *opt="") {
 // _________________________________________________________
 int StPicoSimInputsMaker::FinishHF() {
     closeFile();
+
+    mOutputFileList->cd();
+    ntp_tracks->Write(ntp_tracks->GetName(), TObject::kOverwrite);
     return kStOK;
 }
 // _________________________________________________________
@@ -58,10 +63,13 @@ int StPicoSimInputsMaker::createQA(){
 //    cout<<"createQA"<<endl;
     unsigned int nTracks = mPicoDst->numberOfTracks();
     int multiplicity = mPicoDst->event()->refMult();
-    if (mPicoDst->event()->ZDCx()/1000. > 185) return 0;
-    int ZdcIndex = getZdcIndex(mPicoDst->event()->ZDCx()/1000.);
+    Float_t zdc = mPicoDst->event()->ZDCx()/1000.;
+    if (zdc > 185) return 0;
+    int ZdcIndex = getZdcIndex(zdc);
     if (ZdcIndex==-1) return 0;
     mh3VzZdcMult -> Fill(mPrimVtx.z(),  mPicoDst->event()->ZDCx()/1000., multiplicity);
+
+
 
     Int_t nHftTracks;
     for (unsigned int iTrack = 0; iTrack < nTracks; ++iTrack) {
@@ -69,8 +77,6 @@ int StPicoSimInputsMaker::createQA(){
         if (!trk) continue;
         if (trk->isHFTTrack()) nHftTracks++;
     }
-
-    if (nHftTracks<1) return 0;
 
     for (unsigned int iTrack = 0; iTrack < nTracks; ++iTrack) {
         StPicoTrack const* trk = mPicoDst->track(iTrack);
@@ -126,12 +132,16 @@ int StPicoSimInputsMaker::createQA(){
             }
 //        }
 
+        if (vars::fillNtp) {
+            float isHft=0, isPrimaryTrk=0;
+            if (trk->isHFTTrack()) isHft=1;
+            if (trk->isPrimary()) isPrimaryTrk=1;
+            ntp_tracks->Fill(dca,isHFT,zdc,isPrimaryTrk,trk->nHitsFit(),multiplicity,nHftTracks);
+        }
+
         if (trk->isHFTTrack() && (goodPion || goodKaon) && vars::dcaHists){
             addDcaPtCent(dca, dcaXy, dcaZ, goodPion, goodKaon, momentum.Perp(), multiplicity, EtaIndex, PhiIndex, mPrimVtx.z(), ZdcIndex);
         }
-
-        goodKaon=true;
-        goodPion=true;
 
         if (vars::ratioHists) {
             if ((goodPion || goodKaon)) {
