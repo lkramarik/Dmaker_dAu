@@ -33,8 +33,6 @@ int StPicoSimInputsMaker::InitHF() {
     mOutFileBaseName = mOutFileBaseName.ReplaceAll(".root", "");
     unsigned int nTracks = mPicoDst->numberOfTracks();
 
-    ntp_tracks = new TNtuple("ntp_tracks","ntp_tracks", "dca:isHFT:zdc:isPrimary:nHitsFit:refMult:nHftTracks");
-
     histoInit(mOutFileBaseName, true); //for createQA()
     return kStOK;
 }
@@ -130,10 +128,11 @@ int StPicoSimInputsMaker::createQA(){
 //        }
 
         if (vars::fillNtp) {
-            float isHft=0, isPrimaryTrk=0;
-            if (trk->isHFTTrack()) isHft=1;
-            if (trk->isPrimary()) isPrimaryTrk=1;
-            ntp_tracks->Fill(dca,isHft,zdc,isPrimaryTrk,trk->nHitsFit(),multiplicity,nHftTracks);
+            Float_t isHft=0., isPrimaryTrk=0.;
+            if (trk->isHFTTrack()) isHft=1.;
+            if (trk->isPrimary()) isPrimaryTrk=1.;
+            Float_t nHitsFitTrk = trk->nHitsFit();
+            ntp_tracks->Fill(dca,isHft,zdc,isPrimaryTrk,nHitsFitTrk,multiplicity,nHftTracks);
         }
 
         if (trk->isHFTTrack() && (goodPion || goodKaon) && vars::dcaHists){
@@ -169,6 +168,10 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
             h1Tofmatch[iParticle][nsigma] = new TH1D(Form("h1_Tofmatch_tpc1_p%d_nsigma%d", iParticle, nsigma+1), Form("h1_Tofmatch_tpc1_p%d_nsigma%d", iParticle, nsigma+1),vars::m_nPtTOF,vars::m_PtTOFedge);
             h1TofmatchTOF[iParticle][nsigma] = new TH1D(Form("h1_TofmatchTOF_tpc1_p%d_nsigma%d", iParticle, nsigma+1), Form("h1_TofmatchTOF_tpc1_p%d_nsigma%d", iParticle, nsigma+1),vars::m_nPtTOF,vars::m_PtTOFedge);
         }
+    }
+
+    if(vars::fillNtp) {
+        ntp_tracks = new TNtuple("ntp_tracks","ntp_tracks", "dca:isHFT:zdc:isPrimary:nHitsFit:refMult:nHftTracks");
     }
 
     if(vars::ratioHists) {
