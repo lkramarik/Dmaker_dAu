@@ -47,9 +47,6 @@ void StPicoSimInputsMaker::ClearHF(Option_t *opt="") {
 // _________________________________________________________
 int StPicoSimInputsMaker::FinishHF() {
     closeFile();
-
-    mOutputFileList->cd();
-    ntp_tracks->Write(ntp_tracks->GetName(), TObject::kOverwrite);
     return kStOK;
 }
 // _________________________________________________________
@@ -336,6 +333,9 @@ void StPicoSimInputsMaker::closeFile()
 {
     mOutFile->cd();
 
+    if (vars::fillNtp){
+        ntp_tracks->Write(ntp_tracks->GetName(), TObject::kOverwrite);
+    }
 //    mh1Cent->Write();
 //    mh1CentWg->Write();
 //    mh1gRefmultCor->Write();
