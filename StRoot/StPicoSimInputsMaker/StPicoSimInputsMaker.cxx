@@ -63,10 +63,19 @@ int StPicoSimInputsMaker::createQA(){
     if (ZdcIndex==-1) return 0;
     mh3VzZdcMult -> Fill(mPrimVtx.z(),  mPicoDst->event()->ZDCx()/1000., multiplicity);
 
+    Int_t nHftTracks;
+    for (unsigned int iTrack = 0; iTrack < nTracks; ++iTrack) {
+        StPicoTrack const *trk = mPicoDst->track(iTrack);
+        if (!trk) continue;
+        if (trk->isHFTTrack()) nHftTracks++;
+    }
+
+    if (nHftTracks<1) return 0;
+
     for (unsigned int iTrack = 0; iTrack < nTracks; ++iTrack) {
         StPicoTrack const* trk = mPicoDst->track(iTrack);
         if (!trk) continue;
-        if (!(trk->isPrimary())) continue; //!!! REMOVE
+//        if (!(trk->isPrimary())) continue; //!!! REMOVE
 
         StPicoPhysicalHelix helix = trk->helix(mBField);
         TVector3 momentum = trk->gMom(mPrimVtx, mBField);
