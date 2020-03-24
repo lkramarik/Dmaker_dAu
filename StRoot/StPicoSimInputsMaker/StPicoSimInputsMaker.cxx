@@ -133,7 +133,7 @@ int StPicoSimInputsMaker::createQA(){
             float isHft=0, isPrimaryTrk=0;
             if (trk->isHFTTrack()) isHft=1;
             if (trk->isPrimary()) isPrimaryTrk=1;
-            ntp_tracks->Fill(dca,isHFT,zdc,isPrimaryTrk,trk->nHitsFit(),multiplicity,nHftTracks);
+            ntp_tracks->Fill(dca,isHft,zdc,isPrimaryTrk,trk->nHitsFit(),multiplicity,nHftTracks);
         }
 
         if (trk->isHFTTrack() && (goodPion || goodKaon) && vars::dcaHists){
