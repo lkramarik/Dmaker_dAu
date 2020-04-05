@@ -130,7 +130,7 @@ int StPicoSimInputsMaker::createQA(){
             }
 //        }
 
-        if (vars::fillNtp) {
+        if (vars::fillNtp && (nTofTracks>0 || nHftTracks>0)) {
             Float_t isHft=0., isPrimaryTrk=0.;
             if (trk->isHFTTrack()) isHft=1.;
             if (trk->isPrimary()) isPrimaryTrk=1.;
