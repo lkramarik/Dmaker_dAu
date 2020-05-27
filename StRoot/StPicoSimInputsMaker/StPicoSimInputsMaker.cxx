@@ -134,7 +134,7 @@ int StPicoSimInputsMaker::createQA(){
             Float_t isHft=0., isPrimaryTrk=0., isTOF=0., particleId=5.;
 
             if (tpcKaon && tpcPion) particleId = 2.;
-            else if (tpcPi  on) particleId = 0.;
+            else if (tpcPion) particleId = 0.;
             else if (tpcKaon) particleId = 1.;
 
             if (trk->isHFTTrack()) isHft=1.;
