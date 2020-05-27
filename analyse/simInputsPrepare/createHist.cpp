@@ -10,7 +10,8 @@
 #include <iostream>
 using namespace std;
 
-const int nmultEdge = 7;
+const int nmultEdge = 1;
+//const int nmultEdge = 7;
 
 TH1D* h1Vz[nmultEdge];
 TH1D* h1ZdcX[nmultEdge];
@@ -36,7 +37,8 @@ void createHist() {
     TFile *outEvent = new TFile("inputs.event.root", "RECREATE");
     outEvent->SetCompressionSettings(0);
 
-    int multEdge[nmultEdge + 1] = {0, 4, 8, 12, 16, 20, 24, 200};
+    int multEdge[nmultEdge + 1] = {0, 200};
+//    int multEdge[nmultEdge + 1] = {0, 4, 8, 12, 16, 20, 24, 200};
 
 //    const Double_t ptEdge[nPtBins + 1] = {0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3.0, 3.5, 4.0, 6.0, 12.0};
 //    const int m_nZdc = 5;

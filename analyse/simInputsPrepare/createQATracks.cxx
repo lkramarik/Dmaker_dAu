@@ -163,34 +163,129 @@ void createQATracks() {
 }
 
 //________________________________________________________________________________________________________________________
+void compareEvtEmb() {
+//    TString fileNameSim = "/home/lukas/work/D0-fullEvent/analyse/test.out.root";
+    TString fileNameSim = "/home/lukas/work/D0-fullEvent/analyse/out_test.7.1905.big.root";
+    auto* dataSimF = new TFile(fileNameSim,"r");
+    TList* list = (TList*)dataSimF -> Get("hists_event_QA;1");
+    TH1F* vzSim=static_cast<TH1F*>(list->FindObject("hRcVzAccepVtx"));
+
+    ///////
+    TH1D* vzdata = new TH1D("vzdata","vzdata",100,-6,6);
+    TH1D* vydata = new TH1D("vydata","vydata",100,-1,1);
+    TH1D* vxdata = new TH1D("vxdata","vxdata",100,-1,1);
+    TFile* dataF = new TFile("/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/PV/ntp.PV.1712.root","r");
+    TNtuple* ntpData = (TNtuple*)dataF -> Get("ntp_vertex;1");
+//    ntpData->Scan();
+    cout<<ntpData->GetEntries()<<endl;
+    Float_t picoDstVz, nHftTracks, BBC, picoDstVx, picoDstVy;
+    ntpData->SetBranchAddress("picoDstVx", &picoDstVx);
+    ntpData->SetBranchAddress("picoDstVy", &picoDstVy);
+    ntpData->SetBranchAddress("picoDstVz", &picoDstVz);
+    ntpData->SetBranchAddress("BBC", &BBC);
+    ntpData->SetBranchAddress("nHftTracks", &nHftTracks);
+
+    for (int i = 0; i < ntpData->GetEntries(); ++i) {
+        ntpData->GetEntry(i);
+//        if(BBC<900 && nHftTracks>2 && picoDstVy>-0.25 && picoDstVy<-0.16 && picoDstVx>-0.25 && picoDstVx<-0.16) vxdata->Fill(picoDstVx);
+//        if(BBC<900 && nHftTracks>2 && picoDstVy>-0.25 && picoDstVy<-0.16 && picoDstVx>-0.25 && picoDstVx<-0.16) vydata->Fill(picoDstVy);
+//        if(BBC<900 && nHftTracks>2 && picoDstVy>-0.25 && picoDstVy<-0.16 && picoDstVx>-0.25 && picoDstVx<-0.16) vzdata->Fill(picoDstVz);
+
+//        if(BBC<900 && nHftTracks>2) vxdata->Fill(picoDstVx);
+//        if(BBC<900 && nHftTracks>2) vydata->Fill(picoDstVy);
+//        if(BBC<900 && nHftTracks>2) vzdata->Fill(picoDstVz);
+
+        vxdata->Fill(picoDstVx);
+        vydata->Fill(picoDstVy);
+        vzdata->Fill(picoDstVz);
+
+    }
+    TFile* dataout = new TFile("vzData.root","recreate");
+    vxdata->Write();
+    vydata->Write();
+    vzdata->Write();
+/////////////////////
+
+//    TFile* dataF = new TFile("vzData.root","r");
+//    TH1F* vxdata = (TH1F*)dataF -> Get("vxdata");
+//    TH1F* vydata = (TH1F*)dataF -> Get("vydata");
+//    TH1F* vzdata = (TH1F*)dataF -> Get("vzdata");
+//
+    Double_t nBinsData = vzdata->Integral(vzdata->FindBin(-6), vzdata->FindBin(6));
+    Double_t nBinsSim = vzSim->Integral(vzSim->FindBin(-6), vzSim->FindBin(6));
+
+//    cout<<nBinsData<<" "<<nBinsSim<<endl;
+//    cout<<nBinsData<<" "<<nBinsSim<<endl;
+    cout<<vzdata->GetNbinsX()<<endl;
+    cout<<vzSim->GetNbinsX()<<endl;
+//    vzdata->Rebin(2);
+
+    vzSim->Scale(1/vzSim->GetEntries());
+    vxdata->Scale(1/vxdata->GetEntries());
+    vydata->Scale(1/vydata->GetEntries());
+    vzdata->Scale(1/vzdata->GetEntries());
+
+    cout<<"vzsim"<<endl;
+    vzSim->Fit("gaus");
+    cout<<"vx"<<endl;
+    vxdata->Fit("gaus");
+    cout<<"vy"<<endl;
+    vydata->Fit("gaus");
+    cout<<"vzDat"<<endl;
+    vzdata->Fit("gaus");
+//    vzSim->Scale(1/nBinsSim);
+//    vzdata->Scale(1/nBinsData);
+
+//    vzdata->Divide(vzSim);
+    TCanvas* c = new TCanvas("c","c", 800,900);
+    vzSim->Draw();
+    vzdata->Draw("same");
+
+    TCanvas* cX = new TCanvas("cX","cX", 800,900);
+    vxdata->Draw();
+
+    TCanvas* cY = new TCanvas("cY","cY", 800,900);
+    vydata->Draw();
+
+//    dataF->Close();
+
+}
+
+//________________________________________________________________________________________________________________________
 void compareEmb() {
     TString fileNameData = "/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/simInputsPrepare/tracksQA.data.root";
-    TString fileNameSim = "/home/lukas/work/D0-fullEvent/analyse/test.out.root";
+//    TString fileNameSim = "/home/lukas/work/D0-fullEvent/analyse/test.out.root";
+    TString fileNameSim = "/home/lukas/work/D0-fullEvent/analyse/out_test.big.cc.setup6.root";
+    TString fileNameSim1 = "/home/lukas/work/D0-fullEvent/analyse/out_test.big.MB.2705.root";
 
     auto* dataF = new TFile(fileNameData,"r");
     auto* dataSimF = new TFile(fileNameSim,"r");
+    auto* dataSimF1 = new TFile(fileNameSim1,"r");
 
 
-    TList *list[2];
+    TList *list[3];
     list[0] = (TList*)dataF -> Get("hists_QA;1");
     list[1] = (TList*)dataSimF -> Get("hists_QA;1");
+    list[2] = (TList*)dataSimF1 -> Get("hists_QA;1");
 
-    TString names[] = {"data", "sim"};
+    TString names[] = {"data", "sim", "sim1"};
 
-    Int_t color[]={46,9};
+    const int nFiles=3;
+
+    Int_t color[]={46,9,8};
 
     TString histoname;
 
-    TH1D* hnHitsFit[2];
-    TH1D* hnHitsFitHft[2];
-    TH1D* hDcaAll[2];
-    TH1D* hDcaAllHft[2];
-    TH1D* hPtRecoDCA[2][10];
-    TH1D* hPtRecoHftDCA[2][10];
-    TH1D* hDCAPtBins[2][10];
-    TH1D* hDCAPtBinsHft[2][10];
+    TH1D* hnHitsFit[nFiles];
+    TH1D* hnHitsFitHft[nFiles];
+    TH1D* hDcaAll[nFiles];
+    TH1D* hDcaAllHft[nFiles];
+    TH1D* hPtRecoDCA[nFiles][10];
+    TH1D* hPtRecoHftDCA[nFiles][10];
+    TH1D* hDCAPtBins[nFiles][10];
+    TH1D* hDCAPtBinsHft[nFiles][10];
 
-    for (int k = 0; k < 2; ++k) {
+    for (int k = 0; k < nFiles; ++k) {
         cout<<names[k]<<endl;
         hDcaAll[k]=new TH1D();
         hDcaAll[k]=static_cast<TH1D*>(list[k]->FindObject("hDca_all"));
@@ -254,6 +349,7 @@ void compareEmb() {
     legend -> SetTextSize(0.04);
     legend -> AddEntry(hDCAPtBins[0][0], names[0], "pl");
     legend -> AddEntry(hDCAPtBins[1][0], names[1], "pl");
+    legend -> AddEntry(hDCAPtBins[2][0], names[2], "pl");
 
     const int nCanvas = nDcaRatio+nPtDca+2;
     cout<<nCanvas<<endl;
@@ -268,9 +364,8 @@ void compareEmb() {
     int canId = -1;
 
     canId++;
-    for (int k = 0; k < 2; ++k) {
+    for (int k = 0; k < nFiles; ++k) {
         c[canId]->cd(1);
-        gPad->SetLogy();
         gPad->SetLeftMargin(0.15);
         gPad->SetRightMargin(0.05);
 
@@ -279,9 +374,8 @@ void compareEmb() {
         hnHitsFit[k]->Draw("same");
     }
 
-    for (int k = 0; k < 2; ++k) {
+    for (int k = 0; k < nFiles; ++k) {
         c[canId]->cd(2);
-        gPad->SetLogy();
         gPad->SetLeftMargin(0.15);
         gPad->SetRightMargin(0.05);
 
@@ -292,7 +386,7 @@ void compareEmb() {
     }
     //______________________________________________________
     canId++;
-    for (int k = 0; k < 2; ++k) {
+    for (int k = 0; k < nFiles; ++k) {
         c[canId]->cd(1);
         gPad->SetLogy();
         gPad->SetLeftMargin(0.15);
@@ -303,7 +397,7 @@ void compareEmb() {
         hDcaAll[k]->Draw("same");
     }
 
-    for (int k = 0; k < 2; ++k) {
+    for (int k = 0; k < nFiles; ++k) {
         c[canId]->cd(2);
         gPad->SetLogy();
         gPad->SetLeftMargin(0.15);
@@ -317,7 +411,7 @@ void compareEmb() {
     //______________________________________________________
     for (int j = 0; j < nDcaRatio; ++j) {
         canId++;
-        for (int k = 0; k < 2; ++k) {
+        for (int k = 0; k < nFiles; ++k) {
             c[canId]->cd(1);
             gPad->SetLogy();
             gPad->SetLeftMargin(0.15);
@@ -328,7 +422,7 @@ void compareEmb() {
             hPtRecoDCA[k][j]->Draw("same");
         }
 
-        for (int k = 0; k < 2; ++k) {
+        for (int k = 0; k < nFiles; ++k) {
             c[canId]->cd(2);
             gPad->SetLogy();
             gPad->SetLeftMargin(0.15);
@@ -344,7 +438,7 @@ void compareEmb() {
 
     for (int j = 0; j < nPtDca; ++j) {
         canId++;
-        for (int k = 0; k < 2; ++k) {
+        for (int k = 0; k < nFiles; ++k) {
             c[canId]->cd(1);
             gPad->SetLogy();
             gPad->SetLeftMargin(0.15);
@@ -355,7 +449,7 @@ void compareEmb() {
             hDCAPtBins[k][j]->Draw("same");
         }
 
-        for (int k = 0; k < 2; ++k) {
+        for (int k = 0; k < nFiles; ++k) {
             c[canId]->cd(2);
             gPad->SetLogy();
             gPad->SetLeftMargin(0.15);
@@ -377,6 +471,7 @@ void compareEmb() {
     c[nCanvas-1]->SaveAs("trackQA.pdf)");
 
     for (int i = 0; i < nCanvas; ++i) {
+        c[i]->SaveAs(Form("img/trackQA_%i.png", i));
         c[i]->Close();
     }
 

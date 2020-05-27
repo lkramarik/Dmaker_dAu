@@ -64,7 +64,7 @@ int StPicoSimInputsMaker::createQA(){
     if (ZdcIndex==-1) return 0;
     mh3VzZdcMult -> Fill(mPrimVtx.z(),  mPicoDst->event()->ZDCx()/1000., multiplicity);
 
-
+    mhVz -> Fill(mPrimVtx.z());
 
 
     Int_t nHftTracks=0;
@@ -225,6 +225,7 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
     }
 
     mh3VzZdcMult = new TH3F("mh3VzZdcMult", "mh3VzZdcMult", 100, -6, 6, 100, 0, 250,  50, 0, 50);
+    mhVz = new TH1D("mhVz", "mhVz", 600, -150, 150);
 //    cout<<"endHistoint"<<endl;
 }
 
@@ -399,6 +400,7 @@ void StPicoSimInputsMaker::closeFile()
     }
 
     mh3VzZdcMult -> Write();
+    mhVz -> Write();
 //    mOutFile->Write();
     mOutFile->Close();
 
