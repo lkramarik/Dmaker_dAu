@@ -56,6 +56,8 @@ int StPicoSimInputsMaker::MakeHF() {
 //_________________________________________________________
 int StPicoSimInputsMaker::createQA(){
 //    cout<<"createQA"<<endl;
+    mhVz -> Fill(mPrimVtx.z());
+
     unsigned int nTracks = mPicoDst->numberOfTracks();
     int multiplicity = mPicoDst->event()->refMult();
     Float_t zdc = mPicoDst->event()->ZDCx()/1000.;
@@ -64,7 +66,6 @@ int StPicoSimInputsMaker::createQA(){
     if (ZdcIndex==-1) return 0;
     mh3VzZdcMult -> Fill(mPrimVtx.z(),  mPicoDst->event()->ZDCx()/1000., multiplicity);
 
-    mhVz -> Fill(mPrimVtx.z());
 
 
     Int_t nHftTracks=0;
