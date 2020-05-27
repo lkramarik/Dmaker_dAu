@@ -174,7 +174,7 @@ bool StPicoCutsBase::isGoodEvent(StPicoDst const * const picoDst, int *aEventCut
 
     // -- 4 Vertex z - vertex_z(vpd) outside cut window
     ++iCut;
-    if (true) aEventCuts[iCut] = 1;
+    if (false) aEventCuts[iCut] = 1;
 //    if (fabs(picoEvent->primaryVertex().z() - picoEvent->vzVpd()) >= mVzVpdVzMax) aEventCuts[iCut] = 1;
 
     ++iCut;
