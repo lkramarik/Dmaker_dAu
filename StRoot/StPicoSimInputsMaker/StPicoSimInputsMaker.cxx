@@ -56,6 +56,8 @@ int StPicoSimInputsMaker::MakeHF() {
 //_________________________________________________________
 int StPicoSimInputsMaker::createQA(){
 //    cout<<"createQA"<<endl;
+    mhVx -> Fill(mPrimVtx.x());
+    mhVy -> Fill(mPrimVtx.y());
     mhVz -> Fill(mPrimVtx.z());
 
     unsigned int nTracks = mPicoDst->numberOfTracks();
@@ -226,6 +228,8 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
     }
 
     mh3VzZdcMult = new TH3F("mh3VzZdcMult", "mh3VzZdcMult", 100, -6, 6, 100, 0, 250,  50, 0, 50);
+    mhVx = new TH1D("mhVx", "mhVx", 400, -1, 1);
+    mhVy = new TH1D("mhVy", "mhVy", 400, -1, 1);
     mhVz = new TH1D("mhVz", "mhVz", 600, -150, 150);
 //    cout<<"endHistoint"<<endl;
 }
@@ -401,6 +405,8 @@ void StPicoSimInputsMaker::closeFile()
     }
 
     mh3VzZdcMult -> Write();
+    mhVx -> Write();
+    mhVy -> Write();
     mhVz -> Write();
 //    mOutFile->Write();
     mOutFile->Close();

@@ -171,46 +171,46 @@ void compareEvtEmb() {
     TH1F* vzSim=static_cast<TH1F*>(list->FindObject("hRcVzAccepVtx"));
 
     ///////
-    TH1D* vzdata = new TH1D("vzdata","vzdata",100,-6,6);
-    TH1D* vydata = new TH1D("vydata","vydata",100,-1,1);
-    TH1D* vxdata = new TH1D("vxdata","vxdata",100,-1,1);
-    TFile* dataF = new TFile("/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/PV/ntp.PV.1712.root","r");
-    TNtuple* ntpData = (TNtuple*)dataF -> Get("ntp_vertex;1");
-//    ntpData->Scan();
-    cout<<ntpData->GetEntries()<<endl;
-    Float_t picoDstVz, nHftTracks, BBC, picoDstVx, picoDstVy;
-    ntpData->SetBranchAddress("picoDstVx", &picoDstVx);
-    ntpData->SetBranchAddress("picoDstVy", &picoDstVy);
-    ntpData->SetBranchAddress("picoDstVz", &picoDstVz);
-    ntpData->SetBranchAddress("BBC", &BBC);
-    ntpData->SetBranchAddress("nHftTracks", &nHftTracks);
-
-    for (int i = 0; i < ntpData->GetEntries(); ++i) {
-        ntpData->GetEntry(i);
-//        if(BBC<900 && nHftTracks>2 && picoDstVy>-0.25 && picoDstVy<-0.16 && picoDstVx>-0.25 && picoDstVx<-0.16) vxdata->Fill(picoDstVx);
-//        if(BBC<900 && nHftTracks>2 && picoDstVy>-0.25 && picoDstVy<-0.16 && picoDstVx>-0.25 && picoDstVx<-0.16) vydata->Fill(picoDstVy);
-//        if(BBC<900 && nHftTracks>2 && picoDstVy>-0.25 && picoDstVy<-0.16 && picoDstVx>-0.25 && picoDstVx<-0.16) vzdata->Fill(picoDstVz);
-
-//        if(BBC<900 && nHftTracks>2) vxdata->Fill(picoDstVx);
-//        if(BBC<900 && nHftTracks>2) vydata->Fill(picoDstVy);
-//        if(BBC<900 && nHftTracks>2) vzdata->Fill(picoDstVz);
-
-        vxdata->Fill(picoDstVx);
-        vydata->Fill(picoDstVy);
-        vzdata->Fill(picoDstVz);
-
-    }
-    TFile* dataout = new TFile("vzData.root","recreate");
-    vxdata->Write();
-    vydata->Write();
-    vzdata->Write();
+//    TH1D* vzdata = new TH1D("vzdata","vzdata",100,-6,6);
+//    TH1D* vydata = new TH1D("vydata","vydata",100,-1,1);
+//    TH1D* vxdata = new TH1D("vxdata","vxdata",100,-1,1);
+//    TFile* dataF = new TFile("/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/PV/ntp.PV.1712.root","r");
+//    TNtuple* ntpData = (TNtuple*)dataF -> Get("ntp_vertex;1");
+////    ntpData->Scan();
+//    cout<<ntpData->GetEntries()<<endl;
+//    Float_t picoDstVz, nHftTracks, BBC, picoDstVx, picoDstVy;
+//    ntpData->SetBranchAddress("picoDstVx", &picoDstVx);
+//    ntpData->SetBranchAddress("picoDstVy", &picoDstVy);
+//    ntpData->SetBranchAddress("picoDstVz", &picoDstVz);
+//    ntpData->SetBranchAddress("BBC", &BBC);
+//    ntpData->SetBranchAddress("nHftTracks", &nHftTracks);
+//
+//    for (int i = 0; i < ntpData->GetEntries(); ++i) {
+//        ntpData->GetEntry(i);
+////        if(BBC<900 && nHftTracks>2 && picoDstVy>-0.25 && picoDstVy<-0.16 && picoDstVx>-0.25 && picoDstVx<-0.16) vxdata->Fill(picoDstVx);
+////        if(BBC<900 && nHftTracks>2 && picoDstVy>-0.25 && picoDstVy<-0.16 && picoDstVx>-0.25 && picoDstVx<-0.16) vydata->Fill(picoDstVy);
+////        if(BBC<900 && nHftTracks>2 && picoDstVy>-0.25 && picoDstVy<-0.16 && picoDstVx>-0.25 && picoDstVx<-0.16) vzdata->Fill(picoDstVz);
+//
+////        if(BBC<900 && nHftTracks>2) vxdata->Fill(picoDstVx);
+////        if(BBC<900 && nHftTracks>2) vydata->Fill(picoDstVy);
+////        if(BBC<900 && nHftTracks>2) vzdata->Fill(picoDstVz);
+//
+//        vxdata->Fill(picoDstVx);
+//        vydata->Fill(picoDstVy);
+//        vzdata->Fill(picoDstVz);
+//
+//    }
+//    TFile* dataout = new TFile("vzData.root","recreate");
+//    vxdata->Write();
+//    vydata->Write();
+//    vzdata->Write();
 /////////////////////
 
-//    TFile* dataF = new TFile("vzData.root","r");
-//    TH1F* vxdata = (TH1F*)dataF -> Get("vxdata");
-//    TH1F* vydata = (TH1F*)dataF -> Get("vydata");
-//    TH1F* vzdata = (TH1F*)dataF -> Get("vzdata");
-//
+    TFile* dataF = new TFile("vzData.root","r");
+    TH1F* vxdata = (TH1F*)dataF -> Get("vxdata");
+    TH1F* vydata = (TH1F*)dataF -> Get("vydata");
+    TH1F* vzdata = (TH1F*)dataF -> Get("vzdata");
+
     Double_t nBinsData = vzdata->Integral(vzdata->FindBin(-6), vzdata->FindBin(6));
     Double_t nBinsSim = vzSim->Integral(vzSim->FindBin(-6), vzSim->FindBin(6));
 
@@ -474,5 +474,94 @@ void compareEmb() {
         c[i]->SaveAs(Form("img/trackQA_%i.png", i));
         c[i]->Close();
     }
+
+}
+
+//________________________________________________________________________________________________________________________
+void compareVertex() {
+//    TString fileNameSim = "/home/lukas/work/D0-fullEvent/analyse/test.out.root";
+    TString fileNameSim = "/home/lukas/work/D0-fullEvent/analyse/out_test.7.1905.big.root";
+    auto* dataSimF = new TFile(fileNameSim,"r");
+    TList* list = (TList*)dataSimF -> Get("hists_event_QA;1");
+    TH1F* vzSim=static_cast<TH1F*>(list->FindObject("hRcVzAccepVtx"));
+
+    ///////
+//    TH1D* vzdata = new TH1D("vzdata","vzdata",100,-6,6);
+//    TH1D* vydata = new TH1D("vydata","vydata",100,-1,1);
+//    TH1D* vxdata = new TH1D("vxdata","vxdata",100,-1,1);
+//    TFile* dataF = new TFile("/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/PV/ntp.PV.1712.root","r");
+//    TNtuple* ntpData = (TNtuple*)dataF -> Get("ntp_vertex;1");
+////    ntpData->Scan();
+//    cout<<ntpData->GetEntries()<<endl;
+//    Float_t picoDstVz, nHftTracks, BBC, picoDstVx, picoDstVy;
+//    ntpData->SetBranchAddress("picoDstVx", &picoDstVx);
+//    ntpData->SetBranchAddress("picoDstVy", &picoDstVy);
+//    ntpData->SetBranchAddress("picoDstVz", &picoDstVz);
+//    ntpData->SetBranchAddress("BBC", &BBC);
+//    ntpData->SetBranchAddress("nHftTracks", &nHftTracks);
+//
+//    for (int i = 0; i < ntpData->GetEntries(); ++i) {
+//        ntpData->GetEntry(i);
+////        if(BBC<900 && nHftTracks>2 && picoDstVy>-0.25 && picoDstVy<-0.16 && picoDstVx>-0.25 && picoDstVx<-0.16) vxdata->Fill(picoDstVx);
+////        if(BBC<900 && nHftTracks>2 && picoDstVy>-0.25 && picoDstVy<-0.16 && picoDstVx>-0.25 && picoDstVx<-0.16) vydata->Fill(picoDstVy);
+////        if(BBC<900 && nHftTracks>2 && picoDstVy>-0.25 && picoDstVy<-0.16 && picoDstVx>-0.25 && picoDstVx<-0.16) vzdata->Fill(picoDstVz);
+//
+////        if(BBC<900 && nHftTracks>2) vxdata->Fill(picoDstVx);
+////        if(BBC<900 && nHftTracks>2) vydata->Fill(picoDstVy);
+////        if(BBC<900 && nHftTracks>2) vzdata->Fill(picoDstVz);
+//
+//        vxdata->Fill(picoDstVx);
+//        vydata->Fill(picoDstVy);
+//        vzdata->Fill(picoDstVz);
+//
+//    }
+//    TFile* dataout = new TFile("vzData.root","recreate");
+//    vxdata->Write();
+//    vydata->Write();
+//    vzdata->Write();
+/////////////////////
+
+    TFile* dataF = new TFile("vzData.root","r");
+    TH1F* vxdata = (TH1F*)dataF -> Get("vxdata");
+    TH1F* vydata = (TH1F*)dataF -> Get("vydata");
+    TH1F* vzdata = (TH1F*)dataF -> Get("vzdata");
+
+    Double_t nBinsData = vzdata->Integral(vzdata->FindBin(-6), vzdata->FindBin(6));
+    Double_t nBinsSim = vzSim->Integral(vzSim->FindBin(-6), vzSim->FindBin(6));
+
+//    cout<<nBinsData<<" "<<nBinsSim<<endl;
+//    cout<<nBinsData<<" "<<nBinsSim<<endl;
+    cout<<vzdata->GetNbinsX()<<endl;
+    cout<<vzSim->GetNbinsX()<<endl;
+//    vzdata->Rebin(2);
+
+    vzSim->Scale(1/vzSim->GetEntries());
+    vxdata->Scale(1/vxdata->GetEntries());
+    vydata->Scale(1/vydata->GetEntries());
+    vzdata->Scale(1/vzdata->GetEntries());
+
+    cout<<"vzsim"<<endl;
+    vzSim->Fit("gaus");
+    cout<<"vx"<<endl;
+    vxdata->Fit("gaus");
+    cout<<"vy"<<endl;
+    vydata->Fit("gaus");
+    cout<<"vzDat"<<endl;
+    vzdata->Fit("gaus");
+//    vzSim->Scale(1/nBinsSim);
+//    vzdata->Scale(1/nBinsData);
+
+//    vzdata->Divide(vzSim);
+    TCanvas* c = new TCanvas("c","c", 800,900);
+    vzSim->Draw();
+    vzdata->Draw("same");
+
+    TCanvas* cX = new TCanvas("cX","cX", 800,900);
+    vxdata->Draw();
+
+    TCanvas* cY = new TCanvas("cY","cY", 800,900);
+    vydata->Draw();
+
+//    dataF->Close();
 
 }

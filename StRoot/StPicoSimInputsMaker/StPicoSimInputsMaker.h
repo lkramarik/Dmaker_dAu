@@ -90,6 +90,9 @@ private:
     TH3F* mh3DcaZPtCent;
 
     TH3F* mh3VzZdcMult;
+
+    TH1D* mhVx;
+    TH1D* mhVy;
     TH1D* mhVz;
 
     TNtuple *ntp_tracks;
