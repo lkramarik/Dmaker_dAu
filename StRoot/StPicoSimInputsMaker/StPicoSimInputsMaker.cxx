@@ -408,6 +408,7 @@ void StPicoSimInputsMaker::closeFile()
 
     mh3VzZdcMult -> Write();
     mhVx -> Write();
+    mhVxVy -> Write();
     mhVy -> Write();
     mhVz -> Write();
 //    mOutFile->Write();
