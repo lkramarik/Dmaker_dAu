@@ -94,6 +94,7 @@ private:
     TH1D* mhVx;
     TH1D* mhVy;
     TH1D* mhVz;
+    TH2D* mhVxVy;
 
     TNtuple *ntp_tracks;
 

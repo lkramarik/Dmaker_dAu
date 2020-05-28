@@ -59,6 +59,7 @@ int StPicoSimInputsMaker::createQA(){
     mhVx -> Fill(mPrimVtx.x());
     mhVy -> Fill(mPrimVtx.y());
     mhVz -> Fill(mPrimVtx.z());
+    mhVxVy -> Fill(mPrimVtx.x(), mPrimVtx.y());
 
     unsigned int nTracks = mPicoDst->numberOfTracks();
     int multiplicity = mPicoDst->event()->refMult();
@@ -231,6 +232,7 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
     mhVx = new TH1D("mhVx", "mhVx", 400, -1, 1);
     mhVy = new TH1D("mhVy", "mhVy", 400, -1, 1);
     mhVz = new TH1D("mhVz", "mhVz", 600, -150, 150);
+    mhVxVy = new TH1D("mhVxVy", mhVxVy, 400, -1, 1, 400, -1, 1);
 //    cout<<"endHistoint"<<endl;
 }
 
