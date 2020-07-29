@@ -30,7 +30,7 @@ void draw(TH1D* histo, TString xAxis, TString yAxis, Int_t color) {
     histo->SetMarkerColor(color);
     histo->SetStats(0);
 }
-
+//_______________________________________________________________________
 void createHftFromNtp(){
     Int_t colors[] = {1,46,8,4,5,6,7,9,41,42,44,45,16};
 //    TString fileNameData = "outputLocal.hists.root";
@@ -64,7 +64,8 @@ void createHftFromNtp(){
 //    TString namesSuffix[] = {"dca1.5_nHft0", "dca1.0_nHft0", "dca0.7_nHft0", "dca0.5_nHft0", "dca0.3_nHft0",
 //                             "dca1.5", "dca1.0", "dca0.7", "dca0.5", "dca0.3"};
 
-    TCut additionalCut = "isTOF>0 && isPrimary>0";
+//    TCut additionalCut = "isTOF>0 && isPrimary>0";
+    TCut additionalCut = "isPrimary>0 && nHftTracks>1";
 
     const int nBins = sizeof(namesSuffix) / sizeof(TString);
 
@@ -104,7 +105,6 @@ void createHftFromNtp(){
     }
 
     legend->Draw("same");
-
     c1->SaveAs("hft/ratios.png");
 }
 

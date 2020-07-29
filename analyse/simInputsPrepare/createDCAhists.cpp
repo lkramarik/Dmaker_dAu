@@ -15,35 +15,44 @@ void createDCAhists() {
     const Int_t nParticles = 2; //ok
     int const nVzs = 4; //ok
     const double epsilon = 0.000001;
-    const int nEtas = 3; //ok
+    const int nEtas = 4; //ok
+
+    const int nZDC = 1; //hijing
+
+    const int m_nmultEdge = 1;
+    float const m_multEdge[m_nmultEdge+1] = {0,  200}; //currently not used in dca
 
     // input file and output file
 //    TFile fDca1("dca.hists.0810.root");
-    TFile fDca1("dca.2802.root");
-    TFile *outHistF = new TFile("dcaxy_vs_dcaz.root", "RECREATE");
+
+    TFile fDca1("hijing.sim.hists.root");
+//    TFile fDca1("hijing.sim.hists.3M.etaCut.root");
+//    TFile fDca1("hijing.sim.hists.etaCut.geantKPi.root");
+    TFile *outHistF = new TFile("dcaxy_vs_dcaz_hijing.root", "RECREATE");
     outHistF->SetCompressionSettings(0); //needed to open file in ROOT5
-    TFile *outEvent = new TFile("inputs.event.root", "RECREATE");
+    TFile *outEvent = new TFile("inputs.event_hijing.root", "RECREATE");
     outEvent->SetCompressionSettings(0);
+//
+//    TFile fDca1("dca.2802.root");
+//    TFile *outHistF = new TFile("dcaxy_vs_dcaz.root", "RECREATE");
+//    outHistF->SetCompressionSettings(0); //needed to open file in ROOT5
+//    TFile *outEvent = new TFile("inputs.event.root", "RECREATE");
+//    outEvent->SetCompressionSettings(0);
 
-
-
-
-//    TFile *outHist2dLowStats = new TFile("2d_badstats.root", "RECREATE");
 
 //    const int nZDC = 5;
 //    float const m_zdcEdge[nZDC+1] = {0,50,90,130,170,210};
 
-    const int nZDC = 2;
-    float const m_zdcEdge[nZDC+1] = {0,150,210};
 
-    const int m_nmultEdge = 7;
-    float const m_multEdge[m_nmultEdge+1] = {0, 4, 8, 12, 16, 20, 24, 200};
 
 //    const int m_nmultEdge = 1; //7
 //    float const m_multEdge[m_nmultEdge+1] = {0, 200}; //currently not used in dca
 
-    const int nPtBins = 12;
-    float const ptEdge[nPtBins + 1] = {0.15, 0.3, 0.4, 0.5, 0.6, 0.8, 1., 1.25, 1.5, 2., 3., 5., 12.};
+//    const int nPtBins = 12; //data
+//    float const ptEdge[nPtBins + 1] = {0.15, 0.3, 0.4, 0.5, 0.6, 0.8, 1., 1.25, 1.5, 2., 3., 5., 12.}; //data
+
+    const int nPtBins = 7;
+    float const ptEdge[nPtBins + 1] = {0.15, 0.4, 0.8, 1., 1.5, 2., 4., 12.};
 
     const int m_nDcasDca = 148;
     float const  m_DcaEdgeDca[m_nDcasDca + 1] =   {
@@ -152,11 +161,14 @@ void createDCAhists() {
                             ++iPt3d;
                         }
 
+//                        cout<<h2dName<<endl;
                         // testing if some particles were recorded
-                        if ((hist2D->Integral() < 1000) && ptEdge[iPt]!=5) {
+                        if ((hist2D->Integral() < 1)) {
                             cout << "Number of particles recorded: " << hist2D->Integral()
+                                << "particle "<<iParticle
                                  << " from pT histogram: " << iPt << " between " << ptEdge[iPt] << " and " << ptEdge[iPt + 1]
-                                 << ", mult bin number: " << iCent << " between " << m_multEdge[iCent] << endl;
+                                 << ", mult bin number: " << iCent << " between " << m_multEdge[iCent]
+                                <<h2dName<<endl;
 //                            outHist2dLowStats->cd();
 //                            hist2D.Write();
                         }

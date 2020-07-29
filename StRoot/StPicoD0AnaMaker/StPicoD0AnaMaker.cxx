@@ -246,15 +246,16 @@ int StPicoD0AnaMaker::createCandidates() {
         if (trk->isPrimary()) {
             nPrimary++;
             primaryTracks.push_back(iTrack);
+        }
 
-            if (mHFCuts->isGoodPion(trk)) {
-                mIdxPicoPions.push_back(iTrack);
-                hPionPt->Fill(trk->gPt());
-            }
-            if (mHFCuts->isGoodKaon(trk)){
-                mIdxPicoKaons.push_back(iTrack);
-                hKaonPt->Fill(trk->gPt());
-            }
+        if (mHFCuts->isGoodPion(trk)) {
+            mIdxPicoPions.push_back(iTrack);
+            hPionPt->Fill(trk->gPt());
+        }
+
+        if (mHFCuts->isGoodKaon(trk)){
+            mIdxPicoKaons.push_back(iTrack);
+            hKaonPt->Fill(trk->gPt());
         }
     }
 
@@ -387,8 +388,8 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
         float dca;
         for (unsigned short iTrack = 0; iTrack < primaryTracks.size(); ++iTrack) {
             StPicoTrack* trk = mPicoDst->track(primaryTracks[iTrack]);
-                dca = (mPrimVtx - trk->origin()).Mag();
-                if (dca > 0.009) tracksToRemove.push_back(primaryTracks[iTrack]);
+            dca = (mPrimVtx - trk->origin()).Mag();
+            if (dca > 0.009) tracksToRemove.push_back(primaryTracks[iTrack]);
         }
     }
 

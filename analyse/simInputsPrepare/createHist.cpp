@@ -17,18 +17,32 @@ TH1D* h1Vz[nmultEdge];
 TH1D* h1ZdcX[nmultEdge];
 
 void createHist() {
-    const Int_t nParticles = 2; //ok
-    int const nVzs = 6; //ok
-    int const nEtas = 10; //ok
-//    const Int_t nPtBins = 19;
+    //data:
+//    const Int_t nParticles = 2; //ok
+//    int const nVzs = 6; //ok
+//    int const nEtas = 10; //ok
+//    const Int_t nPhi = 11; //ok
+
+    //hijing:
+      const Int_t nParticles = 2; //ok
+    int const nVzs = 3; //ok
+    int const nEtas = 6; //ok
     const Int_t nPhi = 11; //ok
 
     // input file and output file
-    TFile fDca1("2101.hists.root");
+//    TFile fDca1("2101.hists.root");
+    TFile fDca1("hijing.sim.hists.root");
+//    TFile fDca1("hijing.sim.hists.etaCut.geantKPi.root");
 //    TFile fDca1("ratio.hists.0810.root");
-    TFile *outRatioPion = new TFile("hftratio_vs_pt_dAu_pion.root", "RECREATE");
+
+//    TFile *outRatioPion = new TFile("hftratio_vs_pt_dAu_pion_hijing.root", "RECREATE");
+//    outRatioPion->SetCompressionSettings(0);
+//    TFile *outRatioKaon = new TFile("hftratio_vs_pt_dAu_kaon_hijing.root", "RECREATE");
+//    outRatioKaon->SetCompressionSettings(0);
+
+    TFile *outRatioPion = new TFile("hftratio_vs_pt_dAu_pion_hijing.root", "RECREATE");
     outRatioPion->SetCompressionSettings(0);
-    TFile *outRatioKaon = new TFile("hftratio_vs_pt_dAu_kaon.root", "RECREATE");
+    TFile *outRatioKaon = new TFile("hftratio_vs_pt_dAu_kaon_hijing.root", "RECREATE");
     outRatioKaon->SetCompressionSettings(0);
 
 
@@ -44,8 +58,8 @@ void createHist() {
 //    const int m_nZdc = 5;
 //    float const m_zdcEdge[m_nZdc+1] = {0,50,90,130,170,210};
 
-    const int m_nZdc = 2;
-    float const m_zdcEdge[m_nZdc+1] = {0,150,210};
+    const int m_nZdc = 1;
+    float const m_zdcEdge[m_nZdc+1] = {0,210};
 
 //    for(int iParticle = 0; iParticle < nParticles; ++iParticle){
 //        for (int iEta = 0; iEta < nEtas; ++iEta){
@@ -128,10 +142,15 @@ void createHist() {
 //                            cout << m_zdcEdge[iZDC] << " " << m_zdcEdge[iZDC + 1] << endl;
 //                            cout << binlow << " " << binup << endl;
                             TH1D *hist1d = hist2D->ProjectionY("_py", binlow, binup, "");
+//                            if (hist1d->GetEntries()<10) cout<<nameHft<<" "<< hist1d->GetEntries() <<endl;
+
                             TH1D *hist1dtpc = hist2Dtpc->ProjectionY("_py", binlow, binup, "");
                             hist1d->Divide(hist1dtpc);
                             hist1d->SetNameTitle(Form("h_hftratio_p%d_eta%d_vz%d_phi%d_z%d", iParticle, iEta, iVz, iPhi, iZDC), Form("h_hftratio_p%d_eta%d_vz%d_phi%d_z%d", iParticle, iEta, iVz, iPhi, iZDC));
-                            if (iParticle == 0) {
+
+                            if (hist1d->GetEntries()<10) cout<<hist1d->GetName()<<" "<< hist1d->GetEntries() <<endl;
+
+                        if (iParticle == 0) {
                                 outRatioPion->cd();
                                 hist1d->Write();
                             }

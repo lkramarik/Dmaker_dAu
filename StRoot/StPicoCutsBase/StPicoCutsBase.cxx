@@ -174,8 +174,7 @@ bool StPicoCutsBase::isGoodEvent(StPicoDst const * const picoDst, int *aEventCut
 
     // -- 4 Vertex z - vertex_z(vpd) outside cut window
     ++iCut;
-    if (false) aEventCuts[iCut] = 1;
-//    if (fabs(picoEvent->primaryVertex().z() - picoEvent->vzVpd()) >= mVzVpdVzMax) aEventCuts[iCut] = 1;
+    if (fabs(picoEvent->primaryVertex().z() - picoEvent->vzVpd()) >= mVzVpdVzMax) aEventCuts[iCut] = 1;
 
     ++iCut;
 
@@ -201,13 +200,11 @@ bool StPicoCutsBase::isGoodRun(StPicoEvent const * const picoEvent) const {
 bool StPicoCutsBase::isGoodTrigger(StPicoEvent const * const picoEvent) const {
     // -- is good trigger in list of good triggerIds
 
-//    for(std::vector<unsigned int>::const_iterator iter = mVecTriggerIdList.begin(); iter != mVecTriggerIdList.end(); ++iter)
-//        if(picoEvent->isTrigger(*iter))
-//            return true;
-//
-//    return false;
+    for(std::vector<unsigned int>::const_iterator iter = mVecTriggerIdList.begin(); iter != mVecTriggerIdList.end(); ++iter)
+        if(picoEvent->isTrigger(*iter))
+            return true;
 
-    return true;
+    return false;
 }
 
 // _________________________________________________________
@@ -300,8 +297,8 @@ bool StPicoCutsBase::isTPCHadron(StPicoTrack const * const trk, int pidFlag) con
 bool StPicoCutsBase::isTOFHadronPID(StPicoTrack const *trk, float const & tofBeta, int pidFlag) const {
     if (tofBeta <= 0) {return false;}
     double ptot    = trk->gPtot();
-    float betaInv = ptot / sqrt(ptot*ptot + mHypotheticalMass2[pidFlag]);
-    return ( fabs(1/tofBeta - 1/betaInv) < mTOFDeltaOneOverBetaMax[pidFlag] );
+    float beta = ptot / sqrt(ptot*ptot + mHypotheticalMass2[pidFlag]);
+    return ( fabs(1/tofBeta - 1/beta) < mTOFDeltaOneOverBetaMax[pidFlag] );
 }
 
 // _________________________________________________________

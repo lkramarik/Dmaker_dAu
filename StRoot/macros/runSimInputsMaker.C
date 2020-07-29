@@ -38,14 +38,14 @@ void runSimInputsMaker(
 
     hfCuts->setBadRunListFileName(badRunListFileName);
     hfCuts->addTriggerId(530003); //VPD-5
-    hfCuts->setCutVzMax(600);
-    hfCuts->setCutVzVpdVzMax(600.);
-    hfCuts->setCheckHotSpot(false);
+    hfCuts->setCutVzMax(6);
+    hfCuts->setCutVzVpdVzMax(6.);
+    hfCuts->setCheckHotSpot(true);
 
     hfCuts->setCutNHitsFitMin(15);
     hfCuts->setCutRequireHFT(false); //we want to study HFT ratio, thus need non-HFT tracks
     hfCuts->setHybridTof(true);
-    hfCuts->setCutPrimaryDCAtoVtxMax(1.5);
+    hfCuts->setCutPrimaryDCAtoVtxMax(1.);
 
     hfCuts->setCutTPCNSigmaPion(3.0);
     hfCuts->setCutTPCNSigmaKaon(2.0);

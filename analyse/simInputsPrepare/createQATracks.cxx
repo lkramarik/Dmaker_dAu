@@ -29,6 +29,8 @@ void draw(TH1D* histo, TString xAxis, TString yAxis, Int_t color) {
     histo->SetMarkerColor(color);
     histo->SetMarkerStyle(20);
     histo->SetStats(0);
+    if(xAxis=="p_{T} [GeV/c]") histo->GetXaxis()->SetRangeUser(0,4);
+    if(xAxis=="DCA [cm]") histo->GetXaxis()->SetRangeUser(0,0.1);
 }
 
 //_____________________________________________________________________________________________________________
@@ -37,8 +39,8 @@ void createQATracks() {
 //    TString fileNameData = "outputLocal.hists.root";
 //    TString fileNameData = "ntp.track.2403.root";
 //    TString fileNameData = "ntp.2403.sample.root";
-    TString fileNameData = "/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/simInputsPrepare/toHadd/ntp.ratio.1404.half.rootprimary.root";
 //    TString fileNameData = "/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/simInputsPrepare/toHadd/ntp.ratio.1404.half.root";
+    TString fileNameData = "/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/simInputsPrepare/toHadd/ntp.ratio.1404.half.root";
     auto* dataF = new TFile(fileNameData,"r");
     auto* dataOut = new TFile("tracksQA.data.root","recreate");
     auto* ntpData = (TNtuple*)dataF -> Get("ntp_tracks");
@@ -100,7 +102,9 @@ void createQATracks() {
     for (int k = 0; k < ntpData->GetEntries(); ++k) {
         ntpData->GetEntry(k);
         if (isTOF==0) continue;
+//        if (nTofTracks<1) continue;
         if (dca>1.5) continue;
+//        if ()
 
         hnHitsFit->Fill(nHitsFit);
         hDcaAll->Fill(dca);
@@ -254,9 +258,19 @@ void compareEvtEmb() {
 //________________________________________________________________________________________________________________________
 void compareEmb() {
     TString fileNameData = "/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/simInputsPrepare/tracksQA.data.root";
+//    TString fileNameData = "/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/simInputsPrepare/tracksQA.data.tofmatched.primary.root";
 //    TString fileNameSim = "/home/lukas/work/D0-fullEvent/analyse/test.out.root";
-    TString fileNameSim = "/home/lukas/work/D0-fullEvent/analyse/out_test.big.cc.setup6.root";
-    TString fileNameSim1 = "/home/lukas/work/D0-fullEvent/analyse/out_test.big.MB.2705.root";
+//    TString fileNameSim = "/home/lukas/work/D0-fullEvent/analyse/out_test.big.setup7.root";
+//    TString fileNameSim1 = "/home/lukas/work/D0-fullEvent/analyse/out_test.big.MB.setup7.2805.root";
+
+//    TString fileNameSim = "/home/lukas/work/D0-fullEvent/analyse/out_test.0806.setup7.root";
+//    TString fileNameSim = "/home/lukas/work/D0-fullEvent/analyse/out_test.0906.setup_10_big.root";
+//    TString fileNameSim1 = "/home/lukas/work/D0-fullEvent/analyse/out_test.0906.MB_setup_10_big.root";
+
+    TString fileNameSim = "/home/lukas/work/D0-fullEvent/analyse/out_test.productionSample.MB.root";
+    TString fileNameSim1 = "/home/lukas/work/D0-fullEvent/analyse/out_test.productionSample.vtx.root";
+//    TString fileNameSimNoVtx = "/home/lukas/work/D0-fullEvent/analyse/out_test.productionSample.NoVtx.root";
+//    TString fileNameSim1 = "/home/lukas/work/D0-fullEvent/analyse/out_test.0906.MB_setup_10_big.root";
 
     auto* dataF = new TFile(fileNameData,"r");
     auto* dataSimF = new TFile(fileNameSim,"r");
@@ -268,12 +282,13 @@ void compareEmb() {
     list[1] = (TList*)dataSimF -> Get("hists_QA;1");
     list[2] = (TList*)dataSimF1 -> Get("hists_QA;1");
 
-    TString names[] = {"data", "sim", "sim1"};
+//    TString names[] = {"data","ccbar Pythia+Hijing+zerobias","Pythia+Hijing+zerobias"};
+    TString names[] = {"data","D^{0} Hijing","MB Hijing"};
 
     const int nFiles=3;
 
     Int_t color[]={46,9,8};
-
+    Double_t scale[]={ 10000000, 957., 744.};
     TString histoname;
 
     TH1D* hnHitsFit[nFiles];
@@ -294,7 +309,7 @@ void compareEmb() {
 
         hDcaAllHft[k]=new TH1D();
         hDcaAllHft[k]=static_cast<TH1D*>(list[k]->FindObject("hDca_all_hft"));
-        hDcaAllHft[k]->SetTitle("HFT");
+        hDcaAllHft[k]->SetTitle("HFT tracks");
         draw(hDcaAllHft[k], "DCA [cm]", "1/N_{entries}", color[k]);
 
         hnHitsFit[k]=new TH1D();
@@ -304,7 +319,7 @@ void compareEmb() {
 
         hnHitsFitHft[k]=new TH1D();
         hnHitsFitHft[k]=static_cast<TH1D*>(list[k]->FindObject("hnHitsFitHft"));
-        hnHitsFitHft[k]->SetTitle("HFT");
+        hnHitsFitHft[k]->SetTitle("HFT tracks");
         draw(hnHitsFitHft[k], "nHitsFit", "1/N_{entries}", color[k]);
 
         for (int j = 0; j < nDcaRatio; ++j) {
@@ -314,6 +329,7 @@ void compareEmb() {
             histoname=Form("DCA < %.1f cm", dcaCut[j]);
             hPtRecoDCA[k][j]->SetTitle(histoname);
             draw(hPtRecoDCA[k][j],"p_{T} [GeV/c]", "1/N_{entries}", color[k]);
+//            hPtRecoDCA[k][j]->Scale(1./scale[k]);
 
             histoname=Form("hPt_hft_dca%.1f", dcaCut[j]);
             hPtRecoHftDCA[k][j]=new TH1D();
@@ -321,7 +337,7 @@ void compareEmb() {
             histoname=Form("HFT, DCA < %.1f cm", dcaCut[j]);
             hPtRecoHftDCA[k][j]->SetTitle(histoname);
             draw(hPtRecoHftDCA[k][j], "p_{T} [GeV/c]", "1/N_{entries}", color[k]);
-
+//            hPtRecoHftDCA[k][j]->Scale(1./scale[k]);
         }
 
         for (int j = 0; j < nPtDca; ++j) {
@@ -331,19 +347,22 @@ void compareEmb() {
             histoname=Form("%.2f < p_{T} < %.2f GeV/c", ptCut[j], ptCut[j+1]);
             hDCAPtBins[k][j]->SetTitle(histoname);
             draw(hDCAPtBins[k][j], "DCA [cm]", "1/N_{entries}", color[k]);
+//            hDCAPtBins[k][j]->Scale(1./scale[k]);
 
             histoname=Form("hDca_hft_pt_%.2f_%.2f", ptCut[j], ptCut[j+1]);
             hDCAPtBinsHft[k][j]=new TH1D();
             hDCAPtBinsHft[k][j]=static_cast<TH1D*>(list[k]->FindObject(histoname));
-            histoname=Form("HFT, %.2f < p_{T} < %.2f GeV/c", ptCut[j], ptCut[j+1]);
+            histoname=Form("HFT tracks, %.2f < p_{T} < %.2f GeV/c", ptCut[j], ptCut[j+1]);
             hDCAPtBinsHft[k][j]->SetTitle(histoname);
             draw(hDCAPtBinsHft[k][j], "DCA [cm]", "1/N_{entries}", color[k]);
+//            hDCAPtBinsHft[k][j]->Scale(1./scale[k]);
+
 
         }
 
     }
 
-    TLegend *legend = new TLegend(0.767, 0.78, 0.92, 0.89);
+    TLegend *legend = new TLegend(0.38, 0.78, 0.534, 0.88);
     legend -> SetFillStyle(0);
     legend -> SetLineColor(0);
     legend -> SetTextSize(0.04);
