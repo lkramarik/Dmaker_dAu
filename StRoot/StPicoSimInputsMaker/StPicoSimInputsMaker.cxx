@@ -83,7 +83,7 @@ int StPicoSimInputsMaker::createQA(){
     for (unsigned int iTrack = 0; iTrack < nTracks; ++iTrack) {
         StPicoTrack const* trk = mPicoDst->track(iTrack);
         if (!trk) continue;
-        if (!(trk->isPrimary())) continue; //!!! REMOVE
+        if (!(trk->isPrimary())) continue;
 
         StPicoPhysicalHelix helix = trk->helix(mBField);
         TVector3 momentum = trk->gMom(mPrimVtx, mBField);
