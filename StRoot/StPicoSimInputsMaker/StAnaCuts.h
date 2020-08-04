@@ -58,7 +58,7 @@ namespace vars {
 //    float const m_multEdge[m_nmultEdge+1] = {0, 200}; //currently not used in dca
 
     const int m_nmultEdge = 7;
-    float const m_multEdge[m_nmultEdge+1] = {0, 4, 8, 12, 16, 20, 24, 200}; //currently not used in dca
+    float const m_multEdge[m_nmultEdge+1] = {0, 4, 8, 12, 16, 20, 24, 200};
 //    int multEdge[nmultEdge + 1] = {0, 4, 8, 12, 16, 20, 24, 200};
 
 

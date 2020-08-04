@@ -17,32 +17,31 @@ TH1D* h1Vz[nmultEdge];
 TH1D* h1ZdcX[nmultEdge];
 
 void createHist() {
-    //data:
-//    const Int_t nParticles = 2; //ok
-//    int const nVzs = 6; //ok
-//    int const nEtas = 10; //ok
-//    const Int_t nPhi = 11; //ok
-
     //hijing:
-      const Int_t nParticles = 2; //ok
-    int const nVzs = 3; //ok
-    int const nEtas = 6; //ok
-    const Int_t nPhi = 11; //ok
-
-    // input file and output file
-//    TFile fDca1("2101.hists.root");
-    TFile fDca1("hijing.sim.hists.root");
-//    TFile fDca1("hijing.sim.hists.etaCut.geantKPi.root");
-//    TFile fDca1("ratio.hists.0810.root");
-
+//    const Int_t nParticles = 2; //ok
+//    int const nVzs = 3; //ok
+//    int const nEtas = 6; //ok
+//    const Int_t nPhi = 11; //ok
+//
+//    TFile fDca1("hijing.sim.hists.root");
+//
 //    TFile *outRatioPion = new TFile("hftratio_vs_pt_dAu_pion_hijing.root", "RECREATE");
 //    outRatioPion->SetCompressionSettings(0);
 //    TFile *outRatioKaon = new TFile("hftratio_vs_pt_dAu_kaon_hijing.root", "RECREATE");
 //    outRatioKaon->SetCompressionSettings(0);
 
-    TFile *outRatioPion = new TFile("hftratio_vs_pt_dAu_pion_hijing.root", "RECREATE");
+//_______________________________________________________________________________
+    //data:
+    const Int_t nParticles = 2; //ok
+    int const nVzs = 6; //ok
+    int const nEtas = 10; //ok
+    const Int_t nPhi = 11; //ok
+
+     TFile fDca1("ratio.3107.dca1cm.primary.root");
+
+    TFile *outRatioPion = new TFile("hftratio_vs_pt_dAu_pion.root", "RECREATE");
     outRatioPion->SetCompressionSettings(0);
-    TFile *outRatioKaon = new TFile("hftratio_vs_pt_dAu_kaon_hijing.root", "RECREATE");
+    TFile *outRatioKaon = new TFile("hftratio_vs_pt_dAu_kaon.root", "RECREATE");
     outRatioKaon->SetCompressionSettings(0);
 
 
