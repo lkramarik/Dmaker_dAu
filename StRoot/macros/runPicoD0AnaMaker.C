@@ -46,7 +46,7 @@ void runPicoD0AnaMaker(
     hfCuts->setCutNHitsFitMin(15);
     hfCuts->setCutRequireHFT(true);
     hfCuts->setHybridTof(true);
-    hfCuts->setCheckHotSpot(false);
+    hfCuts->setCheckHotSpot(true);
 
     hfCuts->setCutTPCNSigmaPion(3.0);
     hfCuts->setCutTPCNSigmaKaon(2.0);
@@ -57,10 +57,10 @@ void runPicoD0AnaMaker(
     hfCuts->setCutDcaMin(0.002,StHFCuts::kPion);
     hfCuts->setCutDcaMin(0.002,StHFCuts::kKaon);
 
-    float dcaDaughtersMax = 0.04;  // maximum toto ide
-    float decayLengthMin  = 0.001; // minimum
+    float dcaDaughtersMax = 1;  // maximum toto ide
+    float decayLengthMin  = 0.00001; // minimum
     float decayLengthMax  = 999;  //std::numeric_limits<float>::max(); toto ide (cutuje)
-    float cosThetaMin     = 0.5;   // minimum
+    float cosThetaMin     = 0.0;   // minimum
 //    float minMass         = 0.4;
     float minMass         = 1.7;
     float maxMass         = 2.;

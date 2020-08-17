@@ -33,9 +33,6 @@ namespace vars {
     const int m_nEtasDca = 3;
     float const m_EtaEdgeDca[m_nEtasDca+1] = {0, 0.4, 0.8, 1.0};
 
-    const int m_nPhisDca = 11;
-    float const m_PhiEdgeDca[m_nPhisDca + 1] = {-3.14159, -2.80359, -2.17527, -1.54696, -0.918637, -0.290319, 0.338, 0.966319, 1.59464, 2.22296, 2.85127, 3.14159};
-
     const int m_nVzsDca = 4;
     float const m_VzEdgeDca[m_nVzsDca + 1] = { -6.0, -3.0, 0, 3.0, 6.0};
 

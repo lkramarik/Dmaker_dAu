@@ -239,6 +239,9 @@ int StPicoD0AnaMaker::createCandidates() {
     Int_t nD0 = 0;
     nPrimary = 0;
 
+    Float_t hotSpot=0;
+    if (mHFCuts->checkHotSpot(&mPrimVtx)) hotSpot=1;
+
     for (unsigned short iTrack = 0; iTrack < nTracks; ++iTrack) {
         StPicoTrack* trk = mPicoDst->track(iTrack);
         if (abs(trk->gMom().PseudoRapidity())>1) continue;
@@ -261,10 +264,6 @@ int StPicoD0AnaMaker::createCandidates() {
 
     TVector3 useVertex(mPrimVtx.x(), mPrimVtx.y(), mPrimVtx.z());
     if (mSwitchRefit) useVertex=refitVertex(true);
-//        if (tracksToRemove.size()==nPrimary) {
-//            cout<<useVertex.x()<<" "<<useVertex.y()<<" "<<useVertex.z()<<endl;
-//            cout<<mPrimVtx.x()<<" "<<mPrimVtx.y()<<" "<<mPrimVtx.z()<<endl;
-//        }
 
     for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
         StPicoTrack *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
@@ -281,9 +280,6 @@ int StPicoD0AnaMaker::createCandidates() {
             if (pion1->isPrimary()) primary = 3;
             if (kaon->isPrimary()) primary = 4;
             if (pion1->isPrimary() && kaon->isPrimary()) primary = 2;
-
-            Float_t hotSpot=0;
-            if (mHFCuts->checkHotSpot(&mPrimVtx)) hotSpot=1;
 
             const int nNtVars = ntp_DMeson_Signal->GetNvar();
             float ntVar[nNtVars];

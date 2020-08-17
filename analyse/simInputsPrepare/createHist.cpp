@@ -18,37 +18,42 @@ TH1D* h1ZdcX[nmultEdge];
 
 void createHist() {
     //hijing:
-//    const Int_t nParticles = 2; //ok
-//    int const nVzs = 3; //ok
-//    int const nEtas = 6; //ok
-//    const Int_t nPhi = 11; //ok
-//
+    const Int_t nParticles = 2; //ok
+    int const nVzs = 3; //ok
+    int const nEtas = 6; //ok
+    const Int_t nPhi = 11; //ok
+
 //    TFile fDca1("hijing.sim.hists.root");
-//
-//    TFile *outRatioPion = new TFile("hftratio_vs_pt_dAu_pion_hijing.root", "RECREATE");
-//    outRatioPion->SetCompressionSettings(0);
-//    TFile *outRatioKaon = new TFile("hftratio_vs_pt_dAu_kaon_hijing.root", "RECREATE");
-//    outRatioKaon->SetCompressionSettings(0);
+    TFile fDca1("hijing.sim.hists.production.vtx.3M.1308.root");
+
+    TFile *outRatioPion = new TFile("hftratio_vs_pt_dAu_pion_hijing.root", "RECREATE");
+    outRatioPion->SetCompressionSettings(0);
+    TFile *outRatioKaon = new TFile("hftratio_vs_pt_dAu_kaon_hijing.root", "RECREATE");
+    outRatioKaon->SetCompressionSettings(0);
+    TFile *outHist2d = new TFile("2d_hijing.root", "RECREATE");
+    TFile *outEvent = new TFile("inputs.event.hijing.root", "RECREATE");
+    outEvent->SetCompressionSettings(0);
 
 //_______________________________________________________________________________
     //data:
-    const Int_t nParticles = 2; //ok
-    int const nVzs = 6; //ok
-    int const nEtas = 10; //ok
-    const Int_t nPhi = 11; //ok
+//    const Int_t nParticles = 2; //ok
+//    int const nVzs = 6; //ok
+//    int const nEtas = 10; //ok
+//    const Int_t nPhi = 11; //ok
+//
+//     TFile fDca1("ratio.3107.dca1cm.primary.root");
+//
+//    TFile *outRatioPion = new TFile("hftratio_vs_pt_dAu_pion.root", "RECREATE");
+//    outRatioPion->SetCompressionSettings(0);
+//    TFile *outRatioKaon = new TFile("hftratio_vs_pt_dAu_kaon.root", "RECREATE");
+//    outRatioKaon->SetCompressionSettings(0);
+//
+//    TFile *outHist2d = new TFile("2d.root", "RECREATE");
+////    TFile *outHist2dLowStats = new TFile("2d_badstats.root", "RECREATE");
+//    TFile *outEvent = new TFile("inputs.event.root", "RECREATE");
+//    outEvent->SetCompressionSettings(0);
 
-     TFile fDca1("ratio.3107.dca1cm.primary.root");
-
-    TFile *outRatioPion = new TFile("hftratio_vs_pt_dAu_pion.root", "RECREATE");
-    outRatioPion->SetCompressionSettings(0);
-    TFile *outRatioKaon = new TFile("hftratio_vs_pt_dAu_kaon.root", "RECREATE");
-    outRatioKaon->SetCompressionSettings(0);
-
-
-    TFile *outHist2d = new TFile("2d.root", "RECREATE");
-//    TFile *outHist2dLowStats = new TFile("2d_badstats.root", "RECREATE");
-    TFile *outEvent = new TFile("inputs.event.root", "RECREATE");
-    outEvent->SetCompressionSettings(0);
+    //_______________________________________________________________________________
 
     int multEdge[nmultEdge + 1] = {0, 200};
 //    int multEdge[nmultEdge + 1] = {0, 4, 8, 12, 16, 20, 24, 200};
