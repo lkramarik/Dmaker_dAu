@@ -156,23 +156,23 @@ bool StPicoCutsBase::isGoodEvent(StPicoDst const * const picoDst, int *aEventCut
         aEventCuts[ii] = 0;
 
     unsigned int iCut = 0;
-    // -- 0 - before event cuts
+    // -- 0 - before event cuts //all
     aEventCuts[iCut] = 0;
 
-    // -- 1 - is bad run
+    // -- 1 - is bad run //good run
     ++iCut;
     if (!isGoodRun(picoEvent)) aEventCuts[iCut] = 1;
 
-    // -- 2 - No Trigger fired
+    // -- 2 - No Trigger fired //trigger
     ++iCut;
 //  trigger - is ok?
     if (!isGoodTrigger(picoEvent)) aEventCuts[iCut] = 1;
 
-    // -- 3 - Vertex z outside cut window
+    // -- 3 - Vertex z outside cut window //vz
     ++iCut;
     if (fabs(picoEvent->primaryVertex().z()) >= mVzMax) aEventCuts[iCut] = 1;
 
-    // -- 4 Vertex z - vertex_z(vpd) outside cut window
+    // -- 4 Vertex z - vertex_z(vpd) outside cut window // vz-vzvpd
     ++iCut;
     if (fabs(picoEvent->primaryVertex().z() - picoEvent->vzVpd()) >= mVzVpdVzMax) aEventCuts[iCut] = 1;
 

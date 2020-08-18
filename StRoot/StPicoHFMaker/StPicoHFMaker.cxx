@@ -167,37 +167,23 @@ bool StPicoHFMaker::setupEvent() {
 // _________________________________________________________
 void StPicoHFMaker::initializeEventStats() {
   // -- Initialize event statistics histograms
-
   const char *aEventCutNames[]   = {"all", "good run", "trigger", "#it{v}_{z}", "#it{v}_{z}-#it{v}^{VPD}_{z}", "accepted"};
 
   mOutList->Add(new TH1F("hEventStat0","Event cut statistics 0;Event Cuts;Events", mHFCuts->eventStatMax(), -0.5, mHFCuts->eventStatMax()-0.5));
   TH1F *hEventStat0 = static_cast<TH1F*>(mOutList->Last());
 
-  mOutList->Add(new TH1F("hEventStat1","Event cut statistics 1;Event Cuts;Events", mHFCuts->eventStatMax(), -0.5, mHFCuts->eventStatMax()-0.5));
-  TH1F *hEventStat1 = static_cast<TH1F*>(mOutList->Last());
-
   for (unsigned int ii = 0; ii < mHFCuts->eventStatMax(); ii++) {
     hEventStat0->GetXaxis()->SetBinLabel(ii+1, aEventCutNames[ii]);
-    hEventStat1->GetXaxis()->SetBinLabel(ii+1, aEventCutNames[ii]);
   }
 }
 
 //________________________________________________________________________
 void StPicoHFMaker::fillEventStats(int *aEventStat) {
   // -- Fill event statistics 
-
   TH1F *hEventStat0 = static_cast<TH1F*>(mOutList->FindObject("hEventStat0"));
-//  TH1F *hEventStat1 = static_cast<TH1F*>(mOutList->FindObject("hEventStat1"));
-
   for (unsigned int idx = 0; idx < mHFCuts->eventStatMax() ; ++idx) {
     if (!aEventStat[idx])
       hEventStat0->Fill(idx);
   }
-
-//  for (unsigned int idx = 0; idx < mHFCuts->eventStatMax(); ++idx) {
-//    if (aEventStat[idx])
-//      break;
-//    hEventStat1->Fill(idx);
-//  }
 }
 
