@@ -30,7 +30,7 @@ void draw(TH1D* histo, TString xAxis, TString yAxis, Int_t color) {
     histo->SetMarkerStyle(20);
     histo->SetStats(0);
     if(xAxis=="p_{T} [GeV/c]") histo->GetXaxis()->SetRangeUser(0,4);
-    if(xAxis=="DCA [cm]") histo->GetXaxis()->SetRangeUser(0,0.1);
+//    if(xAxis=="DCA [cm]") histo->GetXaxis()->SetRangeUser(0,0.2);
 }
 
 //_____________________________________________________________________________________________________________
@@ -40,7 +40,7 @@ void createQATracks() {
 //    TString fileNameData = "ntp.track.2403.root";
 //    TString fileNameData = "ntp.2403.sample.root";
 //    TString fileNameData = "/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/simInputsPrepare/toHadd/ntp.ratio.1404.half.root";
-    TString fileNameData = "/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/simInputsPrepare/toHadd/ntp.ratio.1404.half.root";
+    TString fileNameData = "/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/simInputsPrepare/toHadd/ntp.ratio.1404.half.rootprimary.root";
     auto* dataF = new TFile(fileNameData,"r");
     auto* dataOut = new TFile("tracksQA.data.root","recreate");
     auto* ntpData = (TNtuple*)dataF -> Get("ntp_tracks");
@@ -76,7 +76,6 @@ void createQATracks() {
     TH1D* hDcaAll = new TH1D("hDca_all", "hDca_all", 100, 0, maxDca);
     TH1D* hDcaAllHft = new TH1D("hDca_all_hft", "hDca_all_hft", 100, 0, maxDca);
 
-
     TH1D* hPtRecoDCA[10];
     TH1D* hPtRecoHftDCA[10];
     TH1D* hDCAPtBins[10];
@@ -102,9 +101,9 @@ void createQATracks() {
     for (int k = 0; k < ntpData->GetEntries(); ++k) {
         ntpData->GetEntry(k);
         if (isTOF==0) continue;
-//        if (nTofTracks<1) continue;
+//        if (isPrimary==0) continue;
+        if (nTofTracks<2) continue;
         if (dca>1.5) continue;
-//        if ()
 
         hnHitsFit->Fill(nHitsFit);
         hDcaAll->Fill(dca);
@@ -259,16 +258,9 @@ void compareEvtEmb() {
 void compareEmb() {
     TString fileNameData = "/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/simInputsPrepare/tracksQA.data.root";
 //    TString fileNameData = "/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/simInputsPrepare/tracksQA.data.tofmatched.primary.root";
-//    TString fileNameSim = "/home/lukas/work/D0-fullEvent/analyse/test.out.root";
-//    TString fileNameSim = "/home/lukas/work/D0-fullEvent/analyse/out_test.big.setup7.root";
-//    TString fileNameSim1 = "/home/lukas/work/D0-fullEvent/analyse/out_test.big.MB.setup7.2805.root";
 
-//    TString fileNameSim = "/home/lukas/work/D0-fullEvent/analyse/out_test.0806.setup7.root";
-//    TString fileNameSim = "/home/lukas/work/D0-fullEvent/analyse/out_test.0906.setup_10_big.root";
-//    TString fileNameSim1 = "/home/lukas/work/D0-fullEvent/analyse/out_test.0906.MB_setup_10_big.root";
-
-    TString fileNameSim = "/home/lukas/work/D0-fullEvent/analyse/out_test.productionSample.MB.root";
-    TString fileNameSim1 = "/home/lukas/work/D0-fullEvent/analyse/out_test.productionSample.vtx.root";
+    TString fileNameSim = "/home/lukas/work/D0-fullEvent/analyse/out_production.1M.MB.root";
+    TString fileNameSim1 = "/home/lukas/work/D0-fullEvent/analyse/out_production.vtx.3M.1308.root";
 //    TString fileNameSimNoVtx = "/home/lukas/work/D0-fullEvent/analyse/out_test.productionSample.NoVtx.root";
 //    TString fileNameSim1 = "/home/lukas/work/D0-fullEvent/analyse/out_test.0906.MB_setup_10_big.root";
 
@@ -455,6 +447,7 @@ void compareEmb() {
         }
     }
 
+    Double_t scaling;
     for (int j = 0; j < nPtDca; ++j) {
         canId++;
         for (int k = 0; k < nFiles; ++k) {
@@ -463,7 +456,15 @@ void compareEmb() {
             gPad->SetLeftMargin(0.15);
             gPad->SetRightMargin(0.05);
 
-            hDCAPtBins[k][j]->Scale(1/hDCAPtBins[k][j]->GetEntries());
+            scaling=hDCAPtBins[k][j]->Integral();
+            cout<<scaling<<endl;
+
+            hDCAPtBins[k][j]->Scale(1./scaling);
+
+            scaling=hDCAPtBins[k][j]->Integral();
+            cout<<scaling<<endl;
+
+            cout<<hDCAPtBins[k][j]->GetNbinsX()<<endl;
             if (k==0) hDCAPtBins[k][j]->Draw();
             hDCAPtBins[k][j]->Draw("same");
         }
@@ -474,7 +475,7 @@ void compareEmb() {
             gPad->SetLeftMargin(0.15);
             gPad->SetRightMargin(0.05);
 
-            hDCAPtBinsHft[k][j]->Scale(1/hDCAPtBinsHft[k][j]->GetEntries());
+            hDCAPtBinsHft[k][j]->Scale(1./hDCAPtBinsHft[k][j]->GetEntries());
             if (k==0) hDCAPtBinsHft[k][j]->Draw();
             hDCAPtBinsHft[k][j]->Draw("same");
             legend->Draw("same");

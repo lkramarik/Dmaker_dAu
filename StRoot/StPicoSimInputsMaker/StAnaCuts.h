@@ -6,10 +6,10 @@ using namespace std;
 namespace vars {
 //    const bool ratioHists = true;
     const bool ratioHists = false;
-//    const bool dcaHists = false;
-    const bool dcaHists = true;
-    const bool fillNtp = false;
-//    const bool fillNtp = true;
+    const bool dcaHists = false;
+//    const bool dcaHists = true;
+//    const bool fillNtp = false;
+    const bool fillNtp = true;
 
 //histo stuff
     const int m_nPtTOF = 19;

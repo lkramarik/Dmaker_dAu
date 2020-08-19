@@ -83,7 +83,7 @@ int StPicoSimInputsMaker::createQA(){
     for (unsigned int iTrack = 0; iTrack < nTracks; ++iTrack) {
         StPicoTrack const* trk = mPicoDst->track(iTrack);
         if (!trk) continue;
-        if (!(trk->isPrimary())) continue;
+//        if (!(trk->isPrimary())) continue;
 
         StPicoPhysicalHelix helix = trk->helix(mBField);
         TVector3 momentum = trk->gMom(mPrimVtx, mBField);
@@ -146,7 +146,7 @@ int StPicoSimInputsMaker::createQA(){
             if (trk->isPrimary()) isPrimaryTrk=1.;
             Float_t nHitsFitTrk = trk->nHitsFit();
             Float_t pt=momentum.Perp();
-            ntp_tracks->Fill(pt,dca,isHft,isTOF,zdc,isPrimaryTrk,nHitsFitTrk,multiplicity,nHftTracks,nTofTracks,particleId);
+            ntp_tracks->Fill(pt,dca,dcaXy,dcaZ,isHft,isTOF,zdc,isPrimaryTrk,nHitsFitTrk,multiplicity,nHftTracks,nTofTracks,particleId);
         }
 
         if (trk->isHFTTrack() && (goodPion || goodKaon) && vars::dcaHists){
@@ -185,7 +185,7 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
     }
 
     if(vars::fillNtp) {
-        ntp_tracks = new TNtuple("ntp_tracks","ntp_tracks", "pt:dca:isHFT:isTOF:zdc:isPrimary:nHitsFit:refMult:nHftTracks:nTofTracks:particleId");
+        ntp_tracks = new TNtuple("ntp_tracks","ntp_tracks", "pt:dca:dcaXy:dcaZ:isHFT:isTOF:zdc:isPrimary:nHitsFit:refMult:nHftTracks:nTofTracks:particleId");
     }
 
     if(vars::ratioHists) {
