@@ -72,6 +72,8 @@ int StPicoD0AnaMaker::InitHF() {
     mOutList->Add(new TH1F("hInvMassBDT23","hInvMassBDT23", 300, 1.7, 2.0));
     mOutList->Add(new TH1F("hInvMassBDT35","hInvMassBDT35", 300, 1.7, 2.0));
 
+    mOutList->Add(new TH2F("hPVxy","hPVxy", 100, -6, 6, 100, -6, 6));
+
     mOutList->Add(new TH1F("hPVDiffX","hPVDiffX", 1001, -0.02002, 0.01998));
     mOutList->Add(new TH1F("hPVDiffY","hPVDiffY", 1001, -0.02002, 0.01998));
     mOutList->Add(new TH1F("hPVDiffZ","hPVDiffZ", 1001, -0.02002, 0.01998));
@@ -223,6 +225,10 @@ int StPicoD0AnaMaker::createCandidates() {
 //    if (!(abs(mPrimVtx.x())<0.6)) return kStOK;
 //    if (!(abs(mPrimVtx.y())<0.6)) return kStOK;
 
+    TH2F *hPVxy = static_cast<TH2F*>(mOutList->FindObject("hPVxy"));
+
+    hPVxy->Fill(mPrimVtx.x(),mPrimVtx.y());
+
     TH2F *hD0VsRemoved = static_cast<TH2F*>(mOutList->FindObject("hD0VsRemoved"));
 
     TH1F *hKaonPt = static_cast<TH1F*>(mOutList->FindObject("hKaonPt"));
@@ -365,6 +371,7 @@ TVector3 StPicoD0AnaMaker::refitVertex(bool always){
     bool singleTrack=true;
 //    bool singleTrack=!pairRem;
     std::vector<int> goodTracksToFit;
+
 
     TH1F *hPVDiffX = static_cast<TH1F*>(mOutList->FindObject("hPVDiffX"));
     TH1F *hPVDiffY = static_cast<TH1F*>(mOutList->FindObject("hPVDiffY"));
