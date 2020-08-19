@@ -19,7 +19,7 @@ ClassImp(StPicoCutsBase)
 
 // _________________________________________________________
 StPicoCutsBase::StPicoCutsBase() : TNamed("PicoCutsBase", "PicoCutsBase"),
-                                   mTOFCorr(new StV0TofCorrection), mPicoDst(NULL), mEventStatMax(6), mTOFResolution(0.013),
+                                   mTOFCorr(new StV0TofCorrection), mPicoDst(NULL), mEventStatMax(7), mTOFResolution(0.013),
                                    mBadRunListFileName("picoList_bad.list"), mVzMax(6.), mVzVpdVzMax(3.),
                                    mNHitsFitMin(15), mRequireHFT(true), mNHitsFitnHitsMax(0.), mPrimaryDCAtoVtxMax(6.0), mPtMin(0.2), mHybridTof(false), mOnlyHotSpot(false) {
 
@@ -54,7 +54,7 @@ StPicoCutsBase::StPicoCutsBase() : TNamed("PicoCutsBase", "PicoCutsBase"),
 
 // _________________________________________________________
 StPicoCutsBase::StPicoCutsBase(const Char_t *name) : TNamed(name, name),
-                                                     mTOFCorr(new StV0TofCorrection), mPicoDst(NULL), mEventStatMax(6), mTOFResolution(0.013),
+                                                     mTOFCorr(new StV0TofCorrection), mPicoDst(NULL), mEventStatMax(7), mTOFResolution(0.013),
                                                      mBadRunListFileName("picoList_bad_MB.list"), mVzMax(6.), mVzVpdVzMax(3.),
                                                      mNHitsFitMin(15), mRequireHFT(true), mNHitsFitnHitsMax(0.), mPrimaryDCAtoVtxMax(6.0), mPtMin(0.2), mHybridTof(false), mOnlyHotSpot(false) {
     // -- constructor
@@ -141,9 +141,6 @@ bool StPicoCutsBase::isGoodEvent(StPicoDst const * const picoDst, int *aEventCut
     // -- set current primary vertex
     mPrimVtx = picoEvent->primaryVertex();
 
-//    if(mOnlyHotSpot) cout<<"m hot spor true"<<endl;
-    if(mOnlyHotSpot && !(checkHotSpot(&mPrimVtx))) return false;
-
     // -- quick method without providing stats
     if (!aEventCuts) {
         return (isGoodRun(picoEvent) && isGoodTrigger(picoEvent) &&
@@ -175,6 +172,10 @@ bool StPicoCutsBase::isGoodEvent(StPicoDst const * const picoDst, int *aEventCut
     // -- 4 Vertex z - vertex_z(vpd) outside cut window // vz-vzvpd
     ++iCut;
     if (fabs(picoEvent->primaryVertex().z() - picoEvent->vzVpd()) >= mVzVpdVzMax) aEventCuts[iCut] = 1;
+
+    // -- 5 VxVy hotspot
+    ++iCut;
+    if (!(checkHotSpot(&mPrimVtx))) aEventCuts[iCut] = 1;
 
     ++iCut;
 
