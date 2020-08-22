@@ -36,22 +36,88 @@ void createHftFromNtp(){
 //    TString fileNameData = "outputLocal.hists.root";
 //    TString fileNameData = "ntp.track.2403.root";
 //    TString fileNameData = "ntp.2403.sample.root";
-    TString fileNameData = "/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/simInputsPrepare/toHadd/ntp.ratio.1404.half.root";
+//    TString fileNameData = "/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/simInputsPrepare/toHadd/ntp.ratio.1404.half.root";
+    TString fileNameData = "/media/lukas/1E4183350724EC9C/tracks.sim.vzvpd3.hotspot.root";
 //    TString fileNameData = "/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/simInputsPrepare/toHadd/ntp.ratio.1404.half.rootprimary.root";
     auto* dataF = new TFile(fileNameData,"r");
     auto* dataOut = new TFile("ratio.root","recreate");
     auto* ntpData = (TNtuple*)dataF -> Get("ntp_tracks");
 
-    Float_t dca, isHFT, zdc, isPrimary, nHitsFit, refMult, nHftTracks;
+    Float_t  pt, dca, isHFT, isTOF, zdc, nHitsFit, refMult, nHftTracks, nTofTracks, particleId, isPrimary, dcaxy, dcaz;
+    ntpData->SetBranchAddress("pt", &pt);
+    ntpData->SetBranchAddress("dca", &dca);
+    ntpData->SetBranchAddress("dcaXy", &dcaxy);
+    ntpData->SetBranchAddress("dcaZ", &dcaz);
+    ntpData->SetBranchAddress("isHFT", &isHFT);
+    ntpData->SetBranchAddress("isTOF", &isTOF);
+    ntpData->SetBranchAddress("zdc", &zdc);
+    ntpData->SetBranchAddress("nHitsFit", &nHitsFit);
+    ntpData->SetBranchAddress("refMult", &refMult);
+    ntpData->SetBranchAddress("isPrimary", &isPrimary);
+    ntpData->SetBranchAddress("nHftTracks", &nHftTracks);
+    ntpData->SetBranchAddress("nTofTracks", &nTofTracks);
+    ntpData->SetBranchAddress("particleId", &particleId);
 
-    double maxPt = 6;
+//    Float_t dcaCuts[]={0.1, 0.3, 0.5, 0.7, 1, 1.5};
+//    const int nDCAcuts = sizeof(dcaCuts) / sizeof(Float_t);
 
-    TH1D *pt_hist_HFT = new TH1D("pT_HFT", "pT_HFT", 100, 0.15, maxPt);
-    TH1D *pt_hist = new TH1D("pt_hist", "pt_hist", 100, 0.15, maxPt);
+    const int nDCAcuts=6;
+    const float dcaCuts[nDCAcuts+1]={0., 0.3, 0.5, 0.7, 1.0, 1.2, 1.5};
 
-//    ntp_tracks = new TNtuple("ntp_tracks","ntp_tracks", "pt:dca:isHFT:zdc:isPrimary:nHitsFit:refMult:nHftTracks");
+    TString trackKinds[]=    {"","primary",     "TOFmatched", "primary_TOFmatched", "_nHftTracks1", "_nHftTracks2","_nTofTracks2"};
+    TString trackKindsCuts[]={"","isPrimary>0", "isTOF>0",    "isPrimary>0 && isTOF>0"};
+    const int nKinds = sizeof(trackKinds) / sizeof(TString);
 
+    TH1D* hPt[nKinds][nDCAcuts];
+    TH1D* hPtHft[nKinds][nDCAcuts];
 
+    TString nameHisto;
+    for (int i = 0; i < nKinds; ++i) {
+        for (int j = 0; j < nDCAcuts; ++j) {
+            nameHisto=Form("hPt_dca%.1f_%.1f_%s", dcaCuts[j], dcaCuts[j+1], trackKinds[i].Data());
+            hPt[i][j]=new TH1D(nameHisto, nameHisto, 100, 0, 10);
+            hPt[i][j]->Sumw2();
+            nameHisto=Form("hPtHft_dca%.1f_%.1f_%s", dcaCuts[j], dcaCuts[j+1], trackKinds[i].Data());
+            hPtHft[i][j]=new TH1D(nameHisto, nameHisto, 100, 0, 10);
+            hPtHft[i][j]->Sumw2();
+        }
+    }
+
+//    for (int k = 0; k < ntpData->GetEntries(); ++k) {
+    for (int k = 0; k < ntpData->GetEntries()/3; ++k) {
+        ntpData->GetEntry(k);
+        for (int i = 0; i < nDCAcuts; ++i) {
+            if (dca>dcaCuts[i] && dca<dcaCuts[i+1]) {
+                hPt[0][i]->Fill(pt);
+                if (isPrimary>0)  hPt[1][i]->Fill(pt);
+                if (isTOF>0)  hPt[2][i]->Fill(pt);
+                if (isPrimary>0 && isTOF>0)  hPt[3][i]->Fill(pt);
+                if (isPrimary>0 && isTOF>0 && nHftTracks>1)  hPt[4][i]->Fill(pt);
+                if (isPrimary>0 && isTOF>0 && nHftTracks>2)  hPt[5][i]->Fill(pt);
+                if (isPrimary>0 && isTOF>0 && nTofTracks>2)  hPt[6][i]->Fill(pt);
+
+                if (isHFT>0) {
+                    hPtHft[0][i]->Fill(pt);
+                    if (isPrimary>0)  hPtHft[1][i]->Fill(pt);
+                    if (isTOF>0)  hPtHft[2][i]->Fill(pt);
+                    if (isPrimary>0 && isTOF>0)  hPtHft[3][i]->Fill(pt);
+                    if (isPrimary>0 && isTOF>0 && nHftTracks>1)  hPtHft[4][i]->Fill(pt);
+                    if (isPrimary>0 && isTOF>0 && nHftTracks>2)  hPtHft[5][i]->Fill(pt);
+                    if (isPrimary>0 && isTOF>0 && nTofTracks>2)  hPtHft[6][i]->Fill(pt);
+                }
+            }
+        }
+    }
+
+    for (int i = 0; i < nKinds; ++i) {
+        for (int j = 0; j < nDCAcuts; ++j) {
+            hPtHft[i][j]->Divide(hPt[i][j]);
+            dataOut->cd();
+            hPtHft[i][j]->Write();
+        }
+    }
+
+    /*
     const char* cuts[] = {"dca<=0.1", "dca<=1.5", "dca<=1.0", "dca<=0.7", "dca<=0.5", "dca<=0.3"};
 //    const char* cuts[] = {"dca<=1.5 && nHftTracks>1", "dca<=1.0 && nHftTracks>1", "dca<=0.7 && nHftTracks>1", "dca<=0.5 && nHftTracks>1", "dca<=0.3 && nHftTracks>1"};
 //    const char* cuts[] = {"dca<=1.5 && nHftTracks>0", "dca<=1.0 && nHftTracks>0", "dca<=0.7 && nHftTracks>0", "dca<=0.5 && nHftTracks>0", "dca<=0.3 && nHftTracks>0",
@@ -64,8 +130,8 @@ void createHftFromNtp(){
 //    TString namesSuffix[] = {"dca1.5_nHft0", "dca1.0_nHft0", "dca0.7_nHft0", "dca0.5_nHft0", "dca0.3_nHft0",
 //                             "dca1.5", "dca1.0", "dca0.7", "dca0.5", "dca0.3"};
 
-//    TCut additionalCut = "isTOF>0 && isPrimary>0";
-    TCut additionalCut = "isPrimary>0 && nHftTracks>1";
+    TCut additionalCut = "isTOF>0 && isPrimary>0";
+//    TCut additionalCut = "isPrimary>0 && nHftTracks>1";
 
     const int nBins = sizeof(namesSuffix) / sizeof(TString);
 
@@ -77,8 +143,8 @@ void createHftFromNtp(){
     for (int i = 0; i < 6; ++i) {
         cout<<"nbin "<<i<<endl;
         TCut cut = cuts[i];
-        cut+="pt>0.15";
-        cut+="pt<6";
+//        cut+="pt>0.15";
+//        cut+="pt<6";
         cut+=additionalCut;
         cout<<cut<<endl;
         cwork->cd();
@@ -86,8 +152,8 @@ void createHftFromNtp(){
         cut+="isHFT>0";
         ntpData -> Project("pT_HFT", "pt", cut);
 
-        pt_hist_clone[i] = (TH1D*)pt_hist_HFT->Clone(Form("HFT_matching_ratio_%i", i));
-        pt_hist_clone[i]->SetNameTitle(Form("HFT_matching_ratio_%s", namesSuffix[i].Data()), cuts[i]);
+        pt_hist_clone[i] = (TH1D*)pt_hist_HFT->Clone();
+        pt_hist_clone[i]->SetNameTitle(Form("hPt_%s", namesSuffix[i].Data()), cuts[i]);
         pt_hist_clone[i]->Sumw2();
         pt_hist_clone[i]->Divide(pt_hist);
         pt_hist_clone[i]->Write();
@@ -106,6 +172,7 @@ void createHftFromNtp(){
 
     legend->Draw("same");
     c1->SaveAs("hft/ratios.png");
+    */
 }
 
 

@@ -39,7 +39,7 @@ void runSimInputsMaker(
     hfCuts->setBadRunListFileName(badRunListFileName);
     hfCuts->addTriggerId(530003); //VPD-5
     hfCuts->setCutVzMax(6);
-    hfCuts->setCutVzVpdVzMax(3.); //!!!!!!!!!!!!!!!!!!!!!!!!
+    hfCuts->setCutVzVpdVzMax(6.);
     hfCuts->setCheckHotSpot(true);
 
     hfCuts->setCutNHitsFitMin(15);

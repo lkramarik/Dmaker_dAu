@@ -69,7 +69,8 @@ int StPicoSimInputsMaker::createQA(){
     if (ZdcIndex==-1) return 0;
     mh3VzZdcMult -> Fill(mPrimVtx.z(),  mPicoDst->event()->ZDCx()/1000., multiplicity);
 
-
+    Float_t runId = mPicoDst->event()->runId();
+    Float_t eventId = mPicoDst->event()->eventId();
 
     Int_t nHftTracks=0;
     Int_t nTofTracks=0;
@@ -110,7 +111,7 @@ int StPicoSimInputsMaker::createQA(){
         goodKaon = (tofKaon && tpcKaon);
 
         TVector3 dcaPoint = trk->origin();
-        float dca = (mPrimVtx - trk->origin()).Mag();
+        float dca = (dcaPoint - mPrimVtx).Mag();
         float dcaZ = dcaPoint.z() - mPrimVtx.z();
         double dcaXy = helix.geometricSignedDistance(mPrimVtx.x(), mPrimVtx.y());
 
@@ -146,7 +147,7 @@ int StPicoSimInputsMaker::createQA(){
             if (trk->isPrimary()) isPrimaryTrk=1.;
             Float_t nHitsFitTrk = trk->nHitsFit();
             Float_t pt=momentum.Perp();
-            ntp_tracks->Fill(pt,dca,dcaXy,dcaZ,isHft,isTOF,zdc,isPrimaryTrk,nHitsFitTrk,multiplicity,nHftTracks,nTofTracks,particleId);
+            ntp_tracks->Fill(runId,eventId,pt,dca,dcaXy,dcaZ,isHft,isTOF,zdc,isPrimaryTrk,nHitsFitTrk,multiplicity,nHftTracks,nTofTracks,particleId);
         }
 
         if (trk->isHFTTrack() && (goodPion || goodKaon) && vars::dcaHists){
@@ -185,7 +186,7 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
     }
 
     if(vars::fillNtp) {
-        ntp_tracks = new TNtuple("ntp_tracks","ntp_tracks", "pt:dca:dcaXy:dcaZ:isHFT:isTOF:zdc:isPrimary:nHitsFit:refMult:nHftTracks:nTofTracks:particleId");
+        ntp_tracks = new TNtuple("ntp_tracks","ntp_tracks", "runId:eventId:pt:dca:dcaXy:dcaZ:isHFT:isTOF:zdc:isPrimary:nHitsFit:refMult:nHftTracks:nTofTracks:particleId");
     }
 
     if(vars::ratioHists) {
