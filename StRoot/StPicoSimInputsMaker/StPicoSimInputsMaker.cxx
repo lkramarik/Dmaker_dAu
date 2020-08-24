@@ -115,10 +115,13 @@ int StPicoSimInputsMaker::createQA(){
         float dcaZ = dcaPoint.z() - mPrimVtx.z();
         double dcaXy = helix.geometricSignedDistance(mPrimVtx.x(), mPrimVtx.y());
 
-        int EtaIndex = getEtaIndexDca(fabs(momentum.PseudoRapidity()));
-        int EtaIndexRatio = getEtaIndexRatio(momentum.PseudoRapidity());
+        float eta=momentum.PseudoRapidity();
+        float phi=momentum.Phi();
+
+        int EtaIndex = getEtaIndexDca(fabs(eta));
+        int EtaIndexRatio = getEtaIndexRatio(eta);
 //        cout<<"eta is "<<EtaIndex<<endl;
-        int PhiIndex = getPhiIndexRatio(momentum.Phi());
+        int PhiIndex = getPhiIndexRatio(phi);
         if ((EtaIndex==-1) || (PhiIndex==-1)) continue;
 
 //        if (trk->isHFTTrack()) {
@@ -135,19 +138,18 @@ int StPicoSimInputsMaker::createQA(){
             }
 //        }
 
-        if (vars::fillNtp && (nTofTracks>0 || nHftTracks>0) && (tpcPion || tpcKaon)) {
-            Float_t isHft=0., isPrimaryTrk=0., isTOF=0., particleId=5.;
-
-            if (tpcKaon && tpcPion) particleId = 2.;
-            else if (tpcPion) particleId = 0.;
-            else if (tpcKaon) particleId = 1.;
+        if (vars::fillNtp && (tpcPion || tpcKaon)) {
+            Float_t isHft=-1, isPrimaryTrk=-1;
+            Float_t invBetaKaon=mHFCuts->getOneOverBeta(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon);
+            Float_t invBetaPion=mHFCuts->getOneOverBeta(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kPion);
+            Float_t nSigmaPion=trk->nSigmaPion();
+            Float_t nSigmaKaon=trk->nSigmaKaon();
 
             if (trk->isHFTTrack()) isHft=1.;
-            if (trk->isTofTrack()) isTOF=1.;
             if (trk->isPrimary()) isPrimaryTrk=1.;
             Float_t nHitsFitTrk = trk->nHitsFit();
             Float_t pt=momentum.Perp();
-            ntp_tracks->Fill(runId,eventId,pt,dca,dcaXy,dcaZ,isHft,isTOF,zdc,isPrimaryTrk,nHitsFitTrk,multiplicity,nHftTracks,nTofTracks,particleId);
+            ntp_tracks->Fill(runId,eventId,pt,dca,dcaXy,dcaZ,eta,phi,isHft,nSigmaPion,nSigmaKaon,invBetaPion,invBetaKaon,isPrimaryTrk,nHitsFitTrk,multiplicity,nHftTracks,nTofTracks);
         }
 
         if (trk->isHFTTrack() && (goodPion || goodKaon) && vars::dcaHists){
@@ -186,7 +188,7 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
     }
 
     if(vars::fillNtp) {
-        ntp_tracks = new TNtuple("ntp_tracks","ntp_tracks", "runId:eventId:pt:dca:dcaXy:dcaZ:isHFT:isTOF:zdc:isPrimary:nHitsFit:refMult:nHftTracks:nTofTracks:particleId");
+        ntp_tracks = new TNtuple("ntp_tracks","ntp_tracks", "runId:eventId:pt:dca:dcaXy:dcaZ:eta:phi:isHft:nSigmaPion:nSigmaKaon:invBetaPion:invBetaKaon:isPrimaryTrk:nHitsFitTrk:multiplicity:nHftTracks:nTofTracks");
     }
 
     if(vars::ratioHists) {

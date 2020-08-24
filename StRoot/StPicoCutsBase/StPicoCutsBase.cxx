@@ -368,7 +368,7 @@ StPicoBTofPidTraits* StPicoCutsBase::hasTofPid(StPicoTrack const * const trk) co
 // _________________________________________________________
 float StPicoCutsBase::getTofBetaBase(StPicoTrack const * const trk) const {
     int index2tof = trk->bTofPidTraitsIndex(); //if smaller than 0 => not TOF track
-    float beta = std::numeric_limits<float>::quiet_NaN();
+    float beta = -9999;
 
     if(index2tof >= 0) {
         StPicoBTofPidTraits *tofPid = mPicoDst->btofPidTraits(index2tof);
@@ -381,7 +381,7 @@ float StPicoCutsBase::getTofBetaBase(StPicoTrack const * const trk) const {
             float L = tofPathLength(&mPrimVtx, &btofHitPos, helix.curvature());
             float tof = tofPid->btof();
             if (tof > 0) beta = L / (tof * (C_C_LIGHT / 1.e9));
-            else beta = std::numeric_limits<float>::quiet_NaN();
+            else beta = -9999;
         }
     }
 
@@ -391,7 +391,7 @@ float StPicoCutsBase::getTofBetaBase(StPicoTrack const * const trk) const {
 // _________________________________________________________
 float StPicoCutsBase::getOneOverBeta(StPicoTrack const * const trk,  float const & tofBeta, int pidFlag) const {
     if ((tofBeta <= 0) || (tofBeta!=tofBeta))
-        return std::numeric_limits<float>::max();
+        return -9999;
     float m2 = mHypotheticalMass[pidFlag]*mHypotheticalMass[pidFlag];
     float ptot = trk->gPtot();
     float betaInv = ptot / sqrt(ptot*ptot + m2);

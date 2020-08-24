@@ -11,6 +11,7 @@
 #include"TLatex.h"
 #include"TStyle.h"
 #include"TNtuple.h"
+#include"TProfile.h"
 #include"TPad.h"
 #include"TLegend.h"
 #include"TPaveText.h"
@@ -37,13 +38,16 @@ void createHftFromNtp(){
 //    TString fileNameData = "ntp.track.2403.root";
 //    TString fileNameData = "ntp.2403.sample.root";
 //    TString fileNameData = "/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/simInputsPrepare/toHadd/ntp.ratio.1404.half.root";
-    TString fileNameData = "/media/lukas/1E4183350724EC9C/tracks.sim.vzvpd3.hotspot.root";
+    TString fileNameData = "/media/lukas/1E4183350724EC9C/0.hists.root";
+//    TString fileNameData = "/media/lukas/1E4183350724EC9C/tracks.sim.vzvpd3.hotspot.root";
 //    TString fileNameData = "/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/simInputsPrepare/toHadd/ntp.ratio.1404.half.rootprimary.root";
     auto* dataF = new TFile(fileNameData,"r");
     auto* dataOut = new TFile("ratio.root","recreate");
     auto* ntpData = (TNtuple*)dataF -> Get("ntp_tracks");
 
-    Float_t  pt, dca, isHFT, isTOF, zdc, nHitsFit, refMult, nHftTracks, nTofTracks, particleId, isPrimary, dcaxy, dcaz;
+    Float_t  pt, dca, isHFT, isTOF, zdc, nHitsFit, refMult, nHftTracks, nTofTracks, particleId, isPrimary, dcaxy, dcaz, runId, eventId;
+    ntpData->SetBranchAddress("runId", &runId);
+    ntpData->SetBranchAddress("eventId", &eventId);
     ntpData->SetBranchAddress("pt", &pt);
     ntpData->SetBranchAddress("dca", &dca);
     ntpData->SetBranchAddress("dcaXy", &dcaxy);
@@ -68,54 +72,92 @@ void createHftFromNtp(){
     TString trackKindsCuts[]={"","isPrimary>0", "isTOF>0",    "isPrimary>0 && isTOF>0"};
     const int nKinds = sizeof(trackKinds) / sizeof(TString);
 
-    TH1D* hPt[nKinds][nDCAcuts];
-    TH1D* hPtHft[nKinds][nDCAcuts];
+    TProfile *prRatio[nKinds][nDCAcuts];
+//    TH2F *prRatio[nKinds][nDCAcuts];
+
+    TH1D* hPt[2][nKinds][nDCAcuts];
+    TH1D* hPtHft[2][nKinds][nDCAcuts];
 
     TString nameHisto;
     for (int i = 0; i < nKinds; ++i) {
         for (int j = 0; j < nDCAcuts; ++j) {
-            nameHisto=Form("hPt_dca%.1f_%.1f_%s", dcaCuts[j], dcaCuts[j+1], trackKinds[i].Data());
-            hPt[i][j]=new TH1D(nameHisto, nameHisto, 100, 0, 10);
-            hPt[i][j]->Sumw2();
-            nameHisto=Form("hPtHft_dca%.1f_%.1f_%s", dcaCuts[j], dcaCuts[j+1], trackKinds[i].Data());
-            hPtHft[i][j]=new TH1D(nameHisto, nameHisto, 100, 0, 10);
-            hPtHft[i][j]->Sumw2();
+            for (int k = 0; k < 2; ++k) {
+                nameHisto = Form("hPt_dca%.1f_%.1f_%s_%i", dcaCuts[j], dcaCuts[j + 1], trackKinds[i].Data(), k);
+                hPt[k][i][j] = new TH1D(nameHisto, nameHisto, 100, 0, 10);
+                hPt[k][i][j]->Sumw2();
+                nameHisto = Form("hPtHft_dca%.1f_%.1f_%s_%i", dcaCuts[j], dcaCuts[j + 1], trackKinds[i].Data(), k);
+                hPtHft[k][i][j] = new TH1D(nameHisto, nameHisto, 100, 0, 10);
+                hPtHft[k][i][j]->Sumw2();
+            }
+            nameHisto = Form("hPtHft_dca%.1f_%.1f_%s", dcaCuts[j], dcaCuts[j + 1], trackKinds[i].Data());
+            prRatio[i][j] = new TProfile(nameHisto,nameHisto,100,0,10,0,20);
+//            prRatio[i][j] = new TH2F(nameHisto,nameHisto,100,0.,10.,100,0.,2.);
+            prRatio[i][j]->Sumw2();
         }
     }
 
-//    for (int k = 0; k < ntpData->GetEntries(); ++k) {
-    for (int k = 0; k < ntpData->GetEntries()/3; ++k) {
+    Float_t previousEvent=-999;
+    Float_t previousRun=-999;
+    int nEvts=0;
+    cout<<"total entr "<<ntpData->GetEntries()<<endl;
+
+    for (int k = 0; k < ntpData->GetEntries(); ++k) {
+//    for (int k = 0; k < ntpData->GetEntries()/100; ++k) {
         ntpData->GetEntry(k);
+        if (particleId!=1) continue;
+        if (previousEvent!=eventId || previousRun!=runId) { //new event
+            previousEvent = eventId;
+            previousRun = runId;
+            nEvts++;
+            for (int i = 0; i < nKinds; ++i) {
+                for (int j = 0; j < nDCAcuts; ++j) {
+                    hPtHft[1][i][j]->Divide(hPt[1][i][j]);
+                    for (int l = 1; l < hPt[1][i][j]->GetNbinsX()+1; ++l) {
+                        prRatio[i][j]->Fill(hPtHft[1][i][j]->GetBinCenter(l), hPtHft[1][i][j]->GetBinContent(l));
+                    }
+                    hPt[1][i][j]->Reset();
+                    hPtHft[1][i][j]->Reset();
+                }
+            }
+        }
+
         for (int i = 0; i < nDCAcuts; ++i) {
             if (dca>dcaCuts[i] && dca<dcaCuts[i+1]) {
-                hPt[0][i]->Fill(pt);
-                if (isPrimary>0)  hPt[1][i]->Fill(pt);
-                if (isTOF>0)  hPt[2][i]->Fill(pt);
-                if (isPrimary>0 && isTOF>0)  hPt[3][i]->Fill(pt);
-                if (isPrimary>0 && isTOF>0 && nHftTracks>1)  hPt[4][i]->Fill(pt);
-                if (isPrimary>0 && isTOF>0 && nHftTracks>2)  hPt[5][i]->Fill(pt);
-                if (isPrimary>0 && isTOF>0 && nTofTracks>2)  hPt[6][i]->Fill(pt);
+                for (int j = 0; j < 2; ++j) { //total vs. evt averaging
+                    hPt[j][0][i]->Fill(pt);
+                    if (isPrimary > 0) hPt[j][1][i]->Fill(pt);
+                    if (isTOF > 0) hPt[j][2][i]->Fill(pt);
+                    if (isPrimary > 0 && isTOF > 0) hPt[j][3][i]->Fill(pt);
+                    if (isPrimary > 0 && isTOF > 0 && nHftTracks > 1) hPt[j][4][i]->Fill(pt);
+                    if (isPrimary > 0 && isTOF > 0 && nHftTracks > 2) hPt[j][5][i]->Fill(pt);
+                    if (isPrimary > 0 && isTOF > 0 && nTofTracks > 2) hPt[j][6][i]->Fill(pt);
 
-                if (isHFT>0) {
-                    hPtHft[0][i]->Fill(pt);
-                    if (isPrimary>0)  hPtHft[1][i]->Fill(pt);
-                    if (isTOF>0)  hPtHft[2][i]->Fill(pt);
-                    if (isPrimary>0 && isTOF>0)  hPtHft[3][i]->Fill(pt);
-                    if (isPrimary>0 && isTOF>0 && nHftTracks>1)  hPtHft[4][i]->Fill(pt);
-                    if (isPrimary>0 && isTOF>0 && nHftTracks>2)  hPtHft[5][i]->Fill(pt);
-                    if (isPrimary>0 && isTOF>0 && nTofTracks>2)  hPtHft[6][i]->Fill(pt);
+                    if (isHFT > 0) {
+                        hPtHft[j][0][i]->Fill(pt);
+                        if (isPrimary > 0) hPtHft[j][1][i]->Fill(pt);
+                        if (isTOF > 0) hPtHft[j][2][i]->Fill(pt);
+                        if (isPrimary > 0 && isTOF > 0) hPtHft[j][3][i]->Fill(pt);
+                        if (isPrimary > 0 && isTOF > 0 && nHftTracks > 1) hPtHft[j][4][i]->Fill(pt);
+                        if (isPrimary > 0 && isTOF > 0 && nHftTracks > 2) hPtHft[j][5][i]->Fill(pt);
+                        if (isPrimary > 0 && isTOF > 0 && nTofTracks > 2) hPtHft[j][6][i]->Fill(pt);
+                    }
                 }
             }
         }
     }
 
+    cout<<"nevents "<<nEvts<<endl;
     for (int i = 0; i < nKinds; ++i) {
-        for (int j = 0; j < nDCAcuts; ++j) {
-            hPtHft[i][j]->Divide(hPt[i][j]);
+        for (int j = 0; j < nDCAcuts-2; ++j) {
+            hPtHft[0][i][j]->Divide(hPt[0][i][j]);
+            cout<<hPtHft[0][i][j]->Integral()/100<<endl;
             dataOut->cd();
-            hPtHft[i][j]->Write();
+            hPt[0][i][j]->Write();
+            hPtHft[0][i][j]->Write();
+            prRatio[i][j]->Write();
         }
     }
+    dataOut->Close();
 
     /*
     const char* cuts[] = {"dca<=0.1", "dca<=1.5", "dca<=1.0", "dca<=0.7", "dca<=0.5", "dca<=0.3"};
