@@ -149,7 +149,29 @@ int StPicoSimInputsMaker::createQA(){
             if (trk->isPrimary()) isPrimaryTrk=1.;
             Float_t nHitsFitTrk = trk->nHitsFit();
             Float_t pt=momentum.Perp();
-            ntp_tracks->Fill(runId,eventId,pt,dca,dcaXy,dcaZ,eta,phi,isHft,nSigmaPion,nSigmaKaon,invBetaPion,invBetaKaon,isPrimaryTrk,nHitsFitTrk,multiplicity,nHftTracks,nTofTracks);
+
+            const int nNtVars = ntp_tracks->GetNvar();
+            float ntVar[nNtVars];
+            int ii=0;
+            ntVar[ii++]=runId;
+            ntVar[ii++]=eventId;
+            ntVar[ii++]=pt;
+            ntVar[ii++]=dca;
+            ntVar[ii++]=dcaXy;
+            ntVar[ii++]=dcaZ;
+            ntVar[ii++]=eta;
+            ntVar[ii++]=phi;
+            ntVar[ii++]=isHft;
+            ntVar[ii++]=nSigmaPion;
+            ntVar[ii++]=nSigmaKaon;
+            ntVar[ii++]=invBetaPion;
+            ntVar[ii++]=invBetaKaon;
+            ntVar[ii++]=isPrimaryTrk;
+            ntVar[ii++]=nHitsFitTrk;
+            ntVar[ii++]=multiplicity;
+            ntVar[ii++]=nHftTracks;
+            ntVar[ii++]=nTofTracks;
+            ntp_tracks->Fill(ntVar);
         }
 
         if (trk->isHFTTrack() && (goodPion || goodKaon) && vars::dcaHists){
