@@ -21,6 +21,7 @@
 #include"TFitResultPtr.h"
 #include"TFitResult.h"
 #include"TString.h"
+#include <ctime>
 
 using namespace std;
 
@@ -33,34 +34,39 @@ void draw(TH1D* histo, TString xAxis, TString yAxis, Int_t color) {
 }
 //_______________________________________________________________________
 void createHftFromNtp(){
+    clock_t start = clock(); // getting starting time
+
     Int_t colors[] = {1,46,8,4,5,6,7,9,41,42,44,45,16};
-//    TString fileNameData = "outputLocal.hists.root";
-//    TString fileNameData = "ntp.track.2403.root";
-//    TString fileNameData = "ntp.2403.sample.root";
-//    TString fileNameData = "/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/simInputsPrepare/toHadd/ntp.ratio.1404.half.root";
-    TString fileNameData = "/media/lukas/1E4183350724EC9C/0.hists.root";
+    TString fileNameData = "/media/lukas/1E4183350724EC9C/1.hists.root";
 //    TString fileNameData = "/media/lukas/1E4183350724EC9C/tracks.sim.vzvpd3.hotspot.root";
 //    TString fileNameData = "/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/simInputsPrepare/toHadd/ntp.ratio.1404.half.rootprimary.root";
     auto* dataF = new TFile(fileNameData,"r");
     auto* dataOut = new TFile("ratio.root","recreate");
     auto* ntpData = (TNtuple*)dataF -> Get("ntp_tracks");
+//    ntpData->LoadBaskets(5000000000);
+    Float_t  pt, dca, isHFT, isTOF, zdc, nHitsFit, refMult, nHftTracks, nTofTracks, particleId, isPrimary, dcaxy, dcaz, runId, eventId, nSigmaPion,nSigmaKaon,invBetaPion,invBetaKaon, eta, phi;
 
-    Float_t  pt, dca, isHFT, isTOF, zdc, nHitsFit, refMult, nHftTracks, nTofTracks, particleId, isPrimary, dcaxy, dcaz, runId, eventId;
     ntpData->SetBranchAddress("runId", &runId);
     ntpData->SetBranchAddress("eventId", &eventId);
     ntpData->SetBranchAddress("pt", &pt);
+    ntpData->SetBranchAddress("eta", &eta);
+    ntpData->SetBranchAddress("phi", &phi);
     ntpData->SetBranchAddress("dca", &dca);
     ntpData->SetBranchAddress("dcaXy", &dcaxy);
     ntpData->SetBranchAddress("dcaZ", &dcaz);
-    ntpData->SetBranchAddress("isHFT", &isHFT);
-    ntpData->SetBranchAddress("isTOF", &isTOF);
-    ntpData->SetBranchAddress("zdc", &zdc);
-    ntpData->SetBranchAddress("nHitsFit", &nHitsFit);
-    ntpData->SetBranchAddress("refMult", &refMult);
-    ntpData->SetBranchAddress("isPrimary", &isPrimary);
+    ntpData->SetBranchAddress("isHft", &isHFT);
+//    ntpData->SetBranchAddress("isTOF", &isTOF);
+//    ntpData->SetBranchAddress("zdc", &zdc);
+    ntpData->SetBranchAddress("nHitsFitTrk", &nHitsFit);
+    ntpData->SetBranchAddress("multiplicity", &refMult);
+//    ntpData->SetBranchAddress("isPrimary", &isPrimary);
     ntpData->SetBranchAddress("nHftTracks", &nHftTracks);
     ntpData->SetBranchAddress("nTofTracks", &nTofTracks);
-    ntpData->SetBranchAddress("particleId", &particleId);
+//    ntpData->SetBranchAddress("particleId", &particleId);
+    ntpData->SetBranchAddress("invBetaKaon", &invBetaKaon);
+    ntpData->SetBranchAddress("invBetaPion", &invBetaPion);
+    ntpData->SetBranchAddress("nSigmaKaon", &nSigmaKaon);
+    ntpData->SetBranchAddress("nSigmaPion", &nSigmaPion);
 
 //    Float_t dcaCuts[]={0.1, 0.3, 0.5, 0.7, 1, 1.5};
 //    const int nDCAcuts = sizeof(dcaCuts) / sizeof(Float_t);
@@ -68,78 +74,176 @@ void createHftFromNtp(){
     const int nDCAcuts=6;
     const float dcaCuts[nDCAcuts+1]={0., 0.3, 0.5, 0.7, 1.0, 1.2, 1.5};
 
-    TString trackKinds[]=    {"","primary",     "TOFmatched", "primary_TOFmatched", "_nHftTracks1", "_nHftTracks2","_nTofTracks2"};
-    TString trackKindsCuts[]={"","isPrimary>0", "isTOF>0",    "isPrimary>0 && isTOF>0"};
+    const int nPtcuts=9;
+    const float ptCuts[nPtcuts+1]={0.15, 0.3, 0.6, 0.8, 1.0, 1.2, 1.5, 2.0, 3.0, 5.0};
+
+    TString particleName[]={"pion","kaon"};
+//    TString trackKinds[]=    {"","primary",     "TOFmatched", "primary_TOFmatched", "_nHftTracks1", "_nHftTracks2","_nTofTracks2"};
+    TString trackKinds[]=    {"",  "TPC",   "TPC_TOF", "TPC_hybridTOF"};
+//    TString trackKindsCuts[]={"","isPrimary>0", "isTOF>0",    "isPrimary>0 && isTOF>0"};
     const int nKinds = sizeof(trackKinds) / sizeof(TString);
 
     TProfile *prRatio[nKinds][nDCAcuts];
-//    TH2F *prRatio[nKinds][nDCAcuts];
 
-    TH1D* hPt[2][nKinds][nDCAcuts];
-    TH1D* hPtHft[2][nKinds][nDCAcuts];
+    TH1D* hPtAll[2][nKinds][2];
+    TH1D* hPt[2][nKinds][nDCAcuts][2];
+    TH1D* hEta[2][nKinds][nPtcuts][2];
+    TH1D* hPhi[2][nKinds][nPtcuts][2];
+
+    TH1D* hDCAPtBins[2][nKinds][nPtcuts][2];
+    TH1D* hDCAxyPtBins[2][nKinds][nPtcuts][2];
+    TH1D* hDCAzPtBins[2][nKinds][nPtcuts][2];
 
     TString nameHisto;
+    TString hftText[]={"","_hft"};
+
+    Float_t maxDca=0.2;
     for (int i = 0; i < nKinds; ++i) {
-        for (int j = 0; j < nDCAcuts; ++j) {
-            for (int k = 0; k < 2; ++k) {
-                nameHisto = Form("hPt_dca%.1f_%.1f_%s_%i", dcaCuts[j], dcaCuts[j + 1], trackKinds[i].Data(), k);
-                hPt[k][i][j] = new TH1D(nameHisto, nameHisto, 100, 0, 10);
-                hPt[k][i][j]->Sumw2();
-                nameHisto = Form("hPtHft_dca%.1f_%.1f_%s_%i", dcaCuts[j], dcaCuts[j + 1], trackKinds[i].Data(), k);
-                hPtHft[k][i][j] = new TH1D(nameHisto, nameHisto, 100, 0, 10);
-                hPtHft[k][i][j]->Sumw2();
+        for (int k = 0; k < 2; ++k) {
+            for (int iPart = 0; iPart < 2; ++iPart) {
+                nameHisto = Form("hPt_%s_%i_%s", trackKinds[i].Data(), k, particleName[iPart].Data());
+                hPtAll[k][i][iPart] = new TH1D(nameHisto, nameHisto, 100, 0, 10);
+                hPtAll[k][i][iPart]->Sumw2();
+
+                for (int j = 0; j < nDCAcuts; ++j) {
+                    nameHisto = Form("hPt_dca%.1f_%.1f_%s_%i_%s", dcaCuts[j], dcaCuts[j + 1], trackKinds[i].Data(), k, particleName[iPart].Data());
+                    hPt[k][i][j][iPart] = new TH1D(nameHisto, nameHisto, 100, 0, 10);
+                    hPt[k][i][j][iPart]->Sumw2();
+                }
+
+                for (int j = 0; j < nPtcuts; ++j) {
+                    nameHisto = Form("hEta_pt%.1f_%.1f_%s_%i_%s", ptCuts[j], ptCuts[j + 1], trackKinds[i].Data(), k, particleName[iPart].Data());
+                    hEta[k][i][j][iPart] = new TH1D(nameHisto, nameHisto, 100, -1, 1);
+                    hEta[k][i][j][iPart]->Sumw2();
+
+                    nameHisto = Form("hPhi_pt%.1f_%.1f_%s_%i_%s", ptCuts[j], ptCuts[j + 1], trackKinds[i].Data(), k, particleName[iPart].Data());
+                    hPhi[k][i][j][iPart] = new TH1D(nameHisto, nameHisto, 100, -3.2, 3.2);
+                    hPhi[k][i][j][iPart]->Sumw2();
+
+                    nameHisto = Form("hDCA_pt%.1f_%.1f_%s_%s%s", ptCuts[j], ptCuts[j + 1], trackKinds[i].Data(), particleName[iPart].Data(), hftText[k].Data());
+                    hDCAPtBins[k][i][j][iPart] = new TH1D(nameHisto, nameHisto, 100, 0, maxDca);
+                    hDCAPtBins[k][i][j][iPart]->Sumw2();
+
+                    nameHisto = Form("hDCAxy_pt%.1f_%.1f_%s_%s%s", ptCuts[j], ptCuts[j + 1], trackKinds[i].Data(), particleName[iPart].Data(), hftText[k].Data());
+                    hDCAxyPtBins[k][i][j][iPart] = new TH1D(nameHisto, nameHisto, 100, -1*maxDca, maxDca);
+                    hDCAxyPtBins[k][i][j][iPart]->Sumw2();
+
+                    nameHisto = Form("hDCAz_pt%.1f_%.1f_%s_%s%s", ptCuts[j], ptCuts[j + 1], trackKinds[i].Data(), particleName[iPart].Data(), hftText[k].Data());
+                    hDCAzPtBins[k][i][j][iPart] = new TH1D(nameHisto, nameHisto, 100, -1*maxDca, maxDca);
+                    hDCAzPtBins[k][i][j][iPart]->Sumw2();
+                }
             }
-            nameHisto = Form("hPtHft_dca%.1f_%.1f_%s", dcaCuts[j], dcaCuts[j + 1], trackKinds[i].Data());
-            prRatio[i][j] = new TProfile(nameHisto,nameHisto,100,0,10,0,20);
-//            prRatio[i][j] = new TH2F(nameHisto,nameHisto,100,0.,10.,100,0.,2.);
-            prRatio[i][j]->Sumw2();
+
         }
+//        nameHisto = Form("hPtHft_dca%.1f_%.1f_%s", dcaCuts[j], dcaCuts[j + 1], trackKinds[i].Data());
+//        prRatio[i][j] = new TProfile(nameHisto,nameHisto,100,0,10,0,20);
+//            prRatio[i][j] = new TH2F(nameHisto,nameHisto,100,0.,10.,100,0.,2.);
+//        prRatio[i][j]->Sumw2();
     }
+
 
     Float_t previousEvent=-999;
     Float_t previousRun=-999;
     int nEvts=0;
     cout<<"total entr "<<ntpData->GetEntries()<<endl;
 
+    Float_t isHybridTOF[]={-1,-1};
+    Float_t isTOFtrk[]={-1,-1};
+    Float_t isTPCtrk[]={-1,-1};
+
     for (int k = 0; k < ntpData->GetEntries(); ++k) {
 //    for (int k = 0; k < ntpData->GetEntries()/100; ++k) {
         ntpData->GetEntry(k);
-        if (particleId!=1) continue;
-        if (previousEvent!=eventId || previousRun!=runId) { //new event
-            previousEvent = eventId;
-            previousRun = runId;
-            nEvts++;
-            for (int i = 0; i < nKinds; ++i) {
-                for (int j = 0; j < nDCAcuts; ++j) {
-                    hPtHft[1][i][j]->Divide(hPt[1][i][j]);
-                    for (int l = 1; l < hPt[1][i][j]->GetNbinsX()+1; ++l) {
-                        prRatio[i][j]->Fill(hPtHft[1][i][j]->GetBinCenter(l), hPtHft[1][i][j]->GetBinContent(l));
+        if (abs(nSigmaPion)<2) isTPCtrk[0]=1; else isTPCtrk[0]=-1;
+        if (abs(invBetaPion)<20) isTOFtrk[0]=1; else isTOFtrk[0]=-1;
+        if ((isTOFtrk[0]==-1) ||  (abs(invBetaPion)<0.03)) isHybridTOF[0]=1; else isHybridTOF[0]=-1;
+
+        if (abs(nSigmaKaon)<2) isTPCtrk[1]=1; else isTPCtrk[1]=-1;
+        if (abs(invBetaKaon)<20) isTOFtrk[1]=1; else isTOFtrk[1]=-1;
+        if ((isTOFtrk[1]==-1) || (abs(invBetaKaon)<0.03)) isHybridTOF[1]=1; else isHybridTOF[1]=-1;
+
+//_________TPROFILE_________
+//        if (previousEvent!=eventId || previousRun!=runId) { //new event
+//            previousEvent = eventId;
+//            previousRun = runId;
+//            nEvts++;
+//            for (int i = 0; i < nKinds; ++i) {
+//                for (int j = 0; j < nDCAcuts; ++j) {
+//                    hPtHft[1][i][j]->Divide(hPt[1][i][j]);
+//                    for (int l = 1; l < hPt[1][i][j]->GetNbinsX()+1; ++l) {
+//                        prRatio[i][j]->Fill(hPtHft[1][i][j]->GetBinCenter(l), hPtHft[1][i][j]->GetBinContent(l));
+//                    }
+//                    hPt[1][i][j]->Reset();
+//                    hPtHft[1][i][j]->Reset();
+//                }
+//            }
+//        }
+//_________END TPROFILE_________
+
+
+        for (int j = 0; j < 2; ++j) {
+            if (j==1 && isHFT<0) continue;
+
+            for (int iPart = 0; iPart < 2; ++iPart) {
+                //_______no Binnning_______
+                hPtAll[j][0][iPart]->Fill(pt);
+                if (isTPCtrk[iPart]>0){
+                    hPtAll[j][1][iPart]->Fill(pt);
+                    if (isTOFtrk[iPart]>0) {
+                        hPtAll[j][2][iPart]->Fill(pt);
                     }
-                    hPt[1][i][j]->Reset();
-                    hPtHft[1][i][j]->Reset();
+                    if (isHybridTOF[iPart]>0) {
+                        hPtAll[j][3][iPart]->Fill(pt);
+                    }
                 }
-            }
-        }
 
-        for (int i = 0; i < nDCAcuts; ++i) {
-            if (dca>dcaCuts[i] && dca<dcaCuts[i+1]) {
-                for (int j = 0; j < 2; ++j) { //total vs. evt averaging
-                    hPt[j][0][i]->Fill(pt);
-                    if (isPrimary > 0) hPt[j][1][i]->Fill(pt);
-                    if (isTOF > 0) hPt[j][2][i]->Fill(pt);
-                    if (isPrimary > 0 && isTOF > 0) hPt[j][3][i]->Fill(pt);
-                    if (isPrimary > 0 && isTOF > 0 && nHftTracks > 1) hPt[j][4][i]->Fill(pt);
-                    if (isPrimary > 0 && isTOF > 0 && nHftTracks > 2) hPt[j][5][i]->Fill(pt);
-                    if (isPrimary > 0 && isTOF > 0 && nTofTracks > 2) hPt[j][6][i]->Fill(pt);
+                //_______DCA binning____________
+                for (int i = 0; i < nDCAcuts; ++i) {
+                    if (dca>dcaCuts[i] && dca<dcaCuts[i+1]) {
+                        hPt[j][0][i][iPart]->Fill(pt);
+                        if (isTPCtrk[iPart]>0){
+                            hPt[j][1][i][iPart]->Fill(pt);
+                            if (isTOFtrk[iPart]>0) {
+                                hPt[j][2][i][iPart]->Fill(pt);
+                            }
+                            if (isHybridTOF[iPart]>0) {
+                                hPt[j][3][i][iPart]->Fill(pt);
+                            }
+                        }
+                    }
+                }
 
-                    if (isHFT > 0) {
-                        hPtHft[j][0][i]->Fill(pt);
-                        if (isPrimary > 0) hPtHft[j][1][i]->Fill(pt);
-                        if (isTOF > 0) hPtHft[j][2][i]->Fill(pt);
-                        if (isPrimary > 0 && isTOF > 0) hPtHft[j][3][i]->Fill(pt);
-                        if (isPrimary > 0 && isTOF > 0 && nHftTracks > 1) hPtHft[j][4][i]->Fill(pt);
-                        if (isPrimary > 0 && isTOF > 0 && nHftTracks > 2) hPtHft[j][5][i]->Fill(pt);
-                        if (isPrimary > 0 && isTOF > 0 && nTofTracks > 2) hPtHft[j][6][i]->Fill(pt);
+                //_______PT Binning____________
+                for (int i = 0; i < nPtcuts; ++i) {
+                    if (pt>ptCuts[i] && pt<ptCuts[i+1]) {
+                        hEta[j][0][i][iPart]->Fill(eta);
+                        hPhi[j][0][i][iPart]->Fill(phi);
+                        hDCAPtBins[j][0][i][iPart]->Fill(dca);
+                        hDCAxyPtBins[j][0][i][iPart]->Fill(dcaxy);
+                        hDCAzPtBins[j][0][i][iPart]->Fill(dcaz);
+
+                        if (isTPCtrk[iPart]>0){
+                            hEta[j][1][i][iPart]->Fill(eta);
+                            hPhi[j][1][i][iPart]->Fill(phi);
+                            hDCAPtBins[j][1][i][iPart]->Fill(dca);
+                            hDCAxyPtBins[j][1][i][iPart]->Fill(dcaxy);
+                            hDCAzPtBins[j][1][i][iPart]->Fill(dcaz);
+
+                            if (isTOFtrk[iPart]>0) {
+                                hEta[j][2][i][iPart]->Fill(eta);
+                                hPhi[j][2][i][iPart]->Fill(phi);
+                                hDCAPtBins[j][2][i][iPart]->Fill(dca);
+                                hDCAxyPtBins[j][2][i][iPart]->Fill(dcaxy);
+                                hDCAzPtBins[j][2][i][iPart]->Fill(dcaz);
+                            }
+                            if (isHybridTOF[iPart]>0) {
+                                hEta[j][3][i][iPart]->Fill(eta);
+                                hPhi[j][3][i][iPart]->Fill(phi);
+                                hDCAPtBins[j][3][i][iPart]->Fill(dca);
+                                hDCAxyPtBins[j][3][i][iPart]->Fill(dcaxy);
+                                hDCAzPtBins[j][3][i][iPart]->Fill(dcaz);
+                            }
+                        }
                     }
                 }
             }
@@ -148,73 +252,41 @@ void createHftFromNtp(){
 
     cout<<"nevents "<<nEvts<<endl;
     for (int i = 0; i < nKinds; ++i) {
-        for (int j = 0; j < nDCAcuts-2; ++j) {
-            hPtHft[0][i][j]->Divide(hPt[0][i][j]);
-            cout<<hPtHft[0][i][j]->Integral()/100<<endl;
+        for (int iPart = 0; iPart < 2; ++iPart) {
+            hPtAll[1][i][iPart]->Divide(hPtAll[0][i][iPart]);
             dataOut->cd();
-            hPt[0][i][j]->Write();
-            hPtHft[0][i][j]->Write();
-            prRatio[i][j]->Write();
+            hPtAll[1][i][iPart]->Write();
+
+            for (int j = 0; j < nDCAcuts-2; ++j) {
+                hPt[1][i][j][iPart]->Divide(hPt[0][i][j][iPart]);
+                cout << hPt[1][i][j][iPart]->Integral() / 100 << endl;
+
+                dataOut->cd();
+                hPt[1][i][j][iPart]->Write();
+            }
+
+            for (int j = 0; j < nPtcuts; ++j) {
+                hEta[1][i][j][iPart]->Divide(hEta[0][i][j][iPart]);
+                hPhi[1][i][j][iPart]->Divide(hPhi[0][i][j][iPart]);
+
+                dataOut->cd();
+                hEta[1][i][j][iPart]->Write();
+                hPhi[1][i][j][iPart]->Write();
+
+                for (int kHft = 0; kHft < 2; ++kHft) {
+                    hDCAPtBins[kHft][i][j][iPart]->Write();
+                    hDCAxyPtBins[kHft][i][j][iPart]->Write();
+                    hDCAzPtBins[kHft][i][j][iPart]->Write();
+                }
+            }
         }
     }
+
     dataOut->Close();
 
-    /*
-    const char* cuts[] = {"dca<=0.1", "dca<=1.5", "dca<=1.0", "dca<=0.7", "dca<=0.5", "dca<=0.3"};
-//    const char* cuts[] = {"dca<=1.5 && nHftTracks>1", "dca<=1.0 && nHftTracks>1", "dca<=0.7 && nHftTracks>1", "dca<=0.5 && nHftTracks>1", "dca<=0.3 && nHftTracks>1"};
-//    const char* cuts[] = {"dca<=1.5 && nHftTracks>0", "dca<=1.0 && nHftTracks>0", "dca<=0.7 && nHftTracks>0", "dca<=0.5 && nHftTracks>0", "dca<=0.3 && nHftTracks>0",
-//                          "dca<=1.5", "dca<=1.0", "dca<=0.7", "dca<=0.5", "dca<=0.3"};
-
-    TString namesSuffix[] = {"dca0.1_TofMatched", "dca1.5_TofMatched", "dca1.0_TofMatched", "dca0.7_TofMatched", "dca0.5_TofMatched", "dca0.3_TofMatched"};
-//    TString namesSuffix[] = {"dca1.5_TofMatched", "dca1.0_nHft1_TofMatched", "dca0.7_nHft1_TofMatched", "dca0.5_nHft1_TofMatched", "dca0.3_nHft1_TofMatched"};
-//    TString namesSuffix[] = {"dca1.5_nHft1", "dca1.0_nHft1", "dca0.7_nHft1", "dca0.5_nHft1", "dca0.3_nHft1"};
-
-//    TString namesSuffix[] = {"dca1.5_nHft0", "dca1.0_nHft0", "dca0.7_nHft0", "dca0.5_nHft0", "dca0.3_nHft0",
-//                             "dca1.5", "dca1.0", "dca0.7", "dca0.5", "dca0.3"};
-
-    TCut additionalCut = "isTOF>0 && isPrimary>0";
-//    TCut additionalCut = "isPrimary>0 && nHftTracks>1";
-
-    const int nBins = sizeof(namesSuffix) / sizeof(TString);
-
-    TH1D *pt_hist_clone[nBins];
-
-    TCanvas *c1 = new TCanvas("c1","c1",1200,900);
-    TCanvas *cwork = new TCanvas("cwork","cwork",1200,900);
-    TLegend *legend = new TLegend(0.155,0.789, 0.427, 0.884,"","brNDC");
-    for (int i = 0; i < 6; ++i) {
-        cout<<"nbin "<<i<<endl;
-        TCut cut = cuts[i];
-//        cut+="pt>0.15";
-//        cut+="pt<6";
-        cut+=additionalCut;
-        cout<<cut<<endl;
-        cwork->cd();
-        ntpData -> Project("pt_hist", "pt", cut);
-        cut+="isHFT>0";
-        ntpData -> Project("pT_HFT", "pt", cut);
-
-        pt_hist_clone[i] = (TH1D*)pt_hist_HFT->Clone();
-        pt_hist_clone[i]->SetNameTitle(Form("hPt_%s", namesSuffix[i].Data()), cuts[i]);
-        pt_hist_clone[i]->Sumw2();
-        pt_hist_clone[i]->Divide(pt_hist);
-        pt_hist_clone[i]->Write();
-        pt_hist_HFT->Write(Form("pt_HFT_%i_%s", i, namesSuffix[i].Data()));
-        pt_hist->Write(Form("pT_%i_%s", i, namesSuffix[i].Data()));
-        draw(pt_hist_clone[i], "p_{T} [GeV/c]", "HFT ratio from data", colors[i]);
-    }
-
-    cout<<"draw"<<endl;
-
-    for (int j = 0; j < 1; ++j) {
-        c1->cd();
-        if (j==0 )pt_hist_clone[j]->DrawCopy(); else pt_hist_clone[j]->DrawCopy("same");
-        legend->AddEntry(pt_hist_clone[j], cuts[j], "pl");
-    }
-
-    legend->Draw("same");
-    c1->SaveAs("hft/ratios.png");
-    */
+    double duration = (double) (clock() - start) / (double) CLOCKS_PER_SEC;
+    cout << "****************************************** " << endl;
+    cout << "Time needed " << duration << " s" << endl;
 }
 
 

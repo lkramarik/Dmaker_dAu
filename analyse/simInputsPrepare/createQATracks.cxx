@@ -94,14 +94,7 @@ void createQATracks() {
     TH1D* hDcazAll = new TH1D("hDcaz_all", "hDcaz_all", 100, -1*maxDca, maxDca);
     TH1D* hDcazAllHft = new TH1D("hDcaz_all_hft", "hDcaz_all_hft", 100, -1*maxDca, maxDca);
 
-    TH1D* hPtRecoDCA[10];
-    TH1D* hPtRecoHftDCA[10];
-    TH1D* hDCAPtBins[10];
-    TH1D* hDCAPtBinsHft[10];
-    TH1D* hDCAxyPtBins[10];
-    TH1D* hDCAxyPtBinsHft[10];
-    TH1D* hDCAzPtBins[10];
-    TH1D* hDCAzPtBinsHft[10];
+
 
     for (int j = 0; j < nDcaRatio; ++j) {
         histoname=Form("hPt_dca%.1f", dcaCut[j]);
@@ -150,9 +143,6 @@ void createQATracks() {
                 hDCAzPtBins[j]->Fill(dcaz);
             }
         }
-        for (int i = 0; i < nDcaRatio; ++i) {
-            if (dca<dcaCut[i]) hPtRecoDCA[i]->Fill(pt);
-        }
 
         if (isHFT>0) {
             hnHitsFitHft->Fill(nHitsFit);
@@ -170,24 +160,8 @@ void createQATracks() {
                 if (dca<dcaCut[i]) hPtRecoHftDCA[i]->Fill(pt);
             }
         }
-
-//        for (int i = 0; i < nVars; ++i) {
-//            cout<<"working on "<<variables[i]<<endl;
-//            his = new TH1D("hist", variables[i], nBins[i], limMin[i], limMax[i]);
-//            hisHft = new TH1D("hist_HFT", variables[i], nBins[i], limMin[i], limMax[i]);
-//            ntpData -> Project("hist", variables[i]);
-//            ntpData -> Project("hist_HFT", variables[i], "isHFT>0");
-//
-//            his->Scale(1/his->GetEntries());
-//            hisHft->Scale(1/hisHft->GetEntries());
-//
-//            dataOut->cd();
-//            hisname = Form("%s", variables[i].Data());
-//            his->Write(hisname);
-//            hisname = Form("%s_hft", variables[i].Data());
-//            hisHft->Write(hisname);
-//        }
     }
+
     TList *listOutQA = new TList();
     listOutQA->Add(hnHitsFit);
     listOutQA->Add(hnHitsFitHft);
@@ -370,21 +344,10 @@ void compareEmb() {
 //    list.push_back((TList*)dataF30 -> Get("hists_QA;1"));
 //    names.push_back("all pions nhitsfit20");
 //
-
-//
 //    auto* dataF = new TFile("/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/simInputsPrepare/tracksQA.data.new.all.root","r");
 //    list.push_back((TList*)dataF -> Get("hists_QA;1"));
 //    names.push_back("all");
 //
-//
-//
-//
-//
-
-//
-//
-//
-////
 ////    auto* dataF5 = new TFile("/home/lukas/work/D0-fullEvent/analyse/out_production.vtx.3M.geant.primaryTag.1307.pions.all.root","r");
 ////    list.push_back((TList*)dataF5 -> Get("hists_QA;1"));
 ////    names.push_back("sim all pions");
