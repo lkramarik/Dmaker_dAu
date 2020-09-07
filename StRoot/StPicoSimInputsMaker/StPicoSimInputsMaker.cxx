@@ -33,7 +33,7 @@ int StPicoSimInputsMaker::InitHF() {
     mOutFileBaseName = mOutFileBaseName.ReplaceAll(".root", "");
     unsigned int nTracks = mPicoDst->numberOfTracks();
 
-    histoInit(mOutFileBaseName, true); //for createQA()
+    histoInit(mOutFileBaseName, true);
     return kStOK;
 }
 
@@ -450,7 +450,7 @@ void StPicoSimInputsMaker::closeFile()
         }
     }
 
-    mOutFileBaseName->cd();
+    mOutputFileList->cd();
     mh3VzZdcMult -> Write();
     mhVx -> Write();
     mhVxVy -> Write();
