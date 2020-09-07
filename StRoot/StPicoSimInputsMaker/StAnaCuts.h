@@ -8,8 +8,8 @@ namespace vars {
 //    const bool ratioHists = false;
 //    const bool dcaHists = false;
     const bool dcaHists = true;
-//    const bool fillNtp = false;
-    const bool fillNtp = true;
+    const bool fillNtp = false;
+//    const bool fillNtp = true;
 
     const int m_nParticles = 2;
     const TString m_ParticleName[m_nParticles] = {"Pion", "Kaon"};
