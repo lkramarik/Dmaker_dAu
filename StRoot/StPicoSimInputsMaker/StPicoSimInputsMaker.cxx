@@ -474,9 +474,9 @@ void StPicoSimInputsMaker::closeFile()
     mhVz -> Write();
     mOutFileEvent->Close();
 
-    if (!(vars::dcaHists))  gSystem->Exec("rm *.DCA.root);
-    if (!(vars::ratioHists))  gSystem->Exec("rm *.ratio.root);
-    if (!(vars::fillNtp))  gSystem->Exec("rm *.tuple.root);
+    if (!(vars::dcaHists))  gSystem->Exec("rm *.DCA.root");
+    if (!(vars::ratioHists))  gSystem->Exec("rm *.ratio.root");
+    if (!(vars::fillNtp))  gSystem->Exec("rm *.tuple.root");
 
 }
 
