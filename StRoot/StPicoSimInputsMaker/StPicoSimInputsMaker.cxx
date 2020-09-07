@@ -199,6 +199,7 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
     mFillQaHists = fillQaHists;
     mOutFileDCA = new TFile(fileBaseName + ".hists.DCA.root", "RECREATE");
     mOutFileRatio = new TFile(fileBaseName + ".hists.ratio.root", "RECREATE");
+    mOutFileTOFRatio = new TFile(fileBaseName + ".hists.TOFratio.root", "RECREATE");
     mOutFileTuple = new TFile(fileBaseName + ".hists.tuple.root", "RECREATE");
 
     TString hisName;
@@ -399,12 +400,6 @@ void StPicoSimInputsMaker::closeFile()
         mOutFileTuple->cd();
         ntp_tracks->Write(ntp_tracks->GetName(), TObject::kOverwrite);
     }
-//    mh1Cent->Write();
-//    mh1CentWg->Write();
-//    mh1gRefmultCor->Write();
-//    mh1gRefmultCorWg->Write();
-//    mh2CentVz->Write();
-//    mh2CentVzWg->Write();
 
     //HFT DCA Ratio
     if (vars::dcaHists) {
@@ -437,6 +432,7 @@ void StPicoSimInputsMaker::closeFile()
                 for (int iVz = 0; iVz < vars::m_nVzsRatio; iVz++) {
                     for (int iPhi = 0; iPhi < vars::m_nPhisRatio; iPhi++) {
                         for (int iMult = 0; iMult < vars::m_nmultEdge; ++iMult) {
+                            mOutFileRatio->cd();
                             mh2Tpc1PtCentPartEtaVzPhi[iParticle][iEta][iVz][iPhi][iMult]->Write();
                             mh2HFT1PtCentPartEtaVzPhi[iParticle][iEta][iVz][iPhi][iMult]->Write();
                         }
@@ -448,13 +444,13 @@ void StPicoSimInputsMaker::closeFile()
 
     for (int iParticle = 0; iParticle < vars::m_nParticles; ++iParticle) {
         for (int nsigma = 0; nsigma < 3; ++nsigma) {
-            mOutFileRatio->cd();
+            mOutFileTOFRatio->cd();
             h1Tofmatch[iParticle][nsigma] -> Write();
             h1TofmatchTOF[iParticle][nsigma] -> Write();
         }
     }
 
-    mOutFileRatio->cd();
+    mOutFileBaseName->cd();
     mh3VzZdcMult -> Write();
     mhVx -> Write();
     mhVxVy -> Write();
@@ -463,6 +459,7 @@ void StPicoSimInputsMaker::closeFile()
 //    mOutFile->Write();
 
     mOutFileRatio->Close();
+    mOutFileTOFRatio->Close();
     mOutFileDCA->Close();
     mOutFileTuple->Close();
 
