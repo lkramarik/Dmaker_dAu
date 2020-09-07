@@ -118,24 +118,24 @@ int StPicoSimInputsMaker::createQA(){
         float eta=momentum.PseudoRapidity();
         float phi=momentum.Phi();
 
-        int EtaIndex = getEtaIndexDca(fabs(eta));
+        int EtaIndex = getEtaIndexDca(eta);
         int EtaIndexRatio = getEtaIndexRatio(eta);
 //        cout<<"eta is "<<EtaIndex<<endl;
         int PhiIndex = getPhiIndexRatio(phi);
         if ((EtaIndex==-1) || (PhiIndex==-1)) continue;
 
 //        if (trk->isHFTTrack()) {
-            for (int i = 0; i < 3; ++i) {
-                if (trk->nSigmaPion() < i + 1) {
-                    if (tofPion) { h1TofmatchTOF[0][i]->Fill(momentum.Perp()); }
-                    h1Tofmatch[0][i]->Fill(momentum.Perp());
-                }
-
-                if (trk->nSigmaKaon() < i + 1) {
-                    if (tofKaon) { h1TofmatchTOF[1][i]->Fill(momentum.Perp()); }
-                    h1Tofmatch[1][i]->Fill(momentum.Perp());
-                }
+        for (int i = 0; i < 3; ++i) {
+            if (trk->nSigmaPion() < i + 1) {
+                if (tofPion) { h1TofmatchTOF[0][i]->Fill(momentum.Perp()); }
+                h1Tofmatch[0][i]->Fill(momentum.Perp());
             }
+
+            if (trk->nSigmaKaon() < i + 1) {
+                if (tofKaon) { h1TofmatchTOF[1][i]->Fill(momentum.Perp()); }
+                h1Tofmatch[1][i]->Fill(momentum.Perp());
+            }
+        }
 //        }
 
         if (vars::fillNtp && (tpcPion || tpcKaon)) {
@@ -197,7 +197,11 @@ int StPicoSimInputsMaker::createQA(){
 // _________________________________________________________
 void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
     mFillQaHists = fillQaHists;
-    mOutFile = new TFile(fileBaseName + ".hists.root", "RECREATE");
+    mOutFileDCA = new TFile(fileBaseName + ".hists.DCA.root", "RECREATE");
+    mOutFileRatio = new TFile(fileBaseName + ".hists.ratio.root", "RECREATE");
+    mOutFileTuple = new TFile(fileBaseName + ".hists.tuple.root", "RECREATE");
+
+    TString hisName;
 
     TH1::SetDefaultSumw2();
     if (!mFillQaHists) return;
@@ -214,6 +218,7 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
     }
 
     if(vars::ratioHists) {
+
         mh2Tpc1PtCent = new TH2F("mh2Tpc1PtCent", "Tpc tracks;p_{T}(GeV/c);cent",  vars::m_nPtsRatio, vars::m_PtEdgeRatio, vars::m_nmultEdge, vars::m_multEdge);
         mh2HFT1PtCent = new TH2F("mh2HFT1PtCent", "HFT tracks;p_{T}(GeV/c);cent",  vars::m_nPtsRatio, vars::m_PtEdgeRatio, vars::m_nmultEdge, vars::m_multEdge);
         mh2Tpc1PhiVz = new TH2F("mh2Tpc1PhiVz", "Tpc tracks;#Phi;Vz", 100, -3.1415, 3.1415, 20, -10, 10);
@@ -223,10 +228,13 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
             for (int iEta = 0; iEta < vars::m_nEtasRatio; iEta++) {
                 for (int iVz = 0; iVz < vars::m_nVzsRatio; iVz++) {
                     for (int iPhi = 0; iPhi < vars::m_nPhisRatio; iPhi++) {
-                        mh2Tpc1PtCentPartEtaVzPhi[iParticle][iEta][iVz][iPhi] = new TH3F(Form("h3_tpc_mult_pt_p%d_eta%d_vz%d_phi%d", iParticle, iEta, iVz, iPhi), Form("h3_tpc_mult_pt_p%d_eta%d_vz%d_phi%d", iParticle, iEta, iVz, iPhi), vars::m_nPtsRatio, vars::m_PtEdgeRatio, vars::m_nmultEdge,
-                                vars::m_multEdge, vars::m_nZdc, vars::m_zdcEdge);
-                        mh2HFT1PtCentPartEtaVzPhi[iParticle][iEta][iVz][iPhi] = new TH3F(Form("h3_hft_mult_pt_p%d_eta%d_vz%d_phi%d", iParticle, iEta, iVz, iPhi), Form("h3_hft_mult_pt_p%d_eta%d_vz%d_phi%d", iParticle, iEta, iVz, iPhi), vars::m_nPtsRatio, vars::m_PtEdgeRatio, vars::m_nmultEdge,
-                                vars::m_multEdge, vars::m_nZdc, vars::m_zdcEdge);
+                        for (int iMult = 0; iMult < vars::m_nmultEdge; ++iMult) {
+                            hisName = Form("h_tpc_mult_pt_p%d_eta%d_vz%d_phi%d", iParticle, iEta, iVz, iPhi);
+                            mh2Tpc1PtCentPartEtaVzPhi[iParticle][iEta][iVz][iPhi][iMult] = new TH1F(hisName, hisName, vars::m_nPtsRatio, vars::m_PtEdgeRatio);
+
+                            hisName = Form("h_hft_mult_pt_p%d_eta%d_vz%d_phi%d", iParticle, iEta, iVz, iPhi);
+                            mh2HFT1PtCentPartEtaVzPhi[iParticle][iEta][iVz][iPhi][iMult]  = new TH1F(hisName, hisName, vars::m_nPtsRatio, vars::m_PtEdgeRatio);
+                        }
                     }
                 }
             }
@@ -237,16 +245,16 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
         for (int iParticle = 0; iParticle < vars::m_nParticles; iParticle++) {
             for (int iEta = 0; iEta < vars::m_nEtasDca; iEta++) {
                 for (int iVz = 0; iVz < vars::m_nVzsDca; iVz++) {
-                    for (int iZdc = 0; iZdc < vars::m_nZdc; iZdc++) {
-                        for (int iCent = 0; iCent < vars::m_nmultEdge; iCent++) {
-//                            cout<<Form("mh3DcaXyZPt_p%d_eta%d_vz%d_z%d_m%d", iParticle, iEta, iVz, iZdc, iCent)<<endl;
-                            mh3DcaXyZPtCentPartEtaVzPhi[iParticle][iEta][iVz][iZdc][iCent] = new TH3F(Form("mh3DcaXyZPt_p%d_eta%d_vz%d_z%d_m%d", iParticle, iEta, iVz, iZdc, iCent), Form("mh3DcaXyZPt_p%d_eta%d_vz%d_z%d_m%d", iParticle, iEta, iVz, iZdc, iCent),
-                                                                                                      vars::m_nPtsDca, vars::m_PtEdgeDca, vars::m_nDcasDca, vars::m_DcaEdgeDca, vars::m_nDcasDca, vars::m_DcaEdgeDca);
+                    for (int iCent = 0; iCent < vars::m_nmultEdge; iCent++) {
+                        for (int iPt = 0; iPt < vars::m_nPtsDca; ++iPt) {
+                            hisName=Form("mh3DcaXyZPt_p%d_eta%d_vz%d_m%d_pt%d", iParticle, iEta, iVz, iCent, iPt);
+                            mh3DcaXyZPtCentPartEtaVzPhi[iParticle][iEta][iVz][iCent][iPt] = new TH2F(hisName, hisName, vars::m_nDcasDca, vars::m_DcaEdgeDca, vars::m_nDcasDca, vars::m_DcaEdgeDca);
                         }
                     }
                 }
             }
         }
+
         mh3DcaPtCent = new TH3F("mh3DcaPtCent", "mh3DcaPtCent;p_{T}(GeV/c);cent;Dca(cm)", vars::m_nPtsDca, vars::m_PtEdgeDca, vars::m_nmultEdge, vars::m_multEdge, vars::m_nDcasDca, vars::m_DcaEdgeDca);
         mh3DcaXyPtCent = new TH3F("mh3DcaXyPtCent", "mh3DcaXyPtCent;p_{T}(GeV/c);cent;DcaXy(cm)", vars::m_nPtsDca, vars::m_PtEdgeDca, vars::m_nmultEdge, vars::m_multEdge, vars::m_nDcasDca, vars::m_DcaEdgeDca);
         mh3DcaZPtCent = new TH3F("mh3DcaZPtCent", "mh3DcaZPtCent;p_{T}(GeV/c);cent;DcaZ(cm)", vars::m_nPtsDca, vars::m_PtEdgeDca, vars::m_nmultEdge, vars::m_multEdge, vars::m_nDcasDca, vars::m_DcaEdgeDca);
@@ -264,46 +272,47 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
 // _________________________________________________________
 void StPicoSimInputsMaker::addTpcDenom1(bool IsPion, bool IsKaon, float pt, int multiplicity, int EtaIndex, int PhiIndex, float Vz, float zdc){
     int VzIndex = getVzIndexRatio(Vz);
-    if(VzIndex == -1) return;
+    int multIndex = getMultIndex(multiplicity);
+    if((VzIndex == -1) || (centrality==-1)) return;
 
     if (IsPion){
-        mh2Tpc1PtCentPartEtaVzPhi[0][EtaIndex][VzIndex][PhiIndex]->Fill(pt, multiplicity, zdc);
+        mh2Tpc1PtCentPartEtaVzPhi[0][EtaIndex][VzIndex][PhiIndex][multIndex]->Fill(pt);
     }
 
     if (IsKaon){
-        mh2Tpc1PtCentPartEtaVzPhi[1][EtaIndex][VzIndex][PhiIndex]->Fill(pt, multiplicity, zdc);
+        mh2Tpc1PtCentPartEtaVzPhi[1][EtaIndex][VzIndex][PhiIndex][multIndex]->Fill(pt);
     }
 
     mh2Tpc1PtCent->Fill(pt, multiplicity);
-//    if (fabs(Eta) < mHFCuts->cutEta()  && pt > mHFCuts->cutPt()) mh2Tpc1PhiVz->Fill(Phi, Vz);
 }
 
 // _________________________________________________________
 void StPicoSimInputsMaker::addHFTNumer1(bool IsPion, bool IsKaon, float pt, int multiplicity, int EtaIndex, int PhiIndex, float Vz, float zdc){
     int VzIndex = getVzIndexRatio(Vz);
-    if(VzIndex == -1) return;
+    int multIndex = getMultIndex(multiplicity);
+    if((VzIndex == -1) || (centrality==-1)) return;
+
     if (IsPion){
-        mh2HFT1PtCentPartEtaVzPhi[0][EtaIndex][VzIndex][PhiIndex]->Fill(pt, multiplicity, zdc);
+        mh2HFT1PtCentPartEtaVzPhi[0][EtaIndex][VzIndex][PhiIndex][multIndex]->Fill(pt);
     }
     if (IsKaon){
-        mh2HFT1PtCentPartEtaVzPhi[1][EtaIndex][VzIndex][PhiIndex]->Fill(pt, multiplicity, zdc);
+        mh2HFT1PtCentPartEtaVzPhi[1][EtaIndex][VzIndex][PhiIndex][multIndex]->Fill(pt);
     }
 
     mh2HFT1PtCent->Fill(pt, multiplicity);
-//    if (fabs(Eta) < mHFCuts->cutEta()  && pt > mHFCuts->cutPt()) mh2HFT1PhiVz->Fill(Phi, Vz);
 }
 
 // _________________________________________________________
 void StPicoSimInputsMaker::addDcaPtCent(float dca, float dcaXy, float dcaZ, bool IsPion, bool IsKaon, float pt,  int multiplicity, int EtaIndex, int Phi, float Vz, int ZdcIndex){
     int VzIndex = getVzIndexDca(Vz);
     int centrality = getMultIndex(multiplicity);
-    if(VzIndex == -1) return;
-    if (centrality == -1) return;
+    int ptIndex = getPtIndexDca(pt);
+    if(VzIndex==-1) || (centrality==-1) || (ptIndex==-1) return;
     if (IsPion){
-        mh3DcaXyZPtCentPartEtaVzPhi[0][EtaIndex][VzIndex][ZdcIndex][centrality]->Fill(pt, dcaXy, dcaZ);
+        mh3DcaXyZPtCentPartEtaVzPhi[0][EtaIndex][VzIndex][centrality][ptIndex]->Fill(dcaXy, dcaZ);
     }
     if (IsKaon){
-        mh3DcaXyZPtCentPartEtaVzPhi[1][EtaIndex][VzIndex][ZdcIndex][centrality]->Fill(pt, dcaXy, dcaZ);
+        mh3DcaXyZPtCentPartEtaVzPhi[1][EtaIndex][VzIndex][centrality][ptIndex]->Fill(dcaXy, dcaZ);
     }
 
     mh3DcaPtCent->Fill(pt, multiplicity, dca);
@@ -348,6 +357,15 @@ int StPicoSimInputsMaker::getVzIndexDca(float Vz){
 }
 
 // _________________________________________________________
+int StPicoSimInputsMaker::getPtIndexDca(float pt){
+    for (int i = 0; i < vars::m_nPtsDca; i++){
+        if ((pt >= vars::m_PtEdgeDca[i]) && (pt < vars::m_PtEdgeDca[i + 1]))
+            return i;
+    }
+    return -1;
+}
+
+// _________________________________________________________
 int StPicoSimInputsMaker::getEtaIndexRatio(float Eta){
     for (int i = 0; i < vars::m_nEtasRatio; i++){
         if ((Eta >= vars::m_EtaEdgeRatio[i]) && (Eta < vars::m_EtaEdgeRatio[i + 1]))
@@ -377,9 +395,8 @@ int StPicoSimInputsMaker::getVzIndexRatio(float Vz){
 // _________________________________________________________
 void StPicoSimInputsMaker::closeFile()
 {
-    mOutFile->cd();
-
     if (vars::fillNtp){
+        mOutFileTuple->cd();
         ntp_tracks->Write(ntp_tracks->GetName(), TObject::kOverwrite);
     }
 //    mh1Cent->Write();
@@ -394,20 +411,23 @@ void StPicoSimInputsMaker::closeFile()
         for (int iParticle = 0; iParticle < vars::m_nParticles; iParticle++) {
             for (int iEta = 0; iEta < vars::m_nEtasDca; iEta++) {
                 for (int iVz = 0; iVz < vars::m_nVzsDca; iVz++) {
-                    for (int iZdc = 0; iZdc < vars::m_nZdc; iZdc++) {
-                        for (int iCent = 0; iCent < vars::m_nmultEdge; iCent++) {
-                            mh3DcaXyZPtCentPartEtaVzPhi[iParticle][iEta][iVz][iZdc][iCent]->Write();
+                    for (int iCent = 0; iCent < vars::m_nmultEdge; iCent++) {
+                        for (int iPt = 0; iPt < vars::m_nPtsDca; iPt++) {
+                            mOutFileDCA->cd();
+                            mh3DcaXyZPtCentPartEtaVzPhi[iParticle][iEta][iVz][iCent][iPt]->Write();
                         }
                     }
                 }
             }
         }
+        mOutFileDCA->cd();
         mh3DcaZPtCent->Write();
         mh3DcaPtCent->Write();
         mh3DcaXyPtCent->Write();
     }
 
     if (vars::ratioHists) {
+        mOutFileRatio->cd();
         mh2Tpc1PtCent->Write();
         mh2Tpc1PhiVz->Write();
         mh2HFT1PhiVz->Write();
@@ -416,8 +436,10 @@ void StPicoSimInputsMaker::closeFile()
             for (int iEta = 0; iEta < vars::m_nEtasRatio; iEta++) {
                 for (int iVz = 0; iVz < vars::m_nVzsRatio; iVz++) {
                     for (int iPhi = 0; iPhi < vars::m_nPhisRatio; iPhi++) {
-                        mh2Tpc1PtCentPartEtaVzPhi[iParticle][iEta][iVz][iPhi]->Write();
-                        mh2HFT1PtCentPartEtaVzPhi[iParticle][iEta][iVz][iPhi]->Write();
+                        for (int iMult = 0; iMult < vars::m_nmultEdge; ++iMult) {
+                            mh2Tpc1PtCentPartEtaVzPhi[iParticle][iEta][iVz][iPhi][iMult]->Write();
+                            mh2HFT1PtCentPartEtaVzPhi[iParticle][iEta][iVz][iPhi][iMult]->Write();
+                        }
                     }
                 }
             }
@@ -426,20 +448,24 @@ void StPicoSimInputsMaker::closeFile()
 
     for (int iParticle = 0; iParticle < vars::m_nParticles; ++iParticle) {
         for (int nsigma = 0; nsigma < 3; ++nsigma) {
+            mOutFileRatio->cd();
             h1Tofmatch[iParticle][nsigma] -> Write();
             h1TofmatchTOF[iParticle][nsigma] -> Write();
         }
     }
 
+    mOutFileRatio->cd();
     mh3VzZdcMult -> Write();
     mhVx -> Write();
     mhVxVy -> Write();
     mhVy -> Write();
     mhVz -> Write();
 //    mOutFile->Write();
-    mOutFile->Close();
 
-    //mOutFile->Delete();
+    mOutFileRatio->Close();
+    mOutFileDCA->Close();
+    mOutFileTuple->Close();
+
 }
 
 // _________________________________________________________

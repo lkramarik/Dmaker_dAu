@@ -53,6 +53,7 @@ public:
    int getZdcIndex(float zdc);
    int getPhiIndexDca(float Phi) ;
    int getVzIndexDca(float Vz) ;
+   int getPtIndexDca(float pt);
    int getEtaIndexRatio(float Eta) ;
    int getPhiIndexRatio(float Phi) ;
    int getVzIndexRatio(float Vz) ;
@@ -63,7 +64,9 @@ private:
     TString mOutFileBaseName;
 
     bool mFillQaHists;
-    TFile* mOutFile;
+    TFile* mOutFileRatio;
+    TFile* mOutFileDCA;
+    TFile* mOutFileTuple;
 
     TH1F* mh1Cent;
     TH1F* mh1CentWg;
@@ -78,13 +81,15 @@ private:
     TH2F* mh2HFT1PtCent;
     TH2F* mh2HFT1PhiVz;
 
-    TH3F* mh2Tpc1PtCentPartEtaVzPhi[vars::m_nParticles][vars::m_nEtasRatio][vars::m_nVzsRatio][vars::m_nPhisRatio];
-    TH3F* mh2HFT1PtCentPartEtaVzPhi[vars::m_nParticles][vars::m_nEtasRatio][vars::m_nVzsRatio][vars::m_nPhisRatio];
+    TH1F* mh2Tpc1PtCentPartEtaVzPhi[vars::m_nParticles][vars::m_nEtasRatio][vars::m_nVzsRatio][vars::m_nPhisRatio][vars::m_nmultEdge];
+    TH1F* mh2HFT1PtCentPartEtaVzPhi[vars::m_nParticles][vars::m_nEtasRatio][vars::m_nVzsRatio][vars::m_nPhisRatio][vars::m_nmultEdge];
+
     TH1D* h1Tofmatch[vars::m_nParticles][3];
     TH1D* h1TofmatchTOF[vars::m_nParticles][3];
 
     //HFT Dca
-    TH3F* mh3DcaXyZPtCentPartEtaVzPhi[vars::m_nParticles][vars::m_nEtasDca][vars::m_nVzsDca][vars::m_nZdc][vars::m_nmultEdge];
+    TH2F* mh3DcaXyZPtCentPartEtaVzPhi[vars::m_nParticles][vars::m_nEtasDca][vars::m_nVzsDca][vars::m_nmultEdge][vars::m_nPtsDca];
+
     TH3F* mh3DcaPtCent;
     TH3F* mh3DcaXyPtCent;
     TH3F* mh3DcaZPtCent;

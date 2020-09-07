@@ -59,7 +59,7 @@ void createHftFromNtp(){
 //    ntpData->SetBranchAddress("zdc", &zdc);
     ntpData->SetBranchAddress("nHitsFitTrk", &nHitsFit);
     ntpData->SetBranchAddress("multiplicity", &refMult);
-//    ntpData->SetBranchAddress("isPrimary", &isPrimary);
+    ntpData->SetBranchAddress("isPrimaryTrk", &isPrimary);
     ntpData->SetBranchAddress("nHftTracks", &nHftTracks);
     ntpData->SetBranchAddress("nTofTracks", &nTofTracks);
 //    ntpData->SetBranchAddress("particleId", &particleId);
@@ -79,7 +79,7 @@ void createHftFromNtp(){
 
     TString particleName[]={"pion","kaon"};
 //    TString trackKinds[]=    {"","primary",     "TOFmatched", "primary_TOFmatched", "_nHftTracks1", "_nHftTracks2","_nTofTracks2"};
-    TString trackKinds[]=    {"",  "TPC",   "TPC_TOF", "TPC_hybridTOF"};
+    TString trackKinds[]=    {"",  "TPC",   "TPC_TOF", "TPC_hybridTOF", "TPC_TOFPid"};
 //    TString trackKindsCuts[]={"","isPrimary>0", "isTOF>0",    "isPrimary>0 && isTOF>0"};
     const int nKinds = sizeof(trackKinds) / sizeof(TString);
 
@@ -97,7 +97,7 @@ void createHftFromNtp(){
     TString nameHisto;
     TString hftText[]={"","_hft"};
 
-    Float_t maxDca=0.2;
+    Double_t maxDca=0.1;
     for (int i = 0; i < nKinds; ++i) {
         for (int k = 0; k < 2; ++k) {
             for (int iPart = 0; iPart < 2; ++iPart) {
@@ -149,17 +149,23 @@ void createHftFromNtp(){
 
     Float_t isHybridTOF[]={-1,-1};
     Float_t isTOFtrk[]={-1,-1};
+    Float_t isTOFPidtrk[]={-1,-1};
     Float_t isTPCtrk[]={-1,-1};
 
     for (int k = 0; k < ntpData->GetEntries(); ++k) {
-//    for (int k = 0; k < ntpData->GetEntries()/100; ++k) {
+//    for (int k = 0; k < ntpData->GetEntries()/10; ++k) {
         ntpData->GetEntry(k);
-        if (abs(nSigmaPion)<2) isTPCtrk[0]=1; else isTPCtrk[0]=-1;
+        if (nHitsFit<20) continue;
+        if (isPrimary<1) continue;
+
+        if (abs(nSigmaPion)<1) isTPCtrk[0]=1; else isTPCtrk[0]=-1;
         if (abs(invBetaPion)<20) isTOFtrk[0]=1; else isTOFtrk[0]=-1;
+        if (abs(invBetaPion)<0.02) isTOFPidtrk[0]=1; else isTOFPidtrk[0]=-1;
         if ((isTOFtrk[0]==-1) ||  (abs(invBetaPion)<0.03)) isHybridTOF[0]=1; else isHybridTOF[0]=-1;
 
-        if (abs(nSigmaKaon)<2) isTPCtrk[1]=1; else isTPCtrk[1]=-1;
+        if (abs(nSigmaKaon)<1) isTPCtrk[1]=1; else isTPCtrk[1]=-1;
         if (abs(invBetaKaon)<20) isTOFtrk[1]=1; else isTOFtrk[1]=-1;
+        if (abs(invBetaKaon)<0.02) isTOFPidtrk[1]=1; else isTOFPidtrk[1]=-1;
         if ((isTOFtrk[1]==-1) || (abs(invBetaKaon)<0.03)) isHybridTOF[1]=1; else isHybridTOF[1]=-1;
 
 //_________TPROFILE_________
@@ -195,6 +201,9 @@ void createHftFromNtp(){
                     if (isHybridTOF[iPart]>0) {
                         hPtAll[j][3][iPart]->Fill(pt);
                     }
+                    if (isTOFPidtrk[iPart]>0) {
+                        hPtAll[j][4][iPart]->Fill(pt);
+                    }
                 }
 
                 //_______DCA binning____________
@@ -208,6 +217,9 @@ void createHftFromNtp(){
                             }
                             if (isHybridTOF[iPart]>0) {
                                 hPt[j][3][i][iPart]->Fill(pt);
+                            }
+                            if (isTOFPidtrk[iPart]>0) {
+                                hPt[j][4][i][iPart]->Fill(pt);
                             }
                         }
                     }
@@ -242,6 +254,13 @@ void createHftFromNtp(){
                                 hDCAPtBins[j][3][i][iPart]->Fill(dca);
                                 hDCAxyPtBins[j][3][i][iPart]->Fill(dcaxy);
                                 hDCAzPtBins[j][3][i][iPart]->Fill(dcaz);
+                            }
+                            if (isTOFPidtrk[iPart]>0) {
+                                hEta[j][4][i][iPart]->Fill(eta);
+                                hPhi[j][4][i][iPart]->Fill(phi);
+                                hDCAPtBins[j][4][i][iPart]->Fill(dca);
+                                hDCAxyPtBins[j][4][i][iPart]->Fill(dcaxy);
+                                hDCAzPtBins[j][4][i][iPart]->Fill(dcaz);
                             }
                         }
                     }
@@ -289,7 +308,7 @@ void createHftFromNtp(){
     cout << "Time needed " << duration << " s" << endl;
 }
 
-
+//___________________________________________________________________________________________
 void divide_ntp() {
     TString input="/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/simInputsPrepare/toHadd/ntp.ratio.1404.half.root";
     TFile* data = new TFile(input ,"r");

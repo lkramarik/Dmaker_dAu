@@ -38,10 +38,6 @@ void draw(TH1D* histo, TString xAxis, TString yAxis, Int_t color) {
     if(xAxis=="DCA_{xy} [cm]") histo->GetXaxis()->SetRangeUser(-1*dcaMax,dcaMax);
     if(xAxis=="DCA_{z} [cm]") histo->GetXaxis()->SetRangeUser(-1*dcaMax,dcaMax);
     if(xAxis=="DCA [cm]") histo->GetXaxis()->SetRangeUser(0,dcaMax);
-
-//    if(xAxis=="DCA_{xy} [cm]") histo->GetXaxis()->SetRangeUser(-0.1,0.1);
-//    if(xAxis=="DCA_{z} [cm]") histo->GetXaxis()->SetRangeUser(-0.1,0.1);
-//    if(xAxis=="DCA [cm]") histo->GetXaxis()->SetRangeUser(0,0.1);
 }
 
 //_____________________________________________________________________________________________________________
@@ -94,7 +90,15 @@ void createQATracks() {
     TH1D* hDcazAll = new TH1D("hDcaz_all", "hDcaz_all", 100, -1*maxDca, maxDca);
     TH1D* hDcazAllHft = new TH1D("hDcaz_all_hft", "hDcaz_all_hft", 100, -1*maxDca, maxDca);
 
+    TH1D* hPtRecoDCA[nDcaRatio];
+    TH1D* hPtRecoHftDCA[nDcaRatio];
 
+    TH1D* hDCAPtBins[nPtDca];
+    TH1D* hDCAPtBinsHft[nPtDca];
+    TH1D* hDCAxyPtBins[nPtDca];
+    TH1D* hDCAxyPtBinsHft[nPtDca];
+    TH1D* hDCAzPtBins[nPtDca];
+    TH1D* hDCAzPtBinsHft[nPtDca];
 
     for (int j = 0; j < nDcaRatio; ++j) {
         histoname=Form("hPt_dca%.1f", dcaCut[j]);
@@ -195,89 +199,89 @@ void createQATracks() {
 //________________________________________________________________________________________________________________________
 void compareEvtEmb() {
 //    TString fileNameSim = "/home/lukas/work/D0-fullEvent/analyse/test.out.root";
-    TString fileNameSim = "/home/lukas/work/D0-fullEvent/analyse/out_test.7.1905.big.root";
+    TString fileNameSim = "/home/lukas/work/D0-fullEvent/analyse/out_production.1M.MB.root";
     auto* dataSimF = new TFile(fileNameSim,"r");
     TList* list = (TList*)dataSimF -> Get("hists_event_QA;1");
     TH1F* vzSim=static_cast<TH1F*>(list->FindObject("hRcVzAccepVtx"));
 
     ///////
-//    TH1D* vzdata = new TH1D("vzdata","vzdata",100,-6,6);
-//    TH1D* vydata = new TH1D("vydata","vydata",100,-1,1);
-//    TH1D* vxdata = new TH1D("vxdata","vxdata",100,-1,1);
-//    TFile* dataF = new TFile("/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/PV/ntp.PV.1712.root","r");
-//    TNtuple* ntpData = (TNtuple*)dataF -> Get("ntp_vertex;1");
-////    ntpData->Scan();
-//    cout<<ntpData->GetEntries()<<endl;
-//    Float_t picoDstVz, nHftTracks, BBC, picoDstVx, picoDstVy;
-//    ntpData->SetBranchAddress("picoDstVx", &picoDstVx);
-//    ntpData->SetBranchAddress("picoDstVy", &picoDstVy);
-//    ntpData->SetBranchAddress("picoDstVz", &picoDstVz);
-//    ntpData->SetBranchAddress("BBC", &BBC);
-//    ntpData->SetBranchAddress("nHftTracks", &nHftTracks);
-//
-//    for (int i = 0; i < ntpData->GetEntries(); ++i) {
-//        ntpData->GetEntry(i);
-////        if(BBC<900 && nHftTracks>2 && picoDstVy>-0.25 && picoDstVy<-0.16 && picoDstVx>-0.25 && picoDstVx<-0.16) vxdata->Fill(picoDstVx);
-////        if(BBC<900 && nHftTracks>2 && picoDstVy>-0.25 && picoDstVy<-0.16 && picoDstVx>-0.25 && picoDstVx<-0.16) vydata->Fill(picoDstVy);
-////        if(BBC<900 && nHftTracks>2 && picoDstVy>-0.25 && picoDstVy<-0.16 && picoDstVx>-0.25 && picoDstVx<-0.16) vzdata->Fill(picoDstVz);
-//
-////        if(BBC<900 && nHftTracks>2) vxdata->Fill(picoDstVx);
-////        if(BBC<900 && nHftTracks>2) vydata->Fill(picoDstVy);
-////        if(BBC<900 && nHftTracks>2) vzdata->Fill(picoDstVz);
-//
+    TH1D* vzdata = new TH1D("mhVz","mhVz",600, -150, 150);
+    TH1D* vydata = new TH1D("vydata","vydata",100,-1,1);
+    TH1D* vxdata = new TH1D("vxdata","vxdata",100,-1,1);
+    TFile* dataF = new TFile("/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/PV/ntp.PV.1712.root","r");
+    TNtuple* ntpData = (TNtuple*)dataF -> Get("ntp_vertex;1");
+//    ntpData->Scan();
+    cout<<ntpData->GetEntries()<<endl;
+    Float_t picoDstVz, nHftTracks, BBC, picoDstVx, picoDstVy;
+    ntpData->SetBranchAddress("picoDstVx", &picoDstVx);
+    ntpData->SetBranchAddress("picoDstVy", &picoDstVy);
+    ntpData->SetBranchAddress("picoDstVz", &picoDstVz);
+    ntpData->SetBranchAddress("BBC", &BBC);
+    ntpData->SetBranchAddress("nHftTracks", &nHftTracks);
+
+    for (int i = 0; i < ntpData->GetEntries(); ++i) {
+        ntpData->GetEntry(i);
+        if(BBC<900 && nHftTracks>2 && picoDstVy>-0.25 && picoDstVy<-0.16 && picoDstVx>-0.25 && picoDstVx<-0.16) vxdata->Fill(picoDstVx);
+        if(BBC<900 && nHftTracks>2 && picoDstVy>-0.25 && picoDstVy<-0.16 && picoDstVx>-0.25 && picoDstVx<-0.16) vydata->Fill(picoDstVy);
+        if(BBC<900 && nHftTracks>2 && picoDstVy>-0.25 && picoDstVy<-0.16 && picoDstVx>-0.25 && picoDstVx<-0.16) vzdata->Fill(picoDstVz);
+
+//        if(BBC<900 && nHftTracks>2) vxdata->Fill(picoDstVx);
+//        if(BBC<900 && nHftTracks>2) vydata->Fill(picoDstVy);
+//        if(BBC<900 && nHftTracks>2) vzdata->Fill(picoDstVz);
+
 //        vxdata->Fill(picoDstVx);
 //        vydata->Fill(picoDstVy);
 //        vzdata->Fill(picoDstVz);
-//
-//    }
-//    TFile* dataout = new TFile("vzData.root","recreate");
-//    vxdata->Write();
-//    vydata->Write();
-//    vzdata->Write();
+
+    }
+    TFile* dataout = new TFile("vzData.root","recreate");
+    vxdata->Write();
+    vydata->Write();
+    vzdata->Write();
 /////////////////////
 
-    TFile* dataF = new TFile("vzData.root","r");
-    TH1F* vxdata = (TH1F*)dataF -> Get("vxdata");
-    TH1F* vydata = (TH1F*)dataF -> Get("vydata");
-    TH1F* vzdata = (TH1F*)dataF -> Get("vzdata");
-
-    Double_t nBinsData = vzdata->Integral(vzdata->FindBin(-6), vzdata->FindBin(6));
-    Double_t nBinsSim = vzSim->Integral(vzSim->FindBin(-6), vzSim->FindBin(6));
-
-//    cout<<nBinsData<<" "<<nBinsSim<<endl;
-//    cout<<nBinsData<<" "<<nBinsSim<<endl;
-    cout<<vzdata->GetNbinsX()<<endl;
-    cout<<vzSim->GetNbinsX()<<endl;
-//    vzdata->Rebin(2);
-
-    vzSim->Scale(1/vzSim->GetEntries());
-    vxdata->Scale(1/vxdata->GetEntries());
-    vydata->Scale(1/vydata->GetEntries());
-    vzdata->Scale(1/vzdata->GetEntries());
-
-    cout<<"vzsim"<<endl;
-    vzSim->Fit("gaus");
-    cout<<"vx"<<endl;
-    vxdata->Fit("gaus");
-    cout<<"vy"<<endl;
-    vydata->Fit("gaus");
-    cout<<"vzDat"<<endl;
-    vzdata->Fit("gaus");
-//    vzSim->Scale(1/nBinsSim);
-//    vzdata->Scale(1/nBinsData);
-
-//    vzdata->Divide(vzSim);
-    TCanvas* c = new TCanvas("c","c", 800,900);
-    vzSim->Draw();
-    vzdata->Draw("same");
-
-    TCanvas* cX = new TCanvas("cX","cX", 800,900);
-    vxdata->Draw();
-
-    TCanvas* cY = new TCanvas("cY","cY", 800,900);
-    vydata->Draw();
-
-//    dataF->Close();
+//    TFile* dataF = new TFile("vzData.root","r");
+//    TH1F* vxdata = (TH1F*)dataF -> Get("vxdata");
+//    TH1F* vydata = (TH1F*)dataF -> Get("vydata");
+//    TH1F* vzdata = (TH1F*)dataF -> Get("vzdata");
+//
+//    Double_t nBinsData = vzdata->Integral(vzdata->FindBin(-6), vzdata->FindBin(6));
+//    Double_t nBinsSim = vzSim->Integral(vzSim->FindBin(-6), vzSim->FindBin(6));
+//
+////    cout<<nBinsData<<" "<<nBinsSim<<endl;
+////    cout<<nBinsData<<" "<<nBinsSim<<endl;
+//    cout<<vzdata->GetNbinsX()<<endl;
+//    cout<<vzSim->GetNbinsX()<<endl;
+////    vzdata->Rebin(2);
+//
+//    vzSim->Scale(1/vzSim->GetEntries());
+//    vxdata->Scale(1/vxdata->GetEntries());
+//    vydata->Scale(1/vydata->GetEntries());
+//    vzdata->Scale(1/vzdata->GetEntries());
+//
+////    cout<<"vzsim"<<endl;
+////    vzSim->Fit("gaus");
+////    cout<<"vx"<<endl;
+////    vxdata->Fit("gaus");
+////    cout<<"vy"<<endl;
+////    vydata->Fit("gaus");
+////    cout<<"vzDat"<<endl;
+////    vzdata->Fit("gaus");
+////    vzSim->Scale(1/nBinsSim);
+////    vzdata->Scale(1/nBinsData);
+//
+////    vzdata->Divide(vzSim);
+//    TCanvas* c = new TCanvas("c","c", 800,900);
+//    vzSim->Draw();
+//    vzdata->Draw("same");
+//
+//    TCanvas* cX = new TCanvas("cX","cX", 800,900);
+//    vxdata->Draw();
+//
+//    TCanvas* cY = new TCanvas("cY","cY", 800,900);
+//    vydata->Draw();
+//
+////    dataF->Close();
 
 }
 
@@ -322,10 +326,10 @@ void compareEmb() {
 //    auto* dataF1 = new TFile("/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/simInputsPrepare/tracksQA.data.new.pions.primary.tofmatched.root","r");
 //    list.push_back((TList*)dataF1 -> Get("hists_QA;1"));
 //    names.push_back("pions p TOF");
-//
-    auto* dataF3 = new TFile("/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/simInputsPrepare/tracksQA.data.new.all.root","r");
-    list.push_back((TList*)dataF3 -> Get("hists_QA;1"));
-    names.push_back("all");//
+////
+//    auto* dataF3 = new TFile("/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/simInputsPrepare/tracksQA.data.new.all.root","r");
+//    list.push_back((TList*)dataF3 -> Get("hists_QA;1"));
+//    names.push_back("all");//
 
 //    auto* dataF3q = new TFile("/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/simInputsPrepare/tracksQA.data.nTof0.root","r");
 //    list.push_back((TList*)dataF3q -> Get("hists_QA;1"));
@@ -340,9 +344,9 @@ void compareEmb() {
 
 
 //
-//    auto* dataF30 = new TFile("/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/simInputsPrepare/tracksQA.data.new.nhitsfit20.allpions.root","r");
-//    list.push_back((TList*)dataF30 -> Get("hists_QA;1"));
-//    names.push_back("all pions nhitsfit20");
+    auto* dataF30 = new TFile("/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/simInputsPrepare/tracksQA.data.new.nhitsfit20.allpions.root","r");
+    list.push_back((TList*)dataF30 -> Get("hists_QA;1"));
+    names.push_back("all pions nhitsfit20");
 //
 //    auto* dataF = new TFile("/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/analyse/simInputsPrepare/tracksQA.data.new.all.root","r");
 //    list.push_back((TList*)dataF -> Get("hists_QA;1"));
@@ -429,7 +433,6 @@ void compareEmb() {
 
                 if (i%2==1) canPtBins[1][(i-1)/2][j]->cd(2);
                 if (i%2==0) canPtBins[1][i/2][j]->cd(1);
-//                if (k==1) ratios[k][i][j]->Draw();
                 if (k==0) ratios[k][i][j]->Draw(); else {
                     g[k][i][j] = ratios[k][i][j]->GetLowerRefGraph();
                     TH1F *hUp = (TH1F *) ratios[k][i][j]->GetUpperRefObject();
@@ -511,21 +514,7 @@ void compareEmb() {
         hnHitsFitHft[k]->SetTitle("HFT tracks");
         draw(hnHitsFitHft[k], "nHitsFit", "1/N_{entries}", color[k]);
 
-        for (int j = 0; j < nDcaRatio; ++j) {
-            histoname=Form("hPt_dca%.1f", dcaCut[j]);
-            hPtRecoDCA[k][j]=new TH1D();
-            hPtRecoDCA[k][j]=static_cast<TH1D*>(list[k]->FindObject(histoname));
-            histoname=Form("DCA < %.1f cm", dcaCut[j]);
-            hPtRecoDCA[k][j]->SetTitle(histoname);
-            draw(hPtRecoDCA[k][j],"p_{T} [GeV/c]", "1/N_{entries}", color[k]);
 
-            histoname=Form("hPt_hft_dca%.1f", dcaCut[j]);
-            hPtRecoHftDCA[k][j]=new TH1D();
-            hPtRecoHftDCA[k][j]=static_cast<TH1D*>(list[k]->FindObject(histoname));
-            histoname=Form("HFT, DCA < %.1f cm", dcaCut[j]);
-            hPtRecoHftDCA[k][j]->SetTitle(histoname);
-            draw(hPtRecoHftDCA[k][j], "p_{T} [GeV/c]", "1/N_{entries}", color[k]);
-        }
 
         for (int j = 0; j < nPtDca; ++j) {
             histoname=Form("hDca_pt_%.2f_%.2f", ptCut[j], ptCut[j+1]);
@@ -803,14 +792,10 @@ void compareEmb() {
 */
 }
 
-//________________________________________________________________________________________________________________________
-
-
 
 //________________________________________________________________________________________________________________________
 void compareVertex() {
-//    TString fileNameSim = "/home/lukas/work/D0-fullEvent/analyse/test.out.root";
-    TString fileNameSim = "/home/lukas/work/D0-fullEvent/analyse/out_test.7.1905.big.root";
+    TString fileNameSim = "/home/lukas/work/D0-fullEvent/analyse/out_production.1M.MB.root";
     auto* dataSimF = new TFile(fileNameSim,"r");
     TList* list = (TList*)dataSimF -> Get("hists_event_QA;1");
     TH1F* vzSim=static_cast<TH1F*>(list->FindObject("hRcVzAccepVtx"));
@@ -871,13 +856,13 @@ void compareVertex() {
     vzdata->Scale(1/vzdata->GetEntries());
 
     cout<<"vzsim"<<endl;
-    vzSim->Fit("gaus");
+//    vzSim->Fit("gaus");
     cout<<"vx"<<endl;
     vxdata->Fit("gaus");
     cout<<"vy"<<endl;
     vydata->Fit("gaus");
     cout<<"vzDat"<<endl;
-    vzdata->Fit("gaus");
+//    vzdata->Fit("gaus");
 //    vzSim->Scale(1/nBinsSim);
 //    vzdata->Scale(1/nBinsData);
 
