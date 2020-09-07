@@ -66,7 +66,7 @@ private:
     bool mFillQaHists;
     TFile* mOutFileRatio;
     TFile* mOutFileDCA;
-    TFile* mOutFileDCA;
+    TFile* mOutFileTuple;
     TFile* mOutFileTOFRatio;
 
     TH1F* mh1Cent;
