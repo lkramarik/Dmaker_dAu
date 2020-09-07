@@ -201,6 +201,7 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
     mOutFileRatio = new TFile(fileBaseName + ".hists.ratio.root", "RECREATE");
     mOutFileTOFRatio = new TFile(fileBaseName + ".hists.TOFratio.root", "RECREATE");
     mOutFileTuple = new TFile(fileBaseName + ".hists.tuple.root", "RECREATE");
+    mOutFileEvent = new TFile(fileBaseName + ".hists.event.root", "RECREATE");
 
     TString hisName;
 
@@ -450,7 +451,7 @@ void StPicoSimInputsMaker::closeFile()
         }
     }
 
-    mOutputFileList->cd();
+    mOutFileEvent->cd();
     mh3VzZdcMult -> Write();
     mhVx -> Write();
     mhVxVy -> Write();
@@ -462,6 +463,7 @@ void StPicoSimInputsMaker::closeFile()
     mOutFileTOFRatio->Close();
     mOutFileDCA->Close();
     mOutFileTuple->Close();
+    mOutFileEvent->Close();
 
 }
 

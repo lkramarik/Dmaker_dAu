@@ -68,6 +68,7 @@ private:
     TFile* mOutFileDCA;
     TFile* mOutFileTuple;
     TFile* mOutFileTOFRatio;
+    TFile* mOutFileEvent;
 
     TH1F* mh1Cent;
     TH1F* mh1CentWg;
