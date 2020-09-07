@@ -10,6 +10,7 @@
 #include "StPicoSimInputsMaker.h"
 #include "TH2F.h"
 #include "TVector3.h"
+#include "TSystem.h"
 #include "StAnaCuts.h"
 #include <iostream>
 using namespace std;
