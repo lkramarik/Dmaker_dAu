@@ -14,8 +14,8 @@ namespace vars {
     const int m_nParticles = 2;
     const TString m_ParticleName[m_nParticles] = {"Pion", "Kaon"};
 
-    const int m_nmultEdge = 7;
-    float const m_multEdge[m_nmultEdge+1] = {0, 4, 8, 12, 16, 20, 24, 200};
+    const int m_nmultEdge = 6;
+    float const m_multEdge[m_nmultEdge+1] = {0, 8, 12, 16, 20, 24, 200};
 
 //histo stuff
 
@@ -36,8 +36,8 @@ namespace vars {
 
 
     //::RATIO::
-    const int m_nVzsRatio = 6;
-    float const m_VzEdgeRatio[m_nVzsRatio + 1] = { -6.0, -4.0, -2.0, 0, 2.0, 4.0, 6.0};
+    const int m_nVzsRatio = 4;
+    float const m_VzEdgeRatio[m_nVzsRatio + 1] = {-6.0, -3.0, 0, 3.0, 6.0};
 
     const int m_nEtasRatio = 10;
     float const m_EtaEdgeRatio[m_nEtasRatio + 1] = { -1.0, -0.8, -0.6, -0.4, -0.2, 0.0, 0.2, 0.4 , 0.6, 0.8, 1.0};
@@ -47,9 +47,6 @@ namespace vars {
 
     int const m_nPtsRatio = 14;
     float const m_PtEdgeRatio[m_nPtsRatio + 1] = {0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1., 1.25, 1.5, 2., 2.5, 3.0, 4., 6., 12.};
-
-
-
 
     int const m_nDcasDca = 144;
     float const m_DcaEdgeDca[m_nDcasDca + 1] =
