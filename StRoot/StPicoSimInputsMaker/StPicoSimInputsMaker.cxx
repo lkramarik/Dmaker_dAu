@@ -230,10 +230,10 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
                 for (int iVz = 0; iVz < vars::m_nVzsRatio; iVz++) {
                     for (int iPhi = 0; iPhi < vars::m_nPhisRatio; iPhi++) {
                         for (int iMult = 0; iMult < vars::m_nmultEdge; ++iMult) {
-                            hisName = Form("h_tpc_mult_pt_p%d_eta%d_vz%d_phi%d", iParticle, iEta, iVz, iPhi);
+                            hisName = Form("h_tpc_pt_p%d_eta%d_vz%d_phi%d_m%d", iParticle, iEta, iVz, iPhi, iMult);
                             mh2Tpc1PtCentPartEtaVzPhi[iParticle][iEta][iVz][iPhi][iMult] = new TH1F(hisName, hisName, vars::m_nPtsRatio, vars::m_PtEdgeRatio);
 
-                            hisName = Form("h_hft_mult_pt_p%d_eta%d_vz%d_phi%d", iParticle, iEta, iVz, iPhi);
+                            hisName = Form("h_hft_pt_p%d_eta%d_vz%d_phi%d_m%d", iParticle, iEta, iVz, iPhi, iMult);
                             mh2HFT1PtCentPartEtaVzPhi[iParticle][iEta][iVz][iPhi][iMult]  = new TH1F(hisName, hisName, vars::m_nPtsRatio, vars::m_PtEdgeRatio);
                         }
                     }
