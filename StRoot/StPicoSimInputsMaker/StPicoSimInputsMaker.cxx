@@ -198,12 +198,19 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
     mFillQaHists = fillQaHists;
     mOutFileTOFRatio = new TFile(fileBaseName + ".hists.TOFratio.root", "RECREATE");
     mOutFileEvent = new TFile(fileBaseName + ".hists.event.root", "RECREATE");
+    mOutFileTuple = new TFile(fileBaseName + ".hists.tuple.root", "RECREATE");
+    mOutFileDCA = new TFile(fileBaseName + ".hists.DCA.root", "RECREATE");
+
+    mOutFileRatio = new TFile(fileBaseName + ".hists.ratio.root", "RECREATE");
+    mOutFileRatio->mkdir("tpc");
+    mOutFileRatio->mkdir("hft");
 
     TString hisName;
 
     TH1::SetDefaultSumw2();
     if (!mFillQaHists) return;
 
+    mOutFileTOFRatio->cd();
     for (int iParticle = 0; iParticle < vars::m_nParticles; ++iParticle) {
         for (int nsigma = 0; nsigma < 3; ++nsigma) {
             h1Tofmatch[iParticle][nsigma] = new TH1D(Form("h1_Tofmatch_tpc1_p%d_nsigma%d", iParticle, nsigma+1), Form("h1_Tofmatch_tpc1_p%d_nsigma%d", iParticle, nsigma+1),vars::m_nPtTOF,vars::m_PtTOFedge);
@@ -212,15 +219,11 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
     }
 
     if(vars::fillNtp) {
-        mOutFileTuple = new TFile(fileBaseName + ".hists.tuple.root", "RECREATE");
+        mOutFileTuple->cd();
         ntp_tracks = new TNtuple("ntp_tracks","ntp_tracks", "runId:eventId:pt:dca:dcaXy:dcaZ:eta:phi:isHft:nSigmaPion:nSigmaKaon:invBetaPion:invBetaKaon:isPrimaryTrk:nHitsFitTrk:multiplicity:nHftTracks:nTofTracks");
     }
 
     if(vars::ratioHists) {
-        mOutFileRatio = new TFile(fileBaseName + ".hists.ratio.root", "RECREATE");
-        mOutFileRatio->mkdir("tpc");
-        mOutFileRatio->mkdir("hft");
-
         mh2Tpc1PtCent = new TH2F("mh2Tpc1PtCent", "Tpc tracks;p_{T}(GeV/c);cent",  vars::m_nPtsRatio, vars::m_PtEdgeRatio, vars::m_nmultEdge, vars::m_multEdge);
         mh2HFT1PtCent = new TH2F("mh2HFT1PtCent", "HFT tracks;p_{T}(GeV/c);cent",  vars::m_nPtsRatio, vars::m_PtEdgeRatio, vars::m_nmultEdge, vars::m_multEdge);
         mh2Tpc1PhiVz = new TH2F("mh2Tpc1PhiVz", "Tpc tracks;#Phi;Vz", 100, -3.1415, 3.1415, 20, -10, 10);
@@ -231,13 +234,15 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
                 for (int iVz = 0; iVz < vars::m_nVzsRatio; iVz++) {
                     for (int iPhi = 0; iPhi < vars::m_nPhisRatio; iPhi++) {
                         for (int iMult = 0; iMult < vars::m_nmultEdge; ++iMult) {
+                            mOutFileRatio->cd("tpc");
                             hisName = Form("h_tpc_pt_p%d_eta%d_vz%d_phi%d_m%d", iParticle, iEta, iVz, iPhi, iMult);
                             mh2Tpc1PtCentPartEtaVzPhi[iParticle][iEta][iVz][iPhi][iMult] = new TH1F(hisName, hisName, vars::m_nPtsRatio, vars::m_PtEdgeRatio);
-//                            mh2Tpc1PtCentPartEtaVzPhi[iParticle][iEta][iVz][iPhi][iMult]->SetDirectory(0);
+                            mh2Tpc1PtCentPartEtaVzPhi[iParticle][iEta][iVz][iPhi][iMult]->SetDirectory(0);
 
+                            mOutFileRatio->cd("hft");
                             hisName = Form("h_hft_pt_p%d_eta%d_vz%d_phi%d_m%d", iParticle, iEta, iVz, iPhi, iMult);
                             mh2HFT1PtCentPartEtaVzPhi[iParticle][iEta][iVz][iPhi][iMult]  = new TH1F(hisName, hisName, vars::m_nPtsRatio, vars::m_PtEdgeRatio);
-//                            mh2HFT1PtCentPartEtaVzPhi[iParticle][iEta][iVz][iPhi][iMult]->SetDirectory(0);
+                            mh2HFT1PtCentPartEtaVzPhi[iParticle][iEta][iVz][iPhi][iMult]->SetDirectory(0);
                         }
                     }
                 }
@@ -246,7 +251,7 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
     }
 
     if (vars::dcaHists) {
-        mOutFileDCA = new TFile(fileBaseName + ".hists.DCA.root", "RECREATE");
+        mOutFileDCA->cd();
         for (int iParticle = 0; iParticle < vars::m_nParticles; iParticle++) {
             for (int iEta = 0; iEta < vars::m_nEtasDca; iEta++) {
                 for (int iVz = 0; iVz < vars::m_nVzsDca; iVz++) {
@@ -266,6 +271,7 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
 
     }
 
+    mOutFileEvent->cd();
     mh3VzZdcMult = new TH3F("mh3VzZdcMult", "mh3VzZdcMult", 100, -6, 6, 100, 0, 250,  50, 0, 50);
     mhVx = new TH1D("mhVx", "mhVx", 400, -1, 1);
     mhVy = new TH1D("mhVy", "mhVy", 400, -1, 1);
@@ -467,6 +473,10 @@ void StPicoSimInputsMaker::closeFile()
     mhVy -> Write();
     mhVz -> Write();
     mOutFileEvent->Close();
+
+    if (!(vars::dcaHists))  gSystem->Exec("rm *.DCA.root);
+    if (!(vars::ratioHists))  gSystem->Exec("rm *.ratio.root);
+    if (!(vars::fillNtp))  gSystem->Exec("rm *.tuple.root);
 
 }
 
