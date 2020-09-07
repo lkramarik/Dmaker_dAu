@@ -273,7 +273,7 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
 void StPicoSimInputsMaker::addTpcDenom1(bool IsPion, bool IsKaon, float pt, int multiplicity, int EtaIndex, int PhiIndex, float Vz, float zdc){
     int VzIndex = getVzIndexRatio(Vz);
     int multIndex = getMultIndex(multiplicity);
-    if((VzIndex == -1) || (centrality==-1)) return;
+    if((VzIndex == -1) || (multIndex==-1)) return;
 
     if (IsPion){
         mh2Tpc1PtCentPartEtaVzPhi[0][EtaIndex][VzIndex][PhiIndex][multIndex]->Fill(pt);
@@ -290,7 +290,7 @@ void StPicoSimInputsMaker::addTpcDenom1(bool IsPion, bool IsKaon, float pt, int 
 void StPicoSimInputsMaker::addHFTNumer1(bool IsPion, bool IsKaon, float pt, int multiplicity, int EtaIndex, int PhiIndex, float Vz, float zdc){
     int VzIndex = getVzIndexRatio(Vz);
     int multIndex = getMultIndex(multiplicity);
-    if((VzIndex == -1) || (centrality==-1)) return;
+    if((VzIndex == -1) || (multIndex==-1)) return;
 
     if (IsPion){
         mh2HFT1PtCentPartEtaVzPhi[0][EtaIndex][VzIndex][PhiIndex][multIndex]->Fill(pt);
@@ -307,7 +307,7 @@ void StPicoSimInputsMaker::addDcaPtCent(float dca, float dcaXy, float dcaZ, bool
     int VzIndex = getVzIndexDca(Vz);
     int centrality = getMultIndex(multiplicity);
     int ptIndex = getPtIndexDca(pt);
-    if(VzIndex==-1) || (centrality==-1) || (ptIndex==-1) return;
+    if ((VzIndex==-1) || (centrality==-1) || (ptIndex==-1)) return;
     if (IsPion){
         mh3DcaXyZPtCentPartEtaVzPhi[0][EtaIndex][VzIndex][centrality][ptIndex]->Fill(dcaXy, dcaZ);
     }
