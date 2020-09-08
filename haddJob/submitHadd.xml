@@ -14,7 +14,7 @@
 
   <command>
     starver SL18f
-    hadd -k -f ${JOBID}.root *.root
+    hadd -k -f ${JOBID}.root INPUTFILES/*.root
   </command>
 
   <output fromScratch="*.root"    toURL="&basePath;/production/" />
