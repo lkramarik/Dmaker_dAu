@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+  <job fileListSyntax="paths" minFilesPerProcess="100" maxFilesPerProcess="150" simulateSubmission="false">
+    <stdout URL="file:&basePath;/jobs/log/$JOBID.out"/>
+    <stderr URL="file:&basePath;/jobs/err/$JOBID.err"/>
+
+    <input URL="filelist:&basePath;/&listOfFiles;" />
+
+
+  <Generator>
+    <Location>./report/</Location>
+    <ScriptLocation>./csh/</ScriptLocation>
+    <ListLocation>./list/</ListLocation>
+  </Generator>
+
+  <command>
+    starver SL18f
+    hadd -k -f ${JOBID}.root *.root
+  </command>
+
+  <output fromScratch="*.root"    toURL="&basePath;/production/" />
+  <output fromScratch="*.log"     toURL="&basePath;/jobs/log/" />
+
+
+  <SandBox installer="ZIP">
+    <Package name="LocalLibraries">
+      <File>file:./filelist.list</File>
+    </Package>
+  </SandBox>
+</job>
