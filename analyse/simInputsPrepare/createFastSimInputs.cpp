@@ -46,7 +46,7 @@ void createFastSimInputs(TString inputFileName="hftratio_all.root") {
     }
 
     TFile* mOutFileRatio;
-    TString fileNames[]={"hftratio_vs_pt_dAu_pion_hijing.root", "hftratio_vs_pt_dAu_kaon_hijing.root"};
+    TString fileNames[]={"hftratio_vs_pt_dAu_pion.root", "hftratio_vs_pt_dAu_kaon.root"};
 
     for (int iParticle = 0; iParticle < vars::m_nParticles; iParticle++) {
         mOutFileRatio = new TFile(shortName+fileNames[iParticle], "RECREATE");
