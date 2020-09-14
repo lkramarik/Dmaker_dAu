@@ -1,6 +1,3 @@
-//
-// Created by lukas on 3.4.2018.
-//
 #include "TH3D.h"
 #include "TH3F.h"
 #include "TFile.h"
@@ -20,19 +17,21 @@ void createHist() {
     //hijing:
     const Int_t nParticles = 2; //ok
     int const nVzs = 3; //ok
-    int const nEtas = 6; //ok
+    int const nEtas = 10; //ok
     const Int_t nPhi = 11; //ok
 
-//    TFile fDca1("hijing.sim.hists.root");
     TFile fDca1("hijing.sim.hists.production.vtx.3M.1308.root");
 
     TFile *outRatioPion = new TFile("hftratio_vs_pt_dAu_pion_hijing.root", "RECREATE");
     outRatioPion->SetCompressionSettings(0);
+
+    TFile *outHist2d = new TFile("2d_hijing.root", "RECREATE");
+
+    TFile *outEvent = new TFile("inputs.event_hijing.root", "RECREATE");
+    outEvent->SetCompressionSettings(0);
+
     TFile *outRatioKaon = new TFile("hftratio_vs_pt_dAu_kaon_hijing.root", "RECREATE");
     outRatioKaon->SetCompressionSettings(0);
-    TFile *outHist2d = new TFile("2d_hijing.root", "RECREATE");
-    TFile *outEvent = new TFile("inputs.event.hijing.root", "RECREATE");
-    outEvent->SetCompressionSettings(0);
 
 //_______________________________________________________________________________
     //data:
@@ -65,15 +64,10 @@ void createHist() {
     const int m_nZdc = 1;
     float const m_zdcEdge[m_nZdc+1] = {0,210};
 
-//    for(int iParticle = 0; iParticle < nParticles; ++iParticle){
-//        for (int iEta = 0; iEta < nEtas; ++iEta){
-//            for (int iVz = 0; iVz < nVzs; ++iVz){
-//                for(int iPhi = 0; iPhi < nPhi; ++iPhi){
-
     //VZ and ZDC test, this is directly in simulation
-    TH3F* mh3VzZdcMult = (TH3F*)fDca1.Get("mh3VzZdcMult");
+    TH3D* mh3VzZdcMult = (TH3D*)fDca1.Get("mh3VzZdcMult");
     outEvent->cd();
-    mh3VzZdcMult->Write();
+//    mh3VzZdcMult->Write();
 
     int binVzmin = 1;
     int binVzup = mh3VzZdcMult->GetXaxis()->GetNbins(); //ok
