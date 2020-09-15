@@ -14,12 +14,19 @@ namespace vars {
     const int m_nParticles = 2;
     const TString m_ParticleName[m_nParticles] = {"Pion", "Kaon"};
 
+    const int m_nParticlesCharged = 4;
+    const TString m_ParticleChargedName[m_nParticlesCharged] = {"PionPlus", "PionMinus", "KaonPlus", "KaonMinus"};
+
+
     const int m_nmultEdge = 6;
     float const m_multEdge[m_nmultEdge+1] = {0, 8, 12, 16, 20, 24, 200};
 
 //histo stuff
 
     //::TOF::
+    const int m_nPtTOF = 19;
+    float const m_PtTOFedge[m_nPtTOF+1] = {0.15,0.3,0.4,0.5,0.6,0.8,1.,1.25,1.5,2.,3.0,4.,5.,6.,7,8,9,10,11,12.};
+
     const int m_nPtTOF = 19;
     float const m_PtTOFedge[m_nPtTOF+1] = {0.15,0.3,0.4,0.5,0.6,0.8,1.,1.25,1.5,2.,3.0,4.,5.,6.,7,8,9,10,11,12.};
 

@@ -102,11 +102,16 @@ int StPicoSimInputsMaker::createQA(){
         bool tpcPion = false;
         bool tpcKaon = false;
 
+        bool tofMatched = false;
+
+        float beta = mHFCuts->getTofBetaBase(trk);
+        if (beta>0 && beta==beta) tofMatched = true;
+
         if(mHFCuts->isTPCPion(trk)) tpcPion = true;
         if(mHFCuts->isTPCKaon(trk)) tpcKaon = true;
 
-        if(mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kPion)) tofPion = true;
-        if(mHFCuts->isHybridTOFHadron(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon)) tofKaon = true;
+        if(mHFCuts->isHybridTOFHadron(trk, beta, StPicoCutsBase::kPion)) tofPion = true;
+        if(mHFCuts->isHybridTOFHadron(trk, beta, StPicoCutsBase::kKaon)) tofKaon = true;
 
         goodPion = (tofPion && tpcPion);
         goodKaon = (tofKaon && tpcKaon);
@@ -124,19 +129,21 @@ int StPicoSimInputsMaker::createQA(){
         int PhiIndex = getPhiIndexRatio(phi);
         if ((EtaIndex==-1) || (PhiIndex==-1) || (EtaIndexRatio==-1)) continue;
 
-//        if (trk->isHFTTrack()) {
+        //TOF MATCHING
+        int charge = trk->charge();
         for (int i = 0; i < 3; ++i) {
-            if (trk->nSigmaPion() < i + 1) {
-                if (tofPion) { h1TofmatchTOF[0][i]->Fill(momentum.Perp()); }
-                h1Tofmatch[0][i]->Fill(momentum.Perp());
+            int iCharge = (charge>0) ? 0 : 1;
+            if (abs(trk->nSigmaPion()) < i + 1) {
+                if (tofMatched) { h1TofmatchTOF[iCharge][i]->Fill(momentum.Perp()); }
+                h1Tofmatch[iCharge][i]->Fill(momentum.Perp());
             }
 
-            if (trk->nSigmaKaon() < i + 1) {
-                if (tofKaon) { h1TofmatchTOF[1][i]->Fill(momentum.Perp()); }
-                h1Tofmatch[1][i]->Fill(momentum.Perp());
+            iCharge+=2;
+            if (abs(trk->nSigmaKaon()) < i + 1) {
+                if (tofMatched) { h1TofmatchTOF[iCharge][i]->Fill(momentum.Perp()); }
+                h1Tofmatch[iCharge][i]->Fill(momentum.Perp());
             }
         }
-//        }
 
         if (vars::fillNtp && (tpcPion || tpcKaon)) {
             Float_t isHft=-1, isPrimaryTrk=-1;
@@ -212,10 +219,13 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
     if (!mFillQaHists) return;
 
     mOutFileTOFRatio->cd();
-    for (int iParticle = 0; iParticle < vars::m_nParticles; ++iParticle) {
+    for (int iParticle = 0; iParticle < vars::m_nParticlesCharged; ++iParticle) {
         for (int nsigma = 0; nsigma < 3; ++nsigma) {
-            h1Tofmatch[iParticle][nsigma] = new TH1D(Form("h1_Tofmatch_tpc1_p%d_nsigma%d", iParticle, nsigma+1), Form("h1_Tofmatch_tpc1_p%d_nsigma%d", iParticle, nsigma+1),vars::m_nPtTOF,vars::m_PtTOFedge);
-            h1TofmatchTOF[iParticle][nsigma] = new TH1D(Form("h1_TofmatchTOF_tpc1_p%d_nsigma%d", iParticle, nsigma+1), Form("h1_TofmatchTOF_tpc1_p%d_nsigma%d", iParticle, nsigma+1),vars::m_nPtTOF,vars::m_PtTOFedge);
+            hisName=Form("h1_Tofmatch_tpc_%s_nsigma%d", vars::m_ParticleChargedName[iParticle].Data(), nsigma+1);
+            h1Tofmatch[iParticle][nsigma] = new TH1D(hisName, hisName,vars::m_nPtTOF,vars::m_PtTOFedge);
+
+            hisName=Form("h1_Tofmatch_tof_%s_nsigma%d", vars::m_ParticleChargedName[iParticle].Data(), nsigma+1);
+            h1TofmatchTOF[iParticle][nsigma] = new TH1D(hisName, hisName, vars::m_nPtTOF,vars::m_PtTOFedge);
         }
     }
 
@@ -458,7 +468,7 @@ void StPicoSimInputsMaker::closeFile()
 
     //TOF ratio
     mOutFileTOFRatio->cd();
-    for (int iParticle = 0; iParticle < vars::m_nParticles; ++iParticle) {
+    for (int iParticle = 0; iParticle < vars::m_nParticlesCharged; ++iParticle) {
         for (int nsigma = 0; nsigma < 3; ++nsigma) {
             h1Tofmatch[iParticle][nsigma] -> Write();
             h1TofmatchTOF[iParticle][nsigma] -> Write();

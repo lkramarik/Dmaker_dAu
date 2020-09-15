@@ -38,6 +38,7 @@ TF1* fTOFMatch;
 TF1* fTotal;
 TF1* fTotalGraph;
 
+//---------------------------------------------------------------------------------------
 TF1* FitEff(TGraphErrors* gr, TString folder){
     gSystem->Exec("mkdir results_total_eff/"+folder);
 
@@ -90,16 +91,17 @@ TF1* FitEff(TGraphErrors* gr, TString folder){
     return fitF1;
 }
 
-
+//---------------------------------------------------------------------------------------
 double totalEffFct(double *x, double *par){
     return fTPC->Eval(x[0])*fTOFMatch->Eval(x[0])*fTOF->Eval(x[0])+(1.0-fTOFMatch->Eval(x[0]))*fTPC->Eval(x[0]);
 }
 
+//---------------------------------------------------------------------------------------
 double ratioFct(double *x, double *par){
     return fTotal->Eval(x[0])/fTotalGraph->Eval(x[0]);
 }
 
-
+//---------------------------------------------------------------------------------------
 TGraphErrors* totalGraph(TGraphErrors* gTOF, TGraphErrors* gTPC, TGraphErrors* gTOFMatch, TString folder, TString particle) {
     if ( (gTOF->GetN()!=gTPC->GetN()) || (gTOFMatch->GetN()!=gTPC->GetN()) || (gTOF->GetN()!=gTOFMatch->GetN())) cout<<"Your graphs are not compatible."<<endl;
 
@@ -143,7 +145,7 @@ TGraphErrors* totalGraph(TGraphErrors* gTOF, TGraphErrors* gTPC, TGraphErrors* g
     return gTotal;
 }
 
-
+//---------------------------------------------------------------------------------------
 void makeTotalPIDeff(){
     int bbcMin=0;
     int bbcMax=950;
@@ -252,7 +254,6 @@ void makeTotalPIDeff(){
     fTofMatch->Close();
     fTpcPID->Close();
 //    fileTofHybrid->Close();
-
 
 }
 

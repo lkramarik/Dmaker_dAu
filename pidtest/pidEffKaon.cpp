@@ -45,7 +45,8 @@ void pidEffKaon() {
     TString input = "/media/lukas/376AD6A434B7392F/work/pid/ntp.picoPhiAnaMaker.3001.root";
     TString inputCut = input+".cutted.root";
 
-    Float_t ptBins[] = {0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 1.05, 1.2, 1.4, 1.7, 2.3, 3, 4}; //kaon
+    Float_t ptBins[] = {0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 1.05, 1.2, 1.4, 1.7, 2.3, 3, 4}; //kaon/
+//    Float_t ptBins[] = {0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.2, 2.5, 3, 4}; //pion
 //    Float_t ptBins[] = {0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 1.05, 1.2, 1.4, 1.7, 2.3, 3, 4}; //kaon
 
     const int nBins = sizeof(ptBins) / sizeof(Float_t);
@@ -92,9 +93,9 @@ void pidEffKaon() {
 
     cut = Form("pair_mass>%.3f && pair_mass<%.3f", massMin, massMax);
 
-    int bbcMin=750;
+    int bbcMin=0;
     int bbcMax=950;
-    int nTof=0;
+    int nTof=-1;
     float nsigma=3;
     float tofInvBeta=0.03;
     float ptTrackCut=0.;

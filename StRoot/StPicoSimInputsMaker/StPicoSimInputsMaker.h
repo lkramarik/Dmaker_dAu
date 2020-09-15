@@ -86,8 +86,8 @@ private:
     TH1F* mh2Tpc1PtCentPartEtaVzPhi[vars::m_nParticles][vars::m_nEtasRatio][vars::m_nVzsRatio][vars::m_nPhisRatio][vars::m_nmultEdge];
     TH1F* mh2HFT1PtCentPartEtaVzPhi[vars::m_nParticles][vars::m_nEtasRatio][vars::m_nVzsRatio][vars::m_nPhisRatio][vars::m_nmultEdge];
 
-    TH1D* h1Tofmatch[vars::m_nParticles][3];
-    TH1D* h1TofmatchTOF[vars::m_nParticles][3];
+    TH1D* h1Tofmatch[vars::m_nParticlesCharged][3];
+    TH1D* h1TofmatchTOF[vars::m_nParticlesCharged][3];
 
     //HFT Dca
     TH2F* mh3DcaXyZPtCentPartEtaVzPhi[vars::m_nParticles][vars::m_nEtasDca][vars::m_nVzsDca][vars::m_nmultEdge][vars::m_nPtsDca];
