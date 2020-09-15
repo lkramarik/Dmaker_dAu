@@ -17,8 +17,8 @@ namespace vars {
     const int m_nParticlesCharged = 4;
     const TString m_ParticleChargedName[m_nParticlesCharged] = {"PionPlus", "PionMinus", "KaonPlus", "KaonMinus"};
 
-    const int m_nmultEdge = 6;
-    float const m_multEdge[m_nmultEdge+1] = {0, 8, 12, 16, 20, 24, 200};
+    const int m_nmultEdge = 4;
+    float const m_multEdge[m_nmultEdge+1] = {0, 16, 20, 24, 200};
 
 //histo stuff
 
