@@ -27,10 +27,6 @@ namespace vars {
     const int m_nPtTOF = 19;
     float const m_PtTOFedge[m_nPtTOF+1] = {0.15,0.3,0.4,0.5,0.6,0.8,1.,1.25,1.5,2.,3.0,4.,5.,6.,7,8,9,10,11,12.};
 
-    const int m_nPtTOF = 19;
-    float const m_PtTOFedge[m_nPtTOF+1] = {0.15,0.3,0.4,0.5,0.6,0.8,1.,1.25,1.5,2.,3.0,4.,5.,6.,7,8,9,10,11,12.};
-
-
     //::DCAs::
     int const m_nPtsDca = 15;
     float const m_PtEdgeDca[m_nPtsDca + 1] = {0.15, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1., 1.25, 1.5, 2., 2.5, 3.0, 4., 6., 12.};
