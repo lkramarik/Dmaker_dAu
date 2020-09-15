@@ -222,10 +222,10 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
     for (int iParticle = 0; iParticle < vars::m_nParticlesCharged; ++iParticle) {
         for (int nsigma = 0; nsigma < 3; ++nsigma) {
             hisName=Form("h1_Tofmatch_tpc_%s_nsigma%d", vars::m_ParticleChargedName[iParticle].Data(), nsigma+1);
-            h1Tofmatch[iParticle][nsigma] = new TH1D(hisName, hisName,vars::m_nPtTOF,vars::m_PtTOFedge);
+            h1Tofmatch[iParticle][nsigma] = new TH1D(hisName, hisName, 1000, 0.15, 10.15);
 
             hisName=Form("h1_Tofmatch_tof_%s_nsigma%d", vars::m_ParticleChargedName[iParticle].Data(), nsigma+1);
-            h1TofmatchTOF[iParticle][nsigma] = new TH1D(hisName, hisName, vars::m_nPtTOF,vars::m_PtTOFedge);
+            h1TofmatchTOF[iParticle][nsigma] = new TH1D(hisName, hisName, 1000, 0.15, 10.15);
         }
     }
 
