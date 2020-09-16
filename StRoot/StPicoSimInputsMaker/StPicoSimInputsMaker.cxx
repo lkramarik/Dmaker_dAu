@@ -82,6 +82,9 @@ int StPicoSimInputsMaker::createQA(){
         if (trk->isTofTrack()) nTofTracks++;
     }
 
+    if (nHftTracks<2) return 0;
+    if (nTofTracks<1) return 0;
+
     for (unsigned int iTrack = 0; iTrack < nTracks; ++iTrack) {
         StPicoTrack const* trk = mPicoDst->track(iTrack);
         if (!trk) continue;
