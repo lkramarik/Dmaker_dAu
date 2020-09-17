@@ -134,9 +134,7 @@ Int_t StPicoHFMaker::Make() {
 //        StPicoTrack* trk = mPicoDst->track(iTrack);
 //
 //        if (!trk || !mHFCuts->isGoodTrack(trk)) continue;
-//        if (isPion(trk))   mIdxPicoPions.push_back(iTrack);   // isPion implemented by daughter class
-//        if (isKaon(trk))   mIdxPicoKaons.push_back(iTrack);   // isKaon implemented by daughter class
-//        if (isProton(trk)) mIdxPicoProtons.push_back(iTrack); // isProton method to be implemented by daughter class
+
 //    }
 
     // -- call method of daughter class

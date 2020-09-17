@@ -70,8 +70,8 @@ void pidEffPion() {
         tof1="pi1_TOFinvbeta<0.03 || pi1_TOFinvbeta>93";
         tof2="pi2_TOFinvbeta<0.03 || pi2_TOFinvbeta>93";
     } else if (tofPidEff) { //
-        tof1="pi1_TOFinvbeta<0.03";
-        tof2="pi2_TOFinvbeta<0.03";
+        tof1="abs(pi1_TOFinvbeta)<0.03";
+        tof2="abs(pi2_TOFinvbeta)<0.03";
     }
     else {
         tof1="pi1_TOFinvbeta<93";
@@ -132,7 +132,7 @@ void pidEffPion() {
     massSigma = fitmass->getSigma();
 
     cut = Form("pair_mass>%.3f && pair_mass<%.3f", massMean-2*massSigma, massMean+2*massSigma);
-    if (tofPidEff) cut += "pi1_TOFinvbeta<93";
+    if (tofPidEff) cut += "abs(pi1_TOFinvbeta)<93";
 
     fitmass->makeTuple(input, cut+cutPair, plotPart2);
 

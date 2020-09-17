@@ -61,11 +61,10 @@ int StPicoKKMaker::createCandidates() {
         if (mHFCuts->isTOFmatched(trkTest)) nTofTracks += 1;
         if (trkTest->isHFTTrack()) nHftTracks += 1;
         if (abs(trkTest->gMom().PseudoRapidity())>1) continue;
-        if (mHFCuts->isGoodKaon(trkTest)) mIdxPicoKaons.push_back(k);
+        if (mHFCuts->isGoodKaon(trkTest) && !(trkTest->isHFTTrack())) mIdxPicoKaons.push_back(k);
     }
     for (unsigned short j = 0; j < mIdxPicoKaons.size(); ++j) {
         StPicoTrack const *kaon1 = mPicoDst->track(mIdxPicoKaons[j]);
-
         for(unsigned int i = j+1; i < mIdxPicoKaons.size(); ++i)  {
             StPicoTrack const* kaon2 = mPicoDst->track(mIdxPicoKaons[i]);
 
