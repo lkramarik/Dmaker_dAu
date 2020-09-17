@@ -33,7 +33,7 @@ void pidEffPion() {
     bool tofPid = true;
     bool plotPart2 = false;
     bool hybridTof=false;
-    bool tofPidEff=false;
+    bool tofPidEff=true;
 
     gROOT->ProcessLine(".L FitPID.c++");
 
@@ -91,14 +91,14 @@ void pidEffPion() {
 
     cut = Form("pair_mass>%.3f && pair_mass<%.3f", massMin, massMax);
 
-    int bbcMin=750;
+    int bbcMin=0;
     int bbcMax=950;
-    int nTof=0;
-    float nsigma=3;
-    float tofInvBeta=0.03;
+    int nTof=-1;
+    float nsigma=300;
+    float tofInvBeta=999;
     float ptTrackCut=0.;
 
-    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate>%i && bbcRate<=%i && nHftTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
+    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate>%i && bbcRate<=%i && nHftTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f && nHftTracks==0", ptPairMin, ptPairMax, bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
 
 //    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<%i && nHftTracks>%i && abs(pi2_nSigma)<%.1f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbc, nTof, nsigma, ptTrackCut);
 
@@ -125,7 +125,8 @@ void pidEffPion() {
     gSystem->Exec(Form("mkdir %s/img/pipi/fit", dirName.Data()));
 
     fitmass->setOutputFileName(Form("%s/rootFiles/mass_", dirName.Data()) + pairName + ".root");
-    fitmass->setHeight(1000000);
+//    fitmass->setHeight(1000000);
+    fitmass->setHeight(15000);
     TH1F *signal = (TH1F*) fitmass->projectSubtractBckg(dirName, input, 50, massMin, massMax, ptPairMin, ptPairMax, pair, cut + cutPair, "pair_mass", "Mass_{%s} (GeV/c^{2})", true);
     fitmass->peakFit(dirName, signal, mean, sigma, massMin, massMax, pair, ptPairMin, ptPairMax, "mass", 2);
     massMean = fitmass->getMean();

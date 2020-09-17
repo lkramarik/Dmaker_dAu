@@ -28,6 +28,7 @@
 #include "TROOT.h"
 
 TF1* FitEff(TGraphErrors* gr, TString folder);
+TF1* FitEffRange(TGraphErrors* gr, TString folder, double fitM, double fitMax);
 void makeTotalPIDeff();
 double totalEffFct(double *x, double *par);
 double ratioFct(double *x, double *par);
@@ -40,6 +41,11 @@ TF1* fTotalGraph;
 
 //---------------------------------------------------------------------------------------
 TF1* FitEff(TGraphErrors* gr, TString folder){
+    return FitEffRange(gr, folder, 0.15, 1.5);
+}
+
+//---------------------------------------------------------------------------------------
+TF1* FitEffRange(TGraphErrors* gr, TString folder, double fitRangeMin=0.15, double fitRangeMax=1.5){
     gSystem->Exec("mkdir results_total_eff/"+folder);
 
 //    TF1 *fitF1 = new TF1("eff_fit", "[0]+[1]/x+[2]*x+[3]*x*x", 0.15, 5); //momentum resolution fit
@@ -48,15 +54,20 @@ TF1* FitEff(TGraphErrors* gr, TString folder){
 
 //    TF1 *fitF1 = new TF1("eff_fit", "[0]+[1]/x+[2]/x/x", 0.15, 4); //momentum resolution fit
 //    TF1 *fitF1 = new TF1("eff_fit", "[0]+[1]/x+[2]*x+[3]*x*x+[4]/x/x", 0.15, 4); //momentum resolution fit
-    TF1 *fitF1 = new TF1("eff_fit", "[0]+[1]/x+[2]*x+[3]/x/x", 0.15, 4); //momentum resolution fit
-    fitF1->SetParameters(1, -0.06, -0.1, 0.02, 0.006);
-    fitF1->SetParLimits(0, 0, 1);
-    fitF1->SetParLimits(1, 0, 1);
-    fitF1->SetParLimits(2, 0, 1);
-    fitF1->SetParLimits(3, -1, 0);
+
+//    TF1 *fitF1 = new TF1("eff_fit", "[0]+[1]/x+[2]*x+[3]/x/x", 0.15, 5); //momentum resolution fit
+//    fitF1->SetParameters(1, -0.06, -0.1, 0.02, 0.006);
+
+    TF1 *fitF1 = new TF1("eff_fit", "[0]+[1]/x+[2]/x/x", 0.15, 5); //momentum resolution fit
+    fitF1->SetParameters(1, -0.06, -0.1, 0.006);
+
+//    fitF1->SetParLimits(0, 0, 1);
+//    fitF1->SetParLimits(1, 0, 1);
+//    fitF1->SetParLimits(2, 0, 1);
+//    fitF1->SetParLimits(3, -1, 0);
 //    fitF1->SetParLimits(4, -1, 0);
 
-    gr->Fit(fitF1, "", "", 0.15, 3);
+    gr->Fit(fitF1, "R", "", fitRangeMin, fitRangeMax);
     gr->GetYaxis()->SetRangeUser(0,1.2);
 
     TCanvas *out = new TCanvas("out", "out", 900, 1100);
@@ -74,17 +85,19 @@ TF1* FitEff(TGraphErrors* gr, TString folder){
     hint->SetLineColor(17);
 //    hint->Draw("e4 same");
 
-
     TString filename = "results_total_eff/"+folder+(TString)gr->GetName()+".png";
     out->SaveAs(filename);
     filename = "results_total_eff/"+folder+(TString)gr->GetName()+".pdf";
     out->SaveAs(filename);
-    out->Close();
+//    out->Close();
 
     cout<<"chi2/ndf is "<<fitF1->GetChisquare()/fitF1->GetNDF()<<endl;
 
     TFile *file = new TFile("results_total_eff/"+folder+(TString)gr->GetName()+".root", "RECREATE");
-    fitF1->Write(gr->GetName(), TObject::kOverwrite);
+    TString name = gr->GetName();
+    name = "f_"+name;
+    fitF1->Write(name, TObject::kOverwrite);
+    gr->Write();
     file->Close();
 
     fitF1->SetName(gr->GetName());
@@ -146,14 +159,43 @@ TGraphErrors* totalGraph(TGraphErrors* gTOF, TGraphErrors* gTPC, TGraphErrors* g
 }
 
 //---------------------------------------------------------------------------------------
+void makeTpcPidEff() {
+    int bbcMin=0;
+    int bbcMax=950;
+    int nTof=-1;
+    float nsigma=300;
+    float tofInvBeta=999;
+    float ptTrackCut=0.;
+    TString particle = "pi";
+//    TString particle = "K";
+    TString prefix = "tpc_";
+//    TString prefix = "tofPidEff_";
+
+    TString cutComb=Form("bbc%i_%i_nHft%i_nsigma%.1f_tof%.2f_pt%.1f/",bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
+//    TString cutComb1=Form("bbc%i_%i_nHft%i_nsigma%.1f_tof%.2f_pt%.1f/",bbcMin, bbcMax, nTof, nsigma, tofInvBeta, 0.);
+    TString pair = particle+particle;
+
+    TFile *fTpcPID = new TFile(prefix+cutComb+"rootFiles/results_"+pair+".root", "READ");
+
+    TGraphErrors *gTPC = (TGraphErrors*) fTpcPID->Get("eff");
+    gTPC->SetNameTitle(prefix+particle, prefix+particle);
+
+    fTPC = FitEffRange(gTPC, cutComb, 0.2, 3);
+
+//    fTpcPID->Close();
+
+}
+
+//---------------------------------------------------------------------------------------
 void makeTotalPIDeff(){
     int bbcMin=0;
     int bbcMax=950;
-    int nTof=0;
-    float nsigma=3;
-    float tofInvBeta=0.03;
+    int nTof=-1;
+    float nsigma=300;
+    float tofInvBeta=999;
     float ptTrackCut=0.;
-    TString particle = "pi";
+//    TString particle = "pi";
+    TString particle = "K";
 
     TString cutComb=Form("bbc%i_%i_nHft%i_nsigma%.1f_tof%.2f_pt%.1f/",bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
 //    TString cutComb1=Form("bbc%i_%i_nHft%i_nsigma%.1f_tof%.2f_pt%.1f/",bbcMin, bbcMax, nTof, nsigma, tofInvBeta, 0.);
