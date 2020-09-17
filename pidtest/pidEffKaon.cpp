@@ -33,7 +33,7 @@ void pidEffKaon() {
     bool tofPid = true;
     bool plotPart2 = false;
     bool hybridTof=false;
-    bool tofPidEff=false;
+    bool tofPidEff=true;
 
     gROOT->ProcessLine(".L FitPID.c++");
     gSystem->Exec("rm rootFiles/nSigma_KK_1.root rootFiles/nSigma_KK_2.root");
@@ -83,7 +83,8 @@ void pidEffKaon() {
         tof1="pi1_TOFinvbeta<0.03";
         tof2="pi2_TOFinvbeta<0.03";
     }
-    else {
+    else { //this is not used for tpc eff estimate
+//        tof1=""; //tof matching
         tof1="pi1_TOFinvbeta<93"; //tof matching
         tof2="pi2_TOFinvbeta<93";
     }
@@ -96,11 +97,12 @@ void pidEffKaon() {
     int bbcMin=0;
     int bbcMax=950;
     int nTof=-1;
-    float nsigma=3;
-    float tofInvBeta=0.03;
+    float nsigma=300;
+    float tofInvBeta=999;
     float ptTrackCut=0.;
 
-    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate>%i && bbcRate<=%i && nTofTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
+//    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate>%i && bbcRate<=%i && nTofTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
+    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate>%i && bbcRate<=%i && nTofTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f && nHftTracks==0", ptPairMin, ptPairMax, bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
 //    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<%i && nHftTracks>%i && abs(pi2_nSigma)<%.1f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbc, nTof, nsigma, ptTrackCut);
 //    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<%i && nHftTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbc, nTof, nsigma, tofInvBeta, ptTrackCut);
     TString dirName=Form("bbc%i_%i_nHft%i_nsigma%.1f_tof%.2f_pt%.1f", bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
@@ -125,7 +127,7 @@ void pidEffKaon() {
     massSigma = fitmass->getSigma();
 
     cut = Form("pair_mass>%.3f && pair_mass<%.3f", massMean-2*massSigma, massMean+2*massSigma);
-    if (tofPidEff) cut += "pi1_TOFinvbeta<93";
+    if (tofPidEff) cut += "abs(pi1_TOFinvbeta)<93"; //all of the track are tof matched
     fitmass->makeTuple(input, cut+cutPair, plotPart2);
 
     int analysedBins = 0;
@@ -135,11 +137,11 @@ void pidEffKaon() {
         FitPID *pid1 = new FitPID();
         pid1->setOutputFileName(Form("%s/rootFiles/nSigma_", dirName.Data()) + pairName + "_1.root");
         cut = Form("pi1_pt>%.3f && pi1_pt<%.3f", ptBins[i], ptBins[i+1]);
-        if (tofPid) hSigmaSignal1 = (TH1F *) pid1->projectSubtractBckg(dirName, inputCut, 50, -5, 5, ptBins[i], ptBins[i + 1], pair, cut, "pi1_nSigma", "Kaon n#sigma^{TPC}", true);
+        if (tofPid || tofPidEff) hSigmaSignal1 = (TH1F *) pid1->projectSubtractBckg(dirName, inputCut, 50, -5, 5, ptBins[i], ptBins[i + 1], pair, cut, "pi1_nSigma", "Kaon n#sigma^{TPC}", true);
         else hSigmaSignal1 = (TH1F *) pid1->projectSubtractBckg(dirName, inputCut, 50, -0.07, 0.07, ptBins[i], ptBins[i + 1], pair, cut, "pi1_TOFinvbeta", "Kaon #delta1/#beta_{TOF}", true);
 
         pid1->setHeight(height);
-        if (tofPid) {
+        if (tofPid || tofPidEff) {
             if (i==1 || i==0) pid1->peakFit(dirName, hSigmaSignal1, 0, 1, -1.5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma", 1);
             else      pid1->peakFit(dirName, hSigmaSignal1, 0, 1, -5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma", 1);
         } else {
@@ -157,7 +159,7 @@ void pidEffKaon() {
         //tof pions after my PID cut:
         FitPID *pidAna1 = new FitPID();
         pidAna1->setOutputFileName(Form("%s/rootFiles/nSigma_", dirName.Data())+pairName+"_ana_1.root");
-        if (tofPid) hSigmaSignalAna1 = (TH1F*) pidAna1->projectSubtractBckg(dirName, inputCut, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+tof1, "pi1_nSigma", "Kaon n#sigma^{TPC}", false);
+        if (tofPid || tofPidEff) hSigmaSignalAna1 = (TH1F*) pidAna1->projectSubtractBckg(dirName, inputCut, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+tof1, "pi1_nSigma", "Kaon n#sigma^{TPC}", false);
         else hSigmaSignalAna1 = (TH1F*) pidAna1->projectSubtractBckg(dirName, inputCut, 50, -0.07, 0.07, ptBins[i], ptBins[i+1], pair, cut+tpc1, "pi1_TOFinvbeta", "Kaon #delta1/#beta_{TOF}", false);
 
         Double_t integralAna = hSigmaSignalAna1->IntegralAndError(hSigmaSignalAna1->FindBin(pid1->getMean() - 1*pid1->getSigma()), hSigmaSignalAna1->FindBin(pid1->getMean() + 1*pid1->getSigma()), errorAna, ""); //number of it without PID cut
