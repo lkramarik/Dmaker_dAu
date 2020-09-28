@@ -29,6 +29,7 @@
 
 TF1* FitEff(TGraphErrors* gr, TString folder);
 TF1* FitEffRange(TGraphErrors* gr, TString folder, double fitM, double fitMax);
+TF1* FitEffRangeLinear(TGraphErrors* gr, TString folder, double fitM, double fitMax);
 void makeTotalPIDeff();
 double totalEffFct(double *x, double *par);
 double ratioFct(double *x, double *par);
@@ -58,8 +59,11 @@ TF1* FitEffRange(TGraphErrors* gr, TString folder, double fitRangeMin=0.15, doub
 //    TF1 *fitF1 = new TF1("eff_fit", "[0]+[1]/x+[2]*x+[3]/x/x", 0.15, 5); //momentum resolution fit
 //    fitF1->SetParameters(1, -0.06, -0.1, 0.02, 0.006);
 
-    TF1 *fitF1 = new TF1("eff_fit", "[0]+[1]/x+[2]/x/x", 0.15, 5); //momentum resolution fit
-    fitF1->SetParameters(1, -0.06, -0.1, 0.006);
+//    TF1 *fitF1 = new TF1("eff_fit", "[0]+[1]/x+[2]/x/x", 0.15, 5); //momentum resolution fit
+//    fitF1->SetParameters(1, -0.06, -0.1, 0.006);
+
+    TF1 *fitF1 = new TF1("eff_fit", "[0]+[1]/x", 0.15, 5); //momentum resolution fit
+    fitF1->SetParameters(1, -0.06, -0.1);
 
 //    fitF1->SetParLimits(0, 0, 1);
 //    fitF1->SetParLimits(1, 0, 1);
@@ -67,7 +71,57 @@ TF1* FitEffRange(TGraphErrors* gr, TString folder, double fitRangeMin=0.15, doub
 //    fitF1->SetParLimits(3, -1, 0);
 //    fitF1->SetParLimits(4, -1, 0);
 
-    gr->Fit(fitF1, "R", "", fitRangeMin, fitRangeMax);
+    gr->Fit(fitF1, "RW", "", fitRangeMin, fitRangeMax);
+    gr->GetYaxis()->SetRangeUser(0,1.2);
+
+    TCanvas *out = new TCanvas("out", "out", 900, 1100);
+    out->SetGrid();
+    gr->Draw("ap");
+
+    TH1D *hint = new TH1D("hint", "Fitted gaussian with .95 conf.band", 100, 0.15, 3);
+    (TVirtualFitter::GetFitter())->GetConfidenceIntervals(hint);
+    //Now the "hint" histogram has the fitted function values as the
+    //bin contents and the confidence intervals as bin errors
+    hint->GetYaxis()->SetRangeUser(0,1.2);
+
+    hint->SetStats(kFALSE);
+    hint->SetFillColor(0);
+    hint->SetLineColor(17);
+//    hint->Draw("e4 same");
+
+    TString filename = "results_total_eff/"+folder+(TString)gr->GetName()+".png";
+    out->SaveAs(filename);
+    filename = "results_total_eff/"+folder+(TString)gr->GetName()+".pdf";
+    out->SaveAs(filename);
+//    out->Close();
+
+    cout<<"chi2/ndf is "<<fitF1->GetChisquare()/fitF1->GetNDF()<<endl;
+
+    TFile *file = new TFile("results_total_eff/"+folder+(TString)gr->GetName()+".root", "RECREATE");
+    TString name = gr->GetName();
+    name = "f_"+name;
+    fitF1->Write(name, TObject::kOverwrite);
+    gr->Write();
+    file->Close();
+
+    fitF1->SetName(gr->GetName());
+    return fitF1;
+}
+
+//---------------------------------------------------------------------------------------
+TF1* FitEffRangeLinear(TGraphErrors* gr, TString folder, double fitRangeMin=0.15, double fitRangeMax=1.5){
+    gSystem->Exec("mkdir results_total_eff/"+folder);
+
+    TF1 *fitF1 = new TF1("eff_fit", "[0]", 0.15, 5); //momentum resolution fit
+//    fitF1->SetParameters(1, -0.06, -0.1);
+
+//    fitF1->SetParLimits(0, 0, 1);
+//    fitF1->SetParLimits(1, 0, 1);
+//    fitF1->SetParLimits(2, 0, 1);
+//    fitF1->SetParLimits(3, -1, 0);
+//    fitF1->SetParLimits(4, -1, 0);
+
+    gr->Fit(fitF1, "RW", "", fitRangeMin, fitRangeMax);
     gr->GetYaxis()->SetRangeUser(0,1.2);
 
     TCanvas *out = new TCanvas("out", "out", 900, 1100);
@@ -168,8 +222,8 @@ void makeTpcPidEff() {
     float ptTrackCut=0.;
     TString particle = "pi";
 //    TString particle = "K";
-    TString prefix = "tpc_";
-//    TString prefix = "tofPidEff_";
+//    TString prefix = "tpc_";
+    TString prefix = "tofPidEff_";
 
     TString cutComb=Form("bbc%i_%i_nHft%i_nsigma%.1f_tof%.2f_pt%.1f/",bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
 //    TString cutComb1=Form("bbc%i_%i_nHft%i_nsigma%.1f_tof%.2f_pt%.1f/",bbcMin, bbcMax, nTof, nsigma, tofInvBeta, 0.);
@@ -180,7 +234,8 @@ void makeTpcPidEff() {
     TGraphErrors *gTPC = (TGraphErrors*) fTpcPID->Get("eff");
     gTPC->SetNameTitle(prefix+particle, prefix+particle);
 
-    fTPC = FitEffRange(gTPC, cutComb, 0.2, 3);
+//    fTPC = FitEffRange(gTPC, cutComb, 0.3, 2);
+    fTPC = FitEffRangeLinear(gTPC, cutComb, 0.3, 2);
 
 //    fTpcPID->Close();
 
@@ -194,8 +249,8 @@ void makeTotalPIDeff(){
     float nsigma=300;
     float tofInvBeta=999;
     float ptTrackCut=0.;
-//    TString particle = "pi";
-    TString particle = "K";
+    TString particle = "pi";
+//    TString particle = "K";
 
     TString cutComb=Form("bbc%i_%i_nHft%i_nsigma%.1f_tof%.2f_pt%.1f/",bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
 //    TString cutComb1=Form("bbc%i_%i_nHft%i_nsigma%.1f_tof%.2f_pt%.1f/",bbcMin, bbcMax, nTof, nsigma, tofInvBeta, 0.);

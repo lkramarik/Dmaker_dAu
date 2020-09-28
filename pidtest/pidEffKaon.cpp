@@ -31,7 +31,7 @@
 void pidEffKaon() {
 //    gSystem->Load("FitPID");
     bool tofPid = true;
-    bool plotPart2 = false;
+    bool plotPart2 = true;
     bool hybridTof=false;
     bool tofPidEff=true;
 
@@ -42,8 +42,8 @@ void pidEffKaon() {
     gSystem->Exec("rm rootFiles/mass_KK.root");
 
 //    TString input = "/media/lukas/376AD6A434B7392F/work/pid/ntp.noHft.picoPhiAnaMaker.2401.root";
-    TString input = "ntp.picoPhiAnaMaker.nonHftPairs.1709.root";
-//    TString input = "/media/lukas/376AD6A434B7392F/work/pid/ntp.picoPhiAnaMaker.3001.root";
+//    TString input = "ntp.picoPhiAnaMaker.nonHftPairs.1709.root";
+    TString input = "/media/lukas/376AD6A434B7392F/work/pid/ntp.picoPhiAnaMaker.3001.root";
     TString inputCut = input+".cutted.root";
 
     Float_t ptBins[] = {0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 1.05, 1.2, 1.4, 1.7, 2.3, 3, 4}; //kaon/
@@ -100,10 +100,10 @@ void pidEffKaon() {
     int nTof=-1;
     float nsigma=999;
     float tofInvBeta=999;
-    float ptTrackCut=0.;
+    float ptTrackCut=0.3;
 //    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate>%i && bbcRate<=%i && nTofTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
-//    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate>%i && bbcRate<=%i && nTofTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f && nHftTracks==0", ptPairMin, ptPairMax, bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
-    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate>%i && bbcRate<=%i && nTofTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
+    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate>%i && bbcRate<=%i && nTofTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f && nHftTracks==0", ptPairMin, ptPairMax, bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
+//    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate>%i && bbcRate<=%i && nTofTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
 //    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<%i && nHftTracks>%i && abs(pi2_nSigma)<%.1f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbc, nTof, nsigma, ptTrackCut);
 //    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<%i && nHftTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbc, nTof, nsigma, tofInvBeta, ptTrackCut);
     TString dirName=Form("bbc%i_%i_nHft%i_nsigma%.1f_tof%.2f_pt%.1f", bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
