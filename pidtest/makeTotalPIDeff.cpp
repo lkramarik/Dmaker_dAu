@@ -222,8 +222,8 @@ void makeTpcPidEff() {
     float ptTrackCut=0.;
     TString particle = "pi";
 //    TString particle = "K";
-//    TString prefix = "tpc_";
-    TString prefix = "tofPidEff_";
+    TString prefix = "tpc_";
+//    TString prefix = "tofPidEff_";
 
     TString cutComb=Form("bbc%i_%i_nHft%i_nsigma%.1f_tof%.2f_pt%.1f/",bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
 //    TString cutComb1=Form("bbc%i_%i_nHft%i_nsigma%.1f_tof%.2f_pt%.1f/",bbcMin, bbcMax, nTof, nsigma, tofInvBeta, 0.);
@@ -249,8 +249,8 @@ void makeTotalPIDeff(){
     float nsigma=300;
     float tofInvBeta=999;
     float ptTrackCut=0.;
-    TString particle = "pi";
-//    TString particle = "K";
+//    TString particle = "pi";
+    TString particle = "K";
 
     TString cutComb=Form("bbc%i_%i_nHft%i_nsigma%.1f_tof%.2f_pt%.1f/",bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
 //    TString cutComb1=Form("bbc%i_%i_nHft%i_nsigma%.1f_tof%.2f_pt%.1f/",bbcMin, bbcMax, nTof, nsigma, tofInvBeta, 0.);

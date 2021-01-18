@@ -51,6 +51,7 @@ void runPicoPhiAnaMakerLocal(
   hfCuts->setCutRequireHFT(true);
   hfCuts->setHybridTof(true);
   hfCuts->setCutDcaMin(0.00,StHFCuts::kKaon);
+  hfCuts->setCheckHotSpot(true);
 
    // kaonPion pair cuts
   float dcaDaughtersMax = 0.5;  // maximum
