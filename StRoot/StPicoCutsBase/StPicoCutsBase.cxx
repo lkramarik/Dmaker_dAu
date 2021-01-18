@@ -175,7 +175,7 @@ bool StPicoCutsBase::isGoodEvent(StPicoDst const * const picoDst, int *aEventCut
 
     // -- 5 VxVy hotspot
     ++iCut;
-    if (!(checkHotSpot(&mPrimVtx)) && (mOnlyHotSpot==true)) aEventCuts[iCut] = 1;
+    if (!(checkHotSpot(&mPrimVtx)) && mOnlyHotSpot) aEventCuts[iCut] = 1;
 
     ++iCut;
 
