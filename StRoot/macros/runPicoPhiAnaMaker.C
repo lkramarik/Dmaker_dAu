@@ -43,7 +43,7 @@ void runPicoPhiAnaMaker(
     hfCuts->setCutVzMax(6.);
     hfCuts->setCutVzVpdVzMax(6.);
     hfCuts->addTriggerId(530003); //VPD-5
-    hfCuts->setCutPrimaryDCAtoVtxMax(1.5);
+    hfCuts->setCutPrimaryDCAtoVtxMax(1.);
     hfCuts->setCutNHitsFitMin(15); //default is 20
     hfCuts->setCutRequireHFT(false);
     hfCuts->setHybridTof(true);
@@ -54,7 +54,7 @@ void runPicoPhiAnaMaker(
     float dcaDaughtersMax = 1;  // maximum
     float decayLengthMin  = 0.000; // minimum
     float decayLengthMax  = 25; //std::numeric_limits<float>::max();
-    float cosThetaMin     = 0.65;   // minimum
+    float cosThetaMin     = 0.;   // minimum
     float minMass         = 1;
     float maxMass         = 1.05;
     float pairDcaMax      = 1;

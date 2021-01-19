@@ -70,8 +70,6 @@ int StPicoKKMaker::createCandidates() {
         for(unsigned int i = j+1; i < mIdxPicoKaons.size(); ++i)  {
             StPicoTrack const* kaon2 = mPicoDst->track(mIdxPicoKaons[i]);
 
-//            if (kaon1->id() == kaon2->id()) continue;
-
             StHFPair *pair = new StHFPair(kaon1, kaon2, mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon),mHFCuts->getHypotheticalMass(StPicoCutsBase::kKaon), mIdxPicoKaons[j], mIdxPicoKaons[i], mPrimVtx, mBField, kTRUE);
 //            if (!mHFCuts->isClosePair(pair)) continue;
             if (!mHFCuts->isGoodSecondaryVertexPair(pair)) continue;
@@ -103,7 +101,6 @@ int StPicoKKMaker::createCandidates() {
             ntVar[ii++] = mHFCuts->getOneOverBeta(kaon2, mHFCuts->getTofBetaBase(kaon2), StPicoCutsBase::kKaon);
 
             ntVar[ii++] = pair->dcaDaughters();
-            ntVar[ii++] = hotSpot;
             ntVar[ii++] = hotSpot;
             ntVar[ii++] = mPrimVtx.z();
             ntVar[ii++] = mPicoEvent->vzVpd();
