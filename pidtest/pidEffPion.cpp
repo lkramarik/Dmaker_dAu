@@ -32,7 +32,8 @@ void pidEffPion() {
 //    gSystem->Load("FitPID");
     bool plotPart2 = false;
     bool hybridTof=false;
-    bool tofPidEff= false;
+    bool tofPidEff= true;
+//    bool tofPidEff= false;
 
     gROOT->ProcessLine(".L FitPID.c++");
 
@@ -93,14 +94,18 @@ void pidEffPion() {
 
     int bbcMin=0;
     int bbcMax=950;
-    int nTof=-1;
-    float nsigma=300;
+    int nTof=0;
+    float nsigma=3;
+//    float nsigma=300;
+//    float tofInvBeta=0.03;
     float tofInvBeta=999;
-    float ptTrackCut=0.;
+    float ptTrackCut=0.5;
+
+    float nsigmaInFit=2;
 
 //    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate>%i && bbcRate<=%i && nHftTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f && nHftTracks==0", ptPairMin, ptPairMax, bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
 
-    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<%i && nHftTracks>%i && abs(pi2_nSigma)<%.1f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbc, nTof, nsigma, ptTrackCut);
+    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<%i && nHftTracks>%i && abs(pi2_nSigma)<%.1f && pi2_pt>%.1f && pi1_dca<1. && pi2_dca<1.", ptPairMin, ptPairMax, bbcMax, nTof, nsigma, ptTrackCut);
 
 //    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<%i && nTofTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbc, nTof, nsigma, tofInvBeta, ptTrackCut);
 
@@ -150,8 +155,8 @@ void pidEffPion() {
         else hSigmaSignal1 = (TH1F *) pid1->projectSubtractBckg(dirName, inputCut, 50, -0.07, 0.07, ptBins[i], ptBins[i + 1], pair, cut, "pi1_TOFinvbeta", "Pion #Delta1/#beta_{TOF}", true);
 
         pid1->setHeight(height);
-        if (tofPidEff) pid1->peakFit(dirName, hSigmaSignal1, 0, 1, -5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma", 1);
-        else pid1->peakFit(dirName, hSigmaSignal1, 0, 0.02, -0.07, 0.07, pair, ptBins[i], ptBins[i + 1], "1overBeta", 1);
+        if (tofPidEff) pid1->peakFit(dirName, hSigmaSignal1, 0, 1, -5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma", nsigmaInFit);
+        else pid1->peakFit(dirName, hSigmaSignal1, 0, 0.02, -0.07, 0.07, pair, ptBins[i], ptBins[i + 1], "1overBeta", nsigmaInFit);
 
         binWidth[i] = (ptBins[i + 1] - ptBins[i]) / 2;
         xPt[i] = (ptBins[i + 1] + ptBins[i]) / 2;
@@ -159,18 +164,18 @@ void pidEffPion() {
         meansE[i] = pid1->getMeanError();
         sigmas[i] = pid1->getSigma();
         sigmasE[i] = pid1->getSigmaError();
-        Double_t integralClean = hSigmaSignal1->IntegralAndError(hSigmaSignal1->FindBin(pid1->getMean() - 1*pid1->getSigma()), hSigmaSignal1->FindBin(pid1->getMean() + 1*pid1->getSigma()), errorClean, ""); //number of it without PID cut
+        Double_t integralClean = hSigmaSignal1->IntegralAndError(hSigmaSignal1->FindBin(pid1->getMean() - nsigmaInFit*pid1->getSigma()), hSigmaSignal1->FindBin(pid1->getMean() + nsigmaInFit*pid1->getSigma()), errorClean, ""); //number of it without PID cut
 
         //tof pions after my PID cut:
         FitPID *pidAna1 = new FitPID();
         pidAna1->setOutputFileName(Form("%s/rootFiles/nSigma_", dirName.Data())+pairName+"_ana_1.root");
-        if (tofPidEff) hSigmaSignalAna1 = (TH1F*) pidAna1->projectSubtractBckg(dirName, inputCut, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+tof1, "pi1_nSigma", "Kaon n#sigma^{TPC}", false);
+        if (tofPidEff) hSigmaSignalAna1 = (TH1F*) pidAna1->projectSubtractBckg(dirName, inputCut, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+tof1, "pi1_nSigma", "Pion n#sigma^{TPC}", false);
         else hSigmaSignalAna1 = (TH1F*) pidAna1->projectSubtractBckg(dirName, inputCut, 50, -0.07, 0.07, ptBins[i], ptBins[i+1], pair, cut+tpc1, "pi1_TOFinvbeta", "Pion #delta1/#beta_{TOF}", false);
 
-        Double_t integralAna = hSigmaSignalAna1->IntegralAndError(hSigmaSignalAna1->FindBin(pid1->getMean() - 1*pid1->getSigma()), hSigmaSignalAna1->FindBin(pid1->getMean() + 1*pid1->getSigma()), errorAna, ""); //number of it without PID cut
-        TLine *left = new TLine(pid1->getMean() - 1*pid1->getSigma(), hSigmaSignalAna1->GetMaximum(), pid1->getMean() - 1*pid1->getSigma(), hSigmaSignalAna1->GetMinimum());
+        Double_t integralAna = hSigmaSignalAna1->IntegralAndError(hSigmaSignalAna1->FindBin(pid1->getMean() - nsigmaInFit*pid1->getSigma()), hSigmaSignalAna1->FindBin(pid1->getMean() + nsigmaInFit*pid1->getSigma()), errorAna, ""); //number of it without PID cut
+        TLine *left = new TLine(pid1->getMean() - nsigmaInFit*pid1->getSigma(), hSigmaSignalAna1->GetMaximum(), pid1->getMean() - nsigmaInFit*pid1->getSigma(), hSigmaSignalAna1->GetMinimum());
         left->SetLineColor(46);
-        TLine *right = new TLine(pid1->getMean() + 1*pid1->getSigma(), hSigmaSignalAna1->GetMaximum(), pid1->getMean() + 1*pid1->getSigma(), hSigmaSignalAna1->GetMinimum());
+        TLine *right = new TLine(pid1->getMean() + nsigmaInFit*pid1->getSigma(), hSigmaSignalAna1->GetMaximum(), pid1->getMean() + nsigmaInFit*pid1->getSigma(), hSigmaSignalAna1->GetMinimum());
         right->SetLineColor(46);
         TCanvas *c = new TCanvas("c",Form("%.2f_%.2f", ptBins[i],ptBins[i+1]),1000,900);
         hSigmaSignalAna1->Draw();

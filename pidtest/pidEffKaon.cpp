@@ -32,7 +32,8 @@ void pidEffKaon() {
 //    gSystem->Load("FitPID");
     bool plotPart2 = false;
     bool hybridTof=false;
-    bool tofPidEff= false; //pid cut on 1/beta TOF, if false => tpc
+    bool tofPidEff= true; //pid cut on 1/beta TOF, if false => tpc
+//    bool tofPidEff= false; //pid cut on 1/beta TOF, if false => tpc
 
     gROOT->ProcessLine(".L FitPID.c++");
     gSystem->Exec("rm rootFiles/nSigma_KK_1.root rootFiles/nSigma_KK_2.root");
@@ -42,11 +43,12 @@ void pidEffKaon() {
 
 //    TString input = "/media/lukas/376AD6A434B7392F/work/pid/ntp.noHft.picoPhiAnaMaker.2401.root";
 //    TString input = "ntp.picoPhiAnaMaker.nonHftPairs.1709.root";
-//    TString input = "/media/lukas/376AD6A434B7392F/work/pid/ntp.picoPhiAnaMaker.3001.root";
-    TString input = "/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/ntp/ntp.Phi.hotspot.1901.root";
+    TString input = "/media/lukas/376AD6A434B7392F/work/pid/ntp.picoPhiAnaMaker.3001.root";
+//    TString input = "/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/ntp/ntp.Phi.hotspot.1901.root";
     TString inputCut = input+".cutted.root";
 
-    Float_t ptBins[] = {0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 1.05, 1.2, 1.4, 1.7, 2.3, 3, 4}; //kaon/
+//    Float_t ptBins[] = {0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 1.05, 1.2, 1.4, 1.7, 2.3, 3, 4}; //kaon/
+    Float_t ptBins[] = {0.20, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 1.05, 1.2, 1.4, 1.7, 2.3, 3, 4}; //kaon/
 //    Float_t ptBins[] = {0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.2, 2.5, 3, 4}; //pion
 //    Float_t ptBins[] = {0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 1.05, 1.2, 1.4, 1.7, 2.3, 3, 4}; //kaon
 
@@ -97,15 +99,15 @@ void pidEffKaon() {
 
     int bbcMin=0;
     int bbcMax=950;
-    int nTof=-1;
-    float nsigma=999;
+    int nTof=0;
+    float nsigma=3;
     float tofInvBeta=999;
-    float ptTrackCut=0.;
+    float ptTrackCut=0.5;
+
+    float nsigmaInFit=2;
 //    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate>%i && bbcRate<=%i && nTofTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
 
-    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate>%i && bbcRate<=%i && nTofTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
-    //tmp, because of wring file
-    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate>%i && nTofTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
+    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate>%i && bbcRate<=%i && nHftTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f && pi1_dca<1. && pi2_dca<1.", ptPairMin, ptPairMax, bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
 
 //    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate>%i && bbcRate<=%i && nTofTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
 //    cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate<%i && nHftTracks>%i && abs(pi2_nSigma)<%.1f && pi2_pt>%.1f", ptPairMin, ptPairMax, bbc, nTof, nsigma, ptTrackCut);
@@ -149,10 +151,10 @@ void pidEffKaon() {
 
         pid1->setHeight(height);
         if (tofPidEff) {
-            if (i==1 || i==0) pid1->peakFit(dirName, hSigmaSignal1, 0, 1, -1.5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma", 1);
-            else      pid1->peakFit(dirName, hSigmaSignal1, 0, 1, -5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma", 1);
+            if (i==1 || i==0) pid1->peakFit(dirName, hSigmaSignal1, 0, 1, -1.5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma", nsigmaInFit);
+            else      pid1->peakFit(dirName, hSigmaSignal1, 0, 1, -5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma", nsigmaInFit);
         } else {
-            pid1->peakFit(dirName, hSigmaSignal1, 0, 0.02, -0.07, 0.07, pair, ptBins[i], ptBins[i + 1], "1overBeta", 1);
+            pid1->peakFit(dirName, hSigmaSignal1, 0, 0.02, -0.07, 0.07, pair, ptBins[i], ptBins[i + 1], "1overBeta", nsigmaInFit);
         }
 
         binWidth[i] = (ptBins[i + 1] - ptBins[i]) / 2;
@@ -161,7 +163,7 @@ void pidEffKaon() {
         meansE[i] = pid1->getMeanError();
         sigmas[i] = pid1->getSigma();
         sigmasE[i] = pid1->getSigmaError();
-        Double_t integralClean = hSigmaSignal1->IntegralAndError(hSigmaSignal1->FindBin(pid1->getMean() - 1*pid1->getSigma()), hSigmaSignal1->FindBin(pid1->getMean() + 1*pid1->getSigma()), errorClean, ""); //number of it without PID cut
+        Double_t integralClean = hSigmaSignal1->IntegralAndError(hSigmaSignal1->FindBin(pid1->getMean() - nsigmaInFit*pid1->getSigma()), hSigmaSignal1->FindBin(pid1->getMean() + nsigmaInFit*pid1->getSigma()), errorClean, ""); //number of it without PID cut
 
         //tof pions after my PID cut:
         FitPID *pidAna1 = new FitPID();
@@ -169,10 +171,10 @@ void pidEffKaon() {
         if (tofPidEff) hSigmaSignalAna1 = (TH1F*) pidAna1->projectSubtractBckg(dirName, inputCut, 50, -5, 5, ptBins[i], ptBins[i+1], pair, cut+tof1, "pi1_nSigma", "Kaon n#sigma^{TPC}", false);
         else hSigmaSignalAna1 = (TH1F*) pidAna1->projectSubtractBckg(dirName, inputCut, 50, -0.07, 0.07, ptBins[i], ptBins[i+1], pair, cut+tpc1, "pi1_TOFinvbeta", "Kaon #delta1/#beta_{TOF}", false);
 
-        Double_t integralAna = hSigmaSignalAna1->IntegralAndError(hSigmaSignalAna1->FindBin(pid1->getMean() - 1*pid1->getSigma()), hSigmaSignalAna1->FindBin(pid1->getMean() + 1*pid1->getSigma()), errorAna, ""); //number of it without PID cut
-        TLine *left = new TLine(pid1->getMean() - 1*pid1->getSigma(), hSigmaSignalAna1->GetMaximum(), pid1->getMean() - 1*pid1->getSigma(), hSigmaSignalAna1->GetMinimum());
+        Double_t integralAna = hSigmaSignalAna1->IntegralAndError(hSigmaSignalAna1->FindBin(pid1->getMean() - nsigmaInFit*pid1->getSigma()), hSigmaSignalAna1->FindBin(pid1->getMean() + nsigmaInFit*pid1->getSigma()), errorAna, ""); //number of it without PID cut
+        TLine *left = new TLine(pid1->getMean() - nsigmaInFit*pid1->getSigma(), hSigmaSignalAna1->GetMaximum(), pid1->getMean() - nsigmaInFit*pid1->getSigma(), hSigmaSignalAna1->GetMinimum());
         left->SetLineColor(46);
-        TLine *right = new TLine(pid1->getMean() + 1*pid1->getSigma(), hSigmaSignalAna1->GetMaximum(), pid1->getMean() + 1*pid1->getSigma(), hSigmaSignalAna1->GetMinimum());
+        TLine *right = new TLine(pid1->getMean() + nsigmaInFit*pid1->getSigma(), hSigmaSignalAna1->GetMaximum(), pid1->getMean() + nsigmaInFit*pid1->getSigma(), hSigmaSignalAna1->GetMinimum());
         right->SetLineColor(46);
         TCanvas *c = new TCanvas("c",Form("%.2f_%.2f", ptBins[i],ptBins[i+1]),1000,900);
         hSigmaSignalAna1->Draw();
