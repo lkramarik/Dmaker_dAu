@@ -26,6 +26,8 @@ int StPicoKKMaker::InitHF() {
 
     mOutFileBaseName = mOutFileBaseName.ReplaceAll(".root", "");
 
+    mOutList->Add(new TH2F("hPVxy","hPVxy", 100, -6, 6, 100, -6, 6));
+
     TString ntpVars = "pi1_pt:pi1_dca:pi1_nSigma:pi1_nHitFit:pi1_isHft:pi1_eta:pi1_phi:pi1_TOFinvbeta:pi2_pt:pi2_dca:pi2_nSigma:pi2_nHitFit:pi2_isHft:pi2_eta:pi2_phi:pi2_TOFinvbeta:dcaDaughters:hotSpot:primVz:primVzVpd:bbcRate:nTofTracks:nBTOFMatch:nHftTracks:pair_cosTheta:pair_decayL:pair_dcaToPv"
                       ":pair_pt"
                       ":pair_mass";
@@ -55,6 +57,9 @@ int StPicoKKMaker::MakeHF() {
 
 // _________________________________________________________
 int StPicoKKMaker::createCandidates() {
+    TH2F *hPVxy = static_cast<TH2F*>(mOutList->FindObject("hPVxy"));
+    hPVxy->Fill(mPrimVtx.x(),mPrimVtx.y());
+
     //making array of good kaons
     float nTofTracks = 0;
     float nHftTracks = 0;

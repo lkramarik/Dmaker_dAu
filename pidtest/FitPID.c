@@ -30,14 +30,17 @@ using namespace TMath;
 ClassImp(FitPID)
 
 FitPID::FitPID() : TObject(),
-                   mSigma(999), mSigmaE(999), mMean(999), mMeanE(999), mHeight(999), mOutputFileName("defaultName.root") {
+                   mSigma(999), mSigmaE(999), mMean(999), mMeanE(999), mHeight(999), mFuncIntegral(999), mFuncIntegralError(999), mOutputFileName("defaultName.root") {
 
 }
 
+//______________________________________________________________________________________________________________________________________________________
 FitPID::~FitPID() {
     // destructor
 
 }
+
+//______________________________________________________________________________________________________________________________________________________
 TH1F* FitPID::projectSubtractBckg(TString dirName, TString input, Int_t nBins, Float_t massMin, Float_t massMax, Float_t ptmin, Float_t ptmax, TString pair, TCut setCut, TString variable, TString varName, bool save){
     std::vector<TCut> mCuts;
     mCuts.push_back(setCut);
@@ -96,6 +99,7 @@ TH1F* FitPID::projectSubtractBckg(TString dirName, TString input, Int_t nBins, F
     return hSig;
 }
 
+//______________________________________________________________________________________________________________________________________________________
 TH1F* FitPID::subtractBckg(TH1F* hS, TH1F* hB, TString nameSubtr, TFile* outputF, TString imgSave, bool save) {
     outputF->cd();
     TH1F* hSig = (TH1F*)hS->Clone(nameSubtr);
@@ -125,6 +129,7 @@ TH1F* FitPID::subtractBckg(TH1F* hS, TH1F* hB, TString nameSubtr, TFile* outputF
     return hSig;
 }
 
+//______________________________________________________________________________________________________________________________________________________
 void FitPID::peakFit(TString dirName, TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin, Float_t massMax, TString pair, Float_t ptmin, Float_t ptmax, TString varName, Float_t nSigmaLine){
     TF1 *funLS = new TF1("funLS","pol1(0)+gaus(2)", massMin, massMax);
     funLS->SetParameters(1.,1.,mHeight,mean,sigma);
@@ -146,13 +151,15 @@ void FitPID::peakFit(TString dirName, TH1F* hToFit, Float_t mean, Float_t sigma,
     gPad->SetLeftMargin(0.15);
     gStyle->SetOptFit(1);
     hToFit->GetYaxis()->SetTitleOffset(1.25);
-    hToFit->Fit(funLS, "ILRM");
+    TFitResultPtr r = hToFit->Fit(funLS, "ILRMS");
 
     mHeight = funLS->GetParameter(2);
     mSigma = funLS->GetParameter(4);
     mSigmaE = funLS->GetParError(4);
     mMean = funLS->GetParameter(3);
     mMeanE = funLS->GetParError(3);
+    mFuncIntegral = funLS->Integral(massMin, massMax, 1.e-12);
+    mFuncIntegralError = funLS->IntegralError(massMin, massMax, r->GetParams(), r->GetCovarianceMatrix().GetMatrixArray());
 
     TLine *left = new TLine(mMean - nSigmaLine*mSigma, hToFit->GetMaximum(), mMean - nSigmaLine*mSigma, hToFit->GetMinimum());
     left->SetLineColor(46);
@@ -163,17 +170,12 @@ void FitPID::peakFit(TString dirName, TH1F* hToFit, Float_t mean, Float_t sigma,
     left->Draw("same");
     right->Draw("same");
 
-    mHeight = funLS->GetParameter(2);
-    mSigma = funLS->GetParameter(4);
-    mSigmaE = funLS->GetParError(4);
-    mMean = funLS->GetParameter(3);
-    mMeanE = funLS->GetParError(3);
     pair.ReplaceAll("#","");
     c->SaveAs(Form("./%s/img/%s/fit/%s_%.3f_%.3f.png", dirName.Data(), pair.Data(), varName.Data(), ptmin, ptmax));
     c->Close();
 }
 
-
+//______________________________________________________________________________________________________________________________________________________
 TH1F* FitPID::peakFitResSub(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin, Float_t massMax, TString pair, Float_t ptmin, Float_t ptmax, TString varName){
     TF1 *funLS = new TF1("funLS","pol1(0)+gaus(2)", massMin, massMax);
     funLS->SetParameters(1.,1.,mHeight,mean,sigma);
@@ -221,8 +223,7 @@ TH1F* FitPID::peakFitResSub(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t m
 }
 
 
-
-
+//______________________________________________________________________________________________________________________________________________________
 void FitPID::peakMassFit(TString dirName, TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin, Float_t massMax, TString pair, Float_t ptmin, Float_t ptmax, TString varName){
     TF1 *funLS = new TF1("funLS","pol1(0)+gaus(2)", massMin, massMax);
     funLS->SetParameters(1.,1.,mHeight,mean,sigma);
@@ -270,12 +271,13 @@ void FitPID::peakMassFit(TString dirName, TH1F* hToFit, Float_t mean, Float_t si
     c->Close();
 }
 
+//______________________________________________________________________________________________________________________________________________________
 void FitPID::makeTuple(TString input, TCut cuts, bool plot2Part){
     TFile* data = new TFile(input ,"r");
     TNtuple* ntp[2] = {(TNtuple*)data -> Get("ntp_background"), (TNtuple*)data -> Get("ntp_signal")};
     TString outVars = "pi1_pt:pi1_nSigma:pi1_TOFinvbeta:bbcRate:nTofTracks";
     TFile *fileOut = new TFile(input+".cutted.root", "RECREATE");
-
+    cout<<"Smaller nTuple: "<<cuts<<endl;
     TNtuple* ntpOut[2] = {new TNtuple("ntp_background","ntp_background",outVars), new TNtuple("ntp_signal","ntp_signal",outVars)};
 
     Float_t pi1_pt, pi1_nSigma, pi1_TOFinvbeta, pi2_pt, pi2_nSigma, pi2_TOFinvbeta, bbcRate, nTofTracks;

@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "TObject.h"
+#include "TFitResult.h"
 
 using namespace std;
 using namespace TMath;
@@ -50,6 +51,8 @@ public:
     float getSigmaError();
     float getSigma();
     float getHeight();
+    float getFuncIntegral();
+    float getFuncIntegralError();
 
     void makeTuple(TString, TCut, bool);
     void setMean(float);
@@ -61,6 +64,8 @@ private:
     Float_t mSigmaE;
     Float_t mMeanE;
     Float_t mHeight;
+    Float_t mFuncIntegral;
+    Float_t mFuncIntegralError;
 
 ClassDef(FitPID,1)
 
@@ -73,6 +78,8 @@ inline float FitPID::getMeanError() {return mMeanE;}
 inline float FitPID::getHeight() {return mHeight;}
 inline float FitPID::getSigma() {return mSigma;}
 inline float FitPID::getSigmaError() {return mSigmaE;}
+inline float FitPID::getFuncIntegral() {return mFuncIntegral;}
+inline float FitPID::getFuncIntegralError() {return mFuncIntegralError;}
 
 inline void FitPID::setMean(float a) {mMean = a;}
 inline void FitPID::setSigma(float a) {mSigma = a;}
