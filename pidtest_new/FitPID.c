@@ -130,11 +130,11 @@ TH1F* FitPID::subtractBckg(TH1F* hS, TH1F* hB, TString nameSubtr, TFile* outputF
 }
 
 //______________________________________________________________________________________________________________________________________________________
-void FitPID::peakFit(TString dirName, TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin, Float_t massMax, TString pair, Float_t ptmin, Float_t ptmax, TString varName, Float_t nSigmaLine){
+bool FitPID::peakFit(TString dirName, TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin, Float_t massMax, TString pair, Float_t ptmin, Float_t ptmax, TString varName, Float_t nSigmaLine){
     funPID = new TF1("funPID","pol1(0)+gaus(2)", massMin, massMax);
     funPID->SetParameters(1.,1.,mHeight,mean,sigma);
-    funPID->SetLineColor(2);
-    funPID->SetLineStyle(7);
+    funPID->SetLineColor(hToFit->GetMarkerColor());
+    funPID->SetLineWidth(5);
     funPID->SetLineStyle(1);
     funPID->SetParName(2,"height");
     funPID->SetParName(3,"mean");
@@ -145,14 +145,14 @@ void FitPID::peakFit(TString dirName, TH1F* hToFit, Float_t mean, Float_t sigma,
         funPID->SetParLimits(3,-0.9,3);
     }
     funPID->SetParLimits(4,0,4);
-    funPID->SetLineColor(9);
 
     TCanvas *c = new TCanvas("c","%.3f_%.3f",1000,900);
     gPad->SetLeftMargin(0.15);
     gStyle->SetOptFit(1);
     hToFit->GetYaxis()->SetTitleOffset(1.25);
-    r = hToFit->Fit(funPID, "ILRMS");
-
+    r = hToFit->Fit(funPID, "LRS");
+    Int_t fitStatus = r;
+    cout<<"fit status: "<<fitStatus<<endl;
     mHeight = funPID->GetParameter(2);
     mSigma = funPID->GetParameter(4);
     mSigmaE = funPID->GetParError(4);
@@ -163,7 +163,11 @@ void FitPID::peakFit(TString dirName, TH1F* hToFit, Float_t mean, Float_t sigma,
 
     TLine *left = new TLine(mMean - nSigmaLine*mSigma, hToFit->GetMaximum(), mMean - nSigmaLine*mSigma, hToFit->GetMinimum());
     left->SetLineColor(46);
+    left->SetLineWidth(4);
+    left->SetLineStyle(9);
     TLine *right = new TLine(mMean + nSigmaLine*mSigma, hToFit->GetMaximum(), mMean + nSigmaLine*mSigma, hToFit->GetMinimum());
+    right->SetLineStyle(9);
+    right->SetLineWidth(4);
     right->SetLineColor(46);
 
     hToFit->Draw();
@@ -173,22 +177,24 @@ void FitPID::peakFit(TString dirName, TH1F* hToFit, Float_t mean, Float_t sigma,
     pair.ReplaceAll("#","");
     c->SaveAs(Form("./%s/img/%s/fit/%s_%.3f_%.3f.png", dirName.Data(), pair.Data(), varName.Data(), ptmin, ptmax));
     c->Close();
+
+    if (fitStatus!=0) return false;
+    return true;
 }
 //______________________________________________________________________________________________________________________________________________________
 
-void FitPID::getFuncIntegralRange(Double_t min, Double_t max) {
+float FitPID::getFuncIntegral(Double_t min, Double_t max) {
     return funPID->Integral(min, max, 1.e-12);
 }
 //______________________________________________________________________________________________________________________________________________________
-void FitPID::getFuncIntegralRangeError(Double_t min, Double_t max) {
+float FitPID::getFuncIntegralError(Double_t min, Double_t max) {
     return funPID->IntegralError(min, max, r->GetParams(), r->GetCovarianceMatrix().GetMatrixArray());
 }
 //______________________________________________________________________________________________________________________________________________________
-TH1F* FitPID::peakFitResSub(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin, Float_t massMax, TString pair, Float_t ptmin, Float_t ptmax, TString varName){
-    TF1 *funLS = new TF1("funLS","pol1(0)+gaus(2)", massMin, massMax);
+bool FitPID::peakFitResSub(TString dirName, TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin, Float_t massMax, TString pair, Float_t ptmin, Float_t ptmax, TString varName, Float_t nSigmaLine){
+    TF1* funLS = new TF1("funLS","pol1(0)+gaus(2)", massMin, massMax);
     funLS->SetParameters(1.,1.,mHeight,mean,sigma);
     funLS->SetLineColor(2);
-    funLS->SetLineStyle(7);
     funLS->SetLineStyle(1);
     funLS->SetParName(2,"height");
     funLS->SetParName(3,"mean");
@@ -205,7 +211,7 @@ TH1F* FitPID::peakFitResSub(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t m
     gPad->SetLeftMargin(0.15);
     gStyle->SetOptFit(1);
     hToFit->GetYaxis()->SetTitleOffset(1.25);
-    hToFit->Fit(funLS, "LRM");
+    hToFit->Fit(funLS, "LRMN");
 
     TF1 *funLin = new TF1("funLin","pol1(0)", massMin, massMax);
     funLin->SetParameters(funLS->GetParameter(0),funLS->GetParameter(1));
@@ -216,18 +222,52 @@ TH1F* FitPID::peakFitResSub(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t m
     }
 
     hToFit->Sumw2();
-    hToFit->Fit(funLS, "LRM");
+
+    mHeight = funLS->GetParameter(0);
+    mSigma = funLS->GetParameter(2);
+    mSigmaE = funLS->GetParError(2);
+    mMean = funLS->GetParameter(1);
+    mMeanE = funLS->GetParError(1);
+
+    funPID = new TF1("funPID","gaus(0)", massMin, massMax);
+    funPID->SetLineColor(hToFit->GetLineColor());
+//    funPID->SetLineStyle(7);
+    funPID->SetParameters(funLS->GetParameter(2),funLS->GetParameter(3),funLS->GetParameter(4));
+    r = hToFit->Fit(funPID, "NLRS", "", 0.4*massMin, 0.4*massMax);
+    Int_t fitStatus = r;
+    cout<<"fit status: "<<fitStatus<<endl;
+
+    TF1* funDraw = new TF1("funDraw","gaus(0)",massMin, massMax);
+    funDraw->SetParameters(funPID->GetParameters());
+    funDraw->SetLineColor(hToFit->GetMarkerColor());
+    funDraw->SetLineWidth(5);
 
     hToFit->Draw();
-    mHeight = funLS->GetParameter(2);
-    mSigma = funLS->GetParameter(4);
-    mSigmaE = funLS->GetParError(4);
-    mMean = funLS->GetParameter(3);
-    mMeanE = funLS->GetParError(3);
+    funDraw->Draw("same");
+    mHeight = funPID->GetParameter(0);
+    mSigma = funPID->GetParameter(2);
+    mSigmaE = funPID->GetParError(2);
+    mMean = funPID->GetParameter(1);
+    mMeanE = funPID->GetParError(1);
+    mFuncIntegral = funPID->Integral(massMin, massMax, 1.e-12);
+    mFuncIntegralError = funPID->IntegralError(massMin, massMax, r->GetParams(), r->GetCovarianceMatrix().GetMatrixArray());
+
+    TLine *left = new TLine(mMean - nSigmaLine*mSigma, hToFit->GetMaximum(), mMean - nSigmaLine*mSigma, hToFit->GetMinimum());
+    left->SetLineColor(46);
+    left->SetLineWidth(4);
+    left->SetLineStyle(9);
+    TLine *right = new TLine(mMean + nSigmaLine*mSigma, hToFit->GetMaximum(), mMean + nSigmaLine*mSigma, hToFit->GetMinimum());
+    right->SetLineStyle(9);
+    right->SetLineWidth(4);
+    right->SetLineColor(46);
+    left->Draw("same");
+    right->Draw("same");
     pair.ReplaceAll("#","");
-    c->SaveAs(Form("./img/%s/fit/%s_%.3f_%.3f.png", pair.Data(), varName.Data(), ptmin, ptmax));
+    c->SaveAs(Form("./%s/img/%s/fit/%s_%.3f_%.3f.png", dirName.Data(), pair.Data(), varName.Data(), ptmin, ptmax));
     c->Close();
-    return hToFit;
+
+    if (fitStatus!=0) return false;
+    return true;
 }
 
 
@@ -235,9 +275,8 @@ TH1F* FitPID::peakFitResSub(TH1F* hToFit, Float_t mean, Float_t sigma, Float_t m
 void FitPID::peakMassFit(TString dirName, TH1F* hToFit, Float_t mean, Float_t sigma, Float_t massMin, Float_t massMax, TString pair, Float_t ptmin, Float_t ptmax, TString varName){
     TF1 *funLS = new TF1("funLS","pol1(0)+gaus(2)", massMin, massMax);
     funLS->SetParameters(1.,1.,mHeight,mean,sigma);
-    funLS->SetLineColor(2);
-    funLS->SetLineStyle(7);
     funLS->SetLineStyle(1);
+    funLS->SetLineWidth(5);
     funLS->SetParName(2,"height");
     funLS->SetParName(3,"mean");
     funLS->SetParName(4,"sigma");
@@ -246,14 +285,14 @@ void FitPID::peakMassFit(TString dirName, TH1F* hToFit, Float_t mean, Float_t si
     } else {
         funLS->SetParLimits(3,-0.9,3);
     }
-    funLS->SetParLimits(4,0,0.0035);
+//    funLS->SetParLimits(4,0,0.0035);
     funLS->SetLineColor(9);
 
     TCanvas *c = new TCanvas("c","%.3_%.3f",1000,900);
     gPad->SetLeftMargin(0.15);
     gStyle->SetOptFit(1);
     hToFit->GetYaxis()->SetTitleOffset(1.25);
-    hToFit->Fit(funLS, "LRM");
+    hToFit->Fit(funLS, "LRMN", "", mean-5*sigma, mean+5*sigma);
 
     mHeight = funLS->GetParameter(2);
     mSigma = funLS->GetParameter(4);
@@ -261,12 +300,24 @@ void FitPID::peakMassFit(TString dirName, TH1F* hToFit, Float_t mean, Float_t si
     mMean = funLS->GetParameter(3);
     mMeanE = funLS->GetParError(3);
 
+    TF1* fitDraw = new TF1("fitDraw","pol1(0)+gaus(2)", massMin, massMax);
+    fitDraw->SetParameters(funLS->GetParameters());
+    fitDraw->SetLineWidth(5);
+    fitDraw->SetLineStyle(1);
+    fitDraw->SetLineColor(9);
+
+
     TLine *left = new TLine(mMean - 2*mSigma, hToFit->GetMaximum(), mMean - 2*mSigma, hToFit->GetMinimum());
     left->SetLineColor(46);
+    left->SetLineWidth(4);
+    left->SetLineStyle(9);
     TLine *right = new TLine(mMean + 2*mSigma, hToFit->GetMaximum(), mMean + 2*mSigma, hToFit->GetMinimum());
+    right->SetLineStyle(9);
+    right->SetLineWidth(4);
     right->SetLineColor(46);
 
     hToFit->Draw();
+    fitDraw->Draw("same");
     left->Draw("same");
     right->Draw("same");
     mHeight = funLS->GetParameter(2);

@@ -28,51 +28,73 @@
 #include "TSystem.h"
 #include "TROOT.h"
 //class FitPID;
-void pidEff(bool tofPidEff,  int bbcMin, int bbcMax, int nTof, float nsigma, float tofInvBeta, float ptTrackCut);
+TString pidEff(bool tofPidEff,  int bbcMin, int bbcMax, int nTof, float nsigma, float tofInvBeta, float ptTrackCut, TCut addiCut);
+TString pidEff(bool tofPidEff,  int bbcMin, int bbcMax, int nTof, float nsigma, float tofInvBeta, float ptTrackCut);
 
-void pidEffKaon() {
+void pidEffKaonNew() {
     gROOT->ProcessLine(".L FitPID.c++");
-    pidEff(true, 0, 950, 1, 1., 0.02, 0.5);
+//    cout<<pidEff(true, 0, 950, 1, 2., 0.02, 0.,"pi1_isHft>-100")<<endl;
 
-    /*
-    int bbcMin=0;
-    int bbcMax[]={500,800,950};
-    int nTof[]={-1,0,1};
+    TCut cutHft[] = {"pi1_isHft>-100", "pi1_isHft>0", "pi1_isHft<1"};
+    TString folder[] = {"all", "hft", "nonhft"};
 
-    for (int iBBC = 0; iBBC < 3; ++iBBC) {
-        for (int iTOF = 0; iTOF < 3; ++iTOF) {
-            pidEff(false, bbcMin, bbcMax[iBBC], nTof[iTOF], 3, 0.03, 0.5);
-            pidEff(true, bbcMin, bbcMax[iBBC], nTof[iTOF], 3, 0.03, 0.5);
-        }
-    }
+    TString dir;
+    dir=pidEff(true, 0, 950, 1, 100, 100, 0., "pi1_isHft>0 && pi2_isHft>0");
+    gSystem->Exec(Form("mv %s plotPart2/", dir.Data()));
+    dir=pidEff(false, 0, 950, 1, 100, 100, 0., "pi1_isHft>0 && pi2_isHft>0");
+    gSystem->Exec(Form("mv %s plotPart2/", dir.Data()));
 
-    float nsigma[]={3, 5};
-    float tofInvBeta[]={0.03, 0.05};
-    float ptTrackCut[]={0.3, 0.5};
 
-    for (int inSigma = 0; inSigma < 2; ++inSigma) {
-        for (int iBeta = 0; iBeta < 2; ++iBeta) {
-            for (int iPt = 0; iPt < 2; ++iPt) {
-                pidEff(false, 0, 950, 1, nsigma[inSigma], tofInvBeta[iBeta], ptTrackCut[iPt]);
-                pidEff(false, 0, 950, 0, nsigma[inSigma], tofInvBeta[iBeta], ptTrackCut[iPt]);
-                pidEff(true, 0, 950, 1, nsigma[inSigma], tofInvBeta[iBeta], ptTrackCut[iPt]);
-                pidEff(true, 0, 950, 0, nsigma[inSigma], tofInvBeta[iBeta], ptTrackCut[iPt]);
-            }
-        }
-    }
-     */
+//    for (int i = 0; i < 3; ++i) {
+////        int bbcMin=0;
+////        int bbcMax[]={500,800,950};
+////        int nTof[]={-1,0,1};
+////
+////        for (int iBBC = 0; iBBC < 3; ++iBBC) {
+////            for (int iTOF = 0; iTOF < 3; ++iTOF) {
+////                dir=pidEff(false, bbcMin, bbcMax[iBBC], nTof[iTOF], 3, 0.03, 0.5, cutHft[i]);
+////                gSystem->Exec(Form("mv %s %s/", dir.Data(), folder[i].Data()));
+////                dir=pidEff(true, bbcMin, bbcMax[iBBC], nTof[iTOF], 3, 0.03, 0.5, cutHft[i]);
+////                gSystem->Exec(Form("mv %s %s/", dir.Data(), folder[i].Data()));
+////            }
+////        }
+//
+//        float nsigma[]={3, 5};
+//        float tofInvBeta[]={0.03, 0.05};
+//        float ptTrackCut[]={0.0, 0.3, 0.5};
+//
+//        for (int inSigma = 0; inSigma < 1; ++inSigma) {
+//            for (int iBeta = 0; iBeta < 1; ++iBeta) {
+//                for (int iPt = 0; iPt < 1; ++iPt) {
+//                    dir=pidEff(false, 0, 950, 1, nsigma[inSigma], tofInvBeta[iBeta], ptTrackCut[iPt], cutHft[i]);
+//                    gSystem->Exec(Form("mv %s %s/", dir.Data(), folder[i].Data()));
+//
+//                    dir=pidEff(false, 0, 950, 0, nsigma[inSigma], tofInvBeta[iBeta], ptTrackCut[iPt], cutHft[i]);
+//                    gSystem->Exec(Form("mv %s %s/", dir.Data(), folder[i].Data()));
+//
+//                    dir=pidEff(true, 0, 950, 1, nsigma[inSigma], tofInvBeta[iBeta], ptTrackCut[iPt], cutHft[i]);
+//                    gSystem->Exec(Form("mv %s %s/", dir.Data(), folder[i].Data()));
+//
+//                    dir=pidEff(true, 0, 950, 0, nsigma[inSigma], tofInvBeta[iBeta], ptTrackCut[iPt], cutHft[i]);
+//                    gSystem->Exec(Form("mv %s %s/", dir.Data(), folder[i].Data()));
+//                }
+//            }
+//        }
+//
+//    }
 
 }
-void pidEff(bool tofPidEff=true,  int bbcMin=0, int bbcMax=950, int nTof=1, float nsigma=3, float tofInvBeta=0.03, float ptTrackCut=0.5) {
-    bool plotPart2 = false;
+TString pidEff(bool tofPidEff=true,  int bbcMin=0, int bbcMax=950, int nTof=1, float nsigma=3, float tofInvBeta=0.03, float ptTrackCut=0.5) {
+    return pidEff(tofPidEff,  bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut, "");
+}
 
-//    TString input = "/media/lukas/376AD6A434B7392F/work/pid/ntp.noHft.picoPhiAnaMaker.2401.root";
-//    TString input = "ntp.picoPhiAnaMaker.nonHftPairs.1709.root";
-//    TString input = "/media/lukas/376AD6A434B7392F/work/pid/ntp.picoPhiAnaMaker.3001.root";
+TString pidEff(bool tofPidEff=true,  int bbcMin=0, int bbcMax=950, int nTof=1, float nsigma=3, float tofInvBeta=0.03, float ptTrackCut=0.5, TCut additionalCut="") {
+    bool plotPart2 = true;
+
     TString input = "/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/ntp/ntp.phi.2001.hotspot.root";
     TString inputCut = input+".cutted.root";
 
-    Float_t ptBins[] = {0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1., 1.2, 1.4, 1.7, 2., 2.5, 3., 3.5, 4.}; //kaon/
+    Float_t ptBins[] = {0.15, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1., 1.2, 1.4, 1.7, 2., 2.5, 3.}; //kaon/
 //    Float_t ptBins[] = {0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.2, 2.5, 3, 4}; //pion
 //    Float_t ptBins[] = {0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 1.05, 1.2, 1.4, 1.7, 2.3, 3, 4}; //kaon
 
@@ -83,13 +105,13 @@ void pidEff(bool tofPidEff=true,  int bbcMin=0, int bbcMax=950, int nTof=1, floa
     TH1F* hPassCountFunc = new TH1F("hPassCountFunc","hPassCountFunc",nBins-1,ptBins);
 
     Float_t means[nBins], binWidth[nBins], xPt[nBins], massMean, massSigma, eff[nBins], effError[nBins], meansE[nBins], sigmasE[nBins];
-    Double_t errorClean, errorAna;
+    Double_t errorClean, errorAna, anaCut;
     Float_t sigmas[nBins];
 
     Float_t massMin, massMax, mean, sigma, ptPairMin, ptPairMax;
     Float_t height = 1000;
     TString pair, pairName, effTypeString;
-    TCut cut, cutPair, tof1, tpc1;
+    TCut cut, cutPair;
 
     pair = "KK";
     pairName = "KK";
@@ -106,18 +128,22 @@ void pidEff(bool tofPidEff=true,  int bbcMin=0, int bbcMax=950, int nTof=1, floa
     TH1F *hSigmaSignalAna1 = new TH1F();
     TH1F *hSigmaSignalAna2 = new TH1F();
 
-    tof1="abs(pi1_TOFinvbeta)<0.03";
-    tpc1="abs(pi1_nSigma<2.)";
-
     cut = Form("pair_mass>%.3f && pair_mass<%.3f", massMin, massMax);
 
     float nsigmaInFit=1.;
     cutPair=Form("pair_pt>%.3f && pair_pt<%.3f && bbcRate>%i && bbcRate<=%i && nHftTracks>%i && abs(pi2_nSigma)<%.1f && abs(pi2_TOFinvbeta)<%.2f && pi2_pt>%.1f && "
-                 "pi1_dca<1. &&  pair_cosTheta>0.8 && pair_dcaToPv<1. && dcaDaughters<1 && pair_decayL<25.", // && pi1_isHft<1
+                 "pi1_dca<1. &&  pair_cosTheta>0.85 && pair_dcaToPv<1. && dcaDaughters<1 && pair_decayL<25.", // && pi1_isHft<1
                  ptPairMin, ptPairMax, bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
+    cutPair+=additionalCut;
 
-    if (tofPidEff) effTypeString = "tofPidEff";
-    else  effTypeString = "tpc";
+    if (tofPidEff) {
+        effTypeString = "tofPidEff";
+        anaCut=0.03;
+    }
+    else  {
+        effTypeString = "tpc";
+        anaCut=2;
+    }
 
     TString dirName=Form("%s_bbc%i_%i_nHft%i_nsigma%.1f_tof%.2f_pt%.1f", effTypeString.Data(), bbcMin, bbcMax, nTof, nsigma, tofInvBeta, ptTrackCut);
 
@@ -134,77 +160,52 @@ void pidEff(bool tofPidEff=true,  int bbcMin=0, int bbcMax=950, int nTof=1, floa
     massMean = fitmass->getMean();
     massSigma = fitmass->getSigma();
 
-    cut = Form("pair_mass>%.3f && pair_mass<%.3f", massMean-1*massSigma, massMean+1*massSigma);
+    cut = Form("pair_mass>%.3f && pair_mass<%.3f", massMean-2*massSigma, massMean+2*massSigma);
     if (tofPidEff) cut += "abs(pi1_TOFinvbeta)<93.";
 
     fitmass->makeTuple(input, cut+cutPair, plotPart2);
-    Int_t nBinsInFit = 50;
+    Int_t nBinsInFit = 25;
     int analysedBins = 0;
     height = 1600;
+    bool fitOk = false;
     for (int i = 0; i < nBins-1; ++i) {
         //clean pions:
         FitPID *pid1 = new FitPID();
         pid1->setOutputFileName(Form("%s/rootFiles/nSigma_", dirName.Data()) + pairName + "_1.root");
         cut = Form("pi1_pt>%.3f && pi1_pt<%.3f", ptBins[i], ptBins[i+1]);
-        if (tofPidEff) hSigmaSignal1 = (TH1F *) pid1->projectSubtractBckg(dirName, inputCut, nBinsInFit, -5, 5, ptBins[i], ptBins[i + 1], pair, cut, "pi1_nSigma", "Kaon n#sigma^{TPC}", true);
-        else hSigmaSignal1 = (TH1F *) pid1->projectSubtractBckg(dirName, inputCut, nBinsInFit, -0.07, 0.07, ptBins[i], ptBins[i + 1], pair, cut, "pi1_TOFinvbeta", "Kaon #delta1/#beta_{TOF}", true);
+        if (tofPidEff) hSigmaSignal1 = (TH1F *) pid1->projectSubtractBckg(dirName, inputCut, nBinsInFit, -0.06, 0.06, ptBins[i], ptBins[i + 1], pair, cut, "pi1_TOFinvbeta", "Kaon #Delta1/#beta_{TOF}", true);
+        else hSigmaSignal1 = (TH1F *) pid1->projectSubtractBckg(dirName, inputCut, nBinsInFit, -4, 4, ptBins[i], ptBins[i + 1], pair, cut, "pi1_nSigma", "Kaon n#sigma^{TPC}", true);
 
         pid1->setHeight(height);
         if (tofPidEff) {
-            if (i==1 || i==0) pid1->peakFit(dirName, hSigmaSignal1, 0.8, 1, -1.5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma", nsigmaInFit);
-            else      pid1->peakFit(dirName, hSigmaSignal1, 0, 1, -5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma", nsigmaInFit);
+            if (i==0) fitOk=pid1->peakFitResSub(dirName, hSigmaSignal1, 0.01, 0.02, -0.06, 0.06, pair, ptBins[i], ptBins[i + 1], "1overBeta", nsigmaInFit);
+            fitOk=pid1->peakFitResSub(dirName, hSigmaSignal1, 0, 0.01, -0.06, 0.06, pair, ptBins[i], ptBins[i + 1], "1overBeta", nsigmaInFit);
         } else {
-            pid1->peakFit(dirName, hSigmaSignal1, 0, 0.02, -0.07, 0.07, pair, ptBins[i], ptBins[i + 1], "1overBeta", nsigmaInFit);
+//            if (i==1 || i==0) pid1->peakFitResSub(dirName, hSigmaSignal1, 0.8, 1, -1.5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma", nsigmaInFit);
+//            else      pid1->peakFitResSub(dirName, hSigmaSignal1, 0, 1, -5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma", nsigmaInFit);
+            fitOk=pid1->peakFitResSub(dirName, hSigmaSignal1, 0, 1, -4, 4, pair, ptBins[i], ptBins[i + 1], "nSigma", nsigmaInFit);
+//            pid1->peakFitResSub(dirName, hSigmaSignal1, 0, 1, -5, 5, pair, ptBins[i], ptBins[i + 1], "nSigma", nsigmaInFit);
         }
-
+//        if (!fitOk) continue;
         binWidth[i] = (ptBins[i + 1] - ptBins[i]) / 2;
         xPt[i] = (ptBins[i + 1] + ptBins[i]) / 2;
         means[i] = pid1->getMean();
         meansE[i] = pid1->getMeanError();
         sigmas[i] = pid1->getSigma();
         sigmasE[i] = pid1->getSigmaError();
-        Double_t integralClean = hSigmaSignal1->IntegralAndError(hSigmaSignal1->FindBin(pid1->getMean() - nsigmaInFit*pid1->getSigma()), hSigmaSignal1->FindBin(pid1->getMean() + nsigmaInFit*pid1->getSigma()), errorClean, ""); //number of it without PID cut
+
+        Double_t integralClean = hSigmaSignal1->IntegralAndError(1, nBinsInFit, errorClean, ""); //number of it without PID cut
+        Double_t integralAna = hSigmaSignal1->IntegralAndError(hSigmaSignal1->FindBin(-1*anaCut), hSigmaSignal1->FindBin(abs(anaCut)), errorAna, ""); //number of it without PID cut
 
         hTotalCount->SetBinContent(i+1, integralClean);
         hTotalCount->SetBinError(i+1, errorClean);
-        hTotalCountFunc->SetBinContent(i+1, pid1->getFuncIntegral());
-        hTotalCountFunc->SetBinError(i+1, pid1->getFuncIntegralError());
-
-        //tof pions after my PID cut:
-        FitPID *pidAna1 = new FitPID();
-        pidAna1->setOutputFileName(Form("%s/rootFiles/nSigma_", dirName.Data())+pairName+"_ana_1.root");
-        if (tofPidEff) hSigmaSignalAna1 = (TH1F*) pidAna1->projectSubtractBckg(dirName, inputCut, nBinsInFit, -5, 5, ptBins[i], ptBins[i+1], pair, cut+tof1, "pi1_nSigma", "Kaon n#sigma^{TPC}", false);
-        else hSigmaSignalAna1 = (TH1F*) pidAna1->projectSubtractBckg(dirName, inputCut, nBinsInFit, -0.07, 0.07, ptBins[i], ptBins[i+1], pair, cut+tpc1, "pi1_TOFinvbeta", "Kaon #delta1/#beta_{TOF}", false);
-
-        Double_t integralAna = hSigmaSignalAna1->IntegralAndError(hSigmaSignalAna1->FindBin(pid1->getMean() - nsigmaInFit*pid1->getSigma()), hSigmaSignalAna1->FindBin(pid1->getMean() + nsigmaInFit*pid1->getSigma()), errorAna, ""); //number of it without PID cut
         hPassCount->SetBinContent(i+1, integralAna);
         hPassCount->SetBinError(i+1, errorAna);
 
-        pidAna1->setHeight(height);
-        if (tofPidEff) {
-            if (i==1 || i==0) pidAna1->peakFit(dirName, hSigmaSignalAna1, 0.8, 1, -1.5, 5, pair, ptBins[i], ptBins[i + 1], "nSigmaAna", nsigmaInFit);
-            else      pidAna1->peakFit(dirName, hSigmaSignalAna1, 0, 1, -5, 5, pair, ptBins[i], ptBins[i + 1], "nSigmaAna", nsigmaInFit);
-        } else {
-            pidAna1->peakFit(dirName, hSigmaSignalAna1, 0, 0.02, -0.07, 0.07, pair, ptBins[i], ptBins[i + 1], "1overBetaAna", nsigmaInFit);
-        }
-
-        hPassCountFunc->SetBinContent(i+1, pidAna1->getFuncIntegral());
-        hPassCountFunc->SetBinError(i+1, pidAna1->getFuncIntegralError());
-
-
-        TLine *left = new TLine(pid1->getMean() - nsigmaInFit*pid1->getSigma(), hSigmaSignalAna1->GetMaximum(), pid1->getMean() - nsigmaInFit*pid1->getSigma(), hSigmaSignalAna1->GetMinimum());
-        left->SetLineColor(46);
-        TLine *right = new TLine(pid1->getMean() + nsigmaInFit*pid1->getSigma(), hSigmaSignalAna1->GetMaximum(), pid1->getMean() + nsigmaInFit*pid1->getSigma(), hSigmaSignalAna1->GetMinimum());
-        right->SetLineColor(46);
-        TCanvas *c = new TCanvas("c",Form("%.2f_%.2f", ptBins[i],ptBins[i+1]),1000,900);
-        gPad->SetLeftMargin(0.15);
-        hSigmaSignalAna1->Draw();
-        left->Draw("same");
-        right->Draw("same");
-        c->SaveAs(Form("%s/img/KK/fit/ana.%.2f_%.2f.png", dirName.Data(), ptBins[i], ptBins[i+1]));
-        c->Close();
-        left=0x0;
-        right=0x0;
+        hTotalCountFunc->SetBinContent(i+1, pid1->getFuncIntegral());
+        hTotalCountFunc->SetBinError(i+1, pid1->getFuncIntegralError());
+        hPassCountFunc->SetBinContent(i+1, pid1->getFuncIntegral(-1*anaCut,abs(anaCut)));
+        hPassCountFunc->SetBinError(i+1, pid1->getFuncIntegralError(-1*anaCut,abs(anaCut)));
 
         ++analysedBins;
         height=pid1->getHeight();
@@ -220,18 +221,18 @@ void pidEff(bool tofPidEff=true,  int bbcMin=0, int bbcMax=950, int nTof=1, floa
     }
 
     TGraphAsymmErrors *gEff = new TGraphAsymmErrors();
-    gEff->Divide(hPassCount,hTotalCount,"cp");
+    gEff->Divide(hPassCount,hTotalCount,"n");
 
     TGraphAsymmErrors *gEffFunc = new TGraphAsymmErrors();
-    gEffFunc->Divide(hPassCountFunc,hTotalCountFunc,"cp");
+    gEffFunc->Divide(hPassCountFunc,hTotalCountFunc,"n");
 
     TCanvas *c1 = new TCanvas("c1","%.3f_%.3f",1000,900);
     gMean->SetMarkerStyle(20);
     gMean->SetMarkerSize(0.9);
     gMean->SetMarkerColor(kBlack);
     gMean->SetLineColor(kBlack);
-    if (tofPidEff) gMean->GetYaxis()->SetTitle("K n#sigma mean [n#sigma]");
-    else gMean->GetYaxis()->SetTitle("kaon #delta1/#beta mean [#delta1/#beta]");
+    if (tofPidEff) gMean->GetYaxis()->SetTitle("kaon #delta1/#beta mean [#delta1/#beta]");
+    else gMean->GetYaxis()->SetTitle("K n#sigma mean [n#sigma]");
     gMean->GetYaxis()->SetTitleOffset(1.1);
     gMean->GetXaxis()->SetTitle("p_{T} (GeV/c)");
     gMean->SetTitle("");
@@ -244,8 +245,8 @@ void pidEff(bool tofPidEff=true,  int bbcMin=0, int bbcMax=950, int nTof=1, floa
     gSigmas->SetMarkerSize(0.9);
     gSigmas->SetMarkerColor(kBlack);
     gSigmas->SetLineColor(kBlack);
-    if (tofPidEff) gSigmas->GetYaxis()->SetTitle("K n#sigma sigma [n#sigma]");
-    else gSigmas->GetYaxis()->SetTitle("kaon #delta1/#beta sigma [#delta1/#beta]");
+    if (tofPidEff) gSigmas->GetYaxis()->SetTitle("kaon #delta1/#beta sigma [#delta1/#beta]");
+    else gSigmas->GetYaxis()->SetTitle("K n#sigma sigma [n#sigma]");
     gSigmas->GetYaxis()->SetTitleOffset(1.1);
     gSigmas->GetXaxis()->SetTitle("p_{T} (GeV/c)");
     gSigmas->SetTitle("");
@@ -261,7 +262,7 @@ void pidEff(bool tofPidEff=true,  int bbcMin=0, int bbcMax=950, int nTof=1, floa
     gEff->GetYaxis()->SetTitle("Efficiency");
     gEff->GetYaxis()->SetTitleOffset(1.1);
     gEff->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-    gEff->GetYaxis()->SetRangeUser(0.,1.2);
+    gEff->GetYaxis()->SetRangeUser(0.6,1.1);
     gEff->SetTitle("");
     gEff->Draw("ap");
     c3->SaveAs(Form("%s/rootFiles/effTOFKaon.root", dirName.Data()));
@@ -277,7 +278,7 @@ void pidEff(bool tofPidEff=true,  int bbcMin=0, int bbcMax=950, int nTof=1, floa
     gEffFunc->GetYaxis()->SetTitle("Efficiency");
     gEffFunc->GetYaxis()->SetTitleOffset(1.1);
     gEffFunc->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-    gEffFunc->GetYaxis()->SetRangeUser(0.,1.2);
+    gEffFunc->GetYaxis()->SetRangeUser(0.6,1.1);
     gEffFunc->SetTitle("");
     gEffFunc->Draw("ap");
     c4->SaveAs(Form("%s/rootFiles/effTOFKaonFunc.root", dirName.Data()));
@@ -291,5 +292,7 @@ void pidEff(bool tofPidEff=true,  int bbcMin=0, int bbcMax=950, int nTof=1, floa
     gMean->Write("mean");
     gSigmas->Write("sigma");
     resOut->Close();
+
+    return dirName;
 
 }

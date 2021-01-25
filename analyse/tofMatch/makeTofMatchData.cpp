@@ -121,8 +121,12 @@ TSpline3* histoToSpline(TH1D* h, Double_t excludeMin, Double_t excludeMax) {
 }
 
 //-------------------------------------------------------------------------
-void makeTofMatchData(TString inputFileName="tofMatch.primaries.hotspot.root") {
-//void makeTofMatchData(TString inputFileName="tofratio.all.1509.root") {
+//void makeTofMatchData(TString inputFileName="tofMatch.primaries.hotspot.root") {
+void makeTofMatchData(TString inputFileName="tofratio.all.1509.root") {
+    TString inputFileNameOrig=inputFileName;
+    inputFileNameOrig.ReplaceAll(".root","");
+    gSystem->Exec(Form("mkdir %s ", inputFileNameOrig.Data()));
+
     const int m_nParticlesCharged = 4;
     const TString m_ParticleChargedName[m_nParticlesCharged] = {"PionPlus", "PionMinus", "KaonPlus", "KaonMinus"};
     const TString m_ParticleChargedName_plot[m_nParticlesCharged] = {"#pi^{+}", "#pi^{-}", "K^{+}", "K^{-}"};
@@ -316,10 +320,11 @@ void makeTofMatchData(TString inputFileName="tofMatch.primaries.hotspot.root") {
     cNsigmaGR->cd(4);
 
 
-    cNsigma->SaveAs("tofMatchAll.png");
-    cNsigma->SaveAs("tofMatchAll.eps");
-    cNsigmaGR->SaveAs("tofMatchFit.png");
-    cNsigmaGR->SaveAs("tofMatchFit.eps");
+
+    cNsigma->SaveAs(Form("%s/tofMatchAll.png", inputFileNameOrig.Data()));
+    cNsigma->SaveAs(Form("%s/tofMatchAll.eps", inputFileNameOrig.Data()));
+    cNsigmaGR->SaveAs(Form("%s/tofMatchFit.png", inputFileNameOrig.Data()));
+    cNsigmaGR->SaveAs(Form("%s/tofMatchFit.eps", inputFileNameOrig.Data()));
 
 //    for (int i = 0; i < ; ++i) {
 //

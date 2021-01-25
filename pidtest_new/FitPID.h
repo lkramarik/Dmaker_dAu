@@ -42,8 +42,8 @@ public:
 
     TH1F* projectSubtractBckg(TString, TString, Int_t, Float_t, Float_t, Float_t, Float_t, TString, TCut, TString, TString, bool);
     TH1F* subtractBckg(TH1F*, TH1F*, TString, TFile*, TString, bool);
-    void peakFit(TString, TH1F*, Float_t, Float_t, Float_t, Float_t, TString, Float_t, Float_t, TString, Float_t);
-    TH1F* peakFitResSub(TH1F*, Float_t, Float_t, Float_t, Float_t, TString, Float_t, Float_t, TString);
+    bool peakFit(TString, TH1F*, Float_t, Float_t, Float_t, Float_t, TString, Float_t, Float_t, TString, Float_t);
+    bool peakFitResSub(TString, TH1F*, Float_t, Float_t, Float_t, Float_t, TString, Float_t, Float_t, TString, Float_t);
     void peakMassFit(TString, TH1F*, Float_t, Float_t, Float_t, Float_t, TString, Float_t, Float_t, TString);
     void setOutputFileName(TString);
     float getMeanError();
@@ -53,8 +53,8 @@ public:
     float getHeight();
     float getFuncIntegral();
     float getFuncIntegralError();
-    float getFuncIntegralRange(Double_t, Double_t);
-    float getFuncIntegralRangeError(Double_t, Double_t);
+    float getFuncIntegral(Double_t, Double_t);
+    float getFuncIntegralError(Double_t, Double_t);
 
     void makeTuple(TString, TCut, bool);
     void setMean(float);
