@@ -292,7 +292,8 @@ void FitPID::peakMassFit(TString dirName, TH1F* hToFit, Float_t mean, Float_t si
     gPad->SetLeftMargin(0.15);
     gStyle->SetOptFit(1);
     hToFit->GetYaxis()->SetTitleOffset(1.25);
-    hToFit->Fit(funLS, "LRMN", "", mean-5*sigma, mean+5*sigma);
+    hToFit->Fit(funLS, "LR", "", massMin, massMax);
+    hToFit->SetTitle("");
 
     mHeight = funLS->GetParameter(2);
     mSigma = funLS->GetParameter(4);
@@ -317,7 +318,7 @@ void FitPID::peakMassFit(TString dirName, TH1F* hToFit, Float_t mean, Float_t si
     right->SetLineColor(46);
 
     hToFit->Draw();
-    fitDraw->Draw("same");
+//    fitDraw->Draw("same");
     left->Draw("same");
     right->Draw("same");
     mHeight = funLS->GetParameter(2);

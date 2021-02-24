@@ -10,8 +10,9 @@
 #include "TAxis.h"
 #include "TMultiGraph.h"
 #include "TLegend.h"
+#include "projectFiles.cpp"
 #include <stdio.h>
-
+// this is the best code for efficiency plotting
 using namespace std;
 
 void drawEffPubl(){
@@ -27,82 +28,95 @@ void drawEffPubl(){
     std::vector<const char *> legendStrings;
     Int_t colors[] = {1, 46, 8, 9, 38};
 
-    bool tpc= true;
-    bool pions= true;
+//    bool tpc= true;
+    bool tpc= false;
+//    bool pions= true;
+    bool pions= false;
+    bool compareNhft = false;
 
-    if (tpc){
-        if (pions){
-            inputFiles.push_back("plotPart2/all/pi_tpc_bbc0_950_nHft1_nsigma100.0_tof100.00_pt0.0/rootFiles/results_pipi.root");
-            legendStrings.push_back("part2");
 
-            inputFiles.push_back("plotPart2/hft/pi_tpc_bbc0_950_nHft1_nsigma100.0_tof100000.00_pt0.0/rootFiles/results_pipi.root");
-            legendStrings.push_back("part2 hft");
-        } else { //KAONS
-            inputFiles.push_back("plotPart2/all/tpc_bbc0_950_nHft1_nsigma100.0_tof100.00_pt0.0/rootFiles/results_KK.root");
-            legendStrings.push_back("part2");
+    if (!compareNhft) {
+        if (tpc) {
+            if (pions) {
+                projectFiles("pipi", "plotPart2/all/pi_tpc_bbc0_950_nHft1_nsigma100.0_tof1000000.00_pt0.0/");
+                inputFiles.push_back("plotPart2/all/pi_tpc_bbc0_950_nHft1_nsigma100.0_tof1000000.00_pt0.0/rootFiles/results_pipi.root");
+                legendStrings.push_back("TPC");
 
-            inputFiles.push_back("plotPart2/hft/tpc_bbc0_950_nHft1_nsigma100.0_tof100.00_pt0.0/rootFiles/results_KK.root");
-            legendStrings.push_back("part2 hft");
-        }
-    } else { //TOF
-        if (pions){
-            inputFiles.push_back("plotPart2/all/pi_tofPidEff_bbc0_950_nHft1_nsigma100.0_tof100.00_pt0.0/rootFiles/results_pipi.root");
-            legendStrings.push_back("part2");
+                projectFiles("pipi", "plotPart2/hft/pi_tpc_bbc0_950_nHft1_nsigma100.0_tof1000000.00_pt0.0");
+                inputFiles.push_back("plotPart2/hft/pi_tpc_bbc0_950_nHft1_nsigma100.0_tof1000000.00_pt0.0/rootFiles/results_pipi.root");
+                legendStrings.push_back("TPC, with HFT");
 
-            inputFiles.push_back("plotPart2/hft/pi_tofPidEff_bbc0_950_nHft1_nsigma100.0_tof100000.00_pt0.0/rootFiles/results_pipi.root");
-            legendStrings.push_back("part2 hft");
-        } else { //KAONS
-            inputFiles.push_back("plotPart2/all/tofPidEff_bbc0_950_nHft1_nsigma100.0_tof100.00_pt0.0/rootFiles/results_KK.root");
-            legendStrings.push_back("part2");
+                projectFiles("pipi", "plotPart2/all/pi_tpc_bbc0_950_nHft1_nsigma100.0_tof1000000.00_pt0.0/");
+                inputFiles.push_back("plotPart2/all/pi_tpc_bbc0_950_nHft1_nsigma100.0_tof1000000.00_pt0.0/rootFiles/results_pipi.root");
+                legendStrings.push_back("TPC, without HFT");
 
-            inputFiles.push_back("plotPart2/hft/tofPidEff_bbc0_950_nHft1_nsigma100.0_tof100.00_pt0.0/rootFiles/results_KK.root");
-            legendStrings.push_back("part2 hft");
+            } else { //KAONS
+                inputFiles.push_back("plotPart2/all/tpc_bbc0_950_nHft1_nsigma100.0_tof1000000.00_pt0.0/rootFiles/results_KK.root");
+                legendStrings.push_back("TPC");
+
+                inputFiles.push_back("plotPart2/hft/tpc_bbc0_950_nHft1_nsigma100.0_tof1000000.00_pt0.0/rootFiles/results_KK.root");
+                legendStrings.push_back("TPC, with HFT");
+
+                inputFiles.push_back("plotPart2/nonhft/tpc_bbc0_950_nHft1_nsigma100.0_tof1000000.00_pt0.0/rootFiles/results_KK.root");
+                legendStrings.push_back("TPC, without HFT");
+            }
+        } else { //TOF
+            if (pions) {
+                inputFiles.push_back("plotPart2/all/pi_tofPidEff_bbc0_950_nHft1_nsigma100.0_tof1000000.00_pt0.0/rootFiles/results_pipi.root");
+                legendStrings.push_back("TPC");
+
+                inputFiles.push_back("plotPart2/hft/pi_tofPidEff_bbc0_950_nHft1_nsigma100.0_tof1000000.00_pt0.0/rootFiles/results_pipi.root");
+                legendStrings.push_back("TPC, with HFT");
+
+                inputFiles.push_back("plotPart2/nonhft/pi_tofPidEff_bbc0_950_nHft1_nsigma100.0_tof1000000.00_pt0.0/rootFiles/results_pipi.root");
+                legendStrings.push_back("TPC, without HFT");
+
+            } else { //KAONS
+                inputFiles.push_back("plotPart2/all/tofPidEff_bbc0_950_nHft1_nsigma100.0_tof1000000.00_pt0.0/rootFiles/results_KK.root");
+                legendStrings.push_back("TPC");
+
+                inputFiles.push_back("plotPart2/hft/tofPidEff_bbc0_950_nHft1_nsigma100.0_tof1000000.00_pt0.0/rootFiles/results_KK.root");
+                legendStrings.push_back("TPC, with HFT");
+
+                inputFiles.push_back("plotPart2/nonhft/tofPidEff_bbc0_950_nHft1_nsigma100.0_tof1000000.00_pt0.0/rootFiles/results_KK.root");
+                legendStrings.push_back("TPC, without HFT");
+            }
         }
     }
-//    inputFiles.push_back("/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/pidtest/matchTof_vzDiff6_bbc950_nTof0/rootFiles/results_pipi.root");
-//    inputFiles.push_back("/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/pidtest/matchTOF_VzDiff6_bbc950_ntof0/rootFiles/results_KK.root");
-//    inputFiles.push_back("/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/pidtest/hybridTOF_vzDiff6_bbc950_nTof0/rootFiles/results_KK.root");
-//    legendStrings.push_back("BBC rate < 950 kHz");
 
-//    inputFiles.push_back("/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/pidtest/matchTOF_vzDiff6_bbc800_nTof0/rootFiles/results_pipi.root");
-//    inputFiles.push_back("/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/pidtest/matchTOF_VzDiff6_bbc800_ntof0/rootFiles/results_KK.root");
-//    inputFiles.push_back("/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/pidtest/hybridTOF_vzDiff6_bbc800_nTof0/rootFiles/results_KK.root");
-//    legendStrings.push_back("BBC rate < 800 kHz");
+    if (compareNhft) {
+        if (tpc) {
+            if (pions) {
+                inputFiles.push_back("plotPart2/all/pi_tpc_bbc0_950_nHft-100_nsigma100.0_tof1000000.00_pt0.0/rootFiles/results_pipi.root");
+                legendStrings.push_back("no cut on N_{HFT tracks}");
 
-//    inputFiles.push_back("/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/pidtest/bbc950_nHft0_nsigma1.0_tof0.03_pt0.5/rootFiles/results_KK.root");
-//    inputFiles.push_back("/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/pidtest/bbc950_nHft0_nsigma1.0_tof0.03_pt0.5/rootFiles/results_pipi.root");
-//    inputFiles.push_back("/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/pidtest/tpc_bbc950_nHft0_nsigma3.0_tof0.03_pt0.5/rootFiles/results_pipi.root");
-//    legendStrings.push_back("n#sigma_{TPC}<3 & #Delta1/#beta<0.03");
-//
-//    inputFiles.push_back("/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/pidtest/tpc_bbc950_nHft0_nsigma3.0_tof0.03_pt0.5/rootFiles/results_KK.root");
-//    legendStrings.push_back("no cuts on partner");
+                inputFiles.push_back("plotPart2/all/pi_tpc_bbc0_950_nHft1_nsigma100.0_tof1000000.00_pt0.0/rootFiles/results_pipi.root");
+                legendStrings.push_back("N_{HFT tracks} > 1");
 
+            } else { //KAONS
+                inputFiles.push_back("plotPart2/all/tpc_bbc0_950_nHft-100_nsigma100.0_tof1000000.00_pt0.0/rootFiles/results_KK.root");
+                legendStrings.push_back("no cut on N_{HFT tracks}");
 
+                inputFiles.push_back("plotPart2/all/tpc_bbc0_950_nHft1_nsigma100.0_tof1000000.00_pt0.0/rootFiles/results_KK.root");
+                legendStrings.push_back("N_{HFT tracks} > 1");
+            }
+        } else { //TOF
+            if (pions) {
+                inputFiles.push_back("plotPart2/all/pi_tofPidEff_bbc0_950_nHft1_nsigma100.0_tof1000000.00_pt0.0/rootFiles/results_pipi.root");
+                legendStrings.push_back("TPC");
 
-//    inputFiles.push_back("/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/pidtest/bbc950_nHft0_nsigma2.0_tof0.02_pt0.5/rootFiles/results_pipi.root");
-//    inputFiles.push_back("/home/lukas/work/dmesons/Dmaker_ndAu/Dmaker_dAu/pidtest/bbc950_nHft0_nsigma2.0_tof0.02_pt0.5/rootFiles/results_KK.root");
-//    legendStrings.push_back("n#sigma_{TPC}<2 & #Delta1/#beta<0.02");
+                inputFiles.push_back("plotPart2/all/pi_tofPidEff_bbc0_950_nHft-100_nsigma100.0_tof1000000.00_pt0.0/rootFiles/results_pipi.root");
+                legendStrings.push_back("TPC, with HFT");
 
-//    inputFiles.push_back("hft/tpc_bbc0_950_nHft0_nsigma3.0_tof0.03_pt0.3/rootFiles/results_KK.root");
-//    legendStrings.push_back("hft tpc_bbc0_950_nHft0_nsigma3.0_tof0.03_pt0.3");
-////    legendStrings.push_back("BBC: 0-750 kHz & n#sigma_{TPC}<3 & #Delta1/#beta<0.03");
-//
-//    inputFiles.push_back("all/tpc_bbc0_950_nHft0_nsigma3.0_tof0.03_pt0.3/rootFiles/results_KK.root");
-//    legendStrings.push_back("tpc_bbc0_950_nHft0_nsigma3.0_tof0.03_pt0.3");
-////    legendStrings.push_back("BBC: 750-950 kHz & n#sigma_{TPC}<3 & #Delta1/#beta<0.03");
-//
-//    inputFiles.push_back("all/tpc_bbc0_950_nHft0_nsigma5.0_tof0.03_pt0.3/rootFiles/results_KK.root");
-////    legendStrings.push_back("BBC: 0-950 kHz & n#sigma_{TPC}<3 & #Delta1/#beta<0.03");
-//    legendStrings.push_back("tpc_bbc0_950_nHft0_nsigma5.0_tof0.03_pt0.3");
-//
-//    inputFiles.push_back("all/tpc_bbc0_950_nHft0_nsigma3.0_tof0.03_pt0.0/rootFiles/results_KK.root");
-////    legendStrings.push_back("BBC: 0-950 kHz & n#sigma_{TPC}<3 & #Delta1/#beta<0.03");
-//    legendStrings.push_back("tpc_bbc0_950_nHft0_nsigma3.0_tof0.03_pt0.0");
-//
-//    inputFiles.push_back("plotPart2/tpc_bbc0_950_nHft1_nsigma100.0_tof100.00_pt0.0/rootFiles/results_KK.root");
-//////    legendStrings.push_back("BBC: 0-950 kHz & n#sigma_{TPC}<3 & #Delta1/#beta<0.03");
-//    legendStrings.push_back("part2");
+            } else { //KAONS
+                inputFiles.push_back("plotPart2/all/tofPidEff_bbc0_950_nHft1_nsigma100.0_tof1000000.00_pt0.0/rootFiles/results_KK.root");
+                legendStrings.push_back("TPC");
 
+                inputFiles.push_back("plotPart2/all/tofPidEff_bbc0_950_nHft-100_nsigma100.0_tof1000000.00_pt0.0/rootFiles/results_KK.root");
+                legendStrings.push_back("TPC, with HFT");
+            }
+        }
+    }
 
 
     TString particleShort;
@@ -129,11 +143,11 @@ void drawEffPubl(){
     Float_t min[4];
     Float_t max[4];
     if (tpc){
-        min[0] = 0.5; min[1] = 0.5; min[2]=-0.8; min[3]=0.;
-        max[0] = 1.2; max[1] = 1.2; max[2]=0.8; max[3]=1.5;
+        min[0] = 0.7; min[1] = 0.7; min[2]=-1; min[3]=0.;
+        max[0] = 1.1; max[1] = 1.1; max[2]=1; max[3]=1.5;
     } else {
-        min[0] = 0.5; min[1] = 0.5; min[2]=-0.06; min[3]=0.;
-        max[0] = 1.2; max[1] = 1.2; max[2]=0.06; max[3]=0.06;
+        min[0] = 0.7; min[1] = 0.7; min[2]=-0.04; min[3]=0.;
+        max[0] = 1.1; max[1] = 1.1; max[2]=0.04; max[3]=0.02;
     }
     TFile *in[5];
 
@@ -168,6 +182,7 @@ void drawEffPubl(){
             graphs[i][j]->SetLineColor(colors[j]);
             graphs[i][j]->SetName(Form("%i%i",j,i));
             graphs[i][j]->GetYaxis()->SetRangeUser(min[i],max[i]);
+            graphs[i][j]->GetYaxis()->SetTitleOffset(1.7);
             graphs[i][j]->GetYaxis()->SetTitle(title[i]);
             graphs[i][j]->SetTitle("Kaons");
             if (pions) graphs[i][j]->SetTitle("Pions");

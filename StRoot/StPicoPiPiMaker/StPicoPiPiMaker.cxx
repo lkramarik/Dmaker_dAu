@@ -26,8 +26,12 @@ int StPicoPiPiMaker::InitHF() {
 
     mOutFileBaseName = mOutFileBaseName.ReplaceAll(".root", "");
 
-    TString ntpVars = "pi1_pt:pi1_dca:pi1_nSigma:pi1_nHitFit:pi1_isHft:pi1_eta:pi1_phi:pi1_TOFinvbeta:pi2_pt:pi2_dca:pi2_nSigma:pi2_nHitFit:pi2_isHft:pi2_eta:pi2_phi:pi2_TOFinvbeta:dcaDaughters:hotSpot:primVz:primVzVpd:bbcRate:nTofTracks:nBTOFMatch:nHftTracks:pair_cosTheta:pair_decayL"
-                      ":pair_dcaToPv:pair_pt:pair_mass";
+    TString ntpVars = "pi1_pt:pi1_dca:pi1_nSigmaK:pi1_nSigmaPi:pi1_nHitFit:pi1_isHft:pi1_eta:pi1_phi:pi1_TOFinvbetaK:pi1_TOFinvbetaPi:"
+                      "pi2_pt:pi2_dca:pi2_nSigmaK:pi2_nSigmaPi:pi2_nHitFit:pi2_isHft:pi2_eta:pi2_phi:pi2_TOFinvbetaK:pi2_TOFinvbetaPi:"
+                      "dcaDaughters:"
+                      "hotSpot:primVz:primVzVpd:bbcRate:nTofTracks:nBTOFMatch:nHftTracks:pair_cosTheta:pair_decayL:pair_dcaToPv"
+                      ":pair_pt"
+                      ":pair_mass";
 
     ntp_signal = new TNtuple("ntp_signal","Ks_Signal", ntpVars);
     ntp_background = new TNtuple("ntp_background","Ks_background",ntpVars);
@@ -82,25 +86,30 @@ int StPicoPiPiMaker::createCandidates() {
             bool isKs = false;
             if (pion1->charge()+pion2->charge() == 0) isKs = true;
 
+            const int nNtVars = ntp_signal->GetNvar();
+            float ntVar[nNtVars];
             int ii=0;
-            float ntVar[26];
 
             ntVar[ii++] = pion1->gPt();
             ntVar[ii++] = pair->particle1Dca();
+            ntVar[ii++] = pion1->nSigmaKaon();
             ntVar[ii++] = pion1->nSigmaPion();
             ntVar[ii++] = pion1->nHitsFit();
             ntVar[ii++] = pion1->isHFTTrack();
             ntVar[ii++] = pion1->gMom().PseudoRapidity();
             ntVar[ii++] = pion1->gMom().Phi();
+            ntVar[ii++] = mHFCuts->getOneOverBeta(pion1, mHFCuts->getTofBetaBase(pion1), StPicoCutsBase::kKaon);
             ntVar[ii++] = mHFCuts->getOneOverBeta(pion1, mHFCuts->getTofBetaBase(pion1), StPicoCutsBase::kPion);
 
             ntVar[ii++] = pion2->gPt();
             ntVar[ii++] = pair->particle2Dca();
+            ntVar[ii++] = pion2->nSigmaKaon();
             ntVar[ii++] = pion2->nSigmaPion();
             ntVar[ii++] = pion2->nHitsFit();
             ntVar[ii++] = pion2->isHFTTrack();
             ntVar[ii++] = pion2->gMom().PseudoRapidity();
             ntVar[ii++] = pion2->gMom().Phi();
+            ntVar[ii++] = mHFCuts->getOneOverBeta(pion2, mHFCuts->getTofBetaBase(pion2), StPicoCutsBase::kKaon);
             ntVar[ii++] = mHFCuts->getOneOverBeta(pion2, mHFCuts->getTofBetaBase(pion2), StPicoCutsBase::kPion);
 
             ntVar[ii++] = pair->dcaDaughters();

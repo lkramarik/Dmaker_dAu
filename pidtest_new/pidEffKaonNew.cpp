@@ -35,14 +35,26 @@ void pidEffKaonNew() {
     gROOT->ProcessLine(".L FitPID.c++");
 //    cout<<pidEff(true, 0, 950, 1, 2., 0.02, 0.,"pi1_isHft>-100")<<endl;
 
-    TCut cutHft[] = {"pi1_isHft>-100", "pi1_isHft>0", "pi1_isHft<1"};
-    TString folder[] = {"all", "hft", "nonhft"};
+    TCut cutHft[] = {"pi1_isHft>-100 && pi2_isHft>-100 && pi2_dca<1.",
+                     "pi1_isHft>0 && pi2_isHft>0 && pi2_dca<1.",
+                     "pi1_isHft<1 && pi2_isHft<1 && pi2_dca<1."};
+    TString folder[] = {"all",
+                        "hft",
+                        "nonhft"};
 
     TString dir;
-    dir=pidEff(true, 0, 950, 1, 100, 100, 0., "pi1_isHft>0 && pi2_isHft>0");
-    gSystem->Exec(Form("mv %s plotPart2/", dir.Data()));
-    dir=pidEff(false, 0, 950, 1, 100, 100, 0., "pi1_isHft>0 && pi2_isHft>0");
-    gSystem->Exec(Form("mv %s plotPart2/", dir.Data()));
+    for (int i = 0; i < 3; ++i) {
+        dir=pidEff(true, 0, 950, 1, 100, 1000000, 0., cutHft[i]);
+        gSystem->Exec(Form("mv %s plotPart2/%s", dir.Data(), folder[i].Data()));
+        dir=pidEff(false, 0, 950, 1, 100, 1000000, 0., cutHft[i]);
+        gSystem->Exec(Form("mv %s plotPart2/%s", dir.Data(), folder[i].Data()));
+
+        dir=pidEff(true, 0, 950, -100, 100, 1000000, 0., cutHft[i]);
+        gSystem->Exec(Form("mv %s plotPart2/%s", dir.Data(), folder[i].Data()));
+        dir=pidEff(false, 0, 950, -100, 100, 1000000, 0., cutHft[i]);
+        gSystem->Exec(Form("mv %s plotPart2/%s", dir.Data(), folder[i].Data()));
+
+    }
 
 
 //    for (int i = 0; i < 3; ++i) {
@@ -154,7 +166,7 @@ TString pidEff(bool tofPidEff=true,  int bbcMin=0, int bbcMax=950, int nTof=1, f
     gSystem->Exec(Form("mkdir %s/img/KK/fit", dirName.Data()));
 
     fitmass->setOutputFileName(Form("%s/rootFiles/mass_", dirName.Data()) + pairName + ".root");
-    fitmass->setHeight(15000);
+    fitmass->setHeight(40000);
     TH1F *signal = (TH1F*) fitmass->projectSubtractBckg(dirName, input, 50, massMin, massMax, ptPairMin, ptPairMax, pair, cut + cutPair, "pair_mass", "Mass_{%s} (GeV/c^{2})", true);
     fitmass->peakMassFit(dirName, signal, mean, sigma, massMin, massMax, pair, ptPairMin, ptPairMax, "mass");
     massMean = fitmass->getMean();
@@ -162,6 +174,7 @@ TString pidEff(bool tofPidEff=true,  int bbcMin=0, int bbcMax=950, int nTof=1, f
 
     cut = Form("pair_mass>%.3f && pair_mass<%.3f", massMean-2*massSigma, massMean+2*massSigma);
     if (tofPidEff) cut += "abs(pi1_TOFinvbeta)<93.";
+    if (plotPart2 && tofPidEff) cut+="abs(pi2_TOFinvbeta)<93.";
 
     fitmass->makeTuple(input, cut+cutPair, plotPart2);
     Int_t nBinsInFit = 25;

@@ -28,7 +28,10 @@ int StPicoKKMaker::InitHF() {
 
     mOutList->Add(new TH2F("hPVxy","hPVxy", 100, -6, 6, 100, -6, 6));
 
-    TString ntpVars = "pi1_pt:pi1_dca:pi1_nSigma:pi1_nHitFit:pi1_isHft:pi1_eta:pi1_phi:pi1_TOFinvbeta:pi2_pt:pi2_dca:pi2_nSigma:pi2_nHitFit:pi2_isHft:pi2_eta:pi2_phi:pi2_TOFinvbeta:dcaDaughters:hotSpot:primVz:primVzVpd:bbcRate:nTofTracks:nBTOFMatch:nHftTracks:pair_cosTheta:pair_decayL:pair_dcaToPv"
+    TString ntpVars = "pi1_pt:pi1_dca:pi1_nSigmaK:pi1_nSigmaPi:pi1_nHitFit:pi1_isHft:pi1_eta:pi1_phi:pi1_TOFinvbetaK:pi1_TOFinvbetaPi:"
+                      "pi2_pt:pi2_dca:pi2_nSigmaK:pi2_nSigmaPi:pi2_nHitFit:pi2_isHft:pi2_eta:pi2_phi:pi2_TOFinvbetaK:pi2_TOFinvbetaPi:"
+                      "dcaDaughters:"
+                      "hotSpot:primVz:primVzVpd:bbcRate:nTofTracks:nBTOFMatch:nHftTracks:pair_cosTheta:pair_decayL:pair_dcaToPv"
                       ":pair_pt"
                       ":pair_mass";
 
@@ -85,25 +88,31 @@ int StPicoKKMaker::createCandidates() {
             bool isPhi = false;
             if (kaon1->charge()+kaon2->charge() == 0) isPhi = true;
 
+            const int nNtVars = ntp_signal->GetNvar();
+            float ntVar[nNtVars];
             int ii=0;
-            float ntVar[26];
+
             ntVar[ii++] = kaon1->gPt();
             ntVar[ii++] = pair->particle1Dca();
             ntVar[ii++] = kaon1->nSigmaKaon();
+            ntVar[ii++] = kaon1->nSigmaPion();;
             ntVar[ii++] = kaon1->nHitsFit();
             ntVar[ii++] = kaon1->isHFTTrack();
             ntVar[ii++] = kaon1->gMom().PseudoRapidity();
             ntVar[ii++] = kaon1->gMom().Phi();
             ntVar[ii++] = mHFCuts->getOneOverBeta(kaon1, mHFCuts->getTofBetaBase(kaon1), StPicoCutsBase::kKaon);
+            ntVar[ii++] = mHFCuts->getOneOverBeta(kaon1, mHFCuts->getTofBetaBase(kaon1), StPicoCutsBase::kPion);
 
             ntVar[ii++] = kaon2->gPt();
             ntVar[ii++] = pair->particle2Dca();
             ntVar[ii++] = kaon2->nSigmaKaon();
+            ntVar[ii++] = kaon2->nSigmaPion();;
             ntVar[ii++] = kaon2->nHitsFit();
             ntVar[ii++] = kaon2->isHFTTrack();
             ntVar[ii++] = kaon2->gMom().PseudoRapidity();
             ntVar[ii++] = kaon2->gMom().Phi();
             ntVar[ii++] = mHFCuts->getOneOverBeta(kaon2, mHFCuts->getTofBetaBase(kaon2), StPicoCutsBase::kKaon);
+            ntVar[ii++] = mHFCuts->getOneOverBeta(kaon2, mHFCuts->getTofBetaBase(kaon2), StPicoCutsBase::kPion);
 
             ntVar[ii++] = pair->dcaDaughters();
             ntVar[ii++] = hotSpot;
