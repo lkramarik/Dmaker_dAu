@@ -28,8 +28,8 @@ int StPicoKKMaker::InitHF() {
 
     mOutList->Add(new TH2F("hPVxy","hPVxy", 100, -6, 6, 100, -6, 6));
 
-    TString ntpVars = "pi1_pt:pi1_dca:pi1_nSigmaK:pi1_nSigmaPi:pi1_nHitFit:pi1_isHft:pi1_eta:pi1_phi:pi1_TOFinvbetaK:pi1_TOFinvbetaPi:"
-                      "pi2_pt:pi2_dca:pi2_nSigmaK:pi2_nSigmaPi:pi2_nHitFit:pi2_isHft:pi2_eta:pi2_phi:pi2_TOFinvbetaK:pi2_TOFinvbetaPi:"
+    TString ntpVars = "pi1_charge:pi1_pt:pi1_dca:pi1_nSigmaK:pi1_nSigmaPi:pi1_nHitFit:pi1_isHft:pi1_eta:pi1_phi:pi1_TOFinvbetaK:pi1_TOFinvbetaPi:"
+                      "pi2_charge:pi2_pt:pi2_dca:pi2_nSigmaK:pi2_nSigmaPi:pi2_nHitFit:pi2_isHft:pi2_eta:pi2_phi:pi2_TOFinvbetaK:pi2_TOFinvbetaPi:"
                       "dcaDaughters:"
                       "hotSpot:primVz:primVzVpd:bbcRate:nTofTracks:nBTOFMatch:nHftTracks:pair_cosTheta:pair_decayL:pair_dcaToPv"
                       ":pair_pt"
@@ -92,6 +92,7 @@ int StPicoKKMaker::createCandidates() {
             float ntVar[nNtVars];
             int ii=0;
 
+            ntVar[ii++] = kaon1->charge();
             ntVar[ii++] = kaon1->gPt();
             ntVar[ii++] = pair->particle1Dca();
             ntVar[ii++] = kaon1->nSigmaKaon();
@@ -103,6 +104,7 @@ int StPicoKKMaker::createCandidates() {
             ntVar[ii++] = mHFCuts->getOneOverBeta(kaon1, mHFCuts->getTofBetaBase(kaon1), StPicoCutsBase::kKaon);
             ntVar[ii++] = mHFCuts->getOneOverBeta(kaon1, mHFCuts->getTofBetaBase(kaon1), StPicoCutsBase::kPion);
 
+            ntVar[ii++] = kaon2->charge();
             ntVar[ii++] = kaon2->gPt();
             ntVar[ii++] = pair->particle2Dca();
             ntVar[ii++] = kaon2->nSigmaKaon();

@@ -26,13 +26,12 @@ int StPicoPiPiMaker::InitHF() {
 
     mOutFileBaseName = mOutFileBaseName.ReplaceAll(".root", "");
 
-    TString ntpVars = "pi1_pt:pi1_dca:pi1_nSigmaK:pi1_nSigmaPi:pi1_nHitFit:pi1_isHft:pi1_eta:pi1_phi:pi1_TOFinvbetaK:pi1_TOFinvbetaPi:"
-                      "pi2_pt:pi2_dca:pi2_nSigmaK:pi2_nSigmaPi:pi2_nHitFit:pi2_isHft:pi2_eta:pi2_phi:pi2_TOFinvbetaK:pi2_TOFinvbetaPi:"
+    TString ntpVars = "pi1_charge:pi1_pt:pi1_dca:pi1_nSigmaK:pi1_nSigmaPi:pi1_nHitFit:pi1_isHft:pi1_eta:pi1_phi:pi1_TOFinvbetaK:pi1_TOFinvbetaPi:"
+                      "pi2_charge:pi2_pt:pi2_dca:pi2_nSigmaK:pi2_nSigmaPi:pi2_nHitFit:pi2_isHft:pi2_eta:pi2_phi:pi2_TOFinvbetaK:pi2_TOFinvbetaPi:"
                       "dcaDaughters:"
                       "hotSpot:primVz:primVzVpd:bbcRate:nTofTracks:nBTOFMatch:nHftTracks:pair_cosTheta:pair_decayL:pair_dcaToPv"
                       ":pair_pt"
                       ":pair_mass";
-
     ntp_signal = new TNtuple("ntp_signal","Ks_Signal", ntpVars);
     ntp_background = new TNtuple("ntp_background","Ks_background",ntpVars);
 
@@ -90,6 +89,7 @@ int StPicoPiPiMaker::createCandidates() {
             float ntVar[nNtVars];
             int ii=0;
 
+            ntVar[ii++] = pion1->charge();
             ntVar[ii++] = pion1->gPt();
             ntVar[ii++] = pair->particle1Dca();
             ntVar[ii++] = pion1->nSigmaKaon();
@@ -101,6 +101,7 @@ int StPicoPiPiMaker::createCandidates() {
             ntVar[ii++] = mHFCuts->getOneOverBeta(pion1, mHFCuts->getTofBetaBase(pion1), StPicoCutsBase::kKaon);
             ntVar[ii++] = mHFCuts->getOneOverBeta(pion1, mHFCuts->getTofBetaBase(pion1), StPicoCutsBase::kPion);
 
+            ntVar[ii++] = pion2->charge();
             ntVar[ii++] = pion2->gPt();
             ntVar[ii++] = pair->particle2Dca();
             ntVar[ii++] = pion2->nSigmaKaon();
