@@ -55,9 +55,9 @@ void runPicoK0sAnaMaker(
     hfCuts->setCutDcaMin(0.008,StHFCuts::kPion);
 
     float dcaDaughtersMax = 0.6;  // maximum toto ide
-    float decayLengthMin  = 0.1; // minimum
+    float decayLengthMin  = 0.5; // minimum
     float decayLengthMax  = 6;  //
-    float cosThetaMin     = 0.3;   // minimum
+    float cosThetaMin     = 0.7;   // minimum
     float minMass         = 0.42;
     float maxMass         = 0.58;
     float pairDcaMax      = 0.9;
