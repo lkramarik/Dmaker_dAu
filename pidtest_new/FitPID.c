@@ -330,7 +330,6 @@ void FitPID::peakMassFit(TString dirName, TH1F* hToFit, Float_t mean, Float_t si
     c->SaveAs(Form("./%s/img/%s/fit/%s_%.3f_%.3f.png", dirName.Data(), pair.Data(), varName.Data(), ptmin, ptmax));
     c->Close();
 }
-
 //______________________________________________________________________________________________________________________________________________________
 void FitPID::makeTuple(TString input, TCut cuts, bool plot2Part){
     TFile* data = new TFile(input ,"r");
@@ -374,3 +373,52 @@ void FitPID::makeTuple(TString input, TCut cuts, bool plot2Part){
     fileOut->Close();
     data->Close();
 }
+////______________________________________________________________________________________________________________________________________________________
+//void FitPID::makeTuple(TString input, TCut cuts, bool plot2Part){
+//    TFile* data = new TFile(input ,"r");
+//    TNtuple* ntp[2] = {(TNtuple*)data -> Get("ntp_background"), (TNtuple*)data -> Get("ntp_signal")};
+//    TString outVars = "pi1_pt:pi1_nSigmaK:pi1_nSigmaPi:pi1_TOFinvbetaK:pi1_TOFinvbetaPi:bbcRate:nTofTracks:pi1_isHft";
+//    TFile *fileOut = new TFile(input+".cutted.root", "RECREATE");
+//    cout<<"Smaller nTuple: "<<cuts<<endl;
+//    TNtuple* ntpOut[2] = {new TNtuple("ntp_background","ntp_background",outVars), new TNtuple("ntp_signal","ntp_signal",outVars)};
+//
+//    Float_t pi1_pt, pi1_nSigmaK, pi1_nSigmaPi, pi1_TOFinvbetaK, pi1_TOFinvbetaPi;
+//    Float_t pi2_pt, pi2_nSigmaK, pi2_nSigmaPi, pi2_TOFinvbetaK, pi2_TOFinvbetaPi, bbcRate, nTofTracks, pi1_isHft, pi2_isHft;
+//
+//    Long64_t indexCut;
+//    for (int j = 0; j < 2; ++j) {
+//        ntp[j]->Draw(">>elist",cuts);
+//        TEventList *elist = (TEventList*)gDirectory->Get("elist");
+//        ntp[j]->SetBranchAddress("pi1_pt", &pi1_pt);
+//        ntp[j]->SetBranchAddress("pi1_nSigmaK", &pi1_nSigmaK);
+//        ntp[j]->SetBranchAddress("pi1_nSigmaPi", &pi1_nSigmaPi);
+//        ntp[j]->SetBranchAddress("pi1_isHft", &pi1_isHft);
+//        ntp[j]->SetBranchAddress("pi1_TOFinvbetaK", &pi1_TOFinvbetaK);
+//        ntp[j]->SetBranchAddress("pi1_TOFinvbetaPi", &pi1_TOFinvbetaPi);
+//
+//        ntp[j]->SetBranchAddress("pi2_pt", &pi2_pt);
+//        ntp[j]->SetBranchAddress("pi2_nSigmaK", &pi2_nSigmaK);
+//        ntp[j]->SetBranchAddress("pi2_nSigmaPi", &pi2_nSigmaPi);
+//        ntp[j]->SetBranchAddress("pi2_isHft", &pi2_isHft);
+//        ntp[j]->SetBranchAddress("pi2_TOFinvbetaK", &pi2_TOFinvbetaK);
+//        ntp[j]->SetBranchAddress("pi2_TOFinvbetaPi", &pi2_TOFinvbetaPi);
+//
+//        ntp[j]->SetBranchAddress("bbcRate", &bbcRate);
+//        ntp[j]->SetBranchAddress("nTofTracks", &nTofTracks);
+//
+//        ntp[j]->SetEventList(elist);
+//        cout<<elist->GetN()<<endl;
+//
+//        for (int i = 0; i < elist->GetN(); ++i) {
+//            indexCut = elist->GetEntry(i);
+//            ntp[j]->GetEntry(indexCut);
+//            ntpOut[j]->Fill(pi1_pt, pi1_nSigmaK, pi1_nSigmaPi, pi1_TOFinvbetaK, pi1_TOFinvbetaPi, bbcRate, nTofTracks, pi1_isHft);
+//            if(plot2Part) ntpOut[j]->Fill(pi2_pt, pi2_nSigmaK, pi2_nSigmaPi, pi2_TOFinvbetaK, pi2_TOFinvbetaPi, bbcRate, nTofTracks, pi2_isHft);
+//        }
+//    }
+//    fileOut->cd();
+//    ntpOut[0]->Write(ntpOut[0]->GetName(), TObject::kOverwrite);
+//    ntpOut[1]->Write(ntpOut[1]->GetName(), TObject::kOverwrite);
+//    fileOut->Close();
+//    data->Close();
+//}
