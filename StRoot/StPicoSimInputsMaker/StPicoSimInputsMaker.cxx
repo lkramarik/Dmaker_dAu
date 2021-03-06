@@ -82,7 +82,7 @@ int StPicoSimInputsMaker::createQA(){
         if (trk->isTofTrack()) nTofTracks++;
     }
 
-    if (nHftTracks<2) return 0;
+//    if (nHftTracks<2) return 0;
 //    if (nTofTracks<2) return 0;
 
     for (unsigned int iTrack = 0; iTrack < nTracks; ++iTrack) {
@@ -148,7 +148,7 @@ int StPicoSimInputsMaker::createQA(){
             }
         }
 
-        if (vars::fillNtp && (tpcPion || tpcKaon)) {
+        if (vars::fillNtp && (tpcPion || tpcKaon) && (abs(dca)<1.5)) {
             Float_t isHft=-1, isPrimaryTrk=-1;
             Float_t invBetaKaon=mHFCuts->getOneOverBeta(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon);
             Float_t invBetaPion=mHFCuts->getOneOverBeta(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kPion);
