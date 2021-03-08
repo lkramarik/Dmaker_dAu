@@ -149,11 +149,13 @@ int StPicoSimInputsMaker::createQA(){
         }
 
         if (vars::fillNtp && (tpcPion || tpcKaon) && (abs(dca)<1.5)) {
-            Float_t isHft=-1, isPrimaryTrk=-1;
+            Float_t isHft=-1, isPrimaryTrk=-1, hasHftHit=-1;
             Float_t invBetaKaon=mHFCuts->getOneOverBeta(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon);
             Float_t invBetaPion=mHFCuts->getOneOverBeta(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kPion);
             Float_t nSigmaPion=trk->nSigmaPion();
             Float_t nSigmaKaon=trk->nSigmaKaon();
+
+            if (trk->hasPxl1Hit() || trk->hasPxl2Hit() || trk->hasIstHit() || trk->hasSstHit()) hasHftHit=1;
 
             if (trk->isHFTTrack()) isHft=1.;
             if (trk->isPrimary()) isPrimaryTrk=1.;
@@ -172,6 +174,7 @@ int StPicoSimInputsMaker::createQA(){
             ntVar[ii++]=eta;
             ntVar[ii++]=phi;
             ntVar[ii++]=isHft;
+            ntVar[ii++]=hasHftHit;
             ntVar[ii++]=nSigmaPion;
             ntVar[ii++]=nSigmaKaon;
             ntVar[ii++]=invBetaPion;
@@ -234,7 +237,7 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
 
     if(vars::fillNtp) {
         mOutFileTuple->cd();
-        ntp_tracks = new TNtuple("ntp_tracks","ntp_tracks", "runId:eventId:pt:dca:dcaXy:dcaZ:eta:phi:isHft:nSigmaPion:nSigmaKaon:invBetaPion:invBetaKaon:isPrimaryTrk:nHitsFitTrk:multiplicity:nHftTracks:nTofTracks");
+        ntp_tracks = new TNtuple("ntp_tracks","ntp_tracks", "runId:eventId:pt:dca:dcaXy:dcaZ:eta:phi:isHft:hasHftHit:nSigmaPion:nSigmaKaon:invBetaPion:invBetaKaon:isPrimaryTrk:nHitsFitTrk:multiplicity:nHftTracks:nTofTracks");
     }
 
     if(vars::ratioHists) {
