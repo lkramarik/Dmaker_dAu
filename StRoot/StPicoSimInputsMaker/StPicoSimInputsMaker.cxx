@@ -88,7 +88,7 @@ int StPicoSimInputsMaker::createQA(){
     for (unsigned int iTrack = 0; iTrack < nTracks; ++iTrack) {
         StPicoTrack const* trk = mPicoDst->track(iTrack);
         if (!trk) continue;
-        if (!(trk->isPrimary())) continue;
+//        if (!(trk->isPrimary())) continue;
 
         StPicoPhysicalHelix helix = trk->helix(mBField);
         TVector3 momentum = trk->gMom(mPrimVtx, mBField);
@@ -148,7 +148,8 @@ int StPicoSimInputsMaker::createQA(){
             }
         }
 
-        if (vars::fillNtp && (tpcPion || tpcKaon) && (abs(dca)<1.5)) {
+//        if (vars::fillNtp && (tpcPion || tpcKaon) && (abs(dca)<1.5)) {
+        if (vars::fillNtp &&  (abs(dca)<1.5)) {
             Float_t isHft=-1, isPrimaryTrk=-1, hasHftHit=-1;
             Float_t invBetaKaon=mHFCuts->getOneOverBeta(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon);
             Float_t invBetaPion=mHFCuts->getOneOverBeta(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kPion);
