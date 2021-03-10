@@ -149,7 +149,7 @@ int StPicoSimInputsMaker::createQA(){
         }
 
 //        if (vars::fillNtp && (tpcPion || tpcKaon) && (abs(dca)<1.5)) {
-        if (vars::fillNtp &&  (abs(dca)<1.5)) {
+        if (vars::fillNtp) {
             Float_t isHft=-1, isPrimaryTrk=-1, hasHftHit=-1;
             Float_t invBetaKaon=mHFCuts->getOneOverBeta(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kKaon);
             Float_t invBetaPion=mHFCuts->getOneOverBeta(trk, mHFCuts->getTofBetaBase(trk), StPicoCutsBase::kPion);
