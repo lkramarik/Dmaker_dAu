@@ -258,7 +258,7 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
 
     if(vars::fillNtp) {
         mOutFileTuple->cd();
-        ntp_tracks = new TNtuple("ntp_tracks","ntp_tracks", "runId:eventId:pt:dca:dcaXy:dcaZ:eta:phi:isHft:hasHftHit:nSigmaPion:nSigmaKaon:invBetaPion:invBetaKaon:isPrimaryTrk:nHitsFitTrk:multiplicity:nHftTracks:nTofTracks");
+        ntp_tracks = new TNtuple("ntp_tracks","ntp_tracks", "runId:eventId:pt:dca:dcaXy:dcaZ:eta:phi:isHft:hasHftHit:nSigmaPion:nSigmaKaon:invBetaPion:invBetaKaon:isPrimaryTrk:nHitsFitTrk:multiplicity:nHftTracks:nTofTracks:bbc");
     }
 
     if(vars::ratioHists) {
