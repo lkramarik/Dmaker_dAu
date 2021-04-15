@@ -89,6 +89,9 @@ private:
     TH1D* h1Tofmatch[vars::m_nParticlesCharged][3];
     TH1D* h1TofmatchTOF[vars::m_nParticlesCharged][3];
 
+    TH2D* h2TofmatchBBCPt[vars::m_nParticlesCharged][3];
+    TH2D* h2TofmatchBBCPt_TOF[vars::m_nParticlesCharged][3];
+
     //HFT Dca
     TH2F* mh3DcaXyZPtCentPartEtaVzPhi[vars::m_nParticles][vars::m_nEtasDca][vars::m_nVzsDca][vars::m_nmultEdge][vars::m_nPtsDca];
 

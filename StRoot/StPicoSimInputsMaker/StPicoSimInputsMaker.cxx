@@ -65,6 +65,7 @@ int StPicoSimInputsMaker::createQA(){
     unsigned int nTracks = mPicoDst->numberOfTracks();
     int multiplicity = mPicoDst->event()->refMult();
     Float_t zdc = mPicoDst->event()->ZDCx()/1000.;
+    Float_t bbc = mPicoDst->event()->BBCx()/1000.;
     if (zdc > 185) return 0;
     int ZdcIndex = getZdcIndex(zdc);
     if (ZdcIndex==-1) return 0;
@@ -137,15 +138,26 @@ int StPicoSimInputsMaker::createQA(){
             int charge = trk->charge();
             for (int i = 0; i < 3; ++i) {
                 int iCharge = (charge > 0) ? 0 : 1;
+
+//                pions:
                 if (abs(trk->nSigmaPion()) < i + 1) {
-                    if (tofMatched) { h1TofmatchTOF[iCharge][i]->Fill(momentum.Perp()); }
+                    if (tofMatched) {
+                        h1TofmatchTOF[iCharge][i]->Fill(momentum.Perp());
+                        h2TofmatchBBCPt_TOF[iCharge][i]->Fill(momentum.Perp(), bbc);
+                    }
                     h1Tofmatch[iCharge][i]->Fill(momentum.Perp());
+                    h2TofmatchBBCPt[iCharge][i]->Fill(momentum.Perp(), bbc);
                 }
 
+                //kaons:
                 iCharge += 2;
                 if (abs(trk->nSigmaKaon()) < i + 1) {
-                    if (tofMatched) { h1TofmatchTOF[iCharge][i]->Fill(momentum.Perp()); }
+                    if (tofMatched) {
+                        h1TofmatchTOF[iCharge][i]->Fill(momentum.Perp());
+                        h2TofmatchBBCPt_TOF[iCharge][i]->Fill(momentum.Perp(), bbc);
+                    }
                     h1Tofmatch[iCharge][i]->Fill(momentum.Perp());
+                    h2TofmatchBBCPt[iCharge][i]->Fill(momentum.Perp(), bbc);
                 }
             }
         }
@@ -186,6 +198,7 @@ int StPicoSimInputsMaker::createQA(){
             ntVar[ii++]=multiplicity;
             ntVar[ii++]=nHftTracks;
             ntVar[ii++]=nTofTracks;
+            ntVar[ii++]=bbc;
             ntp_tracks->Fill(ntVar);
         }
 
@@ -232,8 +245,14 @@ void StPicoSimInputsMaker::histoInit(TString fileBaseName, bool fillQaHists) {
             hisName=Form("h1_Tofmatch_tpc_%s_nsigma%d", vars::m_ParticleChargedName[iParticle].Data(), nsigma+1);
             h1Tofmatch[iParticle][nsigma] = new TH1D(hisName, hisName, 1000, 0.15, 10.15);
 
+            hisName=Form("h2_Tofmatch_tpc_bbc_pt_%s_nsigma%d", vars::m_ParticleChargedName[iParticle].Data(), nsigma+1);
+            h2TofmatchBBCPt[iParticle][nsigma] = new TH2D(hisName, hisName, 1000, 0.15, 10.15, 1000, 0., 1000.);
+
             hisName=Form("h1_Tofmatch_tof_%s_nsigma%d", vars::m_ParticleChargedName[iParticle].Data(), nsigma+1);
             h1TofmatchTOF[iParticle][nsigma] = new TH1D(hisName, hisName, 1000, 0.15, 10.15);
+
+            hisName=Form("h2_Tofmatch_tof_bbc_pt_%s_nsigma%d", vars::m_ParticleChargedName[iParticle].Data(), nsigma+1);
+            h2TofmatchBBCPt_TOF[iParticle][nsigma] = new TH2D(hisName, hisName, 1000, 0.15, 10.15, 1000, 0., 1000.);
         }
     }
 
@@ -480,6 +499,10 @@ void StPicoSimInputsMaker::closeFile()
         for (int nsigma = 0; nsigma < 3; ++nsigma) {
             h1Tofmatch[iParticle][nsigma] -> Write();
             h1TofmatchTOF[iParticle][nsigma] -> Write();
+            h2TofmatchBBCPt[iParticle][nsigma] -> Write();
+            h2TofmatchBBCPt_TOF[iParticle][nsigma] -> Write();
+
+
         }
     }
     mOutFileTOFRatio->Close();
