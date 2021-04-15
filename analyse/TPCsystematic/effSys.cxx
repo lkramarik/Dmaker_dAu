@@ -18,6 +18,7 @@
 #include"TFitResultPtr.h"
 #include"TFitResult.h"
 #include"TString.h"
+#include"TSystem.h"
 
 using namespace std;
 //const int nmultEdge = 4;
@@ -26,7 +27,7 @@ using namespace std;
 const int nmultEdge = 1;
 float const multEdge[nmultEdge+1] = {0, 200};
 
-Float_t ptBins[]={0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.65, 0.75, 0.85, 0.95, 1.2, 1.45, 1.7, 2.0, 2.3, 2.6, 2.9, 3.2, 3.5, 4., 4.5, 5};
+Float_t ptBins[]={0.15, 0.25, 0.35, 0.45, 0.55, 0.75, 1.05, 1.45, 1.85, 2.3, 2.8, 3.3, 4., 5., 10.};
 
 //Float_t maxDCA=3.0;
 Float_t maxDCA=1.5;
@@ -41,7 +42,7 @@ TH1F* makeRatioPlot(TH1F** histoArray, TString histoName);
 void setHistoStyle(TH1F* histo, Int_t color, Int_t marker, TString titleX, TString titleY);
 //void makeSpline(TGraph* gr);
 TGraph* makeSpline(TGraph* gr);
-
+void mergeImages();
 //________________________________________________________________________________________
 void effSys(){
     bool plotting= true;
@@ -58,8 +59,8 @@ void effSys(){
         fileNames[0]=makeHistosMC("/home/lukas/work/embedding_dAu/analyse/ntp.2303.all.root", particles[iPart]);
         fileNames[1]=makeHistosData("ntp.trk.0903.smaller.root", particles[iPart]);
 
-        int  color[] = {1, kMagenta+2};
-
+        int  color[] = {kBlue+2, kRed+2};
+        int style[] = {20,21};
 
         TString legendNames[]={"embedding", "data"};
         TString legendTitle[]={"w/o HFT hits: DCA<1. / DCA<1.5", "w/o HFT hits: nHitsFit>20 / nHitsFit>15",
@@ -80,7 +81,8 @@ void effSys(){
 
         TLegend *legend[nVars];
         TLegend *legendOne;
-        legendOne=new TLegend(0.596,0.114, 0.76, 0.312,"","brNDC");
+        legendOne=new TLegend(0.2, 0.1,"","brNDC");
+//        legendOne=new TLegend(0.596,0.114, 0.76, 0.312,"","brNDC");
         legendOne->SetFillStyle(0);
         legendOne->SetLineColor(0);
         legendOne->SetTextSize(0.035);
@@ -100,7 +102,7 @@ void effSys(){
                 cout<<tmpName<<endl;
                 hRatio[iVar][iFile] = (TH1F*)fIn->Get(tmpName);
 
-                setHistoStyle(hRatio[iVar][iFile], color[iFile], 20, "p_{T} [GeV/c]", "Ratio");
+                setHistoStyle(hRatio[iVar][iFile], color[iFile], style[iFile], "p_{T} [GeV/c]", "Ratio");
                 hRatio[iVar][iFile]->GetXaxis()->SetRangeUser(0.2, 5.);
                 hRatio[iVar][iFile]->GetYaxis()->SetRangeUser(0.5, 1.1);
                 hRatio[iVar][iFile]->SetTitle("");
@@ -111,7 +113,7 @@ void effSys(){
                 for (int iPt = 0; iPt < nPoints-1; ++iPt) {
                     tmpName=Form("%s_%.2f_%.2f", varNames[iVar].Data(), ptBins[iPt], ptBins[iPt+1]);
                     h[iVar][iFile][iPt] = (TH1F*)fIn->Get(tmpName);
-                    setHistoStyle(h[iVar][iFile][iPt], color[iFile], 20, varNamesAxis[iVar], "Counts");
+                    setHistoStyle(h[iVar][iFile][iPt], color[iFile], style[iFile], varNamesAxis[iVar], "Counts");
                 }
             }
 
@@ -157,7 +159,7 @@ void effSys(){
             c1[iVar] = new TCanvas(tmpName, tmpName, 900, 1100);
             gPad->SetLeftMargin(0.15);
             gPad->SetRightMargin(0.05);
-            rp[iVar] = new TRatioPlot(hRatio[iVar][1], hRatio[iVar][0]);
+            rp[iVar] = new TRatioPlot(hRatio[iVar][1], hRatio[iVar][0], "divsym");
             rp[iVar] -> SetH1DrawOpt("E");
             rp[iVar] -> SetH2DrawOpt("E");
             rp[iVar] -> SetGraphDrawOpt("EP");
@@ -166,8 +168,11 @@ void effSys(){
 
             //Y:
             rp[iVar] -> GetLowerRefYaxis() -> SetTitle("Data/Embedding");
-//        rp[iVar] -> GetLowerRefGraph() -> SetMinimum(0.75);
-//        rp[iVar] -> GetLowerRefGraph() -> SetMaximum(1.25);
+            rp[iVar] -> GetLowerRefGraph() -> SetMinimum(0.8);
+            rp[iVar] -> GetLowerRefGraph() -> SetMaximum(1.1);
+            rp[iVar] -> GetLowerRefGraph() -> SetMarkerColor(1);
+            rp[iVar] -> GetLowerRefGraph() -> SetMarkerStyle(1);
+            rp[iVar] -> GetLowerRefGraph() -> SetLineColor(1);
             rp[iVar] -> GetLowerRefYaxis() -> CenterTitle(kTRUE);
             rp[iVar] -> GetLowerRefYaxis() -> SetLabelSize(0.04);
             rp[iVar] -> GetLowerRefYaxis() -> SetTitleSize(0.045);
@@ -183,7 +188,7 @@ void effSys(){
             rp[iVar] -> GetUpperPad() -> cd();
             gPad->SetGrid();
 
-            legend[iVar]->SetHeader(particles[iPart]+" "+legendTitle[iVar]);
+            legend[iVar]->SetHeader(particles[iPart]+", "+legendTitle[iVar]);
             legend[iVar]->Draw("same");
 
             rp[iVar] -> GetLowerPad() -> SetMargin(0.15,0.05,0.13,0.08);
@@ -217,12 +222,13 @@ void effSys(){
 //        grLowRefSpline[iVar]->SetName(tmpName);
             rp[iVar] -> GetLowerPad() -> cd();
             gPad->SetGrid();
-            grLowRefSpline[iVar]->Draw("lsame");
 
             tmpName="img/"+(TString)c1[iVar]->GetTitle();
             c1[iVar]->SaveAs(tmpName+".png");
         }
     }
+
+    mergeImages();
 
 }
 
@@ -296,7 +302,6 @@ TString makeHistosMC(TString inputFile, TString particle){
 
         for (Long64_t i = iTrack - nMcTracks; i < iTrack; i++) {
             tree->GetEntry(i);
-            if (!(startVtxX==vx && startVtxY==vy && startVtxZ==vz)) continue;
 
             if (abs(eta) > 1.) continue; //eta of MC track
             if (abs(gEta) > 1.) continue;
@@ -436,8 +441,8 @@ TString makeHistosData(TString inputFile, TString particle){
 
     int iTrack = 0;
 
-//    for (Long64_t i=0; i < nEntries; i++) {
-    for (Long64_t i=0; i < nEntries/10; i++) {
+    for (Long64_t i=0; i < nEntries; i++) {
+//    for (Long64_t i=0; i < nEntries/10; i++) {
         tree->GetEntry(i);
         if (TMath::Abs(eta) > 1) continue;
 
@@ -590,7 +595,7 @@ TString makeHistosData(TString inputFile, TString particle){
 
 //________________________________________________________________________________________
 int getPtBin(float pt, int nPtBins){
-    for (int i = 0; i < nPtBins-1; i++){
+    for (int i = 0; i < nPtBins; i++){
         if ((pt >= ptBins[i]) && (pt < ptBins[i+1]))
             return i;
     }
@@ -687,7 +692,6 @@ void setHistoStyle(TH1F* histo, Int_t color, Int_t marker, TString titleX, TStri
 }
 
 //___________________________________--
-//void makeSpline(TGraph* gr) {
 TGraph* makeSpline(TGraph* gr) {
     const int nPtPoints=100;
     TGraph *grOut = new TGraph();
@@ -700,4 +704,62 @@ TGraph* makeSpline(TGraph* gr) {
     }
     return grOut;
 //    return;
+}
+
+//___________________________________--
+void mergeImages() {
+    int nPoints = sizeof(ptBins) / sizeof(Float_t);
+    cout << nPoints << endl;
+
+    TString variables[] = {"dca", "dca_all", "dca_hft",
+                           "nHitsFit", "nHitsFit_all", "nHitsFit_hft"};
+    TString folders[] = {"img/kaon", "img/pion"};
+    TString command = "convert +append ";
+    TString commandHor = "convert -append ";
+    TString commandCycle, commandHorCycle;
+
+
+
+    int nMax=nPoints-3;
+    for (int iFol = 0; iFol < 2; ++iFol) {
+        for (int iVar = 0; iVar < 6; ++iVar) {
+            int nVertical = 4;
+            int nHorizontal = 2;
+            int nVerTmp = 0;
+            int nHorImages = 0;
+            int nVerImages = 0;
+
+            commandCycle = command;
+            commandHorCycle = commandHor;
+
+            for (int i = 0; i < nMax; ++i) {
+                commandCycle += Form("%s/%s_%.2f_%.2f.png ", folders[iFol].Data(), variables[iVar].Data(), ptBins[i], ptBins[i + 1]);
+                nVerTmp++;
+
+                if ((nVerTmp == nVertical) || (nMax-1==i)) {
+                    commandCycle += Form("%s/merges/%s_ver%i.png", folders[iFol].Data(), variables[iVar].Data(), nVerImages);
+
+                    cout << commandCycle << endl;
+
+                    gSystem->Exec(Form("%s", commandCycle.Data()));
+
+                    commandHorCycle += Form("%s/merges/%s_ver%i.png ", folders[iFol].Data(), variables[iVar].Data(), nVerImages);
+
+                    nVerTmp = 0;
+                    nVerImages++;
+                    commandCycle = command;
+
+                    if ((nVerImages > 0) && (nVerImages % nHorizontal == 0)) {
+                        commandHorCycle += Form("%s/merges/%s_%i.png ", folders[iFol].Data(), variables[iVar].Data(), nHorImages);
+                        gSystem->Exec(Form("%s", commandHorCycle.Data()));
+                        cout << commandHorCycle << endl;
+                        commandHorCycle = commandHor;
+                        nHorImages++;
+                    }
+                }
+            }
+        }
+    }
+
+
 }

@@ -208,7 +208,7 @@ void makePtDistro(){
 
     }
 
-    canD0peaks->cd();
+    canD0peaks->cd(3);
     TLegend *legend=new TLegend(0.082,0.21, 0.50, 0.31,"","brNDC");
     legend->SetFillStyle(0);
     legend->SetLineColor(0);

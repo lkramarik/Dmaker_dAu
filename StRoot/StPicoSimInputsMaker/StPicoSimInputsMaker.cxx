@@ -133,21 +133,22 @@ int StPicoSimInputsMaker::createQA(){
         if ((EtaIndex==-1) || (PhiIndex==-1) || (EtaIndexRatio==-1)) continue;
 
         //TOF MATCHING
-        int charge = trk->charge();
-        for (int i = 0; i < 3; ++i) {
-            int iCharge = (charge>0) ? 0 : 1;
-            if (abs(trk->nSigmaPion()) < i + 1) {
-                if (tofMatched) { h1TofmatchTOF[iCharge][i]->Fill(momentum.Perp()); }
-                h1Tofmatch[iCharge][i]->Fill(momentum.Perp());
-            }
+        if (trk->isHFTTrack()) {
+            int charge = trk->charge();
+            for (int i = 0; i < 3; ++i) {
+                int iCharge = (charge > 0) ? 0 : 1;
+                if (abs(trk->nSigmaPion()) < i + 1) {
+                    if (tofMatched) { h1TofmatchTOF[iCharge][i]->Fill(momentum.Perp()); }
+                    h1Tofmatch[iCharge][i]->Fill(momentum.Perp());
+                }
 
-            iCharge+=2;
-            if (abs(trk->nSigmaKaon()) < i + 1) {
-                if (tofMatched) { h1TofmatchTOF[iCharge][i]->Fill(momentum.Perp()); }
-                h1Tofmatch[iCharge][i]->Fill(momentum.Perp());
+                iCharge += 2;
+                if (abs(trk->nSigmaKaon()) < i + 1) {
+                    if (tofMatched) { h1TofmatchTOF[iCharge][i]->Fill(momentum.Perp()); }
+                    h1Tofmatch[iCharge][i]->Fill(momentum.Perp());
+                }
             }
         }
-
 //        if (vars::fillNtp && (tpcPion || tpcKaon) && (abs(dca)<1.5)) {
         if (vars::fillNtp) {
             Float_t isHft=-1, isPrimaryTrk=-1, hasHftHit=-1;

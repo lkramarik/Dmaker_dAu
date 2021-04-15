@@ -146,8 +146,8 @@ void makeToD0New() {
         long int nD0s = tMC->GetEntries();
         cout << nD0s << endl;
         Float_t ptTmpPi, ptTmpK, yPi, yK;
-        for (int iD0 = 0; iD0 < nD0s / 20; ++iD0) {
-//    for (int iD0 = 0; iD0 < nD0s; ++iD0) {
+//        for (int iD0 = 0; iD0 < nD0s / 20; ++iD0) {
+    for (int iD0 = 0; iD0 < nD0s; ++iD0) {
             t->GetEntry(iD0);
 
             double ptD0 = t->rPt;
@@ -169,10 +169,10 @@ void makeToD0New() {
             ptTmpK = kPtD;
             if (kPtD > ptMaxGraph) ptTmpK = ptMaxGraph;
 
-            hAllD0->Fill(ptD0);
-            hAllD0Ana->Fill(ptD0);
-            hAllD0Pion->Fill(ptD0);
-            hAllD0Kaon->Fill(ptD0);
+            hAllD0->Fill(ptD0, weightPt);
+            hAllD0Ana->Fill(ptD0, weightPt);
+            hAllD0Pion->Fill(ptD0, weightPt);
+            hAllD0Kaon->Fill(ptD0, weightPt);
 
             Double_t piRan = rndm1->Uniform(2.) / 2.;
             Double_t kRan = rndm2->Uniform(2.) / 2.;
@@ -181,15 +181,15 @@ void makeToD0New() {
                 bool passPion = false;
                 bool passKaon = false;
 
-                yPi = grSysPion[i]->Eval(ptTmpPi, nullptr, "");
+                yPi = abs(grSysPion[i]->Eval(ptTmpPi, nullptr, ""));
                 if (yPi < piRan) {
-                    hPassD0Pion[i]->Fill(ptD0);
+                    hPassD0Pion[i]->Fill(ptD0, weightPt);
                     passPion = true;
                 }
 
-                yK = grSysKaon[i]->Eval(ptTmpK, nullptr, "");
+                yK = abs(grSysKaon[i]->Eval(ptTmpK, nullptr, ""));
                 if (yK < kRan) {
-                    hPassD0Kaon[i]->Fill(ptD0);
+                    hPassD0Kaon[i]->Fill(ptD0, weightPt);
                     passKaon = true;
                 }
             }
@@ -205,7 +205,6 @@ void makeToD0New() {
         canD0peaks->Divide(3, 1, 1E-11, 1E-11);
 
         for (int i = 0; i < 3; ++i) {
-
             //uncertainty calculation for D0 ( = pion + kaon)
             hPassD0Kaon[i]->Divide(hAllD0Kaon);
             hPassD0Pion[i]->Divide(hAllD0Pion);
@@ -272,8 +271,8 @@ void makeToD0New() {
         grTotalTotal[i]->GetXaxis()->SetTitle("D^{0} p_{T} [GeV/c]");
         grTotalTotal[i]->GetXaxis()->SetTitleSize(0.04);
         grTotalTotal[i]->GetYaxis()->SetTitleSize(0.04);
-        grTotalTotal[i]->GetXaxis()->SetTitleOffset(1.7);
-        grTotalTotal[i]->GetYaxis()->SetTitle("TPC embedding sys. uncert.");
+        grTotalTotal[i]->GetXaxis()->SetTitleOffset(1.1);
+        grTotalTotal[i]->GetYaxis()->SetTitle("TPC embedding sys. uncert. (DCA & nHitsFit)");
 
         grTotalTotal[i]->GetXaxis()->CenterTitle();
         grTotalTotal[i]->GetYaxis()->CenterTitle();
@@ -283,8 +282,9 @@ void makeToD0New() {
         for (int i = 0; i < 3; ++i) { //types of uncertainty
             double x1 = grD0Total[i][0]->GetY()[k];
             double x2 = grD0Total[i][1]->GetY()[k];
-
+            cout<<x1<<" "<<x2<<endl;
             x1=sqrt(x1*x1 + x2*x2);
+            cout<<x1<<endl;
             grTotalTotal[i]->SetPoint(k, grD0Total[i][0]->GetX()[k], x1);
             grTotalTotal[i]->SetPointError(k, grD0Total[i][0]->GetEX()[k], 0);
         }
@@ -313,6 +313,7 @@ void makeToD0New() {
     }
     legend2->Draw("same");
 
+    canD0Ana->SaveAs("img/uncertainty_All.png");
     return;
 
 
