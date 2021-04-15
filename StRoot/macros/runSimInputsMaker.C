@@ -53,7 +53,7 @@ void runSimInputsMaker(
     hfCuts->setCutTOFDeltaOneOverBeta(0.03, StHFCuts::kPion); // v podstate 5 sigma; nastavene = f * (sigmaTOF), sigma TOF je 0.013
     hfCuts->setCutTOFDeltaOneOverBeta(0.03, StHFCuts::kKaon); // v podstate 5 sigma; nastavene = f * (sigmaTOF), sigma TOF je 0.013
 
-    hfCuts->setCutPtMin(0.15);
+    hfCuts->setCutPtMin(0.2);
 
     StPicoDstMaker* picoDstMaker = new StPicoDstMaker(static_cast<StPicoDstMaker::PicoIoMode>(StPicoDstMaker::IoRead), inputFile, "picoDstMaker");
     StPicoSimInputsMaker* picoSimInputs = new StPicoSimInputsMaker("picoSimInputs", picoDstMaker, outputFile);
